@@ -1,0 +1,11 @@
+PACKAGES aptitude
+
+debmirror
+dpkg-dev
+ia32-libs
+ibm-asu
+imvirt
+libstdc++5
+make
+ngcp-deployment
+reprepro
