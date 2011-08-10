@@ -1,9 +1,25 @@
+How to set up grml-live
+-----------------------
+
+Copy the templates/ directory to /srv/grml-live/grml-sipwise/templates, and
+etc/grml/fai/config/package_config/GRML_SIPWISE to
+/etc/grml/fai/config/package_config/GRML_SIPWISE - then invoke:
+
+grml-live -a amd64 -s wheezy -c GRMLBASE,GRML_MEDIUM,GRML_SIPWISE,RELEASE,AMD64 \
+  -o /srv/grml-live/grml-sipwise -v $(date +%Y.%m.%d) \
+  -g grml-sipwise -r grml-ftw -t /srv/grml-live/grml-sipwise/templates
+
+Copy local mirror files to grml_chroot/srv/mirror/.
+
 How to build the local mirror
 -----------------------------
 
-apt-get clean
-apt-get -y --print-uris --reinstall --download-only install $(dpkg --get-selections | awk '{print $1}') | grep "^\'" | cut -d\' -f2 > install.txt
-wget -c --input-file install.txt
+On a running, working sipwise provide installation, run:
+
+  apt-get clean
+  apt-get -y --print-uris --reinstall --download-only install \
+    $(dpkg --get-selections | awk '{print $1}') | grep "^\'" | cut -d\' -f2 > install.txt
+  wget -c --input-file install.txt
 
 Place downloaded .deb files in /srv/mirror/debs/ inside
 the ISO, then execute ./make_reprepro.sh inside /srv/mirror.
