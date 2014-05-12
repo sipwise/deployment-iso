@@ -65,8 +65,8 @@ report_ssh_password() {
 }
 
 deploy() {
-  # deploy only if we have the ngcpce boot option present
-  if ! grep -q ngcpce /proc/cmdline ; then
+  # deploy only if we have the ngcpce or debianrelease boot option present
+  if ! grep -q ngcpce /proc/cmdline && ! grep -q debianrelease /proc/cmdline ; then
     return 0
   fi
 

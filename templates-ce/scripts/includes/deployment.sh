@@ -56,6 +56,7 @@ VAGRANT=false
 ADJUST_FOR_LOW_PERFORMANCE=false
 ENABLE_VM_SERVICES=false
 FILESYSTEM="ext4"
+SYSTEMD=false
 
 if [ -L /sys/block/vda ] ; then
   export DISK=vda # will be configured as /dev/vda
@@ -409,6 +410,11 @@ fi
 
 if checkBootParam enablevmservices ; then
   ENABLE_VM_SERVICES=true
+fi
+
+if checkBootParam ngcpsystemd ; then
+  logit "Enabling systemd support as requested via boot option ngcpsystemd"
+  SYSTEMD=true
 fi
 ## }}}
 
@@ -921,6 +927,19 @@ cat > /etc/debootstrap/pre-scripts/install-sipwise-key.sh << EOF
 cp /etc/apt/trusted.gpg.d/sipwise.gpg "\${MNTPOINT}"/etc/apt/trusted.gpg.d/
 EOF
 chmod 775 /etc/debootstrap/pre-scripts/install-sipwise-key.sh
+
+if "$SYSTEMD" ; then
+  logit "Enabling systemd installation via grml-debootstrap"
+  mkdir -p /etc/debootstrap/scripts/
+  cat > /etc/debootstrap/scripts/systemd.sh << EOF
+#!/bin/bash
+# installed via deployment.sh
+mount "$ROOT_FS" "$TARGET"
+echo 'Yes, do as I say!' | chroot $TARGET apt-get install --force-yes -y systemd-sysv sysvinit-
+umount "$TARGET"
+EOF
+  chmod 775 /etc/debootstrap/scripts/systemd.sh
+fi
 
 # NOTE: we use the debian.sipwise.com CNAME by intention here
 # to avoid conflicts with apt-pinning, preferring deb.sipwise.com
