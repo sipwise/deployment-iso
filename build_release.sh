@@ -7,6 +7,9 @@ TEMPLATES="templates"
 if [ "${PUBLIC}" != "no" ]; then
 	echo "*** Building public ISO ***"
 	TEMPLATES="templates-ce"
+else
+	# build grub.cfg release options
+	./source/build.sh
 fi
 
 echo "*** Retrieving Grml Release ISO [${GRML_ISO}] ***"

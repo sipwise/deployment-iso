@@ -1,0 +1,24 @@
+label ce##VERSION##
+  menu label sip:providerCE (DHCP)      - version ##VERSION##
+  kernel /boot/%SHORT_NAME%/vmlinuz
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcphostname=spce ngcpvers=##VERSION##
+
+  text help
+                                        Install sip:provider
+                                        community edition, version ##VERSION##.
+                                        Retrieve network configuration
+                                        via DHCP.
+  endtext
+
+label cenw##VERSION##
+  menu label sip:providerCE (static NW) - version ##VERSION##
+  kernel /boot/%SHORT_NAME%/vmlinuz
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcphostname=spce ip=192.168.51.123::192.168.51.1:255.255.255.0:spce:eth0:off dns=92.42.136.30 ngcpvers=##VERSION##
+
+  text help
+                                        Install sip:provider
+                                        community edition, version ##VERSION##.
+                                        Use static IP configuration, adjust
+                                        in boot command line if necessary.
+  endtext
+
