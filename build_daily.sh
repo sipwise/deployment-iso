@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 DATE="$(date +%Y%m%d)"
 SIPWISE_ISO="grml64-sipwise-daily_${DATE}.iso"
 
