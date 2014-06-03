@@ -7,7 +7,7 @@ exec  > >(tee -a $INSTALL_LOG    )
 exec 2> >(tee -a $INSTALL_LOG >&2)
 
 # set version to git commit ID
-SCRIPT_VERSION="%SCRIPT_VERSION%"
+SCRIPT_VERSION=45bf9f2
 
 # not set? then fall back to timestamp of execution
 if [ -z "$SCRIPT_VERSION" ] || [ "$SCRIPT_VERSION" = '%SCRIPT_VERSION%' ] ; then
@@ -128,21 +128,6 @@ loadNfsIpArray() {
     eval $1[${ind[n++]}]=$i
   done
   [ "$n" == "7" ] && return 0 || return 1
-}
-
-logo() {
-    cat <<-EOF
-+++ Grml-Sipwise Deployment +++
-
-$(cat /etc/grml_version)
-Host IP(s): $(ip-screen) | Deployment version: $SCRIPT_VERSION
-$(lscpu | awk '/^CPU\(s\)/ {print $2}') CPU(s) | $(/usr/bin/gawk '/MemTotal/{print $2}' /proc/meminfo)kB RAM | $CHASSIS
-
-Install ngcp: $NGCP_INSTALLER | Install pro: $PRO_EDITION [$ROLE] | Install ce: $CE_EDITION
-Installing $SP_VERSION_STR platform | Debian: $DEBIAN_RELEASE
-Install IP: $INSTALL_IP | Started deployment at $(date)
-
-EOF
 }
 
 grml_debootstrap_upgrade() {
@@ -677,24 +662,30 @@ set_deploy_status "start"
 start_seconds=$(cut -d . -f 1 /proc/uptime)
 
 if "$LOGO" ; then
-  # reset terminal, see MT#4697
-  if checkBootParam debugmode ; then
-    clear
-  else
-    reset
-  fi
+  disable_trace
+  GRML_INFO=$(cat /etc/grml_version)
+  IP_INFO=$(ip-screen)
+  CPU_INFO=$(lscpu | awk '/^CPU\(s\)/ {print $2}')
+  RAM_INFO=$(/usr/bin/gawk '/MemTotal/{print $2}' /proc/meminfo)
+  DATE_INFO=$(date)
   # color
   echo -ne "\ec\e[1;32m"
-  # temporary disable trace, see MT#4697
-  disable_trace
+  clear
   #print logo
-  logo
-  # restore trace if necessary, see MT#4697
-  enable_trace
+  echo "+++ Grml-Sipwise Deployment +++"
+  echo ""
+  echo "$GRML_INFO"
+  echo "Host IP(s): $IP_INFO | Deployment version: $SCRIPT_VERSION"
+  echo "$CPU_INFO CPU(s) | ${RAM_INFO}kB RAM | $CHASSIS"
+  echo ""
+  echo "Install ngcp: $NGCP_INSTALLER | Install pro: $PRO_EDITION [$ROLE] | Install ce: $CE_EDITION"
+  echo "Installing $SP_VERSION_STR platform | Debian: $DEBIAN_RELEASE"
+  echo "Install IP: $INSTALL_IP | Started deployment at $DATE_INFO"
   # number of lines
   echo -ne "\e[10;0r"
   # reset color
   echo -ne "\e[9B\e[1;m"
+  enable_trace
 fi
 
 if "$PRO_EDITION" ; then
@@ -801,6 +792,16 @@ else
 fi
 
 if "$LVM" ; then
+  # make sure lvcreate understands the --yes option
+  lv_create_opts=''
+  lvm_version=$(dpkg-query -W -f='${Version}\n' lvm2)
+  if dpkg --compare-versions "$lvm_version" lt 2.02.106 ; then
+    logit "Installed lvm2 version ${lvm_version} doesn't need the '--yes' workaround."
+  else
+    logit "Enabling '--yes' workaround for lvm2 version ${lvm_version}."
+    lv_create_opts='lvcreateopts="--yes"'
+  fi
+
   cat > /tmp/partition_setup.txt << EOF
 disk_config ${DISK} disklabel:${TABLE} bootable:1
 primary -       4096-   -       -
@@ -808,7 +809,7 @@ primary -       4096-   -       -
 disk_config lvm
 vg ngcp       ${DISK}1
 ngcp-root     /       -95%      ext3 rw
-ngcp-swap     swap    RAM:50%   swap sw
+ngcp-swap     swap    RAM:50%   swap sw $lv_create_opts
 EOF
 
   # make sure setup-storage doesn't fail if LVM is already present
@@ -934,8 +935,24 @@ if "$SYSTEMD" ; then
   cat > /etc/debootstrap/scripts/systemd.sh << EOF
 #!/bin/bash
 # installed via deployment.sh
+
+echo "systemd.sh: mounting rootfs $ROOT_FS to $TARGET"
 mount "$ROOT_FS" "$TARGET"
-echo 'Yes, do as I say!' | chroot $TARGET apt-get install --force-yes -y systemd-sysv sysvinit-
+
+echo "systemd.sh: enabling ${DEBIAN_RELEASE} backports"
+echo deb http://debian.sipwise.com/debian/ ${DEBIAN_RELEASE}-backports main contrib non-free >> ${TARGET}/etc/apt/sources.list.d/systemd.list
+chroot $TARGET apt-get update
+
+echo "systemd.sh: installing systemd"
+echo 'Yes, do as I say!' | chroot $TARGET apt-get -t ${DEBIAN_RELEASE}-backports --force-yes -y install systemd-sysv sysvinit-
+
+echo "systemd.sh: verifying that acpid is enabled"
+if ! chroot $TARGET systemctl is-enabled acpid.service ; then
+  echo "acpid service is disabled, enabling"
+  chroot $TARGET systemctl enable acpid.service
+fi
+
+echo "systemd.sh: unmounting $TARGET again"
 umount "$TARGET"
 EOF
   chmod 775 /etc/debootstrap/scripts/systemd.sh
@@ -949,6 +966,15 @@ SEC_MIRROR='http://debian.sipwise.com/debian-security/'
 
 set_deploy_status "debootstrap"
 
+mkdir -p /etc/debootstrap/etc/apt/
+logit "Setting up /etc/debootstrap/etc/apt/sources.list"
+cat > /etc/debootstrap/etc/apt/sources.list << EOF
+# Set up via deployment.sh for grml-debootstrap usage
+deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
+deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
+deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
+EOF
+
 # install Debian
 echo y | grml-debootstrap \
   --arch "${ARCH}" \
@@ -957,6 +983,7 @@ echo y | grml-debootstrap \
   --hostname "${TARGET_HOSTNAME}" \
   --mirror "$MIRROR" \
   --debopt '--keyring=/etc/apt/trusted.gpg.d/sipwise.gpg' $EXTRA_DEBOOTSTRAP_OPTS \
+  --keep_src_list \
   -r "$DEBIAN_RELEASE" \
   -t "$ROOT_FS" \
   --password 'sipwise' 2>&1 | tee -a /tmp/grml-debootstrap.log
@@ -1977,8 +2004,10 @@ adjust_for_low_performance() {
   sed -i -e 's/tcp_children: [0-9]\+$/tcp_children: 1/g' 		${TARGET}/etc/ngcp-config/config.yml
   sed -i -e 's/udp_children: [0-9]\+$/udp_children: 1/g' 		${TARGET}/etc/ngcp-config/config.yml
   sed -i -e 's/natping_processes: [0-9]\+$/natping_processes: 1/g'	${TARGET}/etc/ngcp-config/config.yml
-  # need for NGCP <=3.1 (MT#5513)
-  sed -i -e 's/tcp_children=4$/tcp_children=1/g' ${TARGET}/etc/ngcp-config/templates/etc/kamailio/proxy/kamailio.cfg.tt2 || true
+  if expr $SP_VERSION \<= 3.1 >/dev/null 2>&1 ; then
+    # need for NGCP <=3.1 (MT#5513)
+    sed -i -e 's/tcp_children=4$/tcp_children=1/g' ${TARGET}/etc/ngcp-config/templates/etc/kamailio/proxy/kamailio.cfg.tt2 || true
+  fi
   # apache
   sed -i -e 's/StartServers.*[0-9]\+$/StartServers 1/g'       ${TARGET}/etc/apache2/apache2.conf
   sed -i -e 's/MinSpareServers.*[0-9]\+$/MinSpareServers 1/g' ${TARGET}/etc/apache2/apache2.conf
@@ -1986,8 +2015,12 @@ adjust_for_low_performance() {
   # mysql
   sed -i -e 's/bufferpoolsize:.*$/bufferpoolsize: 64M/g'       ${TARGET}/etc/ngcp-config/config.yml
   # nginx
-  sed -i -e 's/NPROC=[0-9]\+$/NPROC=2/g'       ${TARGET}/etc/ngcp-config/templates/etc/init.d/ngcp-panel.tt2 || true
-  sed -i -e 's/NPROC=[0-9]\+$/NPROC=2/g'       ${TARGET}/etc/ngcp-config/templates/etc/init.d/ngcp-www-csc.tt2 || true
+  sed -i -e 's/fastcgi_workers: [0-9]\+$/fastcgi_workers: 2/g'       ${TARGET}/etc/ngcp-config/config.yml
+  if expr $SP_VERSION \<= mr3.2.999 >/dev/null 2>&1 ; then
+    # need for NGCP <=mr3.2 (MT#7275)
+    sed -i -e 's/NPROC=[0-9]\+$/NPROC=2/g'       ${TARGET}/etc/ngcp-config/templates/etc/init.d/ngcp-panel.tt2 || true
+    sed -i -e 's/NPROC=[0-9]\+$/NPROC=2/g'       ${TARGET}/etc/ngcp-config/templates/etc/init.d/ngcp-www-csc.tt2 || true
+  fi
 
   # record configuration file changes
   chroot "$TARGET" etckeeper commit "Snapshot after decreasing default resource usage [$(date)]" || true
