@@ -23,7 +23,7 @@ echo "*** Copying isolinux.cfg to syslinux.cfg for grml2usb support ***"
 cp ./source/templates/boot/isolinux/isolinux.cfg ./source/templates/boot/isolinux/syslinux.cfg
 
 # build grub.cfg release options
-./source/build.sh
+TEMPLATE=templates MR=yes PUBLIC="no" ./source/build.sh
 
 echo "*** Generating Sipwise ISO ***"
 sudo /usr/sbin/grml2iso -c ./source/templates -o "${SIPWISE_ISO}" "${GRML_ISO}"

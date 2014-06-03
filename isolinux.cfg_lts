@@ -1,0 +1,28 @@
+label celts##VERSION##
+  menu label Install ##VERSION## LTS sip:providerCE - DHCP
+  kernel /boot/%SHORT_NAME%/vmlinuz
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## ngcpvers=##VERSION## scripts ngcphostname=spce
+
+  text help
+                                        Install sip:provider
+                                        community edition,
+                                        LTS version ##VERSION##.
+
+                                        Retrieve network configuration
+                                        via DHCP.
+  endtext
+
+label celtsnw##VERSION##
+  menu label Install ##VERSION## LTS sip:providerCE - static NW
+  kernel /boot/%SHORT_NAME%/vmlinuz
+  append initrd=/boot/%SHORT_NAME%/initrd.emg live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## ngcpvers=##VERSION## scripts ngcphostname=spce ip=192.168.1.100::192.168.1.1:255.255.255.0:spce:eth0:off dns=8.8.8.8
+
+  text help
+                                        Install sip:provider
+                                        community edition,
+                                        LTS version ##VERSION##.
+
+                                        Use static IP configuration, adjust
+                                        ip=... and dns=... options in boot
+                                        command line as necessary.
+  endtext

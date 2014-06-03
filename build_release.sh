@@ -2,15 +2,17 @@
 DATE="$(date +%Y%m%d)"
 SIPWISE_ISO="grml64-sipwise-release_${DATE}.iso"
 PUBLIC="${1:-no}"
-TEMPLATES="templates"
 
 if [ "${PUBLIC}" != "no" ]; then
 	echo "*** Building public ISO ***"
 	TEMPLATES="templates-ce"
 else
 	# build grub.cfg release options
-	./source/build.sh
+	TEMPLATES="templates"
 fi
+
+echo "*** Building templates [TEMPLATES=${TEMPLATES} MR=no PUBLIC=${PUBLIC}] ***"
+TEMPLATES=${TEMPLATES} MR="no" PUBLIC=${PUBLIC} ./source/build.sh
 
 echo "*** Retrieving Grml Release ISO [${GRML_ISO}] ***"
 wget --timeout=30 -q -c -O "$(basename $GRML_ISO)" "http://mirror.inode.at/data/grml/${GRML_ISO}"
