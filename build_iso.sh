@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-DATE="$(date +%Y%m%d)"
+DATE="$(date +%Y%m%d_%H%M%S)"
 WGET_OPT="--timeout=30 -q -c"
 RELEASE=$1
 GRML_ISO=$2
@@ -46,7 +46,7 @@ public)
   TEMPLATES="templates-ce"
   MR="no"
   PUBLIC="yes"
-  SIPWISE_ISO="sip_provider_CE_${DATE}.iso"
+  SIPWISE_ISO="sip_provider_CE_installcd.iso"
   GRML_URL="http://mirror.inode.at/data/grml/"
   GRML_HASH_URL="http://download.grml.org/"
   ;;
