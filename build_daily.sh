@@ -15,9 +15,6 @@ mv grml64-full_testing_latest.iso "${GRML_ISO}"
 wget --timeout=30 -O grml64-full_testing_latest.iso.sha1 http://daily.grml.org/grml64-full_testing/latest/grml64-full_testing_latest.iso.sha1
 sha1sum -c grml64-full_testing_latest.iso.sha1
 
-echo '*** Removing subversion directories (otherwise GRUB fails to boot!) ***'
-find ./source/ -name \*.svn | xargs rm -rf
-
 # make sure syslinux.cfg is same as isolinux.cfg so grml2usb works also
 echo "*** Copying isolinux.cfg to syslinux.cfg for grml2usb support ***"
 cp ./source/templates/boot/isolinux/isolinux.cfg ./source/templates/boot/isolinux/syslinux.cfg
