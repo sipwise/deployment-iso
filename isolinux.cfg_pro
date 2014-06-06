@@ -1,7 +1,7 @@
 label prosp1nw-##VERSION##
   menu label sip:providerPRO - sp1 / ##VERSION## release
   kernel /boot/%SHORT_NAME%/vmlinuz
-  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcpsp1 ip=192.168.1.101::192.168.1.1:255.255.255.0:sp1:eth0:off dns=92.42.136.30 ngcpvers=##VERSION##
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcpsp1 ngcpvers=##VERSION## dns=92.42.136.30 ip=10.15.20.101::10.15.20.1:255.255.255.0:sp1:eth0:off
 
   text help
                                         Install sip:provider
@@ -14,7 +14,7 @@ label prosp1nw-##VERSION##
 label prosp2nw-##VERSION##
   menu label sip:providerPRO - sp2 / ##VERSION## release
   kernel /boot/%SHORT_NAME%/vmlinuz
-  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcpsp2 ip=192.168.1.102::192.168.1.1:255.255.255.0:sp2:eth0:off dns=92.42.136.30 ngcpvers=##VERSION##
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcpsp2 ngcpvers=##VERSION## dns=92.42.136.30 ip=10.15.20.102::10.15.20.1:255.255.255.0:sp2:eth0:off
 
   text help
                                         Install sip:provider

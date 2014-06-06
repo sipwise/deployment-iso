@@ -7,7 +7,7 @@ menuentry "sip:providerCE (DHCP)      - version ##VERSION##" {
 
 menuentry "sip:providerCE (static NW) - version ##VERSION##" {
   echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcphostname=spce ip=192.168.51.123::192.168.51.1:255.255.255.0:spce:eth0:off dns=92.42.136.30 ngcpvers=##VERSION##
+  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcphostname=spce ngcpvers=##VERSION## dns=92.42.136.30 ip=10.15.20.123::10.15.20.1:255.255.255.0:spce:eth0:off
   echo 'Loading initrd...'
   initrd /boot/%SHORT_NAME%/initrd.img
 }
