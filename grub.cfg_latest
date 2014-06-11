@@ -1,13 +1,13 @@
 menuentry "Install latest(##VERSION##) sip:providerCE  - DHCP" {
   echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## scripts ngcphostname=spce
+  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## scripts ngcphostname=spce 
   echo 'Loading initrd...'
   initrd /boot/%SHORT_NAME%/initrd.img
 }
 
 menuentry "Install latest(##VERSION##) sip:providerCE  - static NW config" {
   echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## scripts ngcphostname=spce ip=192.168.1.100::192.168.1.1:255.255.255.0:spce:eth0:off dns=8.8.8.8
+  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## scripts ngcphostname=spce ip=192.168.1.100::192.168.1.1:255.255.255.0:spce:eth0:off dns=8.8.8.8 
   echo 'Loading initrd...'
   initrd /boot/%SHORT_NAME%/initrd.img
 }

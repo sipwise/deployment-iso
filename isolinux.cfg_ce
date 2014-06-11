@@ -1,7 +1,7 @@
 label ce##VERSION##
   menu label sip:providerCE (DHCP)      - version ##VERSION##
   kernel /boot/%SHORT_NAME%/vmlinuz
-  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcphostname=spce ngcpvers=##VERSION##
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcphostname=spce ngcpvers=##VERSION## 
 
   text help
                                         Install sip:provider
@@ -13,7 +13,7 @@ label ce##VERSION##
 label cenw##VERSION##
   menu label sip:providerCE (static NW) - version ##VERSION##
   kernel /boot/%SHORT_NAME%/vmlinuz
-  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcphostname=spce dns=92.42.136.30 ngcpvers=##VERSION## ip=10.15.20.123::10.15.20.1:255.255.255.0:spce:eth0:off
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcphostname=spce dns=92.42.136.30 ngcpvers=##VERSION## ip=10.15.20.123::10.15.20.1:255.255.255.0:spce:eth0:off 
 
   text help
                                         Install sip:provider
