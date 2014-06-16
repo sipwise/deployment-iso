@@ -648,7 +648,7 @@ if "$INTERACTIVE" ; then
   read a
   if [[ "$a" != "y" ]] ; then
     echo "Exiting as requested."
-    exit 0
+    exit 1
   fi
   unset a
 fi
