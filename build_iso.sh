@@ -74,11 +74,11 @@ fi
 
 # make sure syslinux.cfg is same as isolinux.cfg so grml2usb works also
 echo "*** Copying isolinux.cfg to syslinux.cfg for grml2usb support ***"
-cp ./templates/boot/isolinux/isolinux.cfg ./templates/boot/isolinux/syslinux.cfg
+cp ${TEMPLATES}/boot/isolinux/isolinux.cfg ${TEMPLATES}/boot/isolinux/syslinux.cfg
 
 # build grub.cfg release options
 echo "*** Building templates [TEMPLATES=${TEMPLATES} MR=${MR} PUBLIC=${PUBLIC}] ***"
-TEMPLATE="${TEMPLATES}" MR="${MR}" PUBLIC="${PUBLIC}" ./build_templates.sh
+TEMPLATES="${TEMPLATES}" MR="${MR}" PUBLIC="${PUBLIC}" ./build_templates.sh
 
 echo "*** Generating Sipwise ISO ***"
 sudo /usr/sbin/grml2iso -c ./${TEMPLATES} -o "${SIPWISE_ISO}" "${GRML_ISO}"
