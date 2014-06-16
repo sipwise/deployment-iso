@@ -71,12 +71,18 @@ deploy() {
   fi
 
   # TODO - prompt for disk which should be used and ask user if he really wants to execute it
-  if ${scripts_dir}/deployment.sh ; then
-    dialog --msgbox "Successfully finished deployment, enjoy your sip:provider CE system. System will be rebooted once you press OK." 0 0
-    reboot
+  RC=0
+  ${scripts_dir}/deployment.sh || RC=$?
+  if [ $RC -eq 0 ] ; then
+    if dialog --yesno "Successfully finished deployment, enjoy your sip:provider CE system. System will be rebooted once you press OK. Reboot now?" 0 0 ; then
+      reboot
+    else
+      ewarn "Not rebooting as requested, please don't forget to reboot your system." ; eend 0
+    fi
+  elif [ $RC -eq 2 ] ; then
+    ewarn "Installation was cancelled by user. Switching into rescue mode." ; eend 0
   else
     dialog --msgbox "Looks like running the deployment script didn't work. Please provide a bug report to support@sipwise.com, providing information about your system and the files present in /tmp/*.log and /tmp/*.txt - dropping you to the rescue system for further investigation." 0 0
-    RC=1
   fi
 }
 
