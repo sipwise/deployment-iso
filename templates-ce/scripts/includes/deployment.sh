@@ -614,15 +614,28 @@ set_deploy_status "settings"
 
 echo "Deployment Settings:
 
-  Install ngcp:      $NGCP_INSTALLER
-  Installer - pro:   $PRO_EDITION
-  Installer - ce:    $CE_EDITION
-  Version:           $SP_VERSION_STR
-  Install Hostname:  $HOSTNAME
+  Install ngcp:      $NGCP_INSTALLER"
+
+if "$CE_EDITION" ; then
+  echo "  sip:provider:      CE"
+elif "$PRO_EDITION" ; then
+  echo "  sip:provider:      PRO"
+fi
+
+echo "
+  Target disk:       /dev/$DISK
+  Target Hostname:   $TARGET_HOSTNAME
+  Installer version: $SP_VERSION_STR
   Install NW iface:  $INSTALL_DEV
   Install IP:        $INSTALL_IP
+  Use DHCP in host:  $DHCP
 
-  Target Hostname:   $TARGET_HOSTNAME
+  Installing in chassis? $CHASSIS
+
+" | tee -a /tmp/installer-settings.txt
+
+if "$PRO_EDITION" ; then
+  echo "
   Host Role:         $ROLE
   Host Role Carrier: $CROLE
   Profile:           $PROFILE
@@ -633,14 +646,12 @@ echo "Deployment Settings:
   Ext cluster iface: $EIFACE
   Ext cluster IP:    $EADDR
   Multicast addr:    $MCASTADDR
-  Use DHCP in host:  $DHCP
   Internal NW iface: $INTERNAL_DEV
   Int sp1 host IP:   $IP1
   Int sp2 host IP:   $IP2
   Int netmask:       $INTERNAL_NETMASK
-
-  $CHASSIS
 " | tee -a /tmp/installer-settings.txt
+fi
 
 if "$INTERACTIVE" ; then
   echo "WARNING: Execution will override any existing data!"
@@ -648,7 +659,7 @@ if "$INTERACTIVE" ; then
   read a
   if [[ "$a" != "y" ]] ; then
     echo "Exiting as requested."
-    exit 1
+    exit 2
   fi
   unset a
 fi
@@ -2285,6 +2296,10 @@ set_deploy_status "finished"
 # remote host has a chance to check for deploy status "finished",
 # defaults to 0 seconds otherwise
 sleep "$STATUS_WAIT"
+
+if "$INTERACTIVE" ; then
+  exit 0
+fi
 
 # do not prompt when running in automated mode
 if "$REBOOT" ; then
