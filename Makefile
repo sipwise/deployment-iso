@@ -25,6 +25,7 @@ clean:
 	rm -f templates/boot/grub/sipwise_latest.cfg templates/boot/grub/sipwise_lts.cfg \
 	  templates/boot/isolinux/sipwise_latest.cfg templates/boot/isolinux/sipwise_lts.cfg
 	rm -f templates/boot/isolinux/syslinux.cfg
+	sed -i 's/^SCRIPT_VERSION=.*/SCRIPT_VERSION="%SCRIPT_VERSION%"/' ./templates-ce/scripts/includes/deployment.sh
 
 dist-clean: clean
 	rm -rf artifacts

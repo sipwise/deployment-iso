@@ -7,7 +7,7 @@ exec  > >(tee -a $INSTALL_LOG    )
 exec 2> >(tee -a $INSTALL_LOG >&2)
 
 # set version to git commit ID
-SCRIPT_VERSION=45bf9f2
+SCRIPT_VERSION="%SCRIPT_VERSION%"
 
 # not set? then fall back to timestamp of execution
 if [ -z "$SCRIPT_VERSION" ] || [ "$SCRIPT_VERSION" = '%SCRIPT_VERSION%' ] ; then
