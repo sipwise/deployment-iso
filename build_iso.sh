@@ -19,12 +19,6 @@ check_sha1 () {
 
 echo "*** Building ${RELEASE} ISO ***"
 
-if [ "${GRML_ISO}" != "" ]; then
-  GRML_ISO=$(basename ${GRML_ISO})
-else
-  usage
-fi
-
 case ${RELEASE} in
 daily)
   TEMPLATES="templates"
@@ -54,6 +48,16 @@ public)
   usage
   ;;
 esac
+
+if [ "${GRML_ISO}" != "" ]; then
+  if [[ "${GRML_ISO}" =~ ^devel/.*\.iso$ ]]; then
+    GRML_URL+="devel/"
+    GRML_HASH_URL+="devel/"
+  fi
+  GRML_ISO=$(basename ${GRML_ISO})
+else
+  usage
+fi
 
 echo "*** Retrieving Grml ${RELEASE} ISO [${GRML_ISO}] ***"
 wget ${WGET_OPT} -O "${GRML_ISO}" "${GRML_URL}${GRML_ISO}"
