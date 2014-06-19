@@ -25,14 +25,13 @@ network_check() {
   if ${scripts_dir}/check-for-network ; then
     einfo "Looks like we have working network, continuing..." ; eend 0
   else
-    if dialog --yesno "It looks like you don't have a working network connection yet. Do you want to configure the network now?" 0 0 ; then
-      if netcardconfig ; then
-	echo "continue"
-      else
-	echo TODO
+    if dialog --yes-label Yes --no-label Exit --yesno "It looks like you don't have a working network connection yet. Do you want to configure the network now?" 0 0 ; then
+      if ! netcardconfig ; then
+        ewarn "Failed to configure network, continuing anyway." ; eend 0
       fi
     else
-      eerror "no netcardconfig for me :(" ; eend 1
+      ewarn "Cancelling as requested by user." ; eend 0
+      return 1
     fi
   fi
 }
@@ -89,6 +88,7 @@ prompt_for_target()
               done)
 
   if ! TARGET_DISK=$(dialog --title "Disk selection" --single-quoted --stdout \
+                       --ok-label OK --cancel-label Exit \
                        --menu "Please select the target disk for installing Debian/ngcp:" 0 0 0 \
                        $DISK_LIST) ; then
     ewarn "Cancelling as requested by user during disk selection." ; eend 0
@@ -107,7 +107,7 @@ deploy() {
   RC=0
   TARGET_DISK=$TARGET_DISK ${scripts_dir}/deployment.sh || RC=$?
   if [ $RC -eq 0 ] ; then
-    if dialog --yesno "Successfully finished deployment, enjoy your sip:provider CE system. System will be rebooted once you press OK. Reboot now?" 0 0 ; then
+    if dialog --yes-label Reboot --no-label Exit --yesno "Successfully finished deployment, enjoy your sip:provider CE system. Reboot system now?" 0 0 ; then
       reboot
     else
       ewarn "Not rebooting as requested, please don't forget to reboot your system." ; eend 0
