@@ -59,17 +59,22 @@ ENABLE_VM_SERVICES=false
 FILESYSTEM="ext4"
 SYSTEMD=false
 
-if [ -L /sys/block/vda ] ; then
-  export DISK=vda # will be configured as /dev/vda
-else
-  # in some cases, sda is not the HDD, but the CDROM,
-  # so better walk through all devices.
-  for i in /sys/block/sd*; do
-    if grep -q 0 ${i}/removable; then
-      export DISK=$(basename $i)
-      break
-    fi
-  done
+# if TARGET_DISK environment variable is set accept it
+if [ -n "$TARGET_DISK" ] ; then
+  export DISK="${TARGET_DISK}"
+else # otherwise try to find sane default
+  if [ -L /sys/block/vda ] ; then
+    export DISK=vda # will be configured as /dev/vda
+  else
+    # in some cases, sda is not the HDD, but the CDROM,
+    # so better walk through all devices.
+    for i in /sys/block/sd*; do
+      if grep -q 0 ${i}/removable; then
+        export DISK=$(basename $i)
+        break
+      fi
+    done
+  fi
 fi
 
 ### helper functions {{{
@@ -756,24 +761,28 @@ check_for_supported_disk() {
 }
 
 # run in according environment only
-if [[ $(imvirt 2>/dev/null) == "Physical" ]] ; then
-
-  if ! check_for_supported_disk ; then
-    die "Error: /dev/${DISK} does not look like a VirtIO, ServeRAID, LSILOGIC or PowerEdge disk/controller. Exiting to avoid possible data damage."
-  fi
-
+if [ -n "$TARGET_DISK" ] ; then
+  logit "Skipping check for supported disk as TARGET_DISK variable is set."
 else
-  # make sure it runs only within qemu/kvm
-  if [[ "$DISK" == "vda" ]] && readlink -f /sys/block/vda/device | grep -q 'virtio' ; then
-    echo "Looks like a virtio disk, ok."
-  elif grep -q 'QEMU HARDDISK' /sys/block/${DISK}/device/model ; then
-    echo "Looks like a QEMU harddisk, ok."
-  elif grep -q 'VBOX HARDDISK' /sys/block/${DISK}/device/model ; then
-    echo "Looks like a VBOX harddisk, ok."
-  elif grep -q 'Virtual disk' /sys/block/${DISK}/device/model && [[ $(imvirt) == "VMware ESX Server" ]] ; then
-    echo "Looks like a VMware ESX Server harddisk, ok."
+  if [[ $(imvirt 2>/dev/null) == "Physical" ]] ; then
+
+    if ! check_for_supported_disk ; then
+      die "Error: /dev/${DISK} does not look like a VirtIO, ServeRAID, LSILOGIC or PowerEdge disk/controller. Exiting to avoid possible data damage."
+    fi
+
   else
-    die "Error: /dev/${DISK} does not look like a virtual disk. Exiting to avoid possible data damage. Note: imvirt output is $(imvirt)"
+    # make sure it runs only within qemu/kvm
+    if [[ "$DISK" == "vda" ]] && readlink -f /sys/block/vda/device | grep -q 'virtio' ; then
+      echo "Looks like a virtio disk, ok."
+    elif grep -q 'QEMU HARDDISK' /sys/block/${DISK}/device/model ; then
+      echo "Looks like a QEMU harddisk, ok."
+    elif grep -q 'VBOX HARDDISK' /sys/block/${DISK}/device/model ; then
+      echo "Looks like a VBOX harddisk, ok."
+    elif grep -q 'Virtual disk' /sys/block/${DISK}/device/model && [[ $(imvirt) == "VMware ESX Server" ]] ; then
+      echo "Looks like a VMware ESX Server harddisk, ok."
+    else
+      die "Error: /dev/${DISK} does not look like a virtual disk. Exiting to avoid possible data damage. Note: imvirt output is $(imvirt)"
+    fi
   fi
 fi
 
