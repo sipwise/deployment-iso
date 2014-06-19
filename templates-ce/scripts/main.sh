@@ -2,6 +2,9 @@
 
 set -e
 
+export LANG=C
+export LC_ALL=C
+
 working_dir="$(dirname $0)"
 scripts_dir="${working_dir}/includes/"
 
@@ -64,15 +67,45 @@ report_ssh_password() {
   fi
 }
 
+prompt_for_target()
+{
+  AVAILABLE_DISKS=$(awk '/[a-z]$/ {print $4}' /proc/partitions | grep -v '^name$' | sort -u)
+
+  if [ -z "$AVAILABLE_DISKS" ] ; then
+    dialog --title "Disk selection" \
+      --msgbox "Sorry, no disks found. Please make sure to have a hard disk attached to your system/VM." 0 0
+    return 1
+  fi
+
+  # display disk ID next to the disk name
+  DISK_LIST=$(for i in $AVAILABLE_DISKS ; do
+                for file in /dev/disk/by-id/* ; do
+                   case "$(realpath $file)" in
+                     /dev/"$i") disk_info="${file#/dev/disk/by-id/}" ; break ;;
+                             *) disk_info="$file" ;;
+                   esac
+                done
+                echo ${i} ${disk_info}
+              done)
+
+  if ! TARGET_DISK=$(dialog --title "Disk selection" --single-quoted --stdout \
+                       --menu "Please select the target disk for installing Debian/ngcp:" 0 0 0 \
+                       $DISK_LIST) ; then
+    ewarn "Cancelling as requested by user during disk selection." ; eend 0
+    return 1
+  fi
+}
+# }}}
+
+
 deploy() {
   # deploy only if we have the ngcpce or debianrelease boot option present
   if ! grep -q ngcpce /proc/cmdline && ! grep -q debianrelease /proc/cmdline ; then
     return 0
   fi
 
-  # TODO - prompt for disk which should be used and ask user if he really wants to execute it
   RC=0
-  ${scripts_dir}/deployment.sh || RC=$?
+  TARGET_DISK=$TARGET_DISK ${scripts_dir}/deployment.sh || RC=$?
   if [ $RC -eq 0 ] ; then
     if dialog --yesno "Successfully finished deployment, enjoy your sip:provider CE system. System will be rebooted once you press OK. Reboot now?" 0 0 ; then
       reboot
@@ -86,6 +119,7 @@ deploy() {
   fi
 }
 
+prompt_for_target
 network_check
 report_ssh_password
 deploy
