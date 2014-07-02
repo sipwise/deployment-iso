@@ -4,10 +4,10 @@ label ce##VERSION##
   append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcphostname=spce ngcpvers=##VERSION## 
 
   text help
-                                        Install sip:provider
-                                        community edition, version ##VERSION##.
-                                        Retrieve network configuration
-                                        via DHCP.
+                                     Install sip:provider community edition,
+                                     version ##VERSION##.
+
+                                     Retrieve network configuration via DHCP.
   endtext
 
 label cenw##VERSION##
@@ -16,9 +16,10 @@ label cenw##VERSION##
   append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcphostname=spce dns=92.42.136.30 ngcpvers=##VERSION## ip=10.15.20.123::10.15.20.1:255.255.255.0:spce:eth0:off 
 
   text help
-                                        Install sip:provider
-                                        community edition, version ##VERSION##.
-                                        Use static IP configuration, adjust
-                                        in boot command line if necessary.
+                                     Install sip:provider community edition,
+                                     version ##VERSION##.
+
+                                     Use static IP configuration, adjust
+                                     in boot command line if necessary.
   endtext
 

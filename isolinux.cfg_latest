@@ -1,28 +1,25 @@
 label ce##VERSION##
-  menu label Install latest(##VERSION##) sip:providerCE  - DHCP
+  menu label Install ##VERSION## sip:providerCE - DHCP
   kernel /boot/%SHORT_NAME%/vmlinuz
   append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## scripts ngcphostname=spce 
 
   text help
-                                        Install sip:provider
-                                        community edition,
-                                        latest(##VERSION##) available stable release.
+                                     Install sip:provider community edition,
+                                     latest/##VERSION## available stable release.
 
-                                        Retrieve network configuration
-                                        via DHCP.
+                                     Retrieve network configuration via DHCP.
   endtext
 
 label cenw##VERSION##
-  menu label Install latest(##VERSION##) sip:providerCE  - static NW
+  menu label Install ##VERSION## sip:providerCE - static NW
   kernel /boot/%SHORT_NAME%/vmlinuz
   append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## scripts ngcphostname=spce ip=192.168.1.100::192.168.1.1:255.255.255.0:spce:eth0:off dns=8.8.8.8 
 
   text help
-                                        Install sip:provider
-                                        community edition,
-                                        latest(##VERSION##) available stable release.
+                                     Install sip:provider community edition,
+                                     latest/##VERSION## available stable release.
 
-                                        Use static IP configuration, adjust
-                                        ip=... and dns=... options in boot
-                                        command line as necessary.
+                                     Use static IP configuration, adjust
+                                     ip=... and dns=... options in boot
+                                     command line as necessary.
   endtext
