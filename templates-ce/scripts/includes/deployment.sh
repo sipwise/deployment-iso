@@ -134,6 +134,49 @@ loadNfsIpArray() {
   [ "$n" == "7" ] && return 0 || return 1
 }
 
+# see MT#6253
+fai_upgrade() {
+  upgrade=false # upgrade only if needed
+
+  local required_version=4.2
+  local present_version=$(dpkg-query --show --showformat='${Version}' fai-setup-storage)
+
+  if dpkg --compare-versions $present_version lt $required_version ; then
+    echo "fai-setup-storage version $present_version is older than minimum required version $required_version - upgrading."
+    upgrade=true
+  fi
+
+  local required_version=0.17-2
+  local present_version=$(dpkg-query --show --showformat='${Version}' liblinux-lvm-perl)
+
+  if dpkg --compare-versions $present_version lt $required_version ; then
+    echo "liblinux-lvm-perl version $present_version is older than minimum required version $required_version - upgrading."
+    upgrade=true
+  fi
+
+  if ! "$upgrade" ; then
+    echo "fai-setup-storage and liblinux-lvm-perl are OK already, nothing to do about it."
+    return 0
+  fi
+
+  wget -O /tmp/680FBA8A.asc http://deb.sipwise.com/autobuild/680FBA8A.asc
+  apt-key add /tmp/680FBA8A.asc
+
+  # use temporary apt database for speed reasons
+  local TMPDIR=$(mktemp -d)
+  mkdir -p "${TMPDIR}/statedir/lists/partial" "${TMPDIR}/cachedir/archives/partial"
+  local debsrcfile=$(mktemp)
+  echo "deb http://debian.sipwise.com/wheezy-backports wheezy-backports main" >> "$debsrcfile"
+
+  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" -o dir::etc::sourcelist="$debsrcfile" \
+    -o Dir::Etc::sourceparts=/dev/null update
+
+  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" -o dir::etc::sourcelist="$debsrcfile" \
+    -o Dir::Etc::sourceparts=/dev/null -y install fai-setup-storage liblinux-lvm-perl
+}
+
 grml_debootstrap_upgrade() {
   local required_version=0.62
   local present_version=$(dpkg-query --show --showformat='${Version}' grml-debootstrap)
@@ -503,6 +546,9 @@ fi
 
 set_deploy_status "grml_debootstrap_upgrade"
 grml_debootstrap_upgrade
+
+set_deploy_status "fai_upgrade"
+fai_upgrade
 
 set_deploy_status "getconfig"
 
