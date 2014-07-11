@@ -128,9 +128,7 @@ loadNfsIpArray() {
   local IFS=":"
   local ind=(client-ip server-ip gw-ip netmask hostname device autoconf)
   local i
-  for i in $2 ;
-  do
-    #  eval echo ${ind[$n]} - $i
+  for i in $2 ; do
     eval $1[${ind[n++]}]=$i
   done
   [ "$n" == "7" ] && return 0 || return 1
@@ -827,14 +825,20 @@ if "$LVM" ; then
     lv_create_opts='lvcreateopts="--yes"'
   fi
 
+  if "$NGCP_INSTALLER" ; then
+    VG_NAME="ngcp"
+  else
+    VG_NAME="vg0"
+  fi
+
   cat > /tmp/partition_setup.txt << EOF
 disk_config ${DISK} disklabel:${TABLE} bootable:1
 primary -       4096-   -       -
 
 disk_config lvm
-vg ngcp       ${DISK}1
-ngcp-root     /       -95%      ext3 rw
-ngcp-swap     swap    RAM:50%   swap sw $lv_create_opts
+vg ${VG_NAME}       ${DISK}1
+${VG_NAME}-root     /       -95%      ext3 rw
+${VG_NAME}-swap     swap    RAM:50%   swap sw $lv_create_opts
 EOF
 
   # make sure setup-storage doesn't fail if LVM is already present
@@ -855,8 +859,8 @@ EOF
   PATH=/usr/lib/fai:${PATH} setup-storage -f /tmp/partition_setup.txt -X || die "Failure during execution of setup-storage"
 
   # used later by installer
-  ROOT_FS="/dev/mapper/ngcp-root"
-  SWAP_PARTITION="/dev/mapper/ngcp-swap"
+  ROOT_FS="/dev/mapper/${VG_NAME}-root"
+  SWAP_PARTITION="/dev/mapper/${VG_NAME}-swap"
 
 else # no LVM (default)
   parted -s /dev/${DISK} mktable "$TABLE" || die "Failed to set up partition table"
@@ -918,6 +922,15 @@ if "$LVM" ; then
   cat >> /etc/debootstrap/packages << EOF
 # support LVM
 lvm2
+EOF
+fi
+
+if "$VLAN" ; then
+  cat >> /etc/debootstrap/packages << EOF
+# support bridge / bonding / vlan
+bridge-utils
+ifenslave-2.6
+vlan
 EOF
 fi
 
@@ -1292,12 +1305,13 @@ EOF
 
   # install and execute ngcp-installer
   logit "ngcp-installer: $INSTALLER"
+  INSTALLER_OPTS="TRUNK_VERSION=$TRUNK_VERSION SKIP_SOURCES_LIST=$SKIP_SOURCES_LIST ADJUST_FOR_LOW_PERFORMANCE=$ADJUST_FOR_LOW_PERFORMANCE"
   if $PRO_EDITION && ! $LINUX_HA3 ; then # HA v2
-    echo "TRUNK_VERSION=$TRUNK_VERSION SKIP_SOURCES_LIST=$SKIP_SOURCES_LIST ngcp-installer $ROLE $IP1 $IP2 $EADDR $EIFACE" > /tmp/ngcp-installer-cmdline.log
+    echo "$INSTALLER_OPTS ngcp-installer $ROLE $IP1 $IP2 $EADDR $EIFACE" > /tmp/ngcp-installer-cmdline.log
     cat << EOT | grml-chroot $TARGET /bin/bash
 wget ${INSTALLER_PATH}/${INSTALLER}
 dpkg -i $INSTALLER
-TRUNK_VERSION=$TRUNK_VERSION SKIP_SOURCES_LIST=$SKIP_SOURCES_LIST ngcp-installer \$ROLE \$IP1 \$IP2 \$EADDR \$EIFACE 2>&1 | tee -a /tmp/ngcp-installer-debug.log
+$INSTALLER_OPTS ngcp-installer \$ROLE \$IP1 \$IP2 \$EADDR \$EIFACE 2>&1 | tee -a /tmp/ngcp-installer-debug.log
 RC=\${PIPESTATUS[0]}
 if [ \$RC -ne 0 ] ; then
   echo "Fatal error while running ngcp-installer:" >&2
@@ -1307,11 +1321,11 @@ fi
 EOT
 
   elif $PRO_EDITION && $LINUX_HA3 ; then # HA v3
-    echo "TRUNK_VERSION=$TRUNK_VERSION SKIP_SOURCES_LIST=$SKIP_SOURCES_LIST ngcp-installer $ROLE $IP1 $IP2 $EADDR $EIFACE $MCASTADDR" > /tmp/ngcp-installer-cmdline.log
+    echo "$INSTALLER_OPTS ngcp-installer $ROLE $IP1 $IP2 $EADDR $EIFACE $MCASTADDR" > /tmp/ngcp-installer-cmdline.log
     cat << EOT | grml-chroot $TARGET /bin/bash
 wget ${INSTALLER_PATH}/${INSTALLER}
 dpkg -i $INSTALLER
-TRUNK_VERSION=$TRUNK_VERSION SKIP_SOURCES_LIST=$SKIP_SOURCES_LIST ngcp-installer \$ROLE \$IP1 \$IP2 \$EADDR \$EIFACE \$MCASTADDR 2>&1 | tee -a /tmp/ngcp-installer-debug.log
+$INSTALLER_OPTS ngcp-installer \$ROLE \$IP1 \$IP2 \$EADDR \$EIFACE \$MCASTADDR 2>&1 | tee -a /tmp/ngcp-installer-debug.log
 RC=\${PIPESTATUS[0]}
 if [ \$RC -ne 0 ] ; then
   echo "Fatal error while running ngcp-installer (HA v3):" >&2
@@ -1321,11 +1335,11 @@ fi
 EOT
 
   else # spce
-    echo "TRUNK_VERSION=$TRUNK_VERSION SKIP_SOURCES_LIST=$SKIP_SOURCES_LIST ngcp-installer" > /tmp/ngcp-installer-cmdline.log
+    echo "$INSTALLER_OPTS ngcp-installer" > /tmp/ngcp-installer-cmdline.log
     cat << EOT | grml-chroot $TARGET /bin/bash
 wget ${INSTALLER_PATH}/${INSTALLER}
 dpkg -i $INSTALLER
-echo y | TRUNK_VERSION=$TRUNK_VERSION SKIP_SOURCES_LIST=$SKIP_SOURCES_LIST ngcp-installer 2>&1 | tee -a /tmp/ngcp-installer-debug.log
+echo y | $INSTALLER_OPTS ngcp-installer 2>&1 | tee -a /tmp/ngcp-installer-debug.log
 RC=\${PIPESTATUS[1]}
 if [ \$RC -ne 0 ] ; then
   echo "Fatal error while running ngcp-installer:" >&2
@@ -1507,6 +1521,17 @@ if "$PRO_EDITION" ; then
       ;;
   esac
 
+  # get list of available network devices (excl. some known-to-be-irrelevant ones)
+  net_devices=$(tail -n +3 /proc/net/dev | awk -F: '{print $1}'| sed "s/\s*//" | grep -ve '^vmnet' -ve '^vboxnet' -ve '^docker' | sort -u)
+
+  NETWORK_DEVICES=""
+  for network_device in $net_devices $DEFAULT_INSTALL_DEV $INTERNAL_DEV $EXTERNAL_DEV ; do
+    # avoid duplicates
+    echo "$NETWORK_DEVICES" | grep -wq "$network_device" || NETWORK_DEVICES="$NETWORK_DEVICES $network_device"
+  done
+  export NETWORK_DEVICES
+  unset net_devices
+
   cat << EOT | grml-chroot $TARGET /bin/bash
   if ! [ -r /etc/ngcp-config/network.yml ] ; then
     echo '/etc/ngcp-config/network.yml does not exist'
@@ -1534,15 +1559,23 @@ if "$PRO_EDITION" ; then
     ngcp-network --host=$THIS_HOST --move-from=lo --move-to=$INTERNAL_DEV --type=ha_int
     # set *_ext types accordingly for PRO setup
     ngcp-network --host=$THIS_HOST --move-from=lo --move-to=$EXTERNAL_DEV --type=web_ext \
-                                   --type=sip_ext --type=rtp_ext --type=ssh_ext --type=mon_ext
+                                   --type=sip_ext --type=rtp_ext --type=mon_ext
 
     ngcp-network --host=$PEER --peer=$THIS_HOST
     ngcp-network --host=$PEER --set-interface=$EXTERNAL_DEV --shared-ip=none --shared-ipv6=none
     ngcp-network --host=$PEER --set-interface=lo --ipv6='::1' --ip=auto --netmask=auto --hwaddr=auto
 
+    # add ssh_ext to all the interfaces of sp1 on sp1
+    for interface in \$NETWORK_DEVICES ; do
+      ngcp-network --host=$THIS_HOST --set-interface=\$interface --type=ssh_ext
+    done
+
+    # add ssh_ext to lo and $INTERNAL_DEV interfaces of sp2 on sp1 so we can reach the ssh server at any time
+    ngcp-network --host=$PEER --set-interface=lo --type=ssh_ext
+    ngcp-network --host=$PEER --set-interface=$INTERNAL_DEV --type=ssh_ext
+
     # needed to make sure MySQL setup is OK for first node until second node is set up
     ngcp-network --host=$PEER --set-interface=$INTERNAL_DEV --ip=$IP2 --netmask=$DEFAULT_INTERNAL_NETMASK --type=ha_int
-
     ngcp-network --host=$PEER --role=proxy --role=lb --role=mgmt
     ngcp-network --host=$PEER --set-interface=lo --type=sip_int --type=web_int --type=aux_ext
 
@@ -1565,7 +1598,12 @@ if "$PRO_EDITION" ; then
     ngcp-network --host=$THIS_HOST --set-interface=$INTERNAL_DEV --ip=auto --netmask=auto --hwaddr=auto --type=ha_int
     # set *_ext types accordingly for PRO setup
     ngcp-network --host=$THIS_HOST --set-interface=$EXTERNAL_DEV --type=web_ext --type=sip_ext \
-                              --type=rtp_ext --type=ssh_ext --type=mon_ext
+                              --type=rtp_ext --type=mon_ext
+
+    # add ssh_ext to all the interfaces of sp2 on sp2
+    for interface in \$NETWORK_DEVICES ; do
+      ngcp-network --host=$THIS_HOST --set-interface=\$interface --type=ssh_ext
+    done
 
     # use --no-db-sync only if supported by ngcp[cfg] version
     if grep -q -- --no-db-sync /usr/sbin/ngcpcfg ; then
@@ -1598,7 +1636,9 @@ EOT
 fi
 
 if "$RETRIEVE_MGMT_CONFIG" ; then
-  echo "Nothing to do, /etc/network/interfaces was already set up."
+  echo "Nothing to do (RETRIEVE_MGMT_CONFIG is set), /etc/network/interfaces was already set up."
+elif ! "$NGCP_INSTALLER" ; then
+  echo "Not modifying /etc/network/interfaces as installing plain Debian."
 elif "$DHCP" ; then
   cat > $TARGET/etc/network/interfaces << EOF
 # This file describes the network interfaces available on your system
@@ -1993,7 +2033,7 @@ use YAML::Tiny;
 
 my $yaml = YAML::Tiny->new;
 my $inputfile  = "/etc/ngcp-config/config.yml";
-my $outputfile = "/etc/ngcp-config/config.yml";
+my $outputfile = $inputfile;
 
 $yaml = YAML::Tiny->read($inputfile) or die "File $inputfile could not be read";
 
@@ -2012,6 +2052,25 @@ print $fh $yaml->write_string() or die "Could not write YAML to $outputfile";
 EOF
   fi
 
+  # CE
+  chroot "$TARGET" perl -wCSD << "EOF"
+use strict;
+use warnings;
+use YAML::Tiny;
+
+my $yaml = YAML::Tiny->new;
+my $inputfile  = "/etc/ngcp-config/config.yml";
+my $outputfile = $inputfile;
+
+$yaml = YAML::Tiny->read($inputfile) or die "File $inputfile could not be read";
+
+# Enable SSH on all IPs/interfaces (0.0.0.0)
+push @{$yaml->[0]->{sshd}->{listen_addresses}}, '0.0.0.0';
+
+open(my $fh, ">", "$outputfile") or die "Could not open $outputfile for writing";
+print $fh $yaml->write_string() or die "Could not write YAML to $outputfile";
+EOF
+
   # record configuration file changes
   chroot "$TARGET" etckeeper commit "Snapshot after enabling VM defaults [$(date)]" || true
   chroot "$TARGET" bash -c "cd /etc/ngcp-config ; git commit -a -m \"Snapshot after enabling VM defaults [$(date)]\" || true"
@@ -2023,29 +2082,27 @@ adjust_for_low_performance() {
   chroot "$TARGET" bash -c "cd /etc/ngcp-config ; git commit -a -m \"Snapshot before decreasing default resource usage [$(date)]\" || true"
 
   echo "Decreasing default resource usage"
-  # sems
-  sed -i -e 's/media_processor_threads=[0-9]\+$/media_processor_threads=1/g' ${TARGET}/etc/ngcp-config/templates/etc/sems/sems.conf.tt2
-  # kamailio
-  sed -i -e 's/children: [0-9]\+$/children: 1/g'			${TARGET}/etc/ngcp-config/config.yml
-  sed -i -e 's/tcp_children: [0-9]\+$/tcp_children: 1/g' 		${TARGET}/etc/ngcp-config/config.yml
-  sed -i -e 's/udp_children: [0-9]\+$/udp_children: 1/g' 		${TARGET}/etc/ngcp-config/config.yml
-  sed -i -e 's/natping_processes: [0-9]\+$/natping_processes: 1/g'	${TARGET}/etc/ngcp-config/config.yml
-  if expr $SP_VERSION \<= 3.1 >/dev/null 2>&1 ; then
-    # need for NGCP <=3.1 (MT#5513)
-    sed -i -e 's/tcp_children=4$/tcp_children=1/g' ${TARGET}/etc/ngcp-config/templates/etc/kamailio/proxy/kamailio.cfg.tt2 || true
-  fi
-  # apache
-  sed -i -e 's/StartServers.*[0-9]\+$/StartServers 1/g'       ${TARGET}/etc/apache2/apache2.conf
-  sed -i -e 's/MinSpareServers.*[0-9]\+$/MinSpareServers 1/g' ${TARGET}/etc/apache2/apache2.conf
-  sed -i -e 's/MaxSpareServers.*[0-9]\+$/MaxSpareServers 1/g' ${TARGET}/etc/apache2/apache2.conf
-  # mysql
-  sed -i -e 's/bufferpoolsize:.*$/bufferpoolsize: 64M/g'       ${TARGET}/etc/ngcp-config/config.yml
-  # nginx
-  sed -i -e 's/fastcgi_workers: [0-9]\+$/fastcgi_workers: 2/g'       ${TARGET}/etc/ngcp-config/config.yml
   if expr $SP_VERSION \<= mr3.2.999 >/dev/null 2>&1 ; then
-    # need for NGCP <=mr3.2 (MT#7275)
-    sed -i -e 's/NPROC=[0-9]\+$/NPROC=2/g'       ${TARGET}/etc/ngcp-config/templates/etc/init.d/ngcp-panel.tt2 || true
-    sed -i -e 's/NPROC=[0-9]\+$/NPROC=2/g'       ${TARGET}/etc/ngcp-config/templates/etc/init.d/ngcp-www-csc.tt2 || true
+    # sems: need for NGCP <=mr3.2 (MT#7407)
+    sed -e 's/media_processor_threads=[0-9]\+$/media_processor_threads=1/g' \
+        -i ${TARGET}/etc/ngcp-config/templates/etc/sems/sems.conf.tt2 \
+        -i ${TARGET}/etc/sems/sems.conf || true
+  fi
+
+  if expr $SP_VERSION \<= 3.1 >/dev/null 2>&1 ; then
+    # kamailio: need for NGCP <=3.1 (MT#5513)
+    sed -e 's/tcp_children=4$/tcp_children=1/g' \
+        -i ${TARGET}/etc/ngcp-config/templates/etc/kamailio/proxy/kamailio.cfg.tt2 \
+        -i ${TARGET}/etc/kamailio/proxy/kamailio.cfg || true
+  fi
+
+  if expr $SP_VERSION \<= mr3.2.999 >/dev/null 2>&1 ; then
+    # nginx: need for NGCP <=mr3.2 (MT#7275)
+    sed -e 's/NPROC=[0-9]\+$/NPROC=2/g' \
+        -i ${TARGET}/etc/ngcp-config/templates/etc/init.d/ngcp-panel.tt2 \
+        -i ${TARGET}/etc/init.d/ngcp-panel \
+        -i ${TARGET}/etc/ngcp-config/templates/etc/init.d/ngcp-www-csc.tt2 \
+        -i ${TARGET}/etc/init.d/ngcp-www-csc || true
   fi
 
   # record configuration file changes
