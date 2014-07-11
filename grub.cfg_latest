@@ -1,6 +1,6 @@
 menuentry "Install ##VERSION## sip:providerCE - DHCP" {
   echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## scripts ngcphostname=spce 
+  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## scripts ngcphostname=spce ngcpnw.dhcp 
   echo 'Loading initrd...'
   initrd /boot/%SHORT_NAME%/initrd.img
 }
