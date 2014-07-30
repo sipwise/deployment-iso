@@ -104,8 +104,8 @@ prompt_for_target()
   DISK_LIST=$(for i in $AVAILABLE_DISKS ; do
                 for file in /dev/disk/by-id/* ; do
                    case "$(realpath $file)" in
-                     /dev/"$i") disk_info="${file#/dev/disk/by-id/}" ; break ;;
-                             *) disk_info="$file" ;;
+                     (/dev/"$i") disk_info="${file#/dev/disk/by-id/}" ; break ;;
+                             (*) disk_info="$file" ;;
                    esac
                 done
                 echo ${i} ${disk_info}
