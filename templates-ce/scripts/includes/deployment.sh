@@ -1567,8 +1567,8 @@ if "$PRO_EDITION" ; then
       ;;
   esac
 
-  # get list of available network devices (excl. some known-to-be-irrelevant ones)
-  net_devices=$(tail -n +3 /proc/net/dev | awk -F: '{print $1}'| sed "s/\s*//" | grep -ve '^vmnet' -ve '^vboxnet' -ve '^docker' | sort -u)
+  # get list of available network devices (excl. some known-to-be-irrelevant ones, also see MT#8297)
+  net_devices=$(tail -n +3 /proc/net/dev | awk -F: '{print $1}'| sed "s/\s*//" | grep -ve '^vmnet' -ve '^vboxnet' -ve '^docker' -ve '^usb' | sort -u)
 
   NETWORK_DEVICES=""
   for network_device in $net_devices $DEFAULT_INSTALL_DEV $INTERNAL_DEV $EXTERNAL_DEV ; do
