@@ -73,8 +73,19 @@ check_for_existing_pvs()
   local EXISTING_VGS=$(pvs | awk '/\/dev\// {print $2 " " $1}')
 
   if echo $EXISTING_VGS | grep -q '^ngcp ' ; then
+    # which disk has the PV named "ngcp"?
+    local NGCP_DISK="$(echo $EXISTING_VGS | awk '/^ngcp/ {print $2}')"
+    # drop any trailing digits, so we get e.g. /dev/sda for /dev/sda1
+    NGCP_DISK="${NGCP_DISK%%[0-9]*}"
+
+    # if the user tries to (re)install to the disk that provides an "ngcp"
+    # PV already we should allow overwriting data
+    if [[ "${NGCP_DISK}" == "${TARGET_DISK}" ]] ; then
+      return 0
+    fi
+
     dialog --title "LVM PVS check" \
-      --msgbox "Sorry, there seems to be a physical volume named 'ngcp' on disk $(echo $EXISTING_VGS | awk '/^ngcp/ {print $2}') present already. Installation can't continue, please remove/detach the disk and rerun installation procedure." 0 0
+      --msgbox "Sorry, there seems to be a physical volume named 'ngcp' on disk $NGCP_DISK present already. Installation can't continue, please remove/detach the disk and rerun installation procedure." 0 0
     return 1
   fi
 }
