@@ -66,6 +66,19 @@ report_ssh_password() {
   fi
 }
 
+check_for_existing_pvs()
+{
+  # make sure we don't have a PV named "ngcp" on a different disk,
+  # otherwise partitioning and booting won't work
+  local EXISTING_VGS=$(pvs | awk '/\/dev\// {print $2 " " $1}')
+
+  if echo $EXISTING_VGS | grep -q '^ngcp ' ; then
+    dialog --title "LVM PVS check" \
+      --msgbox "Sorry, there seems to be a physical volume named 'ngcp' on disk $(echo $EXISTING_VGS | awk '/^ngcp/ {print $2}') present already. Installation can't continue, please remove/detach the disk and rerun installation procedure." 0 0
+    return 1
+  fi
+}
+
 prompt_for_target()
 {
   AVAILABLE_DISKS=$(awk '/[a-z]$/ {print $4}' /proc/partitions | grep -v '^name$' | sort -u)
@@ -120,6 +133,7 @@ deploy() {
 }
 
 prompt_for_target
+check_for_existing_pvs
 network_check
 report_ssh_password
 deploy
