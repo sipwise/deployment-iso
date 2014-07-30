@@ -80,7 +80,7 @@ check_for_existing_pvs()
 
     # if the user tries to (re)install to the disk that provides an "ngcp"
     # PV already we should allow overwriting data
-    if [[ "${NGCP_DISK}" == "${TARGET_DISK}" ]] ; then
+    if [[ "${NGCP_DISK}" == "/dev/${TARGET_DISK}" ]] ; then
       return 0
     fi
 
