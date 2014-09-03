@@ -24,3 +24,27 @@ label prosp2nw-##VERSION##
                                      in boot command line if necessary.
   endtext
 
+label prosp1-##VERSION##
+  menu label sip:providerPRO - sp1 DHCP/ ##VERSION## release
+  kernel /boot/%SHORT_NAME%/vmlinuz
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcpsp1 ngcpvers=##VERSION## ngcpnw.dhcp 
+
+  text help
+                                     Install sip:provider
+                                     professional edition, version ##VERSION##.
+                                     Install first node of HA setup.
+                                     Retrieve network configuration via DHCP.
+  endtext
+
+label prosp2-##VERSION##
+  menu label sip:providerPRO - sp2 DHCP/ ##VERSION## release
+  kernel /boot/%SHORT_NAME%/vmlinuz
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/kantan/deployment.sh ngcpsp2 ngcpvers=##VERSION## ngcpnw.dhcp 
+
+  text help
+                                     Install sip:provider
+                                     professional edition, version ##VERSION##.
+                                     Install second node of HA setup.
+                                     Retrieve network configuration via DHCP.
+  endtext
+
