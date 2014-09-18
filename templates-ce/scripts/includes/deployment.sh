@@ -37,6 +37,7 @@ PRO_EDITION=false
 CE_EDITION=false
 NGCP_INSTALLER=false
 PUPPET=''
+RESTART_NETWORK=true
 INTERACTIVE=false
 DHCP=false
 LOGO=true
@@ -134,11 +135,22 @@ loadNfsIpArray() {
   [ "$n" == "7" ] && return 0 || return 1
 }
 
+install_sipwise_key() {
+  wget -O /etc/apt/trusted.gpg.d/sipwise.gpg http://deb.sipwise.com/spce/sipwise.gpg
+
+  md5sum_sipwise_key_expected=32a4907a7d7aabe325395ca07c531234
+  md5sum_sipwise_key_calculated=$(md5sum /etc/apt/trusted.gpg.d/sipwise.gpg | awk '{print $1}')
+
+  if [ "$md5sum_sipwise_key_calculated" != "$md5sum_sipwise_key_expected" ] ; then
+    die "Error validating sipwise keyring for apt usage (expected: [$md5sum_sipwise_key_expected] - got: [$md5sum_sipwise_key_calculated])"
+  fi
+}
+
 # see MT#6253
 fai_upgrade() {
   upgrade=false # upgrade only if needed
 
-  local required_version=4.2
+  local required_version=4.2.4+0
   local present_version=$(dpkg-query --show --showformat='${Version}' fai-setup-storage)
 
   if dpkg --compare-versions $present_version lt $required_version ; then
@@ -159,8 +171,7 @@ fai_upgrade() {
     return 0
   fi
 
-  wget -O /tmp/680FBA8A.asc http://deb.sipwise.com/autobuild/680FBA8A.asc
-  apt-key add /tmp/680FBA8A.asc
+  install_sipwise_key
 
   # use temporary apt database for speed reasons
   local TMPDIR=$(mktemp -d)
@@ -196,6 +207,17 @@ grml_debootstrap_upgrade() {
 
     DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
       -o dir::state="${TMPDIR}/statedir" -y install grml-debootstrap
+  fi
+}
+
+ensure_augtool_present() {
+  if [ -x /usr/bin/augtool ] ; then
+    echo "/usr/bin/augtool is present, nothing to do"
+  else
+    echo "augtool isn't present, installing augeas-tools package:"
+
+    apt-get update
+    DEBIAN_FRONTEND='noninteractive' apt-get -y install augeas-tools
   fi
 }
 ### }}}
@@ -383,6 +405,10 @@ if checkBootParam ngcpip2 ; then
   IP2=$(getBootParam ngcpip2)
 fi
 
+if checkBootParam ngcpnetmask ; then
+  INTERNAL_NETMASK=$(getBootParam ngcpnetmask)
+fi
+
 if checkBootParam ngcpeaddr ; then
   EADDR=$(getBootParam ngcpeaddr)
 fi
@@ -452,6 +478,11 @@ if checkBootParam ngcpsystemd ; then
   logit "Enabling systemd support as requested via boot option ngcpsystemd"
   SYSTEMD=true
 fi
+
+if checkBootParam ngcpnonwrecfg ; then
+  logit "Disabling reconfig network as requested via boot option ngcpnonwrecfg"
+  RESTART_NETWORK=false
+fi
 ## }}}
 
 ## interactive mode {{{
@@ -488,6 +519,7 @@ Control target system:
   ngcpeiface=...   - external interface device (defaults to eth0)
   ngcpip1=...      - IP address of first node
   ngcpip2=...      - IP address of second node
+  ngcpnetmask=...  - netmask of ha_int interface
   ngcpeaddr=...    - Cluster IP address
 
 The command line options correspond with the available bootoptions.
@@ -522,6 +554,7 @@ for param in $* ; do
     *ngcpeaddr=*) EADDR=$(echo $param | sed 's/ngcpeaddr=//');;
     *ngcpip1=*) IP1=$(echo $param | sed 's/ngcpip1=//');;
     *ngcpip2=*) IP2=$(echo $param | sed 's/ngcpip2=//');;
+    *ngcpnetmask=*) INTERNAL_NETMASK=$(echo $param | sed 's/ngcpnetmask=//');;
     *ngcpmcast=*) MCASTADDR=$(echo $param | sed 's/ngcpmcast=//');;
     *ngcpcrole=*) CROLE=$(echo $param | sed 's/ngcpcrole=//');;
     *ngcpcmaster=*) CMASTER=$(echo $param | sed 's/ngcpcmaster=//');;
@@ -549,6 +582,11 @@ grml_debootstrap_upgrade
 
 set_deploy_status "fai_upgrade"
 fai_upgrade
+
+if "$NGCP_INSTALLER" ; then
+  set_deploy_status "ensure_augtool_present"
+  ensure_augtool_present
+fi
 
 set_deploy_status "getconfig"
 
@@ -617,6 +655,19 @@ if "$PRO_EDITION" ; then
       INTERNAL_DEV='eth0'
     fi
   fi
+
+  # needed for carrier
+  if "$RETRIEVE_MGMT_CONFIG" ; then
+    logit "Retrieving ha_int IPs configuration from management server"
+    wget --timeout=30 -O "/tmp/hosts" "${MANAGEMENT_IP}:3000/hostconfig/${TARGET_HOSTNAME}"
+    IP1=$(awk '/sp1/ { print $1 }' /tmp/hosts) || IP1=$DEFAULT_IP1
+    IP2=$(awk '/sp2/ { print $1 }' /tmp/hosts) || IP2=$DEFAULT_IP2
+    wget --timeout=30 -O "/tmp/interfaces" "${MANAGEMENT_IP}:3000/nwconfig/${TARGET_HOSTNAME}"
+    INTERNAL_NETMASK=$(grep "$INTERNAL_DEV inet" -A2 /tmp/interfaces | awk '/netmask/ { print $2 }') \
+      || INTERNAL_NETMASK=$DEFAULT_INTERNAL_NETMASK
+    logit "ha_int sp1: $IP1 sp2: $IP2 netmask: $INTERNAL_NETMASK"
+  fi
+
   [ -n "$IP1" ] || IP1=$DEFAULT_IP1
   [ -n "$IP2" ] || IP2=$DEFAULT_IP2
   case "$ROLE" in
@@ -632,6 +683,7 @@ fi
 
 # needed as environment vars for ngcp-installer
 if "$PRO_EDITION" ; then
+  export CROLE
   export ROLE
   export IP1
   export IP2
@@ -946,9 +998,6 @@ locales-all
 firmware-bnx2
 firmware-bnx2x
 
-# required for dkms
-linux-headers-2.6-amd64
-
 # support acpi (d-i installs them as well)
 acpi acpid acpi-support-base
 
@@ -963,6 +1012,26 @@ openssh-server
 #laptop-detect
 #os-prober
 EOF
+
+# MT#8813 The linux-headers-2.6-amd64 package doesn't exist in jessie and newer
+case "$DEBIAN_RELEASE" in
+  lenny|squeeze|wheezy)
+    echo  "Adding linux-headers-2.6-amd64 package (because we're installing ${DEBIAN_RELEASE})"
+    logit "Adding linux-headers-2.6-amd64 package (because we're installing ${DEBIAN_RELEASE})"
+    cat >> /etc/debootstrap/packages << EOF
+# required for dkms
+linux-headers-2.6-amd64
+EOF
+    ;;
+  *)
+    echo  "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
+    logit "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
+    cat >> /etc/debootstrap/packages << EOF
+# required for dkms
+linux-headers-amd64
+EOF
+    ;;
+esac
 
 if "$LVM" ; then
   cat >> /etc/debootstrap/packages << EOF
@@ -995,15 +1064,7 @@ $FIRMWARE_PACKAGES
 EOF
 fi
 
-# sipwise key setup
-wget -O /etc/apt/trusted.gpg.d/sipwise.gpg http://deb.sipwise.com/autobuild/sipwise.gpg
-
-md5sum_sipwise_key_expected=32a4907a7d7aabe325395ca07c531234
-md5sum_sipwise_key_calculated=$(md5sum /etc/apt/trusted.gpg.d/sipwise.gpg | awk '{print $1}')
-
-if [ "$md5sum_sipwise_key_calculated" != "$md5sum_sipwise_key_expected" ] ; then
-  die "Error validating sipwise keyring for apt usage (expected: [$md5sum_sipwise_key_expected] - got: [$md5sum_sipwise_key_calculated])"
-fi
+install_sipwise_key
 
 mkdir -p /etc/debootstrap/pre-scripts/
 cat > /etc/debootstrap/pre-scripts/install-sipwise-key.sh << EOF
@@ -1042,11 +1103,18 @@ EOF
   chmod 775 /etc/debootstrap/scripts/systemd.sh
 fi
 
-# NOTE: we use the debian.sipwise.com CNAME by intention here
-# to avoid conflicts with apt-pinning, preferring deb.sipwise.com
-# over official Debian
-MIRROR='http://debian.sipwise.com/debian/'
-SEC_MIRROR='http://debian.sipwise.com/debian-security/'
+# drop this once we mirror Debian/jessie
+if [ "$DEBIAN_RELEASE" = "jessie" ] ; then
+  MIRROR='http://debian.inode.at/debian/'
+  KEYRING='/usr/share/keyrings/debian-archive-keyring.gpg'
+else
+  # NOTE: we use the debian.sipwise.com CNAME by intention here
+  # to avoid conflicts with apt-pinning, preferring deb.sipwise.com
+  # over official Debian
+  MIRROR='http://debian.sipwise.com/debian/'
+  SEC_MIRROR='http://debian.sipwise.com/debian-security/'
+  KEYRING='/etc/apt/trusted.gpg.d/sipwise.gpg'
+fi
 
 set_deploy_status "debootstrap"
 
@@ -1055,9 +1123,19 @@ logit "Setting up /etc/debootstrap/etc/apt/sources.list"
 cat > /etc/debootstrap/etc/apt/sources.list << EOF
 # Set up via deployment.sh for grml-debootstrap usage
 deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
-deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
-deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
 EOF
+
+# drop this once Debian/jessie has security support
+if [ -n "$SEC_MIRROR" ] ; then
+  echo "deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
+else
+  echo  "Warning: security mirror variable SEC_MIRROR is unset, not enabling security repository for $DEBIAN_RELEASE"
+  logit "Warning: security mirror variable SEC_MIRROR is unset, not enabling security repository for $DEBIAN_RELEASE"
+fi
+
+echo "deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
+
+
 
 # install Debian
 echo y | grml-debootstrap \
@@ -1066,7 +1144,7 @@ echo y | grml-debootstrap \
   --filesystem "${FILESYSTEM}" \
   --hostname "${TARGET_HOSTNAME}" \
   --mirror "$MIRROR" \
-  --debopt '--keyring=/etc/apt/trusted.gpg.d/sipwise.gpg' $EXTRA_DEBOOTSTRAP_OPTS \
+  --debopt "--keyring=${KEYRING}" $EXTRA_DEBOOTSTRAP_OPTS \
   --keep_src_list \
   -r "$DEBIAN_RELEASE" \
   -t "$ROOT_FS" \
@@ -1078,6 +1156,15 @@ fi
 
 sync
 mount "$ROOT_FS" "$TARGET"
+
+# MT#7805
+if "$NGCP_INSTALLER" ; then
+  cat << EOT | augtool --root="$TARGET"
+insert opt after /files/etc/fstab/*[file="/"]/opt[last()]
+set /files/etc/fstab/*[file="/"]/opt[last()] noatime
+save
+EOT
+fi
 
 # provide useable swap partition
 echo "Enabling swap partition $SWAP_PARTITION via /etc/fstab"
@@ -1164,7 +1251,9 @@ if "$RETRIEVE_MGMT_CONFIG" ; then
   wget --timeout=30 -O /etc/network/interfaces "${MANAGEMENT_IP}:3000/nwconfig/$(cat ${TARGET}/etc/hostname)"
 
   cp /etc/network/interfaces "${TARGET}/etc/network/interfaces"
+fi
 
+if "$RETRIEVE_MGMT_CONFIG" && "$RESTART_NETWORK" ; then
   # restart networking for the time being only when running either in toram mode
   # or not booting from NFS, once we've finished the carrier setup procedure we
   # should be able to make this as our only supported default mode and drop
@@ -1217,42 +1306,38 @@ get_installer_path() {
 
   # use pool directory according for ngcp release
   if $PRO_EDITION ; then
+    if [ -n "$CROLE" ]; then
+      local installer_package='ngcp-installer-carrier'
+    else
+      local installer_package='ngcp-installer-pro'
+    fi
+    local repos_base_path="http://deb.sipwise.com/sppro/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
     INSTALLER_PATH="http://deb.sipwise.com/sppro/${SP_VERSION}/pool/main/n/ngcp-installer/"
   else
+    local installer_package='ngcp-installer-ce'
+    local repos_base_path="http://deb.sipwise.com/spce/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
     INSTALLER_PATH="http://deb.sipwise.com/spce/${SP_VERSION}/pool/main/n/ngcp-installer/"
   fi
 
   # use a separate repos for trunk releases
   if $TRUNK_VERSION ; then
-    INSTALLER_PATH='http://deb.sipwise.com/autobuild/pool/main/n/ngcp-installer/'
+    local repos_base_path="http://deb.sipwise.com/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
+    INSTALLER_PATH="http://deb.sipwise.com/autobuild/pool/main/n/ngcp-installer/"
   fi
 
-  wget --directory-prefix=debs --no-directories -r --no-parent "$INSTALLER_PATH"
+  wget --timeout=30 -O Packages "${repos_base_path}/Packages"
+  # sed: display paragraphs matching the "Package: ..." string, then grab string "^Version: " and display the actual version via awk
+  # sort -u to avoid duplicates in repositories shipping the ngcp-installer-pro AND ngcp-installer-pro-ha-v3 debs
+  local version=$(sed "/./{H;\$!d;};x;/Package: ${installer_package}/b;d" Packages | awk '/^Version: / {print $2}' | sort -u)
 
-  # Get rid of unused ngcp-installer-pro-ha-v3 packages to avoid version number problems
-  rm -f debs/ngcp-installer-pro-ha-v3*
+  [ -n "$version" ] || die "Error: installer version for ngcp ${SP_VERSION}, Debian release $DEBIAN_RELEASE with installer package $installer_package could not be detected."
 
-  # As soon as a *tagged* version against $DEBIAN_RELEASE enters the pool
-  # (e.g. during release time) the according package which includes the
-  # $DEBIAN_RELEASE string disappears, in such a situation instead choose the
-  # highest version number instead.
-  local count_distri_package="$(find ./debs -type f -a -name \*\+${DEBIAN_RELEASE}\*.deb)"
-  if [ -z "$count_distri_package" ] ; then
-    echo  "Could not find any $DEBIAN_RELEASE specific packages, going for highest version number instead."
-    logit "Could not find any $DEBIAN_RELEASE specific packages, going for highest version number instead."
-  else
-    echo  "Found $DEBIAN_RELEASE specific packages, getting rid of all packages without gbp and $DEBIAN_RELEASE in their name."
-    logit "Found $DEBIAN_RELEASE specific packages, getting rid of all packages without gbp and $DEBIAN_RELEASE in their name."
-    # get rid of files not matching the Debian relase we want to install
-    find ./debs -type f -a ! -name \*\+${DEBIAN_RELEASE}\* -exec rm {} +
-  fi
-
-  local version=$(dpkg-scanpackages debs /dev/null 2>/dev/null | awk '/Version/ {print $2}' | sort -ur)
-
-  [ -n "$version" ] || die "Error: installer version could not be detected."
-
-  if $PRO_EDITION ; then
-    INSTALLER="ngcp-installer-pro_${version}_all.deb"
+  if "$PRO_EDITION" ; then
+    if [ -n "$CROLE" ]; then
+      INSTALLER="ngcp-installer-carrier_${version}_all.deb"
+    else
+      INSTALLER="ngcp-installer-pro_${version}_all.deb"
+    fi
   else
     INSTALLER="ngcp-installer-ce_${version}_all.deb"
   fi
@@ -1300,7 +1385,17 @@ EOF
 
 # Debian repositories
 deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
-deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
+EOF
+
+# drop this once Debian/jessie has security support
+if [ -n "$SEC_MIRROR" ] ; then
+  echo "deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free" >> $TARGET/etc/apt/sources.list.d/debian.list
+else
+  echo  "Warning: security mirror variable SEC_MIRROR is unset, not enabling security repository for $DEBIAN_RELEASE"
+  logit "Warning: security mirror variable SEC_MIRROR is unset, not enabling security repository for $DEBIAN_RELEASE"
+fi
+
+cat >> $TARGET/etc/apt/sources.list.d/debian.list << EOF
 deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
 
 EOF
@@ -1353,11 +1448,11 @@ EOF
   logit "ngcp-installer: $INSTALLER"
   INSTALLER_OPTS="TRUNK_VERSION=$TRUNK_VERSION SKIP_SOURCES_LIST=$SKIP_SOURCES_LIST ADJUST_FOR_LOW_PERFORMANCE=$ADJUST_FOR_LOW_PERFORMANCE"
   if $PRO_EDITION && ! $LINUX_HA3 ; then # HA v2
-    echo "$INSTALLER_OPTS ngcp-installer $ROLE $IP1 $IP2 $EADDR $EIFACE" > /tmp/ngcp-installer-cmdline.log
+    echo "$INSTALLER_OPTS ngcp-installer $ROLE $CROLE $IP1 $IP2 $EADDR $EIFACE" > /tmp/ngcp-installer-cmdline.log
     cat << EOT | grml-chroot $TARGET /bin/bash
 wget ${INSTALLER_PATH}/${INSTALLER}
 dpkg -i $INSTALLER
-$INSTALLER_OPTS ngcp-installer \$ROLE \$IP1 \$IP2 \$EADDR \$EIFACE 2>&1 | tee -a /tmp/ngcp-installer-debug.log
+$INSTALLER_OPTS ngcp-installer \$ROLE \$CROLE \$IP1 \$IP2 \$EADDR \$EIFACE 2>&1 | tee -a /tmp/ngcp-installer-debug.log
 RC=\${PIPESTATUS[0]}
 if [ \$RC -ne 0 ] ; then
   echo "Fatal error while running ngcp-installer:" >&2
@@ -1402,6 +1497,96 @@ EOT
     logit "installer: error"
     die "Error during installation of ngcp. Find details at: $TARGET/tmp/ngcp-installer.log $TARGET/tmp/ngcp-installer-debug.log"
   fi
+
+  if "$PRO_EDITION" ; then
+    # set variable to have the *other* node from the PRO setup available for ngcp-network
+    case $ROLE in
+      sp1)
+        logit "Role matching sp1"
+        if [ -n "$TARGET_HOSTNAME" ] && [[ "$TARGET_HOSTNAME" == *a ]] ; then # usually carrier env
+          logit "Target hostname is set and ends with 'a'"
+          THIS_HOST="$TARGET_HOSTNAME"
+          PEER="${TARGET_HOSTNAME%a}b"
+        else # usually PRO env
+          logit "Target hostname is not set or does not end with 'a'"
+          THIS_HOST="$ROLE"
+          PEER=sp2
+        fi
+        ;;
+      sp2)
+        logit "Role matching sp2"
+        if [ -n "$TARGET_HOSTNAME" ] && [[ "$TARGET_HOSTNAME" == *b ]] ; then # usually carrier env
+          THIS_HOST="$TARGET_HOSTNAME"
+          PEER="${TARGET_HOSTNAME%b}a"
+        else # usually PRO env
+          logit "Target hostname is not set or does not end with 'b'"
+          THIS_HOST="$ROLE"
+          PEER=sp1
+        fi
+        ;;
+      *)
+        logit "Using unsupported role: $ROLE"
+        ;;
+    esac
+  fi
+
+  if "$RETRIEVE_MGMT_CONFIG" ; then
+    if [ "$ROLE" = "sp1" ] ; then
+      password=sipwise
+
+      logit "Retrieving config.yml from management server"
+      wget --timeout=30 -O "${TARGET}"/etc/ngcp-config/config.yml "${MANAGEMENT_IP}:3000/yml/config/$(cat ${TARGET}/etc/hostname)"
+      logit "Copying config.yml to /mnt/glusterfs/shared_config"
+      chroot $TARGET cp /etc/ngcp-config/config.yml /mnt/glusterfs/shared_config/config.yml
+
+      logit "Retrieving constants.yml from management server"
+      wget --timeout=30 -O "${TARGET}"/etc/ngcp-config/constants.yml "${MANAGEMENT_IP}:3000/yml/constants/$(cat ${TARGET}/etc/hostname)"
+      logit "Copying constants.yml to /mnt/glusterfs/shared_config"
+      chroot $TARGET cp /etc/ngcp-config/constants.yml /mnt/glusterfs/shared_config/constants.yml
+
+      logit "Retrieving network.yml from management server"
+      wget --timeout=30 -O "${TARGET}"/etc/ngcp-config/network.yml "${MANAGEMENT_IP}:3000/yml/network/$(cat ${TARGET}/etc/hostname)"
+
+      logit "Retrieving sipwise.cnf from management server (using password ${password})"
+      wget --timeout=30 -O "${TARGET}"/etc/mysql/sipwise.cnf "${MANAGEMENT_IP}:3000/dbconfig/sipwise_cnf?password=${password}"
+      logit "Copying sipwise.cnf to /mnt/glusterfs/shared_config"
+      chroot $TARGET cp /etc/mysql/sipwise.cnf /mnt/glusterfs/shared_config/sipwise.cnf
+
+      logit "Sync constants"
+      chroot $TARGET ngcp-sync-constants -r
+
+      # use --no-db-sync only if supported by ngcp[cfg] version
+      if chroot $TARGET grep -q -- --no-db-sync /usr/sbin/ngcpcfg ; then
+        chroot $TARGET ngcpcfg --no-db-sync commit 'get network|config|constants yaml [via deployment process]'
+        chroot $TARGET ngcpcfg build --no-db-sync
+        chroot $TARGET ngcpcfg push --shared-only
+      else
+        chroot $TARGET ngcpcfg commit 'get network|config|constants yaml [via deployment process]'
+        chroot $TARGET ngcpcfg build
+        chroot $TARGET ngcpcfg push --shared-only
+      fi
+    else # ROLE = sp2
+      # make sure login from second node to first node works
+      chroot $TARGET ssh-keyscan $PEER >> ~/.ssh/known_hosts
+
+      # live system uses a different SSH host key than the finally installed
+      # system, so do NOT use ssh-keyscan here
+      chroot $TARGET tail -1 ~/.ssh/known_hosts | sed "s/\w* /$THIS_HOST /" >> ~/.ssh/known_hosts
+      chroot $TARGET tail -1 ~/.ssh/known_hosts | sed "s/\w* /$MANAGEMENT_IP /" >> ~/.ssh/known_hosts
+      chroot $TARGET scp ~/.ssh/known_hosts $PEER:~/.ssh/known_hosts
+    fi
+  fi
+
+  case "$CROLE" in
+     proxy)
+        if chroot $TARGET service mysql start 2 ; then
+          logit "Configuring MySQL second instance"
+          chroot $TARGET ngcp-sync-constants -r -s
+        else
+          logit "Can't start MySQL second instance"
+        fi
+        ;;
+  esac
 
   # we require those packages for dkms, so do NOT remove them:
   # binutils cpp-4.3 gcc-4.3-base linux-kbuild-2.6.32
@@ -1467,21 +1652,6 @@ EOF
     adjust_hb_device
   fi
 
-  if [ -n "$CROLE" ] ; then
-    case $CROLE in
-      mgmt)
-	echo  "Carrier role mgmt identified, installing ngcp-bootenv-carrier"
-	logit "Carrier role mgmt identified, installing ngcp-bootenv-carrier"
-	chroot $TARGET apt-get -y install ngcp-bootenv-carrier
-	;;
-      *)
-	echo  "Carrier role identified, installing ngcp-ngcpcfg-carrier"
-	logit "Carrier role identified, installing ngcp-ngcpcfg-carrier"
-	chroot $TARGET apt-get -y install ngcp-ngcpcfg-carrier
-	;;
-    esac
-  fi
-
   # make sure all services are stopped
   for service in \
     apache2 \
@@ -1504,11 +1674,15 @@ EOF
     rsyslog \
     sems ; \
   do
-    chroot $TARGET /etc/init.d/$service stop || true
+    if [ -f $TARGET/etc/init.d/$service ] ; then
+      chroot $TARGET /etc/init.d/$service stop || true
+    fi
   done
 
-  # prosody's init script requires mounted /proc
-  grml-chroot $TARGET /etc/init.d/prosody stop || true
+  if [ -f $TARGET/etc/init.d/prosody ] ; then
+    # prosody's init script requires mounted /proc
+    grml-chroot $TARGET /etc/init.d/prosody stop || true
+  fi
 
   # nuke files
   for i in $(find "$TARGET/var/log" -type f -size +0 -not -name \*.ini 2>/dev/null); do
@@ -1536,37 +1710,9 @@ EOF
 fi
 
 # adjust network.yml
-if "$PRO_EDITION" ; then
-  # set variable to have the *other* node from the PRO setup available for ngcp-network
-  case $ROLE in
-    sp1)
-      logit "Role matching sp1"
-      if [ -n "$TARGET_HOSTNAME" ] && [[ "$TARGET_HOSTNAME" == *a ]] ; then # usually carrier env
-	logit "Target hostname is set and ends with 'a'"
-	THIS_HOST="$TARGET_HOSTNAME"
-	PEER="${TARGET_HOSTNAME%a}b"
-      else # usually PRO env
-	logit "Target hostname is not set or does not end with 'a'"
-	THIS_HOST="$ROLE"
-	PEER=sp2
-      fi
-      ;;
-    sp2)
-      logit "Role matching sp2"
-      if [ -n "$TARGET_HOSTNAME" ] && [[ "$TARGET_HOSTNAME" == *b ]] ; then # usually carrier env
-	THIS_HOST="$TARGET_HOSTNAME"
-	PEER="${TARGET_HOSTNAME%b}a"
-      else # usually PRO env
-	logit "Target hostname is not set or does not end with 'b'"
-	THIS_HOST="$ROLE"
-	PEER=sp1
-      fi
-      ;;
-    *)
-      logit "Using unsupported role: $ROLE"
-      ;;
-  esac
-
+if "$RETRIEVE_MGMT_CONFIG" ; then
+  echo "Nothing to do (RETRIEVE_MGMT_CONFIG is set), network.yml was already set up."
+elif "$PRO_EDITION" ; then
   # get list of available network devices (excl. some known-to-be-irrelevant ones, also see MT#8297)
   net_devices=$(tail -n +3 /proc/net/dev | awk -F: '{print $1}'| sed "s/\s*//" | grep -ve '^vmnet' -ve '^vboxnet' -ve '^docker' -ve '^usb' | sort -u)
 
@@ -1622,7 +1768,7 @@ if "$PRO_EDITION" ; then
 
     # needed to make sure MySQL setup is OK for first node until second node is set up
     ngcp-network --host=$PEER --set-interface=$INTERNAL_DEV --ip=$IP2 --netmask=$DEFAULT_INTERNAL_NETMASK --type=ha_int
-    ngcp-network --host=$PEER --role=proxy --role=lb --role=mgmt
+    ngcp-network --host=$PEER --role=proxy --role=lb --role=mgmt --role=rtp --role=db
     ngcp-network --host=$PEER --set-interface=lo --type=sip_int --type=web_int --type=aux_ext
 
     cp /etc/ngcp-config/network.yml /mnt/glusterfs/shared_config/network.yml
