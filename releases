@@ -1,7 +1,8 @@
 # list of releases
 # no spaces please!!
 mr3.6,wheezy,.
-mr3.6.1,wheezy,LATEST
+mr3.6.2,wheezy,LATEST
+mr3.6.1,wheezy,
 mr3.5,wheezy,.
 mr3.5.1,wheezy,.
 mr3.4,wheezy,.
