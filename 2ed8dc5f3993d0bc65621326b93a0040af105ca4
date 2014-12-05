@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a23299d_6a179fa4",
+        "filename": "templates/boot/isolinux/isolinux.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2014-12-05T13:23:28Z",
+      "side": 1,
+      "message": "on mr3.6.1 this is not true. \"using mgmt node\"?",
+      "range": {
+        "startLine": 410,
+        "startChar": 67,
+        "endLine": 410,
+        "endChar": 71
+      },
+      "revId": "2ed8dc5f3993d0bc65621326b93a0040af105ca4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
