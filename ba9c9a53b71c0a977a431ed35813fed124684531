@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da3975d1_b7acf08d",
+        "filename": "isolinux.cfg_carrier",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2015-01-16T09:48:42Z",
+      "side": 1,
+      "message": "Should here be: s/trunk/##VERSION##/ ? \nAlso maybe into label line.",
+      "revId": "ba9c9a53b71c0a977a431ed35813fed124684531",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
