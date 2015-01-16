@@ -1,23 +1,26 @@
 # list of releases
 # no spaces please!!
-mr3.6,wheezy,.
-mr3.6.2,wheezy,LATEST
-mr3.6.1,wheezy,.
-mr3.5,wheezy,.
-mr3.5.1,wheezy,.
-mr3.4,wheezy,.
-mr3.4.2,wheezy,.
-mr3.4.1,wheezy,.
-mr3.3,wheezy,.
-mr3.3.2,wheezy,.
-mr3.3.1,wheezy,.
-mr3.2.2,wheezy,.
-mr3.2.1,wheezy,.
-mr3.2,wheezy,.
-3.1,wheezy,.
-3.0,wheezy,.
-2.8,squeeze,LTS
-2.7,squeeze,.
-2.6,squeeze,.
-2.5,squeeze,.
-2.4,squeeze,.
+#version,distribution,carrier,info
+# carrier [yes|no]
+# info [.|LTS|LATEST]
+mr3.6,wheezy,yes,.
+mr3.6.2,wheezy,yes,LATEST
+mr3.6.1,wheezy,yes,.
+mr3.5,wheezy,no,.
+mr3.5.1,wheezy,no,.
+mr3.4,wheezy,no,.
+mr3.4.2,wheezy,no,.
+mr3.4.1,wheezy,no,.
+mr3.3,wheezy,no,.
+mr3.3.2,wheezy,no,.
+mr3.3.1,wheezy,no,.
+mr3.2.2,wheezy,no,.
+mr3.2.1,wheezy,no,.
+mr3.2,wheezy,no,.
+3.1,wheezy,no,.
+3.0,wheezy,no,.
+2.8,squeeze,no,LTS
+2.7,squeeze,no,.
+2.6,squeeze,no,.
+2.5,squeeze,no,.
+2.4,squeeze,no,.
