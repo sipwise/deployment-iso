@@ -7,6 +7,7 @@ export LC_ALL=C
 
 working_dir="$(dirname $0)"
 scripts_dir="${working_dir}/includes/"
+netscript_dir="${scripts_dir}/netscript/"
 
 RC=0
 
@@ -128,8 +129,17 @@ deploy() {
     return 0
   fi
 
+  # choose appropriate deployment.sh script:
+  local version=$(grep -Eo '\<ngcpvers=[^ ]+' /proc/cmdline || true)
+  if [ "$version" ]; then
+    version=${version#*=}
+  else
+    version="master"
+  fi
+
+  einfo "Running ${YELLOW}${version}${NORMAL} of deployment.sh..."; eend 0
   RC=0
-  TARGET_DISK=$TARGET_DISK ${scripts_dir}/deployment.sh || RC=$?
+  TARGET_DISK=$TARGET_DISK /bin/bash ${netscript_dir}/${version}/deployment.sh || RC=$?
   if [ $RC -eq 0 ] ; then
     if dialog --yes-label Reboot --no-label Exit --yesno "Successfully finished deployment, enjoy your sip:provider CE system. Reboot system now?" 0 0 ; then
       reboot
