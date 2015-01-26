@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3e81b7_13d62ec6",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-01-26T10:30:56Z",
+      "side": 1,
+      "message": "please add rm of new downloaded files at /templates/scripts/includes",
+      "revId": "8f5363c1222a8c73a2188436a942c138bd34ecae",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
