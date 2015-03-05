@@ -22,6 +22,15 @@ NORMAL="$(tput op)"
 einfo "Executing grml-sipwise specific checks..."
 eindent
 
+install_sipwise_keyring() {
+  if [ -f "${scripts_dir}/sipwise.gpg" ]; then
+    einfo "Installing sipwise keyring to '/etc/apt/trusted.gpg.d/sipwise.gpg'..."; eend 0
+    cp "${scripts_dir}/sipwise.gpg" /etc/apt/trusted.gpg.d/sipwise.gpg
+  else
+    ewarn "Sipwise keyring '${scripts_dir}/sipwise.gpg' not found, continuing anyway." ; eend 0
+  fi
+}
+
 network_check() {
   if ${scripts_dir}/check-for-network ; then
     einfo "Looks like we have working network, continuing..." ; eend 0
@@ -153,6 +162,7 @@ deploy() {
   fi
 }
 
+install_sipwise_keyring
 prompt_for_target
 check_for_existing_pvs
 network_check
