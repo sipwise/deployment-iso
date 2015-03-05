@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a2585a7_a2d704ed",
+        "filename": "Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2015-03-05T11:53:46Z",
+      "side": 1,
+      "message": "Can we use https://deb.sipwise.com/spce/sipwise.gpg here instead?",
+      "revId": "bcb6b33170be3f8adc38250fb463d76b3d540ce5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
