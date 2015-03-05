@@ -16,6 +16,24 @@
       "revId": "bcb6b33170be3f8adc38250fb463d76b3d540ce5",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2585a7_0202583e",
+        "filename": "Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2015-03-05T13:22:19Z",
+      "side": 1,
+      "message": "the problem that we have no trusted/signed certificate there...\n\nactually strange WHY?\n\nACK, for httpS, but please install *.sipwise.com cert there then.",
+      "parentUuid": "5a2585a7_a2d704ed",
+      "revId": "bcb6b33170be3f8adc38250fb463d76b3d540ce5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
