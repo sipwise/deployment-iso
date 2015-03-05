@@ -7,7 +7,10 @@ build:
 	@echo -n "Downloading deployment.sh scripts"; \
 	wget -r --directory-prefix=./templates-ce/scripts/includes/netscript/ --reject "index.html*" \
 	--no-parent --no-host-directories --cut-dirs=1 "http://deb.sipwise.com/netscript/" ; \
-	echo " done."; \
+	echo " done.";
+	@echo -n "Downloading Sipwise keyring 'sipwise.gpg'"; \
+	wget -O ./templates-ce/scripts/includes/sipwise.gpg http://deb.sipwise.com/spce/sipwise.gpg ;\
+	echo " done.";
 
 syntaxcheck: shellcheck
 
