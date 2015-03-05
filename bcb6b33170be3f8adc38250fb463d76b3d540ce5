@@ -34,6 +34,24 @@
       "revId": "bcb6b33170be3f8adc38250fb463d76b3d540ce5",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2585a7_22bb1474",
+        "filename": "Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2015-03-05T14:12:09Z",
+      "side": 1,
+      "message": "Waiting for new certificate here: https://support.sipwise.com/view.php?id\u003d11991",
+      "parentUuid": "5a2585a7_0202583e",
+      "revId": "bcb6b33170be3f8adc38250fb463d76b3d540ce5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
