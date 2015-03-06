@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a2585a7_f95a624f",
+        "filename": "templates-ce/scripts/main.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2015-03-06T10:58:10Z",
+      "side": 1,
+      "message": "s/is not/not/",
+      "revId": "de61bd8b671fd5cc4f6feeb4a29e70118e40c172",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
