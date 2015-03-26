@@ -24,11 +24,9 @@ shellcheck:
 	echo " done."; \
 
 clean:
-	rm -f templates-ce/boot/grub/sipwise_latest.cfg templates-ce/boot/grub/sipwise_lts.cfg \
-	  templates-ce/boot/isolinux/sipwise_latest.cfg templates-ce/boot/isolinux/sipwise_lts.cfg
+	rm -f templates-ce/boot/grub/sipwise_*.cfg templates-ce/boot/isolinux/sipwise_*.cfg
 	rm -f templates-ce/boot/isolinux/syslinux.cfg
-	rm -f templates/boot/grub/sipwise_latest.cfg templates/boot/grub/sipwise_lts.cfg \
-	  templates/boot/isolinux/sipwise_latest.cfg templates/boot/isolinux/sipwise_lts.cfg
+	rm -f templates/boot/grub/sipwise_*.cfg templates/boot/isolinux/sipwise_*.cfg
 	rm -f templates/boot/isolinux/syslinux.cfg
 	rm -rf templates-ce/scripts/includes/netscript
 	rm -f templates-ce/scripts/includes/sipwise.gpg
