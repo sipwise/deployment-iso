@@ -1,13 +1,13 @@
 menuentry "sip:providerCE (DHCP)      - version ##VERSION##" {
   echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcphostname=spce ngcpvers=##VERSION## ngcpnw.dhcp 
+  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcphostname=spce ngcpvers=##VERSION## ngcpnw.dhcp 
   echo 'Loading initrd...'
   initrd /boot/%SHORT_NAME%/initrd.img
 }
 
 menuentry "sip:providerCE (static NW) - version ##VERSION##" {
   echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcphostname=spce ngcpvers=##VERSION## dns=8.8.8.8 ip=10.15.20.123::10.15.20.1:255.255.255.0:spce:eth0:off 
+  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcphostname=spce ngcpvers=##VERSION## dns=8.8.8.8 ip=10.15.20.123::10.15.20.1:255.255.255.0:spce:eth0:off 
   echo 'Loading initrd...'
   initrd /boot/%SHORT_NAME%/initrd.img
 }
