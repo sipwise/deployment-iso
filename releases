@@ -8,7 +8,8 @@ mr4.1.1,wheezy,yes,LATEST
 mr4.0,wheezy,yes,.
 mr4.0.1,wheezy,yes,.
 mr3.8,wheezy,yes,.
-mr3.8.3,wheezy,yes,LTS
+mr3.8.4,wheezy,yes,LTS
+mr3.8.3,wheezy,yes,.
 mr3.8.2,wheezy,yes,.
 mr3.8.1,wheezy,yes,.
 mr3.7,wheezy,yes,.
