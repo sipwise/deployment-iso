@@ -33,7 +33,7 @@ private)
   MR="no"
   PUBLIC="no"
   SIPWISE_ISO="grml64-sipwise-release_${DATE}.iso"
-  GRML_URL="http://mirror.inode.at/data/grml/"
+  GRML_URL="https://deb.sipwise.com/files/grml/"
   GRML_HASH_URL="http://download.grml.org/"
   ;;
 public)
@@ -41,7 +41,7 @@ public)
   MR="no"
   PUBLIC="yes"
   SIPWISE_ISO="sip_provider_CE_installcd.iso"
-  GRML_URL="http://mirror.inode.at/data/grml/"
+  GRML_URL="https://deb.sipwise.com/files/grml/"
   GRML_HASH_URL="http://download.grml.org/"
   ;;
 *)
