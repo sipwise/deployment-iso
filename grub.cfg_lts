@@ -7,7 +7,7 @@ menuentry "Install ##VERSION## LTS sip:providerCE - DHCP" {
 
 menuentry "Install ##VERSION## LTS sip:providerCE - static NW" {
   echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## ngcpvers=##VERSION## scripts ngcphostname=spce ip=192.168.1.100::192.168.1.1:255.255.255.0:spce:eth0:off dns=8.8.8.8 
+  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce noquick distri=grml-sipwise ngcpce ssh=sipwise debianrelease=##DIST## ngcpvers=##VERSION## scripts ngcphostname=spce ip=192.168.1.100::192.168.1.1:255.255.255.0:spce:eth0:off dns=8.8.8.8,8.8.4.4 
   echo 'Loading initrd...'
   initrd /boot/%SHORT_NAME%/initrd.img
 }
