@@ -23,11 +23,11 @@ einfo "Executing grml-sipwise specific checks..."
 eindent
 
 install_sipwise_keyring() {
-  if [ -f "${scripts_dir}/sipwise.gpg" ]; then
-    einfo "Installing sipwise keyring to '/etc/apt/trusted.gpg.d/sipwise.gpg'..."; eend 0
-    cp "${scripts_dir}/sipwise.gpg" /etc/apt/trusted.gpg.d/sipwise.gpg
+  if [ -f "${scripts_dir}/ngcp-keyring-latest.deb" ]; then
+    einfo "Installing sipwise keyring..."; eend 0
+    dpkg -i "${scripts_dir}/ngcp-keyring-latest.deb"
   else
-    ewarn "Sipwise keyring '${scripts_dir}/sipwise.gpg' not found, continuing anyway." ; eend 0
+    ewarn "Sipwise keyring '${scripts_dir}/ngcp-keyring-latest.deb' not found, continuing anyway." ; eend 0
   fi
 }
 

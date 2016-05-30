@@ -8,8 +8,9 @@ build:
 	wget -r --directory-prefix=./templates-ce/scripts/includes/netscript/ --reject "index.html*" \
 	--no-parent --no-host-directories --cut-dirs=1 "http://deb.sipwise.com/netscript/" ; \
 	echo " done.";
-	@echo -n "Downloading Sipwise keyring 'sipwise.gpg'"; \
-	wget -O ./templates-ce/scripts/includes/sipwise.gpg https://deb.sipwise.com/spce/sipwise.gpg ;\
+	@echo -n "Downloading Sipwise keyring 'ngcp-keyring-latest.deb'"; \
+		wget -O ./templates-ce/scripts/includes/ngcp-keyring-latest.deb \
+		        https://deb.sipwise.com/spce/ngcp-keyring-latest.deb ;\
 	echo " done.";
 
 syntaxcheck: shellcheck
@@ -29,7 +30,7 @@ clean:
 	rm -f templates/boot/grub/sipwise_*.cfg templates/boot/isolinux/sipwise_*.cfg
 	rm -f templates/boot/isolinux/syslinux.cfg
 	rm -rf templates-ce/scripts/includes/netscript
-	rm -f templates-ce/scripts/includes/sipwise.gpg
+	rm -f templates-ce/scripts/includes/ngcp-keyring-latest.deb
 
 dist-clean: clean
 	rm -rf artifacts
