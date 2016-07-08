@@ -6,6 +6,7 @@
 mr4.4,jessie,yes,.
 mr4.4.1,jessie,yes,LATEST
 mr4.3,jessie,yes,.
+mr4.3.2,jessie,yes,.
 mr4.3.1,jessie,yes,.
 mr4.2,jessie,yes,.
 mr4.2.2,jessie,yes,.
@@ -17,7 +18,8 @@ mr4.0,wheezy,yes,.
 mr4.0.2,wheezy,yes,.
 mr4.0.1,wheezy,yes,.
 mr3.8,wheezy,yes,.
-mr3.8.6,wheezy,yes,LTS
+mr3.8.7,wheezy,yes,LTS
+mr3.8.6,wheezy,yes,.
 mr3.8.5,wheezy,yes,.
 mr3.8.4,wheezy,yes,.
 mr3.8.3,wheezy,yes,.
