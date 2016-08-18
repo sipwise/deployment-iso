@@ -13,7 +13,7 @@ label ce##VERSION##
 label cenw##VERSION##
   menu label sip:providerCE (static NW) - version ##VERSION##
   kernel /boot/%SHORT_NAME%/vmlinuz
-  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcphostname=spce ngcpvers=##VERSION## ip=10.15.20.123::10.15.20.1:255.255.255.0:spce:eth0:off dns=8.8.8.8,8.8.4.4 
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce ngcpce ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcphostname=spce nodhcp ngcpvers=##VERSION## ip=10.15.20.123::10.15.20.1:255.255.255.0:spce:eth0:off dns=8.8.8.8,8.8.4.4 
 
   text help
                                      Install sip:provider community edition,
