@@ -1,13 +1,13 @@
 menuentry "sip:providerPRO - sp1 / ##VERSION## release" {
   echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcpsp1 ngcpvers=##VERSION## dns=8.8.8.8,8.8.4.4 ip=10.15.20.101::10.15.20.1:255.255.255.0:sp1:eth0:off 
+  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcpsp1 ngcpvers=##VERSION## dns=8.8.8.8,8.8.4.4 nodhcp ip=10.15.20.101::10.15.20.1:255.255.255.0:sp1:eth0:off 
   echo 'Loading initrd...'
   initrd /boot/%SHORT_NAME%/initrd.img
 }
 
 menuentry "sip:providerPRO - sp2 / ##VERSION## release" {
   echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcpsp2 ngcpvers=##VERSION## dns=8.8.8.8,8.8.4.4 ip=10.15.20.102::10.15.20.1:255.255.255.0:sp2:eth0:off 
+  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcpsp2 ngcpvers=##VERSION## dns=8.8.8.8,8.8.4.4 nodhcp ip=10.15.20.102::10.15.20.1:255.255.255.0:sp2:eth0:off 
   echo 'Loading initrd...'
   initrd /boot/%SHORT_NAME%/initrd.img
 }
