@@ -16,6 +16,24 @@
       "revId": "436c61e57df9e2772807639aaf0ec9dc28b9297b",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aa7f18b_013efdb8",
+        "filename": "grub.cfg_carrier",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2016-08-21T19:34:08Z",
+      "side": 1,
+      "message": "I tried to put it in the same place where ngcpnw.dhcp is located for DHCP case. Should I still change the location?",
+      "parentUuid": "3aa7f18b_ae1fd8b6",
+      "revId": "436c61e57df9e2772807639aaf0ec9dc28b9297b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
