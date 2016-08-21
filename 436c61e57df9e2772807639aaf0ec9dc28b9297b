@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aa7f18b_ae1fd8b6",
+        "filename": "grub.cfg_carrier",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-08-21T08:52:03Z",
+      "side": 1,
+      "message": "It would be good to have some consistency with where the nodhcp boot option is placed at, IMO it should always be next to the ip\u003d.... configuration.",
+      "revId": "436c61e57df9e2772807639aaf0ec9dc28b9297b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
