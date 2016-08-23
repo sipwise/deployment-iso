@@ -34,6 +34,24 @@
       "revId": "436c61e57df9e2772807639aaf0ec9dc28b9297b",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aa7f18b_ff8818c8",
+        "filename": "grub.cfg_carrier",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-08-23T12:35:24Z",
+      "side": 1,
+      "message": "The \"nodhcp\" in between the \"ngcpsp1 nodhcp ngcpnonwrecfg\" is a bit hidden from my PoV, since ngcp* are sipwise-specific boot options, while \"nodhcp\" is an upstream/Grml specific one, also if someone drops the ip\u003d... stuff for whatever reason then the \"nodhcp\" should be as visible as possible, IMHO.\n\nDo whatever you prefer to do with that information (I don\u0027t want to be too nitpicky). :)",
+      "parentUuid": "3aa7f18b_013efdb8",
+      "revId": "436c61e57df9e2772807639aaf0ec9dc28b9297b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
