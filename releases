@@ -21,7 +21,8 @@ mr4.0,wheezy,yes,.
 mr4.0.2,wheezy,yes,.
 mr4.0.1,wheezy,yes,.
 mr3.8,wheezy,yes,.
-mr3.8.7,wheezy,yes,LTS
+mr3.8.8,wheezy,yes,LTS
+mr3.8.7,wheezy,yes,.
 mr3.8.6,wheezy,yes,.
 mr3.8.5,wheezy,yes,.
 mr3.8.4,wheezy,yes,.
