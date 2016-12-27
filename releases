@@ -6,7 +6,8 @@
 mr5.0,jessie,yes,.
 mr5.0.1,jessie,yes,LATEST
 mr4.5,jessie,yes,.
-mr4.5.2,jessie,yes,LTS
+mr4.5.3,jessie,yes,LTS
+mr4.5.2,jessie,yes,.
 mr4.5.1,jessie,yes,.
 mr4.4,jessie,yes,.
 mr4.4.2,jessie,yes,.
