@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash
+
+set -e
 
 DATE="$(date +%Y%m%d_%H%M%S)"
 WGET_OPT="--timeout=30 -q -c"
