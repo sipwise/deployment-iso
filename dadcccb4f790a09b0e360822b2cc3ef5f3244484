@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_923cbe95",
+        "filename": "templates/boot/isolinux/isolinux.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2017-07-25T11:43:10Z",
+      "side": 0,
+      "message": "deleted to do not have spaces between:\n  \nInstall specific Debian releases ...\nFurther bootoptions (local/PXE boot) ...",
+      "revId": "dadcccb4f790a09b0e360822b2cc3ef5f3244484",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
