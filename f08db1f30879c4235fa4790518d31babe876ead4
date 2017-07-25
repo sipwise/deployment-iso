@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_12926e57",
+        "filename": "templates/boot/isolinux/isolinux.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-07-25T14:01:44Z",
+      "side": 1,
+      "message": "missing space char (\" \") at the end here? (yeah, doesn\u0027t seem to be in the original either, but while at it :))",
+      "revId": "f08db1f30879c4235fa4790518d31babe876ead4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
