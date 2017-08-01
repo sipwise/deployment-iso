@@ -3,8 +3,10 @@
 #version,distribution,carrier,info
 # carrier [yes|no]
 # info [.|LTS|LATEST]
+mr5.4,jessie,yes,.
+mr5.4.1,jessie,yes,LATEST
 mr5.3,jessie,yes,.
-mr5.3.1,jessie,yes,LATEST
+mr5.3.1,jessie,yes,.
 mr5.2,jessie,yes,.
 mr5.2.2,jessie,yes,.
 mr5.2.1,jessie,yes,.
