@@ -22,6 +22,30 @@
       "revId": "49c5e94e77589ed0dde4723e10daff2755917c1b",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_9fd125d0",
+        "filename": "releases",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2017-12-04T18:20:43Z",
+      "side": 1,
+      "message": "Will do, thanks.\n\nI thought that we would only do that when going public, or perhaps that the upcoming 6.0 or so will be the ones will LATEST anyway.",
+      "parentUuid": "baada198_df539d6a",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 21
+      },
+      "revId": "49c5e94e77589ed0dde4723e10daff2755917c1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
