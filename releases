@@ -3,8 +3,10 @@
 #version,distribution,carrier,info
 # carrier [yes|no]
 # info [.|LTS|LATEST]
+mr6.1,stretch,yes,.
+mr6.1.1,stretch,yes,LATEST
 mr6.0,stretch,yes,.
-mr6.0.1,stretch,yes,LATEST
+mr6.0.1,stretch,yes,.
 mr5.5,stretch,yes,.
 mr5.5.3,stretch,yes,LTS
 mr5.5.2,stretch,yes,.
