@@ -1,0 +1,29 @@
+#!/bin/bash
+################################################################################
+
+. /etc/grml/lsb-functions
+
+if [ $(id -ru) -ne 0 ] ; then
+  echo "Error: please run this script with uid 0 (root)." >&2
+  exit 1
+fi
+
+einfon "Checking network status... "
+
+STATUS="Offline"
+EXIT_CODE=1
+
+GW="$(echo $(route -n | awk '/^0\.0\.0\.0/{print $2}'))"
+GWDEV="$(echo $(route -n | awk '/^0\.0\.0\.0/{print $NF}'))"
+NMAP="$(nmap -sP --host_timeout 4000 --max_rtt_timeout 4000ms $GW 2>/dev/null)"
+
+if [ $? -eq 0 ]; then
+  if ! echo "$NMAP" | grep -q "0 hosts up" ; then
+    STATUS="Online (${GWDEV})"
+    EXIT_CODE=0
+  fi
+fi
+
+printf "%s\n" "$STATUS"
+eend $EXIT_CODE
+exit $EXIT_CODE
