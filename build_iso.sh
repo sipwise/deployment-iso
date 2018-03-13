@@ -6,6 +6,7 @@ DATE="$(date +%Y%m%d_%H%M%S)"
 WGET_OPT="--timeout=30 -q -c"
 RELEASE="$1"
 GRML_ISO="$2"
+TEMPLATES="templates"
 
 usage () {
   echo "Usage: $0 daily|private|public <grml.iso>"
@@ -23,25 +24,19 @@ echo "*** Building ${RELEASE} ISO ***"
 
 case ${RELEASE} in
 daily)
-  TEMPLATES="templates"
   MR="yes"
-  PUBLIC="no"
   SIPWISE_ISO="grml64-sipwise-daily_${DATE}.iso"
   GRML_URL="http://daily.grml.org/grml64-full_testing/latest/"
   GRML_HASH_URL="${GRML_URL}"
   ;;
 private)
-  TEMPLATES="templates"
   MR="no"
-  PUBLIC="no"
   SIPWISE_ISO="grml64-sipwise-release_${DATE}.iso"
   GRML_URL="https://deb.sipwise.com/files/grml/"
   GRML_HASH_URL="http://download.grml.org/"
   ;;
 public)
-  TEMPLATES="templates-ce"
   MR="no"
-  PUBLIC="yes"
   SIPWISE_ISO="sip_provider_CE_installcd.iso"
   GRML_URL="https://deb.sipwise.com/files/grml/"
   GRML_HASH_URL="http://download.grml.org/"
@@ -85,8 +80,8 @@ echo "*** Copying isolinux.cfg to syslinux.cfg for grml2usb support ***"
 cp ${TEMPLATES}/boot/isolinux/isolinux.cfg ${TEMPLATES}/boot/isolinux/syslinux.cfg
 
 # build grub.cfg release options
-echo "*** Building templates [TEMPLATES=${TEMPLATES} MR=${MR} PUBLIC=${PUBLIC}] ***"
-TEMPLATES="${TEMPLATES}" MR="${MR}" PUBLIC="${PUBLIC}" ./build_templates.sh
+echo "*** Building templates [TEMPLATES=${TEMPLATES} MR=${MR}] ***"
+TEMPLATES="${TEMPLATES}" MR="${MR}" ./build_templates.sh
 
 echo "*** Generating Sipwise ISO ***"
 sudo /usr/sbin/grml2iso -c ./${TEMPLATES} -o "${SIPWISE_ISO}" "${GRML_ISO}"
