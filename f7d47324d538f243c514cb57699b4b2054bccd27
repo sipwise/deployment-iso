@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_8ba48e58",
+        "filename": "templates/scripts/includes/check-for-network",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-14T14:06:40Z",
+      "side": 1,
+      "message": "no ideas what is it.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 4
+      },
+      "revId": "f7d47324d538f243c514cb57699b4b2054bccd27",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
