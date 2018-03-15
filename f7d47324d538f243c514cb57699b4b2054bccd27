@@ -46,6 +46,30 @@
       "revId": "f7d47324d538f243c514cb57699b4b2054bccd27",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_ce78542e",
+        "filename": "templates/scripts/includes/check-for-network",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-03-15T07:53:42Z",
+      "side": 1,
+      "message": "Exactly, it\u0027s just for \"nice look/integration\" during boot.\n(Once we finalize the ISO we could look into modifying this if we want to avoid depending on /etc/grml/lsb-functions)",
+      "parentUuid": "3a6ff13c_6b12f263",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 4
+      },
+      "revId": "f7d47324d538f243c514cb57699b4b2054bccd27",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
