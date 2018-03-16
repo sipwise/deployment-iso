@@ -1,6 +1,0 @@
-menuentry "sip:Carrier mgmt (web01a) / ##VERSION## release" {
-  echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce net.ifnames=0 ngcppro ssh=sipwise debianrelease=##DIST## scripts ngcpsp1 ngcpnonwrecfg ngcpfillcache ngcpvers=##VERSION## nodhcp ngcpcrole=mgmt ngcphostname=web01a 
-  echo 'Loading initrd...'
-  initrd /boot/%SHORT_NAME%/initrd.img
-}

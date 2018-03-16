@@ -1,7 +1,0 @@
-menuentry "sip:providerCE - version ##VERSION##" {
-  echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce net.ifnames=0 ngcpce ssh=sipwise debianrelease=##DIST## scripts ngcphostname=spce ngcpvers=##VERSION## nodhcp
-  echo 'Loading initrd...'
-  initrd /boot/%SHORT_NAME%/initrd.img
-}
-
