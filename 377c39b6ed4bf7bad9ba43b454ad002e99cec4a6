@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6ced46_66b950e9",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-16T17:12:55Z",
+      "side": 1,
+      "message": "DISK_LIST\u003d( $(...) )",
+      "range": {
+        "startLine": 111,
+        "startChar": 2,
+        "endLine": 111,
+        "endChar": 12
+      },
+      "revId": "377c39b6ed4bf7bad9ba43b454ad002e99cec4a6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_c6c76463",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-16T17:12:55Z",
+      "side": 1,
+      "message": "del?",
+      "range": {
+        "startLine": 121,
+        "startChar": 1,
+        "endLine": 121,
+        "endChar": 29
+      },
+      "revId": "377c39b6ed4bf7bad9ba43b454ad002e99cec4a6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_a6ca686c",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-16T17:12:55Z",
+      "side": 1,
+      "message": "\"${DISK_LIST[@]}\"",
+      "range": {
+        "startLine": 125,
+        "startChar": 23,
+        "endLine": 125,
+        "endChar": 33
+      },
+      "revId": "377c39b6ed4bf7bad9ba43b454ad002e99cec4a6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
