@@ -156,9 +156,10 @@ deploy() {
 }
 
 install_sipwise_keyring
+network_check
+"${scripts_dir}/check_installing_version.sh"
 prompt_for_target
 check_for_existing_pvs
-network_check
 report_ssh_password
 deploy
 
