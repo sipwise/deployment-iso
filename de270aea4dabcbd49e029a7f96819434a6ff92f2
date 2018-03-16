@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6ced46_26a678c2",
+        "filename": "build_templates.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-16T17:32:33Z",
+      "side": 1,
+      "message": "alutay@jenkins-slave1:~$ meta-release-helper trunk LTS\n0\nalutay@jenkins-slave1:~$ meta-release-helper trunk Dist\nstretch\nalutay@jenkins-slave1:~$\n\nwill simplify your life.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 46
+      },
+      "revId": "de270aea4dabcbd49e029a7f96819434a6ff92f2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_46ab7489",
+        "filename": "grub.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-16T17:32:33Z",
+      "side": 1,
+      "message": "\"release\"?\n\ncommon logic... or drop everywhere. IMHO:\n\nmr6.1.1 sip:providerCE\nmr6.1.1 sip:providerPRO (sp1)\nmr6.1.1 sip:providerPRO (sp2)\nmr6.1.1 sip:Carrier (web01a)",
+      "revId": "de270aea4dabcbd49e029a7f96819434a6ff92f2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_66b070f5",
+        "filename": "isolinux.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-16T17:32:33Z",
+      "side": 1,
+      "message": "del?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 54
+      },
+      "revId": "de270aea4dabcbd49e029a7f96819434a6ff92f2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_86948c45",
+        "filename": "isolinux.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-16T17:32:33Z",
+      "side": 1,
+      "message": "mr6.1.1 sip:providerCE\nmr6.1.1 sip:providerPRO (sp1)\nmr6.1.1 sip:providerPRO (sp2)\nmr6.1.1 sip:Carrier (web01a)",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 49
+      },
+      "revId": "de270aea4dabcbd49e029a7f96819434a6ff92f2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
