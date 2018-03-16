@@ -6,11 +6,12 @@ DATE="$(date +%Y%m%d_%H%M%S)"
 WGET_OPT="--timeout=30 -q -c"
 RELEASE="$1"
 GRML_ISO="$2"
+MR="$3"
 TEMPLATES="templates"
 
 usage () {
-  echo "Usage: $0 daily|private|public <grml.iso>"
-  echo "Sample: $0 'daily' 'grml64-full_testing_latest.iso'"
+  echo "Usage: $0 daily|private|public <grml.iso> <mr version>"
+  echo "Sample: $0 'daily' 'grml64-full_testing_latest.iso' mr6.2.1"
   exit 1
 }
 
@@ -24,19 +25,16 @@ echo "*** Building ${RELEASE} ISO ***"
 
 case ${RELEASE} in
 daily)
-  MR="yes"
   SIPWISE_ISO="grml64-sipwise-daily_${DATE}.iso"
   GRML_URL="http://daily.grml.org/grml64-full_testing/latest/"
   GRML_HASH_URL="${GRML_URL}"
   ;;
 private)
-  MR="no"
   SIPWISE_ISO="grml64-sipwise-release_${DATE}.iso"
   GRML_URL="https://deb.sipwise.com/files/grml/"
   GRML_HASH_URL="http://download.grml.org/"
   ;;
 public)
-  MR="no"
   SIPWISE_ISO="sip_provider_CE_installcd.iso"
   GRML_URL="https://deb.sipwise.com/files/grml/"
   GRML_HASH_URL="http://download.grml.org/"
@@ -75,13 +73,13 @@ else
   check_sha1 "${GRML_ISO}"
 fi
 
-# make sure syslinux.cfg is same as isolinux.cfg so grml2usb works also
-echo "*** Copying isolinux.cfg to syslinux.cfg for grml2usb support ***"
-cp ${TEMPLATES}/boot/isolinux/isolinux.cfg ${TEMPLATES}/boot/isolinux/syslinux.cfg
-
 # build grub.cfg release options
 echo "*** Building templates [TEMPLATES=${TEMPLATES} MR=${MR}] ***"
 TEMPLATES="${TEMPLATES}" MR="${MR}" ./build_templates.sh
+
+# make sure syslinux.cfg is same as isolinux.cfg so grml2usb works also
+echo "*** Copying isolinux.cfg to syslinux.cfg for grml2usb support ***"
+cp ${TEMPLATES}/boot/isolinux/isolinux.cfg ${TEMPLATES}/boot/isolinux/syslinux.cfg
 
 echo "*** Generating Sipwise ISO ***"
 sudo /usr/sbin/grml2iso -c ./${TEMPLATES} -o "${SIPWISE_ISO}" "${GRML_ISO}"

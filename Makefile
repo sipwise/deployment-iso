@@ -24,12 +24,11 @@ shellcheck:
 	echo " done."; \
 
 clean:
-	rm -f templates/boot/grub/sipwise_*.cfg templates/boot/isolinux/sipwise_*.cfg
-	rm -f templatese/boot/isolinux/syslinux.cfg
-	rm -f templates/boot/grub/sipwise_*.cfg templates/boot/isolinux/sipwise_*.cfg
 	rm -f templates/boot/isolinux/syslinux.cfg
 	rm -rf templates/scripts/includes/netscript
 	rm -f templates/scripts/includes/sipwise.gpg
+	rm -f templates/boot/grub/grub.cfg
+	rm -f templates/boot/isolinux/isolinux.cfg
 
 dist-clean: clean
 	rm -rf artifacts
