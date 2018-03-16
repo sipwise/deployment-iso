@@ -1,2 +1,10 @@
 *~
 sipwise_*.cfg
+artifacts/
+grml64*.iso
+grml64*.iso.sha1
+templates/boot/grub/grub.cfg
+templates/boot/isolinux/isolinux.cfg
+templates/boot/isolinux/syslinux.cfg
+templates/scripts/includes/netscript/
+templates/scripts/includes/sipwise.gpg
