@@ -1,13 +1,16 @@
 # for syntax checks
 BASH_SCRIPTS = ./templates/scripts/main.sh ./templates/scripts/includes/* ./build_iso.sh ./build_templates.sh
 
+RELEASE ?= trunk
+
 all: build
 
 build:
 	@echo -n "Downloading deployment.sh scripts"; \
 	wget -r --directory-prefix=./templates/scripts/includes/netscript/ --reject "index.html*" \
-	--no-parent --no-host-directories --cut-dirs=1 "http://deb.sipwise.com/netscript/" ; \
+	--no-parent --no-host-directories --cut-dirs=1 "http://deb.sipwise.com/netscript/${RELEASE}/" ; \
 	echo " done.";
+
 	@echo -n "Downloading Sipwise keyring 'sipwise.gpg'"; \
 	wget -O ./templates/scripts/includes/sipwise.gpg https://deb.sipwise.com/spce/sipwise.gpg ;\
 	echo " done.";
@@ -32,5 +35,7 @@ clean:
 
 dist-clean: clean
 	rm -rf artifacts
+	rm -f *.iso
+	rm -f *.iso.sha1
 
 .PHONY: clean dist-clean syntaxcheck build all
