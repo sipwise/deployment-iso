@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6ced46_497c6573",
+        "filename": "templates/scripts/includes/check_installing_version.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-19T13:24:13Z",
+      "side": 1,
+      "message": "I have just checked the code, it is different on Carrier:\n\nset debianrepo web01:9998\nset sipwiserepo web01:9998\n...\nset ngcpopts ${ngcpopts} debianrepo\u003d${debianrepo} sipwiserepo\u003d${sipwiserepo}\nset ngcpopts ${ngcpopts} debianrepotransport\u003dhttp\nset ngcpopts ${ngcpopts} sipwiserepotransport\u003dhttp\n\n\nSo, IMHO you can actually check availability for both cases:\nPRO and Carrier 1st node -\u003e check connectivity to https://deb.sipwise.com/sppro/\nCarrier second+ node -\u003e check connectivity to http://web01:9998/sppro/\n\nJust use properly sipwiserepo/sipwiserepotransport and show proper error message.",
+      "range": {
+        "startLine": 37,
+        "startChar": 34,
+        "endLine": 37,
+        "endChar": 47
+      },
+      "revId": "f365cabf6473ea0b5150ae37cf84416b4ea7b5aa",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_89ae5de6",
+        "filename": "templates/scripts/includes/check_installing_version.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-19T13:24:13Z",
+      "side": 1,
+      "message": "this can be read from checkBootParam as well, option sipwiserepotransport\u003dhttps",
+      "range": {
+        "startLine": 40,
+        "startChar": 9,
+        "endLine": 40,
+        "endChar": 31
+      },
+      "revId": "f365cabf6473ea0b5150ae37cf84416b4ea7b5aa",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
