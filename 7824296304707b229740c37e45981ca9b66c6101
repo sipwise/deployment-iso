@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6ced46_29c1e9e4",
+        "filename": "build_iso.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-19T17:18:51Z",
+      "side": 1,
+      "message": "I believe here (on building stage) we do not have the different between privat/public as well.\n\npublic iso is a privat iso which we copied/published to publicly accessible location, while ISO is still the same :-)\n\nWhat do you think?",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 4
+      },
+      "revId": "7824296304707b229740c37e45981ca9b66c6101",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
