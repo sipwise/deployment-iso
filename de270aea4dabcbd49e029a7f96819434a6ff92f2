@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a6ced46_c6e4c4ae",
+        "filename": "build_templates.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-19T08:51:02Z",
+      "side": 1,
+      "message": "I think we should not bind such scripts to some kind of \u0027hidden knowledge\u0027. I mean for now it is possible to build image on any machine but \u0027meta-release-helper\u0027 adds non-obvious and not documented part.",
+      "parentUuid": "1a6ced46_26a678c2",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 46
+      },
+      "revId": "de270aea4dabcbd49e029a7f96819434a6ff92f2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6ced46_46ab7489",
         "filename": "grub.cfg",
         "patchSetId": 1
