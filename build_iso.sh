@@ -4,15 +4,19 @@ set -e
 
 DATE="$(date +%Y%m%d_%H%M%S)"
 WGET_OPT="--timeout=30 -q -c"
+# RELEASE option isn't used but kept for backward compatibility
 RELEASE="$1"
 GRML_ISO="$2"
 MR="$3"
 DIST="$4"
 TEMPLATES="templates"
+GRML_URL="https://deb.sipwise.com/files/grml/"
+GRML_HASH_URL="http://download.grml.org/"
+SIPWISE_ISO="sip_provider_${MR}_${DATE}.iso"
 
 usage () {
-  echo "Usage: $0 daily|private|public <grml.iso> <mr version> <Debian dist>"
-  echo "Sample: $0 'daily' 'grml64-full_testing_latest.iso' mr6.2.1 stretch"
+  echo "Usage: $0 private|public <grml.iso> <mr version> <Debian dist>"
+  echo "Sample: $0 private 'grml64-full_2014.11.iso' mr6.2.1 stretch"
   exit 1
 }
 
@@ -30,29 +34,6 @@ elif [ -z "${DIST}" ]; then
   usage
 fi
 
-echo "*** Building ${RELEASE} ISO ***"
-
-case ${RELEASE} in
-daily)
-  SIPWISE_ISO="grml64-sipwise-daily_${DATE}.iso"
-  GRML_URL="http://daily.grml.org/grml64-full_testing/latest/"
-  GRML_HASH_URL="${GRML_URL}"
-  ;;
-private)
-  SIPWISE_ISO="grml64-sipwise-release_${DATE}.iso"
-  GRML_URL="https://deb.sipwise.com/files/grml/"
-  GRML_HASH_URL="http://download.grml.org/"
-  ;;
-public)
-  SIPWISE_ISO="sip_provider_CE_installcd.iso"
-  GRML_URL="https://deb.sipwise.com/files/grml/"
-  GRML_HASH_URL="http://download.grml.org/"
-  ;;
-*)
-  usage
-  ;;
-esac
-
 if [ "${GRML_ISO}" != "" ]; then
   if [[ "${GRML_ISO}" =~ ^devel/.*\.iso$ ]]; then
     GRML_URL+="devel/"
@@ -63,24 +44,15 @@ else
   usage
 fi
 
-echo "*** Retrieving Grml ${RELEASE} ISO [${GRML_ISO}] ***"
+echo "*** Building ${MR} ISO ***"
+
+echo "*** Retrieving Grml ISO [${GRML_ISO}] ***"
 # shellcheck disable=SC2086
 wget ${WGET_OPT} -O "${GRML_ISO}" "${GRML_URL}${GRML_ISO}"
 # shellcheck disable=SC2086
 wget ${WGET_OPT} -O "${GRML_ISO}.sha1" "${GRML_HASH_URL}${GRML_ISO}.sha1"
 
-if [ "${RELEASE}" = "daily"  ]; then
-  echo "*** Renaming Grml ISO (from the latest to exact build version) ***"
-  # identify ISO version (build time might not necessarily match ISO date)
-  ISO_DATE=$(isoinfo -d -i "${GRML_ISO}" | awk '/^Volume id:/ {print $4}')
-  if [ -z "${ISO_DATE}" ] ; then echo "ISO_DATE not identified, exiting." >&2 ; exit 1 ; fi
-  GRML_ISO_DATE="grml64-full_testing_${ISO_DATE}.iso"
-  mv "${GRML_ISO}" "${GRML_ISO_DATE}"
-  check_sha1 "${GRML_ISO}"
-  GRML_ISO="${GRML_ISO_DATE}"
-else
-  check_sha1 "${GRML_ISO}"
-fi
+check_sha1 "${GRML_ISO}"
 
 # build grub.cfg release options
 echo "*** Building templates [TEMPLATES=${TEMPLATES} MR=${MR}] ***"
@@ -101,4 +73,5 @@ sha1sum "${SIPWISE_ISO}" > "${SIPWISE_ISO}.sha1"
 md5sum  "${SIPWISE_ISO}" > "${SIPWISE_ISO}.md5"
 
 mkdir -p artifacts
-mv "${SIPWISE_ISO}" ${SIPWISE_ISO}.sha1 ${SIPWISE_ISO}.md5 artifacts/
+echo "*** Moving ${SIPWISE_ISO} ${SIPWISE_ISO}.sha1 ${SIPWISE_ISO}.md5 to artifacts/ ***"
+mv "${SIPWISE_ISO}" "${SIPWISE_ISO}.sha1" "${SIPWISE_ISO}.md5" artifacts/
