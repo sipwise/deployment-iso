@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1a6ced46_66edd08b",
+        "filename": "build_templates.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-19T09:27:37Z",
+      "side": 1,
+      "message": "Discussed personally, the best approach is to remove releases files and just ask all necessary parameters like \"Dist/Release\" (release we already ask as a script parameter anyway). Carrier can be deleted completely as repo is release specific now, so trunk does have Carrier.\n\nAlso jenkins can use meta-release-helper to fetch the current Dist and pass it to the script here.",
+      "parentUuid": "1a6ced46_c6e4c4ae",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 46
+      },
+      "revId": "de270aea4dabcbd49e029a7f96819434a6ff92f2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6ced46_46ab7489",
         "filename": "grub.cfg",
         "patchSetId": 1
