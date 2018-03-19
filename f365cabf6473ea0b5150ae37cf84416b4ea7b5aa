@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1a6ced46_09798dfc",
+        "filename": "templates/scripts/includes/check_installing_version.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-19T16:24:19Z",
+      "side": 1,
+      "message": "I can disagree with your here due to 3 points:\n1) in a way suggested by me you will have no Carrier checks \u003d\u003e less complexity for the code\n2) Booting over PXE doesn\u0027t mean you have HTTP access to SIPWISE_REPO_HOST (nginx on port 9998 there). And if you have - nothing is displayed - ALL OK, if not - you have be warned earlier then ngcp-installer fails to fetch packages.\n3) also remember VLANS... PXE it running before all the vlans.. while installer later - not.",
+      "parentUuid": "1a6ced46_09126db4",
+      "range": {
+        "startLine": 37,
+        "startChar": 34,
+        "endLine": 37,
+        "endChar": 47
+      },
+      "revId": "f365cabf6473ea0b5150ae37cf84416b4ea7b5aa",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6ced46_89ae5de6",
         "filename": "templates/scripts/includes/check_installing_version.sh",
         "patchSetId": 2
