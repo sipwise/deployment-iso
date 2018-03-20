@@ -1,0 +1,18 @@
+Source: ngcp-deployment-iso
+Section: admin
+Priority: optional
+Maintainer: Sipwise Development Team <support@sipwise.com>
+Homepage: https://www.sipwise.com/
+Standards-Version: 3.9.8
+Build-Depends:
+ debhelper (>= 10),
+ git,
+
+Package: ngcp-deployment-iso
+Architecture: any
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: NGCP deployment ISO scripts
+ Framework needed to install Sipwise NGCP system
+ using iPXE and GRML during the boot process.
