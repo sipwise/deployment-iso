@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6ced46_8cf74b8c",
+        "filename": "build_iso.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-20T15:39:18Z",
+      "side": 1,
+      "message": "please\n  \nGRML_URL\u003d\"${GRML_URL:-https://deb.sipwise.com/files/grml/}\"\nGRML_HASH_URL\u003d\"${GRML_HASH_URL:-https://download.grml.org/}\"",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 41
+      },
+      "revId": "5287468596a083a4df837b9491c11cf59f69647a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
