@@ -1,0 +1,188 @@
+ngcp-deployment-iso (6.2.0.0+0~mr6.2.0.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [f0e7100] provide netscript and templates as separate package
+  * [db2e460] update to grml-live templates
+  * [da9f2de] Add package list for grml-sipwise ISO.
+  * [dcbae41] package config: add software for vmdebootstrap deployment
+  * [299637a] grml-live templates: drop ngcpmcast=226.94.1.1 (unused in HA v2 setup for now), default to ngcpeiface=eth0 (no bonding).
+  * [aa5048b] Provide documentation how to get a local mirror.
+  * [480464e] Add relevant template files for deployment ISO, update docs how to build a new ISO.
+  * [6bdd721] Drop unnecessary ngcp* bootoptions, change password from 'grml2011' to more generic 'grml'.
+  * [a545c0d] Provide grml-live, installer-testsuite and vmbuilder documentation in pro handbook.
+  * [74524ff] provide version specific sip:provider installation submenus
+  * [4a4ef1c] use sipwise as ssh password
+  * [238c953] No need to remaster the ISO any longer, just take the official Grml ISO and overlay our bootsplash stuff
+  * [f1cb5d4] deployment ISO: provide puppet + 2.5 release as entries in bootsplash
+  * [90bebb1] Provide boot menu entries for 2.6 release + pre-releases (ngcpautobuildrelease=...)
+  * [50e124a] provide grub.cfg to support [U]EFI boot on deployment ISO
+  * [29987bc] Provide sipwise logo and move Debian install options to submenu
+  * [64a7b0a] drop gfxpayload=keep from grub config so we get working UEFI boot on Dell hardware
+  * [2a0db7c] deployment ISO: provide Memtest86+ entry in boot splash
+  * [a5f86e6] add endtext for memtest86+ entry
+  * [0b42bcd] Update boot splash templates for 2.7 release
+  * [0c5a0ea] Deployment ISO: integrate submenu for Debian installations to support squeeze vs wheezy
+  * [09fc4b3] boot splash: provide back option in Debian release submenu
+  * [15be1e8] Explicitly set debianrelease boot option to be backwards and forward compatible
+  * [7c367fb] Provide boot menu entries for upcoming 3.0 stable release
+  * [93f1273] Fix debianrelease for ngcp 3.0 releases, drop duplicated debianrelease entries
+  * [81111cd] MT#6253 Initial templates for public Grml-Sipwise ISO
+  * [da2b541] MT#6253 Provide initial scripts + configs for customer deployments
+  * [c38b3f3] MT#6253 Add further boot entries to boot splash
+  * [7d79672] MT#6253 Support Debian installations, sync isolinux<->grub boot splashes
+  * [9a4d13d] MT#6253 Fix shebang line
+  * [56d68d2] MT#6253 Re-add missing trailing white space char in kernel command lines
+  * [d1b7bf0] MT#6253 Support usage of build script within git repository
+  * [1f055ee] MT#6253 Fix broken templates usage
+  * [e73f650] MT#6253 Properly exit if user doesn't want to deploy
+  * [29c796d] MT#6253 Improve prompting for public deployment ISO
+  * [4176153] MT#6253 Improve prompting to user for reboot and when cancelling
+  * [db3bbb7] MT#6253 Provide Makefile for syntaxcheck, cleanup and version handling
+  * [2036191] MT#6253 Fix script version usage
+  * [8aea373] MT#6253 Sync deployment.sh with status from netscript.git (12b283759)
+  * [7ea4f5e] MT#6253 Support setting target disk via TARGET_DISK env variable
+  * [09f9edf] MT#6253 Prompt user for target disk used for installation
+  * [7a0a08b] MT#6253 Improve prompting for netcardconfig
+  * [9aa7fd6] MT#6253 Sync deployment.sh with what we have in netscript.git as of commit 4222a9
+  * [5361bac] MT#6253 Update fai-setup-storage + liblinux-lvm-perl to fix re-installation problem
+  * [9a3f98d] MT#6253 Enable ngcpnw.dhcp for DHCP entries, use Google's DNS server, add missing Debian/wheezy entries to Grub
+  * [6b846f5] MT#8347 Disable automatic boot / timeout
+  * [1fd3d0b] MT#6253 Display error message if "ngcp" PV exists already
+  * [a892da4] MT#6253 Sync deployment.sh with netscript.git
+  * [37239e5] MT#6253 Allow overwriting the disk that has a PV named "ngcp"
+  * [0103510] MT#6253 Fix check for target disk
+  * [c598296] MT#6253 Modify syntax to make it parseable by bash <4.3-7 + Zsh
+  * [cc98fb4] MT#9121 Sync deployment.sh with netscript.git (fixing 403 error with sipwise key)
+  * [f8dde4c] MT#12479 Use mgag200.modeset=0 as default boot option to mitigate Grml 2014.11 issue
+  * [9c3bd31] MT#12713 Add boot menu entries for Debian/jessie
+  * [d0d0ab1] MT#16709 Trunk installations are based on Debian/jessie now
+  * [71434f4] TT#9084 Default to Debian/jessie nowadays
+  * [eff3431] TT#15829 Ensure we run under 'set -e'
+  * [5dcee44] TT#15829 Use net.ifnames=0 by default, support Debian/stretch + sort GRUB menu
+
+  [ Andreas Granig ]
+  * [1e5f621] Add 2.8 release and deprecate releases older than 2.4
+  * [e6442b9] Reorder pre-releases and fix dns server.
+
+  [ Andrew Pogrebennyk ]
+  * [0378d5f] Provide boot menu entries for 3.1 release.
+  * [9f7d06b] Add boot menu entries for 3.1 release to isolinux.cfg
+  * [b1cb4a4] MT#5847 Add PRO mr3.2.1 to deployment ISO.
+  * [74dfefc] MT#10421 Add mr3.6.2 release and mark it as latest
+  * [4a1c215] MT#10421 Add missed dot after mr3.6.1 release
+  * [30aa4ce] MT#13141 Add mr3.8.2 to releases file
+  * [6f3eaad] MT#16279 Add mr3.8.4 to releases file
+  * [1578dcf] MT#17685 Add mr3.8.5 to releases file
+  * [f33c94b] MT#19157 Add mr3.8.6 to releases file
+
+  [ Alex Lutay ]
+  * [24e489f] MT#5847 Add mr3.2.1 support
+  * [4677daa] MT#6253 Add ngcpnoupload to trunk
+  * [9bb4e47] MT#6253 Sync deployment.sh (version 45bf9f2)
+  * [4e97c3b] MT#6253 Typo fixed (s/initrd.emg/initrd.img/)
+  * [27cf3a5] MT#6253 Removed SVN directories cleanup (using Git)
+  * [f517652] MT#6253 Merge build_release.sh and build_daily.sh into build_iso.sh
+  * [85d455d] MT#6253 Remove date for public install CD (documentation.git linking)
+  * [b358e3c] MT#7365 Move ip= option to the end, use Vienna IPs
+  * [b9a05e9] MT#7365 Move ip= option to the end, use Vienna IPs (stable release iso)
+  * [4f60c4a] MT#7365 Move ip= option (links 'latest' for non-public iso)
+  * [b8e6273] MT#6253 Improved boot screen layout
+  * [b71a7bf] MT#6253 Update hard disk typo
+  * [b18faf5] MT#6253 Restore support of 'devel/something.iso' GRML images
+  * [a7a9697] MT#8147 Add release mr3.3.2 and mark it as latest
+  * [9137b03] MT#8147 Add missed dot (it will be commmon mistake, need improvement here)
+  * [1ced947] MT#8871 Add mr3.4.2 to releases file
+  * [a9aba19] MT#8347 Remove auto-boot timeout for grub
+  * [160c3b1] MT#9191 Add initial Carrier 3.x menu for daily and release ISOs
+  * [fae5ba9] MT#9191 Add all the Carrier 3.x node types
+  * [ffbaf36] MT#9191 Restore ngcptrunk option for isolinux Carrier 3.X
+  * [539088d] MT#8473 Add mr3.5 and mr3.5.1 to releases file
+  * [f351561] MT#9919 Add mr3.6.1 release and mark it as latest
+  * [c685191] MT#7505 Add .gitreview file for deployment-iso
+  * [9ba39a6] MT#10093 Update boot menus to support PXE Carrier 3.x setup
+  * [4118fdd] MT#10277 Switch code to release-specific deployment.sh
+  * [60c4593] MT#11911 Add mr3.7.2 to releases file
+  * [bacb139] MT#11947 Include Sipwise keyring 'sipwise.gpg' into CE Install CD
+  * [8208be4] MT#9249 Fix 'make clean' (delete all generated sipwise_*.cfg files)
+  * [5148102] MT#9249 Add boot option 'ngcpfillcache' for Carrier
+  * [22610dc] MT#9249 Remove outdated boot option 'ngcpnoupload'
+  * [f010e6c] MT#11493 Add mr3.8 and mr3.8.1 releases
+  * [b43950e] MT#13679 Add mr4.0.1, mark mr4.0.1 as LATEST and mr3.8.2 as LTS
+  * [8d63df6] MT#14681 Add mr3.8.3 to releases file
+  * [4935b8e] MT#15581 Add mr4.1.1 to releases file
+  * [10189f4] MT#12713 Fix 9c3bd317: Add missed isolinux.cfg for jessie
+  * [0cd1223] MT#16755 Add mr4.2/mr4.2.1 to releases file
+  * [5663913] MT#17689 Add mr4.1.2 to releases
+  * [21a602d] MT#17685 Switch GRML iso from mirror.inode.at to deb.sipwise.com
+  * [2695d4f] MT#18419 Add mr4.3/mr4.3.1 to release file
+  * [1c40797] MT#19051 Add second DNS server for new installations
+  * [645f4f8] MT#19797 Add mr4.4/mr4.4.1 to releases file
+  * [33550d9] MT#20855 MT#20863 Add mr3.8.7 LTS and mr4.3.2 releases
+  * [b5a13fa] MT#20879 Add mr4.5.1 to deployment-iso releases file
+  * [634c0d7] MT#22083 Add GRML boot option nodhcp for all non-DHCP menu items
+  * [483bbb6] MT#22257 Change Carrier sample IP from 10.15.20.101 to 192.168.52.114 (to simplify testing)
+  * [cda3d64] TT#4162 Add mr4.4.2 to releases
+  * [2c72250] TT#4562 Add mr4.5.2 to the file 'release'
+  * [d41ef2b] TT#8299 Add mr4.5.3 to releases
+  * [325aac1] TT#10023 Add mr5.1/mr5.1.1 to releases
+  * [13f4233] TT#11315 Add mr5.0.2 to releases
+  * [a745d74] TT#11757 Add mr4.5.4 to releases
+  * [c62d200] TT#14939 Add mr3.8.10 LTS to releases
+  * [1189749] TT#16361 Add mr5.3.1 to releases
+  * [69051f7] TT#17032 Add mr4.5.5 LTS to releases
+  * [1adcca0] TT#19347 Remove 'latest' boot options from private (PRO/Carrier) ISOs
+  * [f08db1f] TT#19347 Move NGCP install option before Debian install options
+  * [0b4134a] TT#19347 Add missing space for boot option carrierweb01atrunkstatic
+  * [867e3ae] TT#19347 Improve label 'Install specific versions of CE/PRO/Carrier'
+  * [40bb927] TT#18360 Add mr5.4.1 to releases (mark mr5.4.1 as LATEST)
+  * [f9d1efc] TT#20300 Discontinue GRML boot option 'ngcptrunk' (use common 'ngcpvers=trunk')
+  * [42f3660] TT#20342 Add mr5.3.2 to releases
+  * [265cc33] TT#21905 Switch trunk/mr5.5 to Debian stretch
+  * [219d551] TT#21056 Add mr5.5.1 to releases
+  * [2d2623a] TT#26461 Add mr6.0(.1) to releases and mark it as the latest
+  * [25e147e] TT#34318 Merge netscript.git code (commit 82bd20e) into deployment-iso.git
+
+  [ Victor Seva ]
+  * [da6de53] MT#6253 move jenkins scripts to repo.
+  * [d2a57a6] MT#6253 generate grub and isolinux include files for releases
+  * [193bda5] MT#6253 fix build.sh excution outside the source directory
+  * [2184a26] MT#6253 use templates too for public release
+  * [d578b66] MT#6659 add mr3.3.1 to releases list with LATEST tag
+  * [28b662e] MT#7945 add 3.4.1 and 3.4 versions
+  * [f1e0581] MT#8773 add DHCP option for PRO
+  * [eacff4b] MT#10805 add carrier support in templates
+  * [fd1ad85] MT#10805 Add mr3.7 and mr3.7.1 releases
+  * [62309fd] MT#16279 add mr4.0.2 release
+  * [46e679a] MT#19153 releases: Add mr4.2.2
+
+  [ Guillem Jover ]
+  * [f25f51e] MT#17177 Remove unused file
+
+  [ Sergii Kipot ]
+  * [9489094] TT#4357 Add mr3.8.8 to deployment-iso releases file
+  * [f6c2566] TT#2385 Add mr5.0 and mr5.0.1 to releases
+  * [9e4857a] TT#8902 Add mr3.8.9 to deployment-iso releases file
+  * [efe928b] TT#12759 Add mr5.2/mr5.2.1 to releases
+  * [0a590a9] TT#14940 Add mr5.1.2 to releases
+  * [70a85cc] TT#17031 Add mr5.2.2 to releases
+  * [530dcf6] TT#20341 Add mr3.8.11 to releases
+  * [8c6ad3f] TT#21879 Add mr4.5.6 to releases
+  * [0d3e8ab] TT#21880 Add mr5.4.2 to releases
+  * [0192c68] TT#26460 Add mr3.8.12 to releases
+  * [9361812] TT#26463 Add mr4.5.7 to releases
+  * [1a720bc] TT#30371 Add mr6.1(.1) to releases and mark it as the latest
+  * [14b48fe] TT#33906 Add mr6.0.2 to releases
+
+  [ Manuel Montecelo ]
+  * [4f607ab] TT#26462 Prepare and release mr5.5.2
+  * [4429a61] TT#30372 Prepare release mr5.5.3
+
+  [ Mykola Malkov ]
+  * [35c1f29] TT#32751 Combine CE and Pro install cd
+  * [0616bb9] TT#32751 Remove obsolete not-used files
+  * [9bd4560] TT#32751 Build MR specific ISO files
+  * [85c8ec3] TT#32751 Remove outdated template files
+  * [2532db8] TT#32751 Update gitignore file
+
+ -- Alex Lutay <alutay@sipwise.com>  Tue, 20 Mar 2018 17:14:08 +0100
+
