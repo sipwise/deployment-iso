@@ -1,0 +1,19 @@
+#!/usr/bin/make -f
+# Uncomment this to turn on verbose mode.
+# export DH_VERBOSE=1
+
+DEBVERSION:=$(shell head -n 1 debian/changelog \
+                    | sed -e 's/^[^(]*(\([^)]*\)).*/\1/')
+
+ifneq ($(GIT_COMMIT),)
+export NGCP_VERSION := $(GIT_COMMIT)
+else
+export NGCP_VERSION:=$(DEBVERSION)
+endif
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	echo "NGCP_VERSION=$(NGCP_VERSION)"
+	make script_version
