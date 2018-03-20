@@ -8,7 +8,6 @@ export LC_ALL=C
 working_dir="$(dirname "$0")"
 scripts_dir="${working_dir}/includes/"
 keys_dir="${working_dir}/keys/"
-netscript_dir="${scripts_dir}/netscript/"
 
 RC=0
 
@@ -141,7 +140,7 @@ deploy() {
 
   einfo "Running ${YELLOW}${version}${NORMAL} of deployment.sh..."; eend 0
   RC=0
-  TARGET_DISK="$TARGET_DISK" /bin/bash "${netscript_dir}/${version}/deployment.sh" || RC=$?
+  TARGET_DISK="$TARGET_DISK" /bin/bash "${scripts_dir}/deployment.sh" || RC=$?
   if [ $RC -eq 0 ] ; then
     if dialog --yes-label Reboot --no-label Exit --yesno "Successfully finished deployment, enjoy your sip:provider system. Reboot system now?" 0 0 ; then
       reboot
