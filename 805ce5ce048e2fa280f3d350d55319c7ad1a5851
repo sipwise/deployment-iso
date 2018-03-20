@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6ced46_8ce66b15",
+        "filename": "build_iso.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-20T13:41:40Z",
+      "side": 1,
+      "message": "With the code here I cannot build arbitrary ISO using \u0027latest\u0027 GRML, right? Do you have some plans here?",
+      "revId": "805ce5ce048e2fa280f3d350d55319c7ad1a5851",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_ccf063cc",
+        "filename": "build_iso.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-20T13:41:40Z",
+      "side": 1,
+      "message": "this part probably should be extracted from the script into Jenkins job, since artifacts is a pure Jenkins folder..\nSo building locally is useless to move to artifacts, IMHO.",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 73
+      },
+      "revId": "805ce5ce048e2fa280f3d350d55319c7ad1a5851",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
