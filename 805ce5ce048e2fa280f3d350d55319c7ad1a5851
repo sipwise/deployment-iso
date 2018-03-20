@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a6ced46_cc9ea363",
+        "filename": "build_iso.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-20T13:55:18Z",
+      "side": 1,
+      "message": "ping",
+      "parentUuid": "1a6ced46_8ce66b15",
+      "revId": "805ce5ce048e2fa280f3d350d55319c7ad1a5851",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6ced46_2cbf37d2",
         "filename": "build_iso.sh",
         "patchSetId": 4
