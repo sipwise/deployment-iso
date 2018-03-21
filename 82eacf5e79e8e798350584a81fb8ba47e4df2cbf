@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_e23006a1",
+        "filename": "debian/control",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-21T09:37:54Z",
+      "side": 1,
+      "message": "As it was discussed it\u0027s better to use smth like \u0027ngcp-deployment-scripts\u0027 as the package doesn\u0027t contain any script for actual build of iso",
+      "range": {
+        "startLine": 11,
+        "startChar": 25,
+        "endLine": 11,
+        "endChar": 28
+      },
+      "revId": "82eacf5e79e8e798350584a81fb8ba47e4df2cbf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
