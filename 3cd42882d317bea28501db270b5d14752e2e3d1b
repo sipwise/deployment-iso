@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa963961_6223d606",
+        "filename": "debian/control",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-03-21T12:29:13Z",
+      "side": 1,
+      "message": "Nope, seems to have been a c/p error in the original ngcp-netscript Debian package",
+      "parentUuid": "fa963961_a202fe6d",
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_82f81a7e",
         "filename": "debian/copyright",
         "patchSetId": 6
