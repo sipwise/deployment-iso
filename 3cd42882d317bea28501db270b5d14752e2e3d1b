@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "fa963961_22038e11",
+        "filename": "Makefile",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-21T13:49:55Z",
+      "side": 1,
+      "message": "OK, the problem here is \"legacy\" and \"complexity\" :-)\n\nAt the moment those repos is used to:\n\n1) build ISO images using Jenkins job https://jenkins.mgm.sipwise.com/job/grml-sipwise-iso-release/\nThose deployment.sh with proper version will be built-in into ISO.\n\n2) build package ngcp-deployment-scripts to be installed on Carrier nodes to provide deployment.sh for iPXE there.\nI can be wrong, but AFAIK those code is not in use in package building at all, there is another one in debian/rules\n\n3) deployment.sh is published to http://deb.sipwise.com/netscript/ using Jenkins job https://jenkins.mgm.sipwise.com/job/deployment-iso-deployment/ (backward compatibility mainly here). So far we cannot use packages to deploy deployment.sh to deb.sipwise.com as multiply versions must be installed there, so we have to copy it manually. First changing version using this make.\n\nI am not good enough in Debian\u0026Makefile to improve something here keeping in mind 1)-3) above. :-( share better ideas here please.",
+      "parentUuid": "fa963961_e2c006e3",
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_a202fe6d",
         "filename": "debian/control",
         "patchSetId": 6
