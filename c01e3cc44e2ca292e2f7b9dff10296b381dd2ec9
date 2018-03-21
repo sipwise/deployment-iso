@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_62ff5635",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-03-21T13:11:42Z",
+      "side": 1,
+      "message": "d",
+      "range": {
+        "startLine": 9,
+        "startChar": 23,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "c01e3cc44e2ca292e2f7b9dff10296b381dd2ec9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_02952ae3",
+        "filename": "debian/rules",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-03-21T13:11:42Z",
+      "side": 1,
+      "message": "I\u0027m not sure why we\u0027d want to strip an epoch or revision from the version? They do not exist in this native version anyway?",
+      "revId": "c01e3cc44e2ca292e2f7b9dff10296b381dd2ec9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
