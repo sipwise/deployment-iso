@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "fa963961_42e572a6",
+        "filename": "debian/control",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-21T13:04:31Z",
+      "side": 1,
+      "message": "should I change it to amd64 here?",
+      "parentUuid": "fa963961_6223d606",
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_82f81a7e",
         "filename": "debian/copyright",
         "patchSetId": 6
