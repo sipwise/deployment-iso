@@ -7,4 +7,3 @@ templates/boot/grub/grub.cfg
 templates/boot/isolinux/isolinux.cfg
 templates/boot/isolinux/syslinux.cfg
 templates/scripts/includes/netscript/
-templates/scripts/includes/sipwise.gpg

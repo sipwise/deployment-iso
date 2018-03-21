@@ -7,6 +7,7 @@ export LC_ALL=C
 
 working_dir="$(dirname "$0")"
 scripts_dir="${working_dir}/includes/"
+keys_dir="${working_dir}/keys/"
 netscript_dir="${scripts_dir}/netscript/"
 
 RC=0
@@ -20,11 +21,11 @@ einfo "Executing grml-sipwise specific checks..."
 eindent
 
 install_sipwise_keyring() {
-  if [ -f "${scripts_dir}/sipwise.gpg" ]; then
+  if [ -f "${keys_dir}/sipwise.gpg" ]; then
     einfo "Installing sipwise keyring to '/etc/apt/trusted.gpg.d/sipwise.gpg'..."; eend 0
-    cp "${scripts_dir}/sipwise.gpg" /etc/apt/trusted.gpg.d/sipwise.gpg
+    cp "${keys_dir}/sipwise.gpg" /etc/apt/trusted.gpg.d/sipwise.gpg
   else
-    ewarn "Sipwise keyring '${scripts_dir}/sipwise.gpg' not found, continuing anyway." ; eend 0
+    ewarn "Sipwise keyring '${keys_dir}/sipwise.gpg' not found, continuing anyway." ; eend 0
   fi
 }
 

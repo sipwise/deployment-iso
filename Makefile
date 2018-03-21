@@ -11,10 +11,6 @@ build:
 	--no-parent --no-host-directories --cut-dirs=1 "http://deb.sipwise.com/netscript/${RELEASE}/" ; \
 	echo " done.";
 
-	@echo -n "Downloading Sipwise keyring 'sipwise.gpg'"; \
-	wget -O ./templates/scripts/includes/sipwise.gpg https://deb.sipwise.com/spce/sipwise.gpg ;\
-	echo " done.";
-
 syntaxcheck: shellcheck
 
 shellcheck:
@@ -29,7 +25,6 @@ shellcheck:
 clean:
 	rm -f templates/boot/isolinux/syslinux.cfg
 	rm -rf templates/scripts/includes/netscript
-	rm -f templates/scripts/includes/sipwise.gpg
 	rm -f templates/boot/grub/grub.cfg
 	rm -f templates/boot/isolinux/isolinux.cfg
 
