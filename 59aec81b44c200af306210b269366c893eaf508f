@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_059bf4ca",
+        "filename": "debian/rules",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-03-21T15:02:04Z",
+      "side": 1,
+      "message": "This is unnecessary here, it was fine before when trying to parse the version from the file header, but here we already get the version from the field.",
+      "range": {
+        "startLine": 5,
+        "startChar": 52,
+        "endLine": 5,
+        "endChar": 85
+      },
+      "revId": "59aec81b44c200af306210b269366c893eaf508f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
