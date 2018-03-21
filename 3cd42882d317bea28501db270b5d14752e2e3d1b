@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa963961_626ab61c",
+        "filename": "Makefile",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-21T13:03:14Z",
+      "side": 1,
+      "message": "The logic here copied from netscript, I didn\u0027t say it is correct one, we can improve it, IMHO on migration I shouldn\u0027t touch it anyway. P.S. how should I deal here from your point of view?",
+      "parentUuid": "fa963961_a210bea9",
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_a202fe6d",
         "filename": "debian/control",
         "patchSetId": 6
@@ -95,6 +113,30 @@
     },
     {
       "key": {
+        "uuid": "fa963961_4277b202",
+        "filename": "debian/copyright",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-21T13:03:14Z",
+      "side": 1,
+      "message": "Done, BTW, nice to add check in check-packaging :-)\nhttps://gerrit.mgm.sipwise.com/#/c/19899/",
+      "parentUuid": "fa963961_82f81a7e",
+      "range": {
+        "startLine": 7,
+        "startChar": 18,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_62f51682",
         "filename": "debian/rules",
         "patchSetId": 6
@@ -106,6 +148,24 @@
       "writtenOn": "2018-03-21T11:52:38Z",
       "side": 1,
       "message": "dpkg-parsechangelog?",
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_424e92c2",
+        "filename": "debian/rules",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-21T13:03:14Z",
+      "side": 1,
+      "message": "can you please share the fill command here, I will change it with pleasure. Tnx!",
+      "parentUuid": "fa963961_62f51682",
       "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
@@ -135,6 +195,30 @@
     },
     {
       "key": {
+        "uuid": "fa963961_224b8eb2",
+        "filename": "debian/rules",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-21T13:03:14Z",
+      "side": 1,
+      "message": "Done http://gerrit.mgm.sipwise.com/19901",
+      "parentUuid": "fa963961_42f2129c",
+      "range": {
+        "startLine": 11,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_22ef0eb2",
         "filename": "t/Dockerfile",
         "patchSetId": 6
@@ -146,6 +230,30 @@
       "writtenOn": "2018-03-21T11:52:38Z",
       "side": 1,
       "message": "Seems wrong? The same for the following ones.",
+      "range": {
+        "startLine": 22,
+        "startChar": 24,
+        "endLine": 22,
+        "endChar": 48
+      },
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_a2d55eba",
+        "filename": "t/Dockerfile",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-21T13:03:14Z",
+      "side": 1,
+      "message": "Nope, historically is uses those Docker images... migrated AS IS from netscript.git",
+      "parentUuid": "fa963961_22ef0eb2",
       "range": {
         "startLine": 22,
         "startChar": 24,
