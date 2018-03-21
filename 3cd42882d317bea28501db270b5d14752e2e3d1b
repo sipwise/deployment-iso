@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa963961_a210bea9",
+        "filename": "Makefile",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-03-21T12:26:08Z",
+      "side": 1,
+      "message": "\u003e It seems you are modifying the file in place? That\u0027s not very nice,\n \u003e it will give modified status all the time. :)\n\nThat\u0027s what we also did with netscript.git so far.\nWhat\u0027s the proper approach for handling that within shell scripts, so the version information matches what\u0027s being used?",
+      "parentUuid": "fa963961_c2fd0270",
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_a202fe6d",
         "filename": "debian/control",
         "patchSetId": 6
