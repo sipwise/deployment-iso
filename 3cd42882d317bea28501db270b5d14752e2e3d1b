@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "fa963961_e2c006e3",
+        "filename": "Makefile",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-03-21T13:18:03Z",
+      "side": 1,
+      "message": "Ideally, like any built artifact, install it somewhere under $(DESTDIR) and modify it there or on the fly when installing, and then we do not touch the source. Or generate a foo from foo.sh and install the former.",
+      "parentUuid": "fa963961_626ab61c",
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_a202fe6d",
         "filename": "debian/control",
         "patchSetId": 6
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "should I change it to amd64 here?",
       "parentUuid": "fa963961_6223d606",
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_02bc0a6b",
+        "filename": "debian/control",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-03-21T13:18:03Z",
+      "side": 1,
+      "message": "If this contains only architecture independent files then change it to «all».",
+      "parentUuid": "fa963961_42e572a6",
       "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
@@ -272,6 +308,30 @@
       "side": 1,
       "message": "Nope, historically is uses those Docker images... migrated AS IS from netscript.git",
       "parentUuid": "fa963961_22ef0eb2",
+      "range": {
+        "startLine": 22,
+        "startChar": 24,
+        "endLine": 22,
+        "endChar": 48
+      },
+      "revId": "3cd42882d317bea28501db270b5d14752e2e3d1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_a2bafe6c",
+        "filename": "t/Dockerfile",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-03-21T13:18:03Z",
+      "side": 1,
+      "message": "Still seems wrong? That means this repo will create locally images tagged with the lua repo name? :)",
+      "parentUuid": "fa963961_a2d55eba",
       "range": {
         "startLine": 22,
         "startChar": 24,
