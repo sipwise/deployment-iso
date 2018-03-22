@@ -93,6 +93,30 @@
       "revId": "e572f6eb7e8dcc2ddbcc5f878b33eecf46cdf759",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_44b9002e",
+        "filename": "templates/scripts/includes/network_configuration.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-22T14:51:39Z",
+      "side": 1,
+      "message": "Using \"ip\" both variants are valid.",
+      "parentUuid": "da9b358b_a4720cac",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 85
+      },
+      "revId": "e572f6eb7e8dcc2ddbcc5f878b33eecf46cdf759",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
