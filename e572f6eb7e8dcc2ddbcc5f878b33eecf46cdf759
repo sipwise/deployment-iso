@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_04ff7802",
+        "filename": "templates/scripts/includes/network_configuration.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2018-03-22T14:10:07Z",
+      "side": 1,
+      "message": "We have to move to ip-util:\nip link add link eth0 name eth0.${NET_CONFIG[0]} type vlan id ${NET_CONFIG[0]}",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 39
+      },
+      "revId": "e572f6eb7e8dcc2ddbcc5f878b33eecf46cdf759",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_441d8065",
+        "filename": "templates/scripts/includes/network_configuration.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2018-03-22T14:10:07Z",
+      "side": 1,
+      "message": "ip addr add \"${NET_CONFIG[1]}\"/\"${NET_CONFIG[2]}\" dev eth0.\"${NET_CONFIG[0]}\"",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 85
+      },
+      "revId": "e572f6eb7e8dcc2ddbcc5f878b33eecf46cdf759",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
