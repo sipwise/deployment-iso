@@ -45,6 +45,30 @@
       "revId": "e572f6eb7e8dcc2ddbcc5f878b33eecf46cdf759",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_643e44ba",
+        "filename": "templates/scripts/includes/network_configuration.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-03-22T14:27:40Z",
+      "side": 1,
+      "message": "thx, consider to update https://wiki.sipwise.com/wiki/index.php/Boot_rescue_with_vlan_tagging as well, as it was the origing of hidden knowledge for us :-)",
+      "parentUuid": "da9b358b_441d8065",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 85
+      },
+      "revId": "e572f6eb7e8dcc2ddbcc5f878b33eecf46cdf759",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
