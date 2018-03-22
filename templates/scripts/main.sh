@@ -28,21 +28,6 @@ install_sipwise_keyring() {
   fi
 }
 
-network_check() {
-  if "${scripts_dir}/check-for-network" ; then
-    einfo "Looks like we have working network, continuing..." ; eend 0
-  else
-    if dialog --yes-label Yes --no-label Exit --yesno "It looks like you don't have a working network connection yet. Do you want to configure the network now?" 0 0 ; then
-      if ! netcardconfig ; then
-        ewarn "Failed to configure network, continuing anyway." ; eend 0
-      fi
-    else
-      ewarn "Cancelling as requested by user." ; eend 0
-      return 1
-    fi
-  fi
-}
-
 report_ssh_password() {
   local rootpwd=$(grep -Eo '\<ssh=[^ ]+' /proc/cmdline || true)
 
@@ -155,7 +140,7 @@ deploy() {
 }
 
 install_sipwise_keyring
-network_check
+"${scripts_dir}/network_configuration.sh"
 "${scripts_dir}/check_installing_version.sh"
 "${scripts_dir}/verify_iso_image.sh"
 prompt_for_target
