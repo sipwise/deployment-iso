@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_248ddc7b",
+        "filename": "templates/scripts/includes/network_configuration.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-03-22T15:11:13Z",
+      "side": 1,
+      "message": "Is it really always eth0 that we\u0027ve to configure?",
+      "revId": "f94c92f48ab46e079192e7aaf7b8f8d6cf3750c1",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
