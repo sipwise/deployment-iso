@@ -22,6 +22,30 @@
       "revId": "aec86cd62c6fa533039628d31578ac64c4db2b25",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_c7b5127f",
+        "filename": "templates/scripts/includes/verify_iso_image.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-23T15:52:33Z",
+      "side": 1,
+      "message": "\u003e the script can be aborted due to \u0027set -e\u0027, maybe we should care here somehow?\n\u003e also think about STDERR/STDOUT?\n\nDone\n\n\u003e check binary checkisomd5 availability?\n\nIt will be shown in \"err_message\"",
+      "parentUuid": "da9b358b_e7f2566f",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 68
+      },
+      "revId": "aec86cd62c6fa533039628d31578ac64c4db2b25",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
