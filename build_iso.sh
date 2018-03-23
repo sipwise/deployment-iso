@@ -80,6 +80,8 @@ sudo /usr/sbin/grml2iso -c ./${TEMPLATES} -o "${SIPWISE_ISO}" "${GRML_ISO}"
 echo "*** Generating dd-able ISO ***"
 sudo /usr/bin/isohybrid "${SIPWISE_ISO}"
 
+sudo implantisomd5 "${SIPWISE_ISO}"
+
 echo "*** Generating SHA1 and MD5 checksum files ***"
 sha1sum "${SIPWISE_ISO}" > "${SIPWISE_ISO}.sha1"
 md5sum  "${SIPWISE_ISO}" > "${SIPWISE_ISO}.md5"
