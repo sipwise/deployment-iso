@@ -1,3 +1,19 @@
+ngcp-deployment-iso (6.2.1.0+0~mr6.2.1.0) unstable; urgency=medium
+
+  [ Alexander Lutay ]
+  * [5b85d2e] TT#34318 Update year in debian/copyright
+  * [294437d] TT#34318 Fix spacing in debian/rules (common style)
+  * [8451154] TT#34318 Use dpkg-parsechangelog instead of 'head | sed'
+
+  [ Mykola Malkov ]
+  * [be0527d] TT#32751 Fix booting from HDD
+  * [df0420e] TT#32751 Check CD integrity
+  * [c6f5156] TT#32751 Add network configuration script
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 03 Apr 2018 22:59:02 +0200
+
 ngcp-deployment-iso (6.2.0.0+0~mr6.2.0.0) unstable; urgency=medium
 
   [ Michael Prokop ]
