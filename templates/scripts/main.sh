@@ -103,7 +103,7 @@ prompt_for_target()
                 echo "${i}" "${disk_info}"
               done) )
 
-  if ! TARGET_DISK=$(dialog --title "Disk selection" --single-quoted --stdout \
+  if ! TARGET_DISK=$(dialog --title "Disk selection" --single-quoted \
                        --ok-label OK --cancel-label Exit \
                        --menu "Please select the target disk for installing Debian/ngcp:" 0 0 0 \
                        "${DISK_LIST[@]}") ; then
