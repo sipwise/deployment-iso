@@ -19,6 +19,9 @@ NORMAL="$(tput op)"
 einfo "Executing grml-sipwise specific checks..."
 eindent
 
+echo "ASM"
+read xxx
+
 install_sipwise_keyring() {
   if [ -f "${keys_dir}/sipwise.gpg" ]; then
     einfo "Installing sipwise keyring to '/etc/apt/trusted.gpg.d/sipwise.gpg'..."; eend 0
@@ -103,13 +106,16 @@ prompt_for_target()
                 echo "${i}" "${disk_info}"
               done) )
 
-  if ! TARGET_DISK=$(dialog --title "Disk selection" --single-quoted --stdout \
-                       --ok-label OK --cancel-label Exit \
-                       --menu "Please select the target disk for installing Debian/ngcp:" 0 0 0 \
-                       "${DISK_LIST[@]}") ; then
+  TMP=$(mktemp)
+  if ! dialog --title "Disk selection" --single-quoted \
+    --ok-label OK --cancel-label Exit \
+    --menu "Please select the target disk for installing Debian/ngcp:" 0 0 0 \
+    "${DISK_LIST[@]}" 2>"${TMP}" ; then
+    rm -f "${TMP}"
     ewarn "Cancelling as requested by user during disk selection." ; eend 0
     return 1
   fi
+  TARGET_DISK="$(cat "${TMP}")"; rm -f "${TMP}"
 }
 # }}}
 
