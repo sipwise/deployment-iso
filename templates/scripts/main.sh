@@ -103,13 +103,17 @@ prompt_for_target()
                 echo "${i}" "${disk_info}"
               done) )
 
-  if ! TARGET_DISK=$(dialog --title "Disk selection" --single-quoted --stdout \
-                       --ok-label OK --cancel-label Exit \
-                       --menu "Please select the target disk for installing Debian/ngcp:" 0 0 0 \
-                       "${DISK_LIST[@]}") ; then
+  TMP=$(mktemp)
+  if ! dialog --title "Disk selection" --single-quoted \
+    --ok-label OK --cancel-label Exit \
+    --menu "Please select the target disk for installing Debian/ngcp:" 0 0 0 \
+    "${DISK_LIST[@]}" 2>"${TMP}" ; then
+    read -r TARGET_DISK <"${TMP}" ; rm -f "${TMP}"
+    rm -f "${TMP}"
     ewarn "Cancelling as requested by user during disk selection." ; eend 0
     return 1
   fi
+  rm -f "${TMP}"
 }
 # }}}
 
