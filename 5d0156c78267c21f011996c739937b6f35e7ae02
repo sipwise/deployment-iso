@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_b5391244",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-04-09T08:13:57Z",
+      "side": 1,
+      "message": "I preffer cat for better readability \n  \nTARGET_DISK\u003d\"$(cat \"${TMP}\")\"\nrm -f \"${TMP}\"",
+      "range": {
+        "startLine": 115,
+        "startChar": 2,
+        "endLine": 115,
+        "endChar": 29
+      },
+      "revId": "5d0156c78267c21f011996c739937b6f35e7ae02",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
