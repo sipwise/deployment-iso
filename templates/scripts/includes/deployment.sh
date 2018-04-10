@@ -336,7 +336,7 @@ ensure_augtool_present() {
 #cat > /etc/rsyslog.d/logsend.conf << EOF
 #*.*  @@192.168.51.28
 #EOF
-#/etc/init.d/rsyslog restart
+#service rsyslog restart
 
 logit() {
   logger -t grml-deployment "$@"
@@ -1164,7 +1164,7 @@ EOF
 fi
 
 # remote login ftw
-/etc/init.d/ssh start >/dev/null &
+service ssh start >/dev/null &
 echo "root:sipwise" | chpasswd
 
 ## partition disk
@@ -1543,7 +1543,7 @@ if "$RETRIEVE_MGMT_CONFIG" && "$RESTART_NETWORK" ; then
     cp ${TARGET}/etc/hosts /etc/hosts
     echo  'Restarting networking'
     logit 'Restarting networking'
-    /etc/init.d/networking restart
+    service networking restart
   else
     # make sure we can access the management system which might be reachable
     # through a specific VLAN only
@@ -1796,10 +1796,8 @@ EOT
   # make sure services are stopped
   . "$NGCP_SERVICES_FILE"
   for service in ${HA_NGCP_SERVICES} ${NGCP_SERVICES} ${NON_NGCP_SERVICES} ; do
-    if [ -f "${TARGET}/etc/init.d/${service}" ] ; then
-      echo "Stopping ${service} ..."
-      grml-chroot ${TARGET} "/etc/init.d/${service}" stop || true
-    fi
+    echo "Stopping ${service} ..."
+    grml-chroot ${TARGET} service "${service}" stop || true
   done
 
   # nuke files
