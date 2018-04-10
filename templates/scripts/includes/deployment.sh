@@ -2520,10 +2520,13 @@ if [ "$(get_deploy_status)" != "error" ] ; then
   set_deploy_status "finished"
 fi
 
-# if ngcpstatus boot option is used wait for a specific so a
-# remote host has a chance to check for deploy status "finished",
-# defaults to 0 seconds otherwise
-sleep "$STATUS_WAIT"
+if [[ -n "$STATUS_WAIT" && "$STATUS_WAIT" != 0 ]]; then
+  # if ngcpstatus boot option is used wait for a specific so a
+  # remote host has a chance to check for deploy status "finished",
+  # defaults to 0 seconds otherwise
+  echo "Sleeping for $STATUS_WAIT seconds (as requested via boot option 'ngcpstatus')"
+  sleep "$STATUS_WAIT"
+fi
 
 if "$INTERACTIVE" ; then
   exit 0
