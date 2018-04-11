@@ -37,13 +37,11 @@ if checkBootParam ngcppro ; then
   if checkBootParam "sipwiserepo=" ; then
     SIPWISE_REPO_HOST=$(getBootParam sipwiserepo)
   fi
+
   URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/"
-  accessible=$( curl -s -o /dev/null -w "%{http_code}" "${URL}" 2>/dev/null || true )
   err_message="You are installing Pro/Carrier version but ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/ repository not accessible. Please contact support@sipwise.com"
-  while [[ "${accessible}" != 200 ]]; do
-    if dialog --yes-label Retry --no-label Exit --yesno "${err_message}" 0 0 ; then
-      accessible=$( curl -s -o /dev/null -w "%{http_code}" "${URL}" 2>/dev/null || true )
-    else
+  while ! wget -q -T 10 -O /dev/null "${URL}" ; do
+    if ! dialog --yes-label Retry --no-label Exit --yesno "${err_message}" 0 0 ; then
       exit 1
     fi
   done

@@ -145,6 +145,7 @@ deploy() {
 install_sipwise_keyring
 "${scripts_dir}/network_configuration.sh"
 "${scripts_dir}/check_installing_version.sh"
+"${scripts_dir}/install_required_packages.sh"
 "${scripts_dir}/verify_iso_image.sh"
 prompt_for_target
 check_for_existing_pvs
