@@ -224,6 +224,32 @@ install_apt_transport_https () {
     -y --no-install-recommends install apt-transport-https
 }
 
+install_moreutils () {
+  echo "Installing package moreutils"
+
+  if [ "$(dpkg-query -f "\${db:Status-Status} \${db:Status-Eflag}" -W moreutils 2>/dev/null)" = 'installed ok' ]; then
+    echo "moreutils is already installed, nothing to do about it."
+    return 0
+  fi
+
+  # use temporary apt database for speed reasons
+  local TMPDIR
+  TMPDIR=$(mktemp -d)
+  mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
+    "${TMPDIR}/cachedir/archives/partial"
+  echo "deb http://${DEBIAN_REPO_HOST}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
+    "${TMPDIR}/etc/sources.list"
+
+  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" -o dir::etc="${TMPDIR}/etc" \
+    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" update
+
+  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::etc="${TMPDIR}/etc" -o dir::state="${TMPDIR}/statedir" \
+    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
+    -y --no-install-recommends install moreutils
+}
+
 install_fai_setup_storage () {
   echo "Installing fai-setup-storage (it is missing on GRML 'small')"
 
@@ -827,6 +853,9 @@ install_sipwise_key
 
 set_deploy_status "installing_apt_transport_https"
 install_apt_transport_https
+
+set_deploy_status "install_moreutils"
+install_moreutils
 
 set_deploy_status "debootstrap_upgrade"
 debootstrap_upgrade
