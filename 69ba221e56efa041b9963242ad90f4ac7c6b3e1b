@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_00687bf4",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-11T13:16:27Z",
+      "side": 1,
+      "message": "I\u0027d merge all install_* into a single function and place all the calls into one place (cycle for example)",
+      "revId": "69ba221e56efa041b9963242ad90f4ac7c6b3e1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
