@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "baa041b7_3b9bb0cb",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-11T13:44:59Z",
+      "side": 1,
+      "message": "It can\u0027t be installed due to:\n\nmoreutils : Depends: libipc-run-perl but it is not going to be installed",
+      "range": {
+        "startLine": 250,
+        "startChar": 39,
+        "endLine": 250,
+        "endChar": 48
+      },
+      "revId": "69ba221e56efa041b9963242ad90f4ac7c6b3e1b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_00687bf4",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
