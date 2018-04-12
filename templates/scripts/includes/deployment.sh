@@ -278,33 +278,6 @@ debootstrap_upgrade() {
   fi
 }
 
-grml_debootstrap_upgrade() {
-  local required_version=0.74
-  local present_version
-
-  present_version=$(dpkg-query --show --showformat="\${Version}" grml-debootstrap)
-
-  if dpkg --compare-versions "${present_version}" lt "${required_version}" ; then
-    echo "grml-deboostrap version $present_version is older than minimum required version $required_version - upgrading."
-
-    # use temporary apt database for speed reasons
-    local TMPDIR
-    TMPDIR=$(mktemp -d)
-    mkdir -p "${TMPDIR}/statedir/lists/partial" "${TMPDIR}/cachedir/archives/partial"
-    local debsrcfile
-    debsrcfile=$(mktemp)
-    echo "deb ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/grml.org grml-testing main" >> "$debsrcfile"
-
-    DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
-      -o dir::state="${TMPDIR}/statedir" -o dir::etc::sourcelist="$debsrcfile" \
-      -o Dir::Etc::sourceparts=/dev/null update
-
-    DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
-      -o dir::state="${TMPDIR}/statedir" -o dir::etc::sourcelist="$debsrcfile" \
-      -o Dir::Etc::sourceparts=/dev/null -y install grml-debootstrap
-  fi
-}
-
 install_vbox_iso() {
   echo "Downloading virtualbox-guest-additions ISO"
 
@@ -827,9 +800,6 @@ install_sipwise_key
 
 set_deploy_status "debootstrap_upgrade"
 debootstrap_upgrade
-
-set_deploy_status "grml_debootstrap_upgrade"
-grml_debootstrap_upgrade
 
 if "$NGCP_INSTALLER" ; then
   set_deploy_status "ensure_augtool_present"
