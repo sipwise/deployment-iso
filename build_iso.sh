@@ -60,7 +60,7 @@ else
   # identify ISO version (build time might not necessarily match ISO date)
   ISO_DATE=$(isoinfo -d -i "${GRML_ISO}" | awk '/^Volume id:/ {print $4}')
   if [ -z "${ISO_DATE}" ]; then echo "ISO_DATE not identified, exiting." >&2 ; exit 1 ; fi
-  GRML_ISO_DATE="grml64-full_testing_${ISO_DATE}.iso"
+  GRML_ISO_DATE="grml64-small_testing_${ISO_DATE}.iso"
   mv "${GRML_ISO}" "${GRML_ISO_DATE}"
   check_sha1 "${GRML_ISO}"
   GRML_ISO="${GRML_ISO_DATE}"
