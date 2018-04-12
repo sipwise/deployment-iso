@@ -853,13 +853,13 @@ if [ -z "$INSTALL_DEV" ] ; then
     INSTALL_DEV=$DEFAULT_INSTALL_DEV
   fi
 fi
-INSTALL_IP="$(ifdata -pa $INSTALL_DEV)"
+INSTALL_IP="$(ip -4 addr show "${INSTALL_DEV}" | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3}).*$/\1/p')"
 logit "INSTALL_IP is $INSTALL_IP"
 
 # if the default network device (eth0) is unconfigured try to retrieve configuration from eth1
 if [ "$INSTALL_IP" = "NON-IP" ] && [ "$INSTALL_DEV" = "$DEFAULT_INSTALL_DEV" ] ; then
   logit "Falling back to device eth1 for INSTALL_IP because $DEFAULT_INSTALL_DEV is unconfigured"
-  INSTALL_IP="$(ifdata -pa eth1)"
+  INSTALL_IP="$(ip -4 addr show eth1 | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3}).*$/\1/p')"
   logit "INSTALL_IP is $INSTALL_IP"
 fi
 
@@ -1829,6 +1829,19 @@ case "$DEBIAN_RELEASE" in
     ;;
 esac
 
+cdr2mask ()
+{
+  # From https://stackoverflow.com/questions/20762575/explanation-of-convertor-of-cidr-to-netmask-in-linux-shell-netmask2cdir-and-cdir
+  # Number of args to shift, 255..255, first non-255 byte, zeroes
+  set -- $(( 5 - ("${1}" / 8) )) 255 255 255 255 $(( (255 << (8 - ("${1}" % 8))) & 255 )) 0 0 0
+  if [[ "${1}" -gt 1 ]] ; then
+    shift "${1}"
+  else
+    shift
+  fi
+  echo "${1:-0}.${2:-0}.${3:-0}.${4:-0}"
+}
+
 if "$CARRIER_EDITION" ; then
   echo "Nothing to do on Carrier, /etc/network/interfaces was already set up."
 elif ! "$NGCP_INSTALLER" ; then
@@ -1858,6 +1871,7 @@ iface $INTERNAL_DEV inet static
 EOF
   fi
 else
+  external_ip_data=( $( ip -4 addr show "${EXTERNAL_DEV}" | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3})\/([0-9]+).*$/\1 \3/p' ) )
   # assume host system has a valid configuration
   if "$PRO_EDITION" && "$VLAN" ; then
     cat > $TARGET/etc/network/interfaces << EOF
@@ -1869,8 +1883,8 @@ iface lo inet loopback
 
 auto vlan${VLANID}
 iface vlan${VLANID} inet static
-        address $(ifdata -pa $EXTERNAL_DEV)
-        netmask $(ifdata -pn $EXTERNAL_DEV)
+        address ${external_ip_data[0]}
+        netmask $( cdr2mask "${external_ip_data[1]}" )
         gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
         dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
         vlan-raw-device $VLANIF
@@ -1906,8 +1920,8 @@ iface bond0 inet static
         bond_mode 802.3ad
         bond_miimon 100
         bond_lacp_rate 1
-        address $(ifdata -pa $EXTERNAL_DEV)
-        netmask $(ifdata -pn $EXTERNAL_DEV)
+        address ${external_ip_data[0]}
+        netmask $( cdr2mask "${external_ip_data[1]}" )
         gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
         dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
 
@@ -1940,8 +1954,8 @@ iface lo inet loopback
 
 auto $EXTERNAL_DEV
 iface $EXTERNAL_DEV inet static
-        address $(ifdata -pa $EXTERNAL_DEV)
-        netmask $(ifdata -pn $EXTERNAL_DEV)
+        address ${external_ip_data[0]}
+        netmask $( cdr2mask "${external_ip_data[1]}" )
         gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
         dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
 
@@ -1972,8 +1986,8 @@ iface lo inet loopback
 
 auto $EXTERNAL_DEV
 iface $EXTERNAL_DEV inet static
-        address $(ifdata -pa $EXTERNAL_DEV)
-        netmask $(ifdata -pn $EXTERNAL_DEV)
+        address ${external_ip_data[0]}
+        netmask $( cdr2mask "${external_ip_data[1]}" )
         gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
         dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
 
