@@ -224,6 +224,32 @@ install_fai_setup_storage () {
     -y --no-install-recommends install fai-setup-storage
 }
 
+install_package_git () {
+  echo "Installing package git (it is missing on GRML 'small')"
+
+  if [ "$(dpkg-query -f "\${db:Status-Status} \${db:Status-Eflag}" -W git 2>/dev/null)" = 'installed ok' ]; then
+    echo "git is already installed, nothing to do about it."
+    return 0
+  fi
+
+  # use temporary apt database for speed reasons
+  local TMPDIR
+  TMPDIR=$(mktemp -d)
+  mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
+    "${TMPDIR}/cachedir/archives/partial"
+  echo "deb http://${DEBIAN_REPO_HOST}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
+    "${TMPDIR}/etc/sources.list"
+
+  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" -o dir::etc="${TMPDIR}/etc" \
+    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" update
+
+  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::etc="${TMPDIR}/etc" -o dir::state="${TMPDIR}/statedir" \
+    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
+    -y --no-install-recommends install git
+}
+
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=776917
 debootstrap_upgrade() {
   local required_version=1.0.87
@@ -2101,7 +2127,7 @@ vagrant_configuration() {
   fi
 
   vagrant_ssh_pub_key='/var/tmp/id_rsa_sipwise.pub'
-  echo "Checking out ngcp-vmbuilder git repository"
+  echo "Fetching Sipwise vagrant public key from builder.mgm.sipwise.com"
   if ! wget -O "${vagrant_ssh_pub_key}" http://builder.mgm.sipwise.com/vagrant-ngcp/id_rsa_sipwise.pub ; then
     die "Error: failed to wget public Sipwise SSH key for Vagrant boxes"
   fi
@@ -2317,6 +2343,7 @@ puppet_install_from_git () {
   rmdir "${PUPPET_RESCUE_PATH}"
 
   echo "Cloning Puppet git repository from '${PUPPET_GIT_REPO}' to '${PUPPET_LOCAL_GIT}' (branch '${PUPPET_GIT_BRANCH}')"
+  install_package_git
   echo 'ssh -i ~/.ssh/id_rsa_r10k -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $*' > ssh
   chmod +x ssh
   if ! GIT_SSH="${PWD}/ssh" git clone --depth 1 -b "${PUPPET_GIT_BRANCH}" "${PUPPET_GIT_REPO}" "${PUPPET_LOCAL_GIT}" ; then
