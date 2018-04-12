@@ -199,7 +199,7 @@ install_sipwise_key() {
 }
 
 install_fai_setup_storage () {
-  echo "Installing fai-setup-storage (it is missing on GRML 'small')"
+  echo "Installing fai-setup-storage (it is missed on GRML 'small')"
 
   if [ "$(dpkg-query -f "\${db:Status-Status} \${db:Status-Eflag}" -W fai-setup-storage 2>/dev/null)" = 'installed ok' ]; then
     echo "fai-setup-storage is already installed, nothing to do about it."
