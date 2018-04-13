@@ -11,7 +11,7 @@ MR="$3"
 DIST="$4"
 TEMPLATES="templates"
 GRML_URL="${GRML_URL:-https://deb.sipwise.com/files/grml/}"
-GRML_HASH_URL="${GRML_HASH_URL:-http://download.grml.org/}"
+GRML_HASH_URL="${GRML_HASH_URL:-https://deb.sipwise.com/files/grml/}"
 SIPWISE_ISO="sip_provider_${MR}_${DATE}.iso"
 
 usage () {
