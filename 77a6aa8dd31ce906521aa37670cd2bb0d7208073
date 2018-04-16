@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_95f164d0",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-04-16T10:16:23Z",
+      "side": 1,
+      "message": "I believe it is a wrong place for it...\nConceptually ngcp-installer start some services and should stop them there. deployment.sh is not repsonsible for the services at all. Moreover we should move 2449-2453 into installer if necessary. Deployment.sh should receive from ngcp-installer clean state like he gave him. Isn\u0027t it?",
+      "revId": "77a6aa8dd31ce906521aa37670cd2bb0d7208073",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
