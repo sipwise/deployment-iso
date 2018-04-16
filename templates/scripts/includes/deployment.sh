@@ -2443,6 +2443,9 @@ EOF
 
 fi # if [ -n "$PUPPET" ] ; then
 
+# it is necessary to stop glusterfsd correctly to avoid broken dir /mnt/mnt/glusterfs
+# which prevents /mnt to be unmounted
+grml-chroot ${TARGET} start-stop-daemon --stop --exec /usr/sbin/glusterfsd || true
 # make sure we don't leave any running processes
 for i in asterisk atd collectd collectdmon dbus-daemon exim4 \
          glusterd glusterfs glusterfsd glusterfs-server haveged monit nscd \
