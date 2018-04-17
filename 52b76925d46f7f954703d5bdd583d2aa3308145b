@@ -69,6 +69,24 @@
       "revId": "52b76925d46f7f954703d5bdd583d2aa3308145b",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_a5ce8ab2",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-04-17T17:35:38Z",
+      "side": 1,
+      "message": "I think the proper way to disable this is to mask it. You can even use «systemctl mask systemd-tmpfiles-clean.timer».",
+      "parentUuid": "9aa53dc9_05e9b61a",
+      "revId": "52b76925d46f7f954703d5bdd583d2aa3308145b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
