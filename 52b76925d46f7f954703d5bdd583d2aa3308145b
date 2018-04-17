@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9aa53dc9_258dda7b",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-04-17T16:53:01Z",
+      "side": 1,
+      "message": "Ah good point, didn\u0027t consider that, thanks!\nPushed new changeset moving this to deployment.sh",
+      "parentUuid": "9aa53dc9_e586d264",
+      "revId": "52b76925d46f7f954703d5bdd583d2aa3308145b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa53dc9_8596e692",
         "filename": "templates/scripts/main.sh",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-04-17T16:51:39Z",
       "side": 1,
       "message": "Maybe I\u0027m not getting the bigger picture, but isn\u0027t it better to disable it temporarily (/run) instead of permanently (/etc)?",
+      "revId": "52b76925d46f7f954703d5bdd583d2aa3308145b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_05e9b61a",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-04-17T16:53:01Z",
+      "side": 1,
+      "message": "It\u0027s a live system, which is running just \"temporarily\" anyway? :)",
+      "parentUuid": "9aa53dc9_8596e692",
       "revId": "52b76925d46f7f954703d5bdd583d2aa3308145b",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
