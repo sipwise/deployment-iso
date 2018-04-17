@@ -203,32 +203,6 @@ install_sipwise_key() {
   debootstrap_sipwise_key
 }
 
-install_fai_setup_storage () {
-  echo "Installing fai-setup-storage (it is missed on GRML 'small')"
-
-  if [ "$(dpkg-query -f "\${db:Status-Status} \${db:Status-Eflag}" -W fai-setup-storage 2>/dev/null)" = 'installed ok' ]; then
-    echo "fai-setup-storage is already installed, nothing to do about it."
-    return 0
-  fi
-
-  # use temporary apt database for speed reasons
-  local TMPDIR
-  TMPDIR=$(mktemp -d)
-  mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
-    "${TMPDIR}/cachedir/archives/partial"
-  echo "deb http://${DEBIAN_REPO_HOST}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
-    "${TMPDIR}/etc/sources.list"
-
-  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
-    -o dir::state="${TMPDIR}/statedir" -o dir::etc="${TMPDIR}/etc" \
-    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" update
-
-  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
-    -o dir::etc="${TMPDIR}/etc" -o dir::state="${TMPDIR}/statedir" \
-    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
-    -y --no-install-recommends install fai-setup-storage
-}
-
 install_package_git () {
   echo "Installing package git (it is missed on GRML 'small')"
 
@@ -1138,7 +1112,6 @@ echo "root:sipwise" | chpasswd
 
 ## partition disk
 set_deploy_status "disksetup"
-install_fai_setup_storage
 
 # 2000GB = 2097152000 blocks in /proc/partitions - so make a rough estimation
 if [ "$(awk "/ ${DISK}$/ {print \$3}" /proc/partitions)" -gt 2000000000 ] ; then
@@ -1148,65 +1121,148 @@ else
 fi
 
 if "$LVM" ; then
-  # make sure lvcreate understands the --yes option
-  lv_create_opts=''
-  lvm_version=$(dpkg-query -W -f="\${Version}\n" lvm2) || die "Unknown package lvm2"
-  setupstorage_version=$(dpkg-query --show --showformat="\${Version}" fai-setup-storage) || die "Unknown package fai-setup-storage"
-
-  if dpkg --compare-versions "$setupstorage_version" ge 5.0 ; then
-    logit "Installed fai-setup-storage version ${setupstorage_version} doesn't need the LVM '--yes' workaround."
-  elif dpkg --compare-versions "$lvm_version" lt 2.02.106 ; then
-    logit "Installed lvm2 version ${lvm_version} doesn't need the '--yes' workaround."
-  else
-    logit "Enabling '--yes' workaround for lvm2 version ${lvm_version}."
-    lv_create_opts='lvcreateopts="--yes"'
-  fi
-
   if "$NGCP_INSTALLER" ; then
     VG_NAME="ngcp"
   else
     VG_NAME="vg0"
   fi
+fi
 
-  cat > /tmp/partition_setup.txt << EOF
-disk_config ${DISK} disklabel:${TABLE} bootable:1
-primary -       4096-   -       -
+clear_partition_table() {
+  local blockdevice
+  blockdevice="/dev/${DISK}"
 
-disk_config lvm
-vg ${VG_NAME}       ${DISK}1
-${VG_NAME}-root     /       -95%      ext3 rw
-${VG_NAME}-swap     swap    RAM:50%   swap sw $lv_create_opts
-EOF
+  echo "Wiping disk signatures from ${blockdevice}"
+  wipefs -a "${blockdevice}"
 
-  # make sure setup-storage/parted doesn't fail if LVM is already present
-  blockdev --rereadpt "/dev/${DISK}"
-  for disk in "/dev/${DISK}"* ; do
+  # make sure parted doesn't fail if LVM is already present
+  blockdev --rereadpt "$blockdevice"
+  for disk in "$blockdevice"* ; do
+    existing_pvs=$(pvs "$disk" -o vg_name --noheadings 2>/dev/null || true)
+    if [ -n "$existing_pvs" ] ; then
+      for pv in $existing_pvs ; do
+        logit "Getting rid of existing VG $pv on partition $part"
+        vgremove -ff "$pv"
+      done
+    fi
+
     logit "Removing possibly existing LVM/PV label from $disk"
     pvremove "$disk" --force --force --yes || true
   done
+
   dd if=/dev/zero of="/dev/${DISK}" bs=1M count=1
   blockdev --rereadpt "/dev/${DISK}"
+}
 
-  export LOGDIR='/tmp/setup-storage'
-  mkdir -p $LOGDIR
+set_up_partition_table() {
+  clear_partition_table
 
-  # /usr/lib/fai/fai-disk-info is available as of FAI 4.0,
-  # older versions shipped /usr/lib/fai/disk-info which doesn't
-  # support the partition setup syntax we use in our setup
-  if ! [ -x /usr/lib/fai/fai-disk-info ] ; then
-    die "You are using an outdated ISO, please update it to have fai-setup-storage >=4.0.6 available."
+  local blockdevice
+  blockdevice="/dev/${DISK}"
+
+  echo "Creating partition table"
+  parted -a optimal -s "${blockdevice}" mklabel "$TABLE"
+
+  parted -a optimal -s "${blockdevice}" mkpart primary 2048s 100%
+  parted -a optimal -s "${blockdevice}" set 1 lvm on
+
+  echo "Creating PV + VG"
+  pvcreate -ff -y "${blockdevice}"1
+  vgcreate "${VG_NAME}" "${blockdevice}"1
+  vgchange -a y "${VG_NAME}"
+}
+
+create_ngcp_partitions() {
+  local memory swap_size
+
+  memory=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
+  swap_size=$(( memory / 2 / 1024)) # 50% of RAM in MB
+
+  # rootfs
+  local vg_free rootfs_size
+  vg_free=$(vgs "${VG_NAME}" -o vg_free --noheadings --nosuffix --units B)
+  rootfs_size=$(( (vg_free - ( $swap_size * 1024 * 1024 )) * 19 / 20 / 1024 / 1024 )) # 95% of free space, excl. swap (in MB)
+  echo "Creating LV root with ${rootfs_size}M"
+  lvcreate --yes -n root -L "${rootfs_size}M" "${VG_NAME}"
+
+  echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/root"
+  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
+
+  # swap
+  echo "Creating LV swap with ${swap_size}"
+  lvcreate --yes -n swap -L "${swap_size}M" "${VG_NAME}"
+
+  echo "Creating swap space on /dev/${VG_NAME}/swap"
+  mkswap /dev/"${VG_NAME}"/swap
+
+  # used later by installer
+  ROOT_FS="/dev/mapper/${VG_NAME}-root"
+  SWAP_PARTITION="/dev/mapper/${VG_NAME}-swap"
+}
+
+create_debian_partitions() {
+  local memory swap_size
+
+  memory=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
+  swap_size=$(( memory / 2 / 1024)) # 50% of RAM in MB
+
+  # rootfs
+  local root_size=8G
+  echo "Creating LV root with ${root_size}"
+  lvcreate --yes -n root -L "${root_size}" "${VG_NAME}"
+
+  echo "Creating ${FILESYSTEM} on /dev/${VG_NAME}/root"
+  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
+
+  # swap
+  echo "Creating LV swap with ${swap_size}"
+  lvcreate --yes -n swap -L "${swap_size}M" "${VG_NAME}"
+
+  echo "Creating swap on /dev/${VG_NAME}/swap"
+  mkswap /dev/"${VG_NAME}"/swap
+
+  # used later by installer
+  ROOT_FS="/dev/mapper/${VG_NAME}-root"
+  SWAP_PARTITION="/dev/mapper/${VG_NAME}-swap"
+}
+
+display_partition_table() {
+  local blockdevice
+  blockdevice="/dev/${DISK}"
+
+  echo "Displaying partition table for reference:"
+  parted -s "${blockdevice}" unit GiB print
+  lsblk "${blockdevice}"
+}
+
+lvm_setup() {
+  local saved_options
+  saved_options="$(set +o)"
+  # be restrictive in what we execute
+  set -euo pipefail
+
+  if "$NGCP_INSTALLER" ; then
+    VG_NAME="ngcp"
+    set_up_partition_table
+    create_ngcp_partitions
+    display_partition_table
+  else
+    VG_NAME="vg0"
+    set_up_partition_table
+    create_debian_partitions
+    display_partition_table
   fi
-
-  disklist=$(/usr/lib/fai/fai-disk-info | sort)
-  export disklist
-  PATH=/usr/lib/fai:${PATH} setup-storage -f /tmp/partition_setup.txt -X || die "Failure during execution of setup-storage"
 
   # used later by installer
   ROOT_FS="/dev/mapper/${VG_NAME}-root"
   SWAP_PARTITION="/dev/mapper/${VG_NAME}-swap"
 
-else # no LVM
-  parted -s -a optimal "/dev/${DISK}" mktable "$TABLE" || die "Failed to set up partition table"
+  # restore original options/behavior
+  eval "$saved_options"
+}
+
+plain_disk_setup() {
+  parted -s -a optimal "/dev/${DISK}" mktable "${TABLE}" || die "Failed to set up partition table"
   # hw-raid with rootfs + swap partition
   parted -s -a optimal "/dev/${DISK}" 'mkpart primary ext4 2048s 95%' || die "Failed to set up primary partition"
   parted -s -a optimal "/dev/${DISK}" 'mkpart primary linux-swap 95% -1' || die "Failed to set up swap partition"
@@ -1221,6 +1277,12 @@ else # no LVM
 
   # for later usage in /etc/fstab use /dev/disk/by-label/ngcp-swap instead of /dev/${DISK}2
   SWAP_PARTITION="/dev/disk/by-label/ngcp-swap"
+}
+
+if "$LVM" ; then
+  lvm_setup
+else # no LVM
+  plain_disk_setup
 fi
 
 # otherwise e2fsck fails with "need terminal for interactive repairs"
