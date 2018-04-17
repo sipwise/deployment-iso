@@ -1,0 +1,7 @@
+Code-Review+2: Alexander Lutay <alutay@sipwise.com>
+Verified+1: Alexander Lutay <alutay@sipwise.com>
+Submitted-by: Sergii Kipot <skipot@sipwise.com>
+Submitted-at: Tue, 17 Apr 2018 17:22:55 +0200
+Reviewed-on: http://gerrit.mgm.sipwise.com/20569
+Project: deployment-iso
+Branch: refs/heads/legacy_releases_before_mr6.2
