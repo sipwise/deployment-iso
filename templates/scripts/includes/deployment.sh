@@ -153,6 +153,11 @@ loadNfsIpArray() {
   [ "$n" == "7" ] && return 0 || return 1
 }
 
+disable_systemd_tmpfiles_clean() {
+  einfo "Disabling systemd-tmpfiles-clean.timer"
+  systemctl mask systemd-tmpfiles-clean.timer ; eend $?
+}
+
 debootstrap_sipwise_key() {
   mkdir -p /etc/debootstrap/pre-scripts/
   cat > /etc/debootstrap/pre-scripts/install-sipwise-key.sh << EOF
@@ -347,6 +352,8 @@ if checkBootParam debugmode ; then
   DEBUG_MODE=true
   enable_trace
 fi
+
+disable_systemd_tmpfiles_clean
 
 if checkBootParam targetdisk ; then
   TARGET_DISK=$(getBootParam targetdisk)
