@@ -2443,6 +2443,7 @@ EOF
 
 fi # if [ -n "$PUPPET" ] ; then
 
+grml-chroot ${TARGET} start-stop-daemon --stop --exec /usr/sbin/glusterfsd || true
 # make sure we don't leave any running processes
 for i in asterisk atd collectd collectdmon dbus-daemon exim4 \
          glusterd glusterfs glusterfsd glusterfs-server haveged monit nscd \
@@ -2465,6 +2466,7 @@ umount ${TARGET}/proc       2>/dev/null || true
 umount ${TARGET}/sys        2>/dev/null || true
 umount ${TARGET}/dev/pts    2>/dev/null || true
 umount ${TARGET}/dev        2>/dev/null || true
+exit 0
 chroot ${TARGET} umount -a  2>/dev/null || true
 sync
 
