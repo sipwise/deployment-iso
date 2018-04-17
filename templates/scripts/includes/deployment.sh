@@ -2465,6 +2465,7 @@ umount ${TARGET}/proc       2>/dev/null || true
 umount ${TARGET}/sys        2>/dev/null || true
 umount ${TARGET}/dev/pts    2>/dev/null || true
 umount ${TARGET}/dev        2>/dev/null || true
+exit 0
 chroot ${TARGET} umount -a  2>/dev/null || true
 sync
 
