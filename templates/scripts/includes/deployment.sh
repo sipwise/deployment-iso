@@ -153,6 +153,11 @@ loadNfsIpArray() {
   [ "$n" == "7" ] && return 0 || return 1
 }
 
+disable_systemd_tmpfiles_clean() {
+  einfo "Disabling systemd-tmpfiles-clean.timer"
+  systemctl mask systemd-tmpfiles-clean.timer ; eend $?
+}
+
 debootstrap_sipwise_key() {
   mkdir -p /etc/debootstrap/pre-scripts/
   cat > /etc/debootstrap/pre-scripts/install-sipwise-key.sh << EOF
@@ -334,6 +339,7 @@ disable_trace() {
   fi
 }
 
+disable_systemd_tmpfiles_clean
 
 logit "host-IP: $(ip-screen)"
 logit "deployment-version: $SCRIPT_VERSION"
