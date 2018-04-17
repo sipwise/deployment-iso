@@ -19,6 +19,14 @@ NORMAL="$(tput op)"
 einfo "Executing grml-sipwise specific checks..."
 eindent
 
+disable_systemd_tmpfiles_clean() {
+  einfo "Disabling systemd-tmpfiles-clean.timer"
+  cat > /etc/systemd/system/systemd-tmpfiles-clean.timer << EOF
+[Timer]
+EOF
+  systemctl daemon-reload; eend $?
+}
+
 install_sipwise_keyring() {
   if [ -f "${keys_dir}/sipwise.gpg" ]; then
     einfo "Installing sipwise keyring to '/etc/apt/trusted.gpg.d/sipwise.gpg'..."; eend 0
@@ -142,6 +150,7 @@ deploy() {
   fi
 }
 
+disable_systemd_tmpfiles_clean
 install_sipwise_keyring
 "${scripts_dir}/network_configuration.sh"
 "${scripts_dir}/check_installing_version.sh"
