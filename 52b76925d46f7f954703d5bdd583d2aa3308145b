@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa53dc9_e586d264",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-04-17T16:48:12Z",
+      "side": 1,
+      "message": "JFYI, main.sh is not in use on builder.mgm (there is still deployment.sh) and carrier iPXE (TODO there).\n\nMaybe worth to add it to deployment.sh? 15 mins is enough to be in deployment.sh. \n\nWhat do you think?",
+      "revId": "52b76925d46f7f954703d5bdd583d2aa3308145b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
