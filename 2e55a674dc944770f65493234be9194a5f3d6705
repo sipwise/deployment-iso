@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa53dc9_052bf6ec",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-04-18T06:57:07Z",
+      "side": 1,
+      "message": "I would put it after\n\nif checkBootParam debugmode ; then\n  DEBUG_MODE\u003dtrue\n  enable_trace\nfi\n\nthen we will see the trace with debugmode for troubleshooting. There it no point to be very first in a list IMHO. It just should be in the first X minutes of running time.",
+      "revId": "2e55a674dc944770f65493234be9194a5f3d6705",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
