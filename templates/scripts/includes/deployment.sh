@@ -154,8 +154,8 @@ loadNfsIpArray() {
 }
 
 disable_systemd_tmpfiles_clean() {
-  einfo "Disabling systemd-tmpfiles-clean.timer"
-  systemctl mask systemd-tmpfiles-clean.timer ; eend $?
+  echo "Disabling systemd-tmpfiles-clean.timer"
+  systemctl mask systemd-tmpfiles-clean.timer
 }
 
 debootstrap_sipwise_key() {
