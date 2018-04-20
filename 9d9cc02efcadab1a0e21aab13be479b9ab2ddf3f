@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9aa53dc9_ae80a747",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-04-20T07:19:05Z",
+      "side": 1,
+      "message": "ACK good idea, done",
+      "parentUuid": "9aa53dc9_c582aec8",
+      "range": {
+        "startLine": 1183,
+        "startChar": 55,
+        "endLine": 1183,
+        "endChar": 80
+      },
+      "revId": "9d9cc02efcadab1a0e21aab13be479b9ab2ddf3f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa53dc9_a587aad6",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2018-04-18T09:56:54Z",
       "side": 1,
       "message": "M ?",
+      "revId": "9d9cc02efcadab1a0e21aab13be479b9ab2ddf3f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_ce7beb7a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-04-20T07:19:05Z",
+      "side": 1,
+      "message": "\"M\" is the default already, but I\u0027ll add it for clarity",
+      "parentUuid": "9aa53dc9_a587aad6",
       "revId": "9d9cc02efcadab1a0e21aab13be479b9ab2ddf3f",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
