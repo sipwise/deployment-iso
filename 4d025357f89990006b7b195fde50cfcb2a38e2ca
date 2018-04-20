@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa53dc9_8e4ba32b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-04-20T07:30:34Z",
+      "side": 1,
+      "message": "ah right!",
+      "range": {
+        "startLine": 1184,
+        "startChar": 31,
+        "endLine": 1184,
+        "endChar": 32
+      },
+      "revId": "4d025357f89990006b7b195fde50cfcb2a38e2ca",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
