@@ -22,6 +22,30 @@
       "revId": "1165a1e6eeb863d8eac16421cb1b5a2d761998a4",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_599fa35f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-04-23T07:31:57Z",
+      "side": 1,
+      "message": "You are absolutely right, addressed here \nhttps://gerrit.mgm.sipwise.com/#/c/20668/1/templates/scripts/includes/deployment.sh\n\nJust for the history. Tnx!",
+      "parentUuid": "9aa53dc9_ee7d8fe8",
+      "range": {
+        "startLine": 157,
+        "startChar": 2,
+        "endLine": 157,
+        "endChar": 7
+      },
+      "revId": "1165a1e6eeb863d8eac16421cb1b5a2d761998a4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
