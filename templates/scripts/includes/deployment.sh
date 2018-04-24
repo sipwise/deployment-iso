@@ -1609,11 +1609,7 @@ get_installer_path() {
 
   # use pool directory according for ngcp release
   if "$PRO_EDITION" ; then
-    if "$CARRIER_EDITION" ; then
-      local installer_package='ngcp-installer-carrier'
-    else
-      local installer_package='ngcp-installer-pro'
-    fi
+    local installer_package='ngcp-installer-pro'
     local repos_base_path="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
     INSTALLER_PATH="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/${SP_VERSION}/pool/main/n/ngcp-installer/"
   else
@@ -1641,9 +1637,7 @@ get_installer_path() {
 
   [ -n "$version" ] || die "Error: installer version for ngcp ${SP_VERSION}, Debian release $DEBIAN_RELEASE with installer package $installer_package could not be detected."
 
-  if "$CARRIER_EDITION" ; then
-    INSTALLER="ngcp-installer-carrier_${version}_all.deb"
-  elif "$PRO_EDITION" ; then
+  if "$PRO_EDITION" ; then
     INSTALLER="ngcp-installer-pro_${version}_all.deb"
   else
     INSTALLER="ngcp-installer-ce_${version}_all.deb"
@@ -1792,6 +1786,17 @@ EOT
   cat > "${TARGET}/tmp/ngcp-installer-deployment.sh" << "EOT"
 #!/bin/bash
 echo "Running ngcp-installer via grml-chroot." | tee -a /tmp/ngcp-installer-debug.log
+EOT
+
+  echo "export CE=${CE_EDITION}" >> "${TARGET}/tmp/ngcp-installer-deployment.sh"
+  if "${CARRIER_EDITION}" ; then
+    echo "export PRO=false" >> "${TARGET}/tmp/ngcp-installer-deployment.sh"
+  else
+    echo "export PRO=${PRO_EDITION}" >> "${TARGET}/tmp/ngcp-installer-deployment.sh"
+  fi
+  echo "export CARRIER=${CARRIER_EDITION}" >> "${TARGET}/tmp/ngcp-installer-deployment.sh"
+
+  cat >> "${TARGET}/tmp/ngcp-installer-deployment.sh" << "EOT"
 ngcp-installer 2>&1 | tee -a /tmp/ngcp-installer-debug.log
 RC=${PIPESTATUS[0]}
 if [ "${RC}" = "0" ] ; then
