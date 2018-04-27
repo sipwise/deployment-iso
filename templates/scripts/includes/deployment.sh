@@ -2,6 +2,8 @@
 # Purpose: automatically install Debian + sip:provider platform
 ################################################################################
 
+set -e
+
 INSTALL_LOG='/tmp/deployment-installer-debug.log'
 exec  > >(tee -a $INSTALL_LOG    )
 exec 2> >(tee -a $INSTALL_LOG >&2)
@@ -1141,7 +1143,7 @@ clear_partition_table() {
     existing_pvs=$(pvs "$disk" -o vg_name --noheadings 2>/dev/null || true)
     if [ -n "$existing_pvs" ] ; then
       for pv in $existing_pvs ; do
-        logit "Getting rid of existing VG $pv on partition $part"
+        logit "Getting rid of existing VG $pv"
         vgremove -ff "$pv"
       done
     fi
