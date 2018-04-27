@@ -128,7 +128,7 @@ deploy() {
 
   einfo "Running ${YELLOW}${version}${NORMAL} of deployment.sh..."; eend 0
   RC=0
-  TARGET_DISK="$TARGET_DISK" /bin/bash "${scripts_dir}/deployment.sh" || RC=$?
+  TARGET_DISK="$TARGET_DISK" "${scripts_dir}/deployment.sh" || RC=$?
   if [ $RC -eq 0 ] ; then
     if dialog --yes-label Reboot --no-label Exit --yesno "Successfully finished deployment, enjoy your sip:provider system. Reboot system now?" 0 0 ; then
       reboot
