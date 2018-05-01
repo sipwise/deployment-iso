@@ -526,20 +526,6 @@ if checkBootParam ngcpnolvm ; then
   LVM=false
 fi
 
-case "$SP_VERSION" in
-  2.*)
-    logit "Disabling LVM due to SP_VERSION [$SP_VERSION] matching 2.*"
-    LVM=false
-    ;;
-esac
-
-case "$SP_VERSION" in
-  2.*|3.0|3.1|mr3.2*)
-    FILESYSTEM="ext3"
-    logit "Using filesystem $FILESYSTEM for sip:provider release ${SP_VERSION}"
-    ;;
-esac
-
 # allow forcing LVM mode
 if checkBootParam ngcplvm ; then
   logit "Enabling LVM due to ngcplvm boot option"
@@ -868,23 +854,6 @@ if "$CARRIER_EDITION" ; then
   [ -n "$EADDR" ] || EADDR=$DEFAULT_EXT_IP
 else
   [ -n "$EADDR" ] || EADDR=$INSTALL_IP
-fi
-
-if "$CE_EDITION" ; then
-  case "$SP_VERSION" in
-    # we do not have a local mirror for lenny, so disable it
-    2.1)     DEBIAN_RELEASE="lenny" ;;
-    2.2)     DEBIAN_RELEASE="squeeze" ;;
-    2.4)     DEBIAN_RELEASE="squeeze" ;;
-    2.5)     DEBIAN_RELEASE="squeeze" ;;
-    2.6-rc1) DEBIAN_RELEASE="squeeze" ;;
-    2.6-rc2) DEBIAN_RELEASE="squeeze" ;;
-    2.6)     DEBIAN_RELEASE="squeeze" ;;
-    2.7-rc2) DEBIAN_RELEASE="squeeze" ;;
-    2.7-rc3) DEBIAN_RELEASE="squeeze" ;;
-    2.7)     DEBIAN_RELEASE="squeeze" ;;
-    2.8)     DEBIAN_RELEASE="squeeze" ;;
-  esac
 fi
 
 set_deploy_status "settings"
@@ -1333,41 +1302,19 @@ ca-certificates
 #os-prober
 EOF
 
-# ifenslave-2.6 in jessie+ is a transitional dummy package that will disappear.
-case "$DEBIAN_RELEASE" in
-  lenny|squeeze|wheezy)
-    PKG_IFENSLAVE="ifenslave-2.6"
-    ;;
-  *)
-    PKG_IFENSLAVE="ifenslave"
-    ;;
-esac
-echo  "Adding ${PKG_IFENSLAVE} package (because we're installing ${DEBIAN_RELEASE})"
-logit "Adding ${PKG_IFENSLAVE} package (because we're installing ${DEBIAN_RELEASE})"
+echo  "Adding ifenslave package (because we're installing ${DEBIAN_RELEASE})"
+logit "Adding ifenslave package (because we're installing ${DEBIAN_RELEASE})"
 cat >> /etc/debootstrap/packages << EOF
 # support bonding
-${PKG_IFENSLAVE}
+ifenslave
 EOF
 
-# MT#8813 The linux-headers-2.6-amd64 package doesn't exist in jessie and newer
-case "$DEBIAN_RELEASE" in
-  lenny|squeeze|wheezy)
-    echo  "Adding linux-headers-2.6-amd64 package (because we're installing ${DEBIAN_RELEASE})"
-    logit "Adding linux-headers-2.6-amd64 package (because we're installing ${DEBIAN_RELEASE})"
-    cat >> /etc/debootstrap/packages << EOF
-# required for dkms
-linux-headers-2.6-amd64
-EOF
-    ;;
-  *)
-    echo  "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
-    logit "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
-    cat >> /etc/debootstrap/packages << EOF
+echo  "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
+logit "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
+cat >> /etc/debootstrap/packages << EOF
 # required for dkms
 linux-headers-amd64
 EOF
-    ;;
-esac
 
 if "$LVM" ; then
   cat >> /etc/debootstrap/packages << EOF
@@ -1430,21 +1377,6 @@ if [ "$DEBIAN_RELEASE" != "jessie" ] ; then
   echo "deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
 fi
 
-# GRUB versions until Debian/wheezy generate an invalid device.map
-# entry if /dev/disk/by-id/lvm-pv-uuid-* is present, resulting in
-# a GRUB installation failing with "error: no such disk" during boot.
-# This is only a problem if we're using a virtio disk and deploying
-# from a system running lvm2 v2.02.106 or newer.
-if [ "${DISK}" = "vda" ] ; then
-  case "$DEBIAN_RELEASE" in
-    lenny|squeeze|wheezy)
-      echo  "Applying /dev/disk/by-id/lvm-pv-uuid-* workaround for virtio disk and Debian release <= wheezy"
-      logit "Applying /dev/disk/by-id/lvm-pv-uuid-* workaround for virtio disk and Debian release <= wheezy"
-      rm -f /dev/disk/by-id/lvm-pv-uuid-*
-      ;;
-  esac
-fi
-
 if [ "$DEBIAN_RELEASE" = "stretch" ] && [ ! -r /usr/share/debootstrap/scripts/stretch ] ; then
   echo  "Enabling stretch support for debootstrap via symlink to sid"
   ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/stretch
@@ -1472,17 +1404,6 @@ fi
 sync
 mount "$ROOT_FS" "$TARGET"
 
-# MT#13711
-case "$DEBIAN_RELEASE" in
-  lenny|squeeze)
-    echo  "Setting up /etc/apt/apt.conf.d/42_ngcp_aptproxy to avoid random 'Hash Sum mismatch' failures."
-    logit "Setting up /etc/apt/apt.conf.d/42_ngcp_aptproxy to avoid random 'Hash Sum mismatch' failures."
-    echo "// NGCP_MANAGED_FILE - do not remove this line if it should be automatically handled" > "${TARGET}/etc/apt/apt.conf.d/42_ngcp_aptproxy"
-    echo "// Installed via 'deployment.sh' on $(date)" >> "${TARGET}/etc/apt/apt.conf.d/42_ngcp_aptproxy"
-    echo 'Acquire::http::Pipeline-Depth "0";' >> "${TARGET}/etc/apt/apt.conf.d/42_ngcp_aptproxy"
-    ;;
-esac
-
 # MT#7805
 if "$NGCP_INSTALLER" ; then
   cat << EOT | augtool --root="$TARGET"
@@ -1497,13 +1418,6 @@ echo "Enabling swap partition $SWAP_PARTITION via /etc/fstab"
 cat >> "${TARGET}/etc/fstab" << EOF
 $SWAP_PARTITION                      none           swap       sw,pri=0  0  0
 EOF
-
-case "$DEBIAN_RELEASE" in
-  lenny|squeeze|wheezy)
-    echo "Removing packages which debootstrap installs but d-i doesn't"
-    chroot $TARGET apt-get --purge -y remove tcpd xauth
-    ;;
-esac
 
 if "$PRO_EDITION" ; then
   echo "Pro edition: keeping firmware* packages."
@@ -2126,13 +2040,8 @@ vagrant_configuration() {
   # bzip2, linux-headers-amd64 and make are required for VirtualBox Guest Additions installer
   # less + sudo are required for Vagrant itself
   echo "Installing software for VirtualBox Guest Additions installer"
-  # there's no linux-headers-amd64 package in squeeze:
-  case "$DEBIAN_RELEASE" in
-    squeeze) local linux_headers_package="linux-headers-2.6-amd64" ;;
-          *) local linux_headers_package="linux-headers-amd64"     ;;
-  esac
-  if ! chroot "$TARGET" apt-get -y install bzip2 less ${linux_headers_package} make sudo ; then
-    die "Error: failed to install 'bzip2 less ${linux_headers_package} make sudo' packages."
+  if ! chroot "$TARGET" apt-get -y install bzip2 less linux-headers-amd64 make sudo ; then
+    die "Error: failed to install 'bzip2 less linux-headers-amd64 make sudo' packages."
   fi
 
   vagrant_ssh_pub_key='/var/tmp/id_rsa_sipwise.pub'
@@ -2162,14 +2071,7 @@ vagrant_configuration() {
   mkdir -p "${TARGET}/root/.ssh/"
   cat "${vagrant_ssh_pub_key}" >> "${TARGET}/root/.ssh/sipwise_vagrant_key"
   chroot "${TARGET}" chmod 0600 /root/.ssh/sipwise_vagrant_key
-  case "${DEBIAN_RELEASE}" in
-    squeeze)
-      sed -i 's|^[#\s]*AuthorizedKeysFile.*$|AuthorizedKeysFile %h/.ssh/sipwise_vagrant_key|g' "${TARGET}/etc/ssh/sshd_config"
-      ;;
-    *)
-      sed -i 's|^[#\s]*\(AuthorizedKeysFile.*\)$|\1 %h/.ssh/sipwise_vagrant_key|g' "${TARGET}/etc/ssh/sshd_config"
-      ;;
-  esac
+  sed -i 's|^[#\s]*\(AuthorizedKeysFile.*\)$|\1 %h/.ssh/sipwise_vagrant_key|g' "${TARGET}/etc/ssh/sshd_config"
 
   # see https://github.com/mitchellh/vagrant/issues/1673
   # and https://bugs.launchpad.net/ubuntu/+source/xen-3.1/+bug/1167281
