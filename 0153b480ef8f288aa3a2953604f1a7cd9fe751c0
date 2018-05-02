@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_7dc49791",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-05-02T07:33:11Z",
+      "side": 1,
+      "message": "this is unbelievably dangerous :-)\nThe script was written for X years with no \"set -e\" in a mind.\nI am afraid we will have tons of reports about aborted installations here for tons of reasons which cause tons of hotfixes. Are you ready to fix all of them urgently? :-)",
+      "revId": "0153b480ef8f288aa3a2953604f1a7cd9fe751c0",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
