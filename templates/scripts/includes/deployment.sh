@@ -1748,7 +1748,6 @@ EOT
     die "Error during installation of ngcp. Find details at: ${TARGET}/tmp/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log"
   fi
 
-  # upload db dump only if we're deploying a trunk version
   if $TRUNK_VERSION && checkBootParam ngcpupload ; then
     set_deploy_status "prepare_translations"
     grml-chroot $TARGET apt-get -y install ngcp-dev-tools
@@ -1757,18 +1756,6 @@ EOT
     fi
     set_deploy_status "ngcp-installer"
   fi
-
-  NGCP_SERVICES_FILE="${TARGET}/usr/share/ngcp-system-tools/ngcp.inc"
-  if ! [ -r "$NGCP_SERVICES_FILE" ]; then
-    die "Error: File $NGCP_SERVICES_FILE not found. Exiting."
-  fi
-
-  # make sure services are stopped
-  . "$NGCP_SERVICES_FILE"
-  for service in ${HA_NGCP_SERVICES} ${NGCP_SERVICES} ${NON_NGCP_SERVICES} ; do
-    echo "Stopping ${service} ..."
-    grml-chroot ${TARGET} service "${service}" stop || true
-  done
 
   # nuke files
   find "${TARGET}/var/log" -type f -size +0 -not -name \*.ini -exec sh -c ":> \${1}" sh {} \;
