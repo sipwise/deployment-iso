@@ -469,7 +469,7 @@ if checkBootParam nongcp ; then
 fi
 
 # configure static network in installed system?
-if checkBootParam ngcpnw.dhcp ; then
+if pgrep dhclient &>/dev/null ; then
   DHCP=true
 fi
 
@@ -672,7 +672,6 @@ Control installation parameters:
 
 Control target system:
 
-  ngcpnw.dhcp      - use DHCP as network configuration in installed system
   ngcphostname=... - hostname of installed system (defaults to ngcp/sp[1,2])
                      NOTE: do NOT use when installing Pro Edition!
   ngcpeiface=...   - external interface device (defaults to eth0)
@@ -686,8 +685,6 @@ The command line options correspond with the available bootoptions.
 Command line overrides any present bootoption.
 
 Usage examples:
-
-  # ngcp-deployment ngcpce ngcpnw.dhcp
 
   # netcardconfig # configure eth0 with static configuration
   # ngcp-deployment ngcppro ngcpsp1
@@ -718,7 +715,6 @@ for param in "$@" ; do
     *ngcpextnetmask=*) EXTERNAL_NETMASK="${param//ngcpextnetmask=/}";;
     *ngcpmcast=*) MCASTADDR="${param//ngcpmcast=/}";;
     *ngcpcrole=*) CARRIER_EDITION=true; CROLE="${param//ngcpcrole=/}";;
-    *ngcpnw.dhcp*) DHCP=true;;
     *ngcpnobonding*) BONDING=false;;
     *ngcpbonding*) BONDING=true;;
     *ngcphalt*) HALT=true;;
