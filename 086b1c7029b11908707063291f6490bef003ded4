@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_ddd4cb48",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-05-02T07:31:12Z",
+      "side": 1,
+      "message": "brr... we have \"gen_installer_config()\" where we define the config. why don\u0027t you put them into ${TARGET}/etc/ngcp-installer/config_deploy.inc  ?\n\nAlso I believe we are doing this too early.\nWe should merge PRO/Carrier inside the installer and only then merge packages, otherwise we have chicken-eggs issues here with definitions PRO/Carrier.",
+      "range": {
+        "startLine": 1790,
+        "startChar": 0,
+        "endLine": 1799,
+        "endChar": 62
+      },
+      "revId": "086b1c7029b11908707063291f6490bef003ded4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
