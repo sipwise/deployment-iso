@@ -1,3 +1,36 @@
+ngcp-deployment-iso (6.2.2.0+0~mr6.2.2.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [9e60123] TT#32751 Fix default exit code of bailout
+  * [b0f9b75] TT#32751 Fix stdout issue with dialog utility
+  * [e0d33c7] TT#28952 Change scripts to use 'small' GRML
+  * [7fb8a1b] TT#28952 Fix image name to small if 'latest' image is used
+  * [0e8b9be] TT#28952 Replace 'ifdata' with 'sed' utility
+  * [4d8f8ab] TT#28952 Download sha1 file from deb.sipwise.com/files/grml
+  * [8279b53] TT#28952 Remove 'chroot umount -a'
+
+  [ Alexander Lutay ]
+  * [a42c751] TT#35550 Improve debug output for sleep in 'ngcpstatus'
+  * [9ee9d69] TT#28952 Install fai-setup-storage manually
+  * [7f9a289] TT#28952 remove apt-transport-https manual installation inside GRML
+  * [130b097] TT#28952 Install git on GRML in case of puppet recovery
+  * [aaf2a66] TT#28952 Fix typo 'is missing'->'is missed'
+  * [31aa185] TT#28952 Remove grml_debootstrap_upgrade() as current GRML uses version 0.81 already
+  * [dfebaf4] TT#28952 Remove debootstrap_upgrade() as current GRML uses version 1.0.95 already
+
+  [ Guillem Jover ]
+  * [15332d1] TT#26264 Use service(8) instead of directly calling /etc/init.d/<service>
+
+  [ Michael Prokop ]
+  * [e26093c] TT#35642 Disable systemd-tmpfiles-clean.timer.
+    Thanks to Guillem Jover <gjover@sipwise.com> for the suggestion to just mask it
+  * [0708d72] TT#35642 disable_systemd_tmpfiles_clean: don't depend on lsb-functions.
+    Thanks to Mykola Malkov for spotting this bug
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Wed, 02 May 2018 12:54:42 +0200
+
 ngcp-deployment-iso (6.2.1.0+0~mr6.2.1.0) unstable; urgency=medium
 
   [ Alexander Lutay ]
