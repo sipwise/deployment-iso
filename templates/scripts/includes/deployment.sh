@@ -469,7 +469,7 @@ if checkBootParam nongcp ; then
 fi
 
 # configure static network in installed system?
-if checkBootParam ngcpnw.dhcp ; then
+if checkBootParam ngcpnw.dhcp || pgrep dhclient &>/dev/null ; then
   DHCP=true
 fi
 
