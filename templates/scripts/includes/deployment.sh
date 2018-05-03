@@ -1820,13 +1820,10 @@ EOT
     set_deploy_status "ngcp-installer"
   fi
 
-  NGCP_SERVICES_FILE="${TARGET}/usr/share/ngcp-system-tools/ngcp.inc"
-  if ! [ -r "$NGCP_SERVICES_FILE" ]; then
-    die "Error: File $NGCP_SERVICES_FILE not found. Exiting."
-  fi
-
   # make sure services are stopped
-  . "$NGCP_SERVICES_FILE"
+  HA_NGCP_SERVICES="$(ngcp-service --list --manager sysv --group ha)"
+  NGCP_SERVICES="$(ngcp-service --list --manager sysv --group ngcp)"
+  NON_NGCP_SERVICES="$(ngcp-service --list --manager sysv --group base)"
   for service in ${HA_NGCP_SERVICES} ${NGCP_SERVICES} ${NON_NGCP_SERVICES} ; do
     echo "Stopping ${service} ..."
     grml-chroot ${TARGET} service "${service}" stop || true
