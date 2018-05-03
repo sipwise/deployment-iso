@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ab451fb_3f584356",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-05-03T20:53:36Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand this commit message with the actual change done in the commit?\n\nIs this trying to fix the case where several of the services are not yet available/installed, or something else? Would switching to ngcp-service fix this? Or I\u0027m just misunderstanding the whole problem entirely? :)",
+      "revId": "2eeb4876738528a6dd32d1ed0420216196007f37",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
