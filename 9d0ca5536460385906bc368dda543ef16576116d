@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ab451fb_82893ecd",
+        "filename": "isolinux.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-05-04T13:30:39Z",
+      "side": 1,
+      "message": "Isn\u0027t this call main.sh with all the further network configuration? Should it be merged?",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 9
+      },
+      "revId": "9d0ca5536460385906bc368dda543ef16576116d",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ab451fb_22902aec",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-05-04T13:30:39Z",
+      "side": 1,
+      "message": "delete it and use \u0027ifenslave\u0027 inline?",
+      "range": {
+        "startLine": 1305,
+        "startChar": 0,
+        "endLine": 1305,
+        "endChar": 25
+      },
+      "revId": "9d0ca5536460385906bc368dda543ef16576116d",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
