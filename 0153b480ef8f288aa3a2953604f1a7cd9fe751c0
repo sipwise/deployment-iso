@@ -16,6 +16,24 @@
       "revId": "0153b480ef8f288aa3a2953604f1a7cd9fe751c0",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ab451fb_025e4ee9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-04T09:02:21Z",
+      "side": 1,
+      "message": "We have to do it sooner or later besides the obvious scenarios work well.",
+      "parentUuid": "5aa745d1_7dc49791",
+      "revId": "0153b480ef8f288aa3a2953604f1a7cd9fe751c0",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
