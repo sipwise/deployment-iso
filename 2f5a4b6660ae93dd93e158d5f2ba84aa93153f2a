@@ -16,6 +16,24 @@
       "revId": "2f5a4b6660ae93dd93e158d5f2ba84aa93153f2a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ab451fb_022c0e49",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-04T09:44:15Z",
+      "side": 0,
+      "message": "This comment made me spend ~1h to dig and understand that there is no any db action here. So just remove the rake.",
+      "parentUuid": "3ab451fb_82ddbe72",
+      "revId": "2f5a4b6660ae93dd93e158d5f2ba84aa93153f2a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
