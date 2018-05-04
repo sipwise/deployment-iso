@@ -34,6 +34,24 @@
       "revId": "2f5a4b6660ae93dd93e158d5f2ba84aa93153f2a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ab451fb_82201e4b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-05-04T09:50:56Z",
+      "side": 0,
+      "message": "Ah right, it is about translation only here nowadays. :-)",
+      "parentUuid": "3ab451fb_022c0e49",
+      "revId": "2f5a4b6660ae93dd93e158d5f2ba84aa93153f2a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
