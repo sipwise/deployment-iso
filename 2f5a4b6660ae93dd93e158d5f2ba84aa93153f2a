@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ab451fb_82ddbe72",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-05-04T08:33:35Z",
+      "side": 0,
+      "message": "don\u0027t you like it? :-)",
+      "revId": "2f5a4b6660ae93dd93e158d5f2ba84aa93153f2a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
