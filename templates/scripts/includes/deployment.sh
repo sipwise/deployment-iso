@@ -487,13 +487,6 @@ if checkBootParam ngcphostname ; then
   TARGET_HOSTNAME="$(getBootParam ngcphostname)" || true
 fi
 
-if [ -n "$TARGET_HOSTNAME" ] ; then
-  export HOSTNAME="$TARGET_HOSTNAME"
-else
-  [ -n "$HOSTNAME" ] || HOSTNAME="nohostname"
-  export HOSTNAME
-fi
-
 if checkBootParam ngcpip1 ; then
   IP1=$(getBootParam ngcpip1)
 fi
@@ -791,6 +784,12 @@ if [ -z "$TARGET_HOSTNAME" ] ; then
     fi
   fi
 fi
+
+[ -z "$HOSTNAME" ] && HOSTNAME="nohostname"
+if [ -n "$TARGET_HOSTNAME" ] ; then
+  HOSTNAME="$TARGET_HOSTNAME"
+fi
+export HOSTNAME
 
 # get install device from "ip=<client-ip:<srv-ip>:..." boot arg
 if checkBootParam ip ; then
