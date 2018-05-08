@@ -386,6 +386,14 @@ if checkBootParam vlan ; then
     VLANIF=${VLANPARAMS[1]}
   fi
 fi
+# if VLAN was configured via netcardconfig we need to collect the current configuration
+# from interface
+vlan_config=( $(ip link show | sed -rn 's/^[0-9]+: vlan([0-9]+)@([a-z0-9]+):.+$/\1 \2/p') )
+if [[ "${#vlan_config[@]}" -eq 2 ]]; then
+  VLAN=true
+  VLANID=${vlan_config[0]}
+  VLANIF=${vlan_config[1]}
+fi
 
 if checkBootParam ngcpmgmt ; then
   MANAGEMENT_IP=$(getBootParam ngcpmgmt)
