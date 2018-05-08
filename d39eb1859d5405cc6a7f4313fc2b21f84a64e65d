@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ab14d0d_9b39ab44",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-05-08T12:31:44Z",
+      "side": 1,
+      "message": "causes",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 6
+      },
+      "revId": "d39eb1859d5405cc6a7f4313fc2b21f84a64e65d",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ab14d0d_7b3fff25",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-05-08T12:31:44Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 18,
+        "startChar": 5,
+        "endLine": 18,
+        "endChar": 7
+      },
+      "revId": "d39eb1859d5405cc6a7f4313fc2b21f84a64e65d",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ab14d0d_5b3c432f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-05-08T12:31:44Z",
+      "side": 1,
+      "message": "so we move",
+      "range": {
+        "startLine": 18,
+        "startChar": 31,
+        "endLine": 18,
+        "endChar": 40
+      },
+      "revId": "d39eb1859d5405cc6a7f4313fc2b21f84a64e65d",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ab14d0d_3b4977d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-05-08T12:31:44Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 23,
+        "startChar": 19,
+        "endLine": 23,
+        "endChar": 22
+      },
+      "revId": "d39eb1859d5405cc6a7f4313fc2b21f84a64e65d",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
