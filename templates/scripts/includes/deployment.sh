@@ -1771,6 +1771,18 @@ EOF
   cat "${TARGET}/etc/ngcp-installer/config_deploy.inc" > /tmp/ngcp-installer-cmdline.log
 }
 
+prepare_translations() {
+    set_deploy_status "prepare_translations"
+    grml-chroot "${TARGET}" apt-get -y install ngcp-dev-tools
+    grml-chroot "${TARGET}" service mysql start
+    if ! grml-chroot "${TARGET}" ngcp-prepare-translations ; then
+      grml-chroot "${TARGET}" service mysql stop
+      die "Error: Failed to prepare ngcp-panel translations. Exiting."
+    fi
+    grml-chroot "${TARGET}" service mysql stop
+    set_deploy_status "ngcp-installer"
+}
+
 if "$NGCP_INSTALLER" ; then
   # set INSTALLER_PATH and INSTALLER depending on release/version
   get_installer_path
@@ -1813,12 +1825,7 @@ EOT
   fi
 
   if $TRUNK_VERSION && checkBootParam ngcpupload ; then
-    set_deploy_status "prepare_translations"
-    grml-chroot $TARGET apt-get -y install ngcp-dev-tools
-    if ! grml-chroot $TARGET ngcp-prepare-translations ; then
-      die "Error: Failed to prepare ngcp-panel translations. Exiting."
-    fi
-    set_deploy_status "ngcp-installer"
+    prepare_translations
   fi
 
   # nuke files
