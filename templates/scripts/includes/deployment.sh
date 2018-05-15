@@ -331,7 +331,7 @@ fi
 
 disable_systemd_tmpfiles_clean
 
-if checkBootParam targetdisk ; then
+if checkBootParam 'targetdisk=' ; then
   TARGET_DISK=$(getBootParam targetdisk)
 fi
 
@@ -356,7 +356,7 @@ fi
 
 [ -z "${DISK}" ] && die "Error: No non-removable disk suitable for installation found"
 
-if checkBootParam ngcpstatus ; then
+if checkBootParam 'ngcpstatus=' ; then
   STATUS_WAIT=$(getBootParam ngcpstatus || true)
   [ -n "$STATUS_WAIT" ] || STATUS_WAIT=30
 fi
@@ -378,7 +378,7 @@ if checkBootParam ngcpbonding ; then
   BONDING=true
 fi
 
-if checkBootParam vlan ; then
+if checkBootParam 'vlan=' ; then
   VLANPARAMS=($(getBootParam vlan | tr ":" "\n"))
   if [ ${#VLANPARAMS[@]} -eq 2 ] ; then
     VLAN=true
@@ -395,7 +395,7 @@ if [[ "${#vlan_config[@]}" -eq 2 ]]; then
   VLANIF=${vlan_config[1]}
 fi
 
-if checkBootParam ngcpmgmt ; then
+if checkBootParam 'ngcpmgmt=' ; then
   MANAGEMENT_IP=$(getBootParam ngcpmgmt)
   RETRIEVE_MGMT_CONFIG=true
 fi
@@ -431,41 +431,41 @@ if "$PRO_EDITION" ; then
   fi
 fi
 
-if checkBootParam "puppetenv" ; then
+if checkBootParam "puppetenv=" ; then
   # we expected to get the environment for puppet
   PUPPET=$(getBootParam puppetenv)
 fi
 
-if checkBootParam "puppetserver" ; then
+if checkBootParam "puppetserver=" ; then
   PUPPET_SERVER=$(getBootParam puppetserver)
 fi
 
-if checkBootParam "puppetgitrepo" ; then
+if checkBootParam "puppetgitrepo=" ; then
   PUPPET_GIT_REPO=$(getBootParam puppetgitrepo)
 fi
 
-if checkBootParam "puppetgitbranch" ; then
+if checkBootParam "puppetgitbranch=" ; then
   PUPPET_GIT_BRANCH=$(getBootParam puppetgitbranch)
 fi
 
-if checkBootParam "debianrelease" ; then
+if checkBootParam "debianrelease=" ; then
   DEBIAN_RELEASE=$(getBootParam debianrelease)
 fi
 
 ARCH=$(dpkg --print-architecture)
-if checkBootParam "arch" ; then
+if checkBootParam "arch=" ; then
   ARCH=$(getBootParam arch)
 fi
 
 # test unfinished releases against
 # "https://deb.sipwise.com/autobuild/ release-$AUTOBUILD_RELEASE"
-if checkBootParam ngcpautobuildrelease ; then
+if checkBootParam 'ngcpautobuildrelease=' ; then
   AUTOBUILD_RELEASE=$(getBootParam ngcpautobuildrelease)
   export SKIP_SOURCES_LIST=true # make sure it's available within grml-chroot subshell
 fi
 
 # existing ngcp releases (like 2.2) with according repository and installer
-if checkBootParam ngcpvers ; then
+if checkBootParam 'ngcpvers=' ; then
   SP_VERSION=$(getBootParam ngcpvers)
   if [ "${SP_VERSION:-}" = "trunk" ] ; then
     TRUNK_VERSION=true
@@ -483,43 +483,43 @@ if checkBootParam ngcpnw.dhcp || pgrep dhclient &>/dev/null ; then
   DHCP=true
 fi
 
-if checkBootParam ngcphostname ; then
+if checkBootParam 'ngcphostname=' ; then
   TARGET_HOSTNAME="$(getBootParam ngcphostname)" || true
 fi
 
-if checkBootParam ngcpip1 ; then
+if checkBootParam 'ngcpip1=' ; then
   IP1=$(getBootParam ngcpip1)
 fi
 
-if checkBootParam ngcpip2 ; then
+if checkBootParam 'ngcpip2=' ; then
   IP2=$(getBootParam ngcpip2)
 fi
 
-if checkBootParam ngcpipshared ; then
+if checkBootParam 'ngcpipshared=' ; then
   IP_HA_SHARED=$(getBootParam ngcpipshared)
 fi
 
-if checkBootParam ngcpnetmask ; then
+if checkBootParam 'ngcpnetmask=' ; then
   INTERNAL_NETMASK=$(getBootParam ngcpnetmask)
 fi
 
-if checkBootParam ngcpextnetmask ; then
+if checkBootParam 'ngcpextnetmask=' ; then
   EXTERNAL_NETMASK=$(getBootParam ngcpextnetmask)
 fi
 
-if checkBootParam ngcpeaddr ; then
+if checkBootParam 'ngcpeaddr=' ; then
   EADDR=$(getBootParam ngcpeaddr)
 fi
 
-if checkBootParam ngcpeiface ; then
+if checkBootParam 'ngcpeiface=' ; then
   EIFACE=$(getBootParam ngcpeiface)
 fi
 
-if checkBootParam ngcpmcast ; then
+if checkBootParam 'ngcpmcast=' ; then
   MCASTADDR=$(getBootParam ngcpmcast)
 fi
 
-if checkBootParam ngcpcrole ; then
+if checkBootParam 'ngcpcrole=' ; then
   CROLE=$(getBootParam ngcpcrole)
   CARRIER_EDITION=true
 fi
@@ -590,55 +590,55 @@ if checkBootParam ngcpfillcache ; then
   FILL_APPROX_CACHE=true
 fi
 
-if checkBootParam ngcpvlanbootint ; then
+if checkBootParam 'ngcpvlanbootint=' ; then
   VLAN_BOOT_INT=$(getBootParam ngcpvlanbootint)
 fi
 
-if checkBootParam ngcpvlansshext ; then
+if checkBootParam 'ngcpvlansshext=' ; then
   VLAN_SSH_EXT=$(getBootParam ngcpvlansshext)
 fi
 
-if checkBootParam ngcpvlanwebext ; then
+if checkBootParam 'ngcpvlanwebext=' ; then
   VLAN_WEB_EXT=$(getBootParam ngcpvlanwebext)
 fi
 
-if checkBootParam ngcpvlansipext ; then
+if checkBootParam 'ngcpvlansipext=' ; then
   VLAN_SIP_EXT=$(getBootParam ngcpvlansipext)
 fi
 
-if checkBootParam ngcpvlansipint ; then
+if checkBootParam 'ngcpvlansipint=' ; then
   VLAN_SIP_INT=$(getBootParam ngcpvlansipint)
 fi
 
-if checkBootParam ngcpvlanhaint ; then
+if checkBootParam 'ngcpvlanhaint=' ; then
   VLAN_HA_INT=$(getBootParam ngcpvlanhaint)
 fi
 
-if checkBootParam ngcpvlanrtpext ; then
+if checkBootParam 'ngcpvlanrtpext=' ; then
   VLAN_RTP_EXT=$(getBootParam ngcpvlanrtpext)
 fi
 
-if checkBootParam ngcpppa ; then
+if checkBootParam 'ngcpppa=' ; then
   NGCP_PPA=$(getBootParam ngcpppa)
 fi
 
-if checkBootParam ngcpppainstaller ; then
+if checkBootParam 'ngcpppainstaller=' ; then
   NGCP_PPA_INSTALLER=$(getBootParam ngcpppainstaller)
 fi
 
-if checkBootParam debianrepotransport ; then
+if checkBootParam 'debianrepotransport=' ; then
   DEBIAN_REPO_TRANSPORT=$(getBootParam debianrepotransport)
 fi
 
-if checkBootParam sipwiserepotransport ; then
+if checkBootParam 'sipwiserepotransport=' ; then
   SIPWISE_REPO_TRANSPORT=$(getBootParam sipwiserepotransport)
 fi
 
-if checkBootParam debootstrapkey ; then
+if checkBootParam 'debootstrapkey=' ; then
   GPG_KEY=$(getBootParam debootstrapkey)
 fi
 
-if checkBootParam ngcpinitsystem ; then
+if checkBootParam 'ngcpinitsystem=' ; then
   NGCP_INIT_SYSTEM=$(getBootParam ngcpinitsystem)
   logit "Using init system '${NGCP_INIT_SYSTEM}' as requested via boot option ngcpinitsystem"
 fi
@@ -792,7 +792,7 @@ fi
 export HOSTNAME
 
 # get install device from "ip=<client-ip:<srv-ip>:..." boot arg
-if checkBootParam ip ; then
+if checkBootParam 'ip=' ; then
   declare -A IP_ARR
   if loadNfsIpArray IP_ARR "$(getBootParam ip)" ; then
     INSTALL_DEV=${IP_ARR[device]}
