@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fabf19d9_80f93acb",
+        "filename": "releases",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2018-05-15T19:03:14Z",
+      "side": 1,
+      "message": "latest is mr6.2.1 now. Probably missed by Alex or this file is not checked anymore after migration to per release iso images. Anyway to keep it consistent add mr6.2, mr6.2.1 here as well.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "e5ab2f0137c5c39b5703bb072f9feb36022d3a72",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
