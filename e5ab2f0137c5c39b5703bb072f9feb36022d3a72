@@ -22,6 +22,30 @@
       "revId": "e5ab2f0137c5c39b5703bb072f9feb36022d3a72",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fabf19d9_c025f25c",
+        "filename": "releases",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-05-15T19:16:26Z",
+      "side": 1,
+      "message": "\u003e latest is mr6.2.1 now. Probably missed by Alex or this file is not\n \u003e checked anymore after migration to per release iso images. Anyway\n \u003e to keep it consistent add mr6.2, mr6.2.1 here as well.\n\nAs per the branch name and the instructions in the pad, 6.2 and later should not be added:\n\n\"[Before mr6.2] Commit mrX.Y.Z to \u0027deployment-iso.git/releases\u0027in legacy_releases_before_mr6.2 branch\"\n\nNow, the thing is that I should remove the LATEST then, in any case.\n\nSince 6.1.1 had it before, I carried it over, but it doesn\u0027t make much sense.",
+      "parentUuid": "fabf19d9_80f93acb",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "e5ab2f0137c5c39b5703bb072f9feb36022d3a72",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
