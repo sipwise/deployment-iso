@@ -1,3 +1,45 @@
+ngcp-deployment-iso (6.3.1.0+0~mr6.3.1.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [e163031] TT#32751 Fix default exit code of bailout
+  * [35af947] TT#32751 Fix stdout issue with dialog utility
+  * [d15f038] TT#28952 Change scripts to use 'small' GRML
+  * [dca377f] TT#28952 Fix image name to small if 'latest' image is used
+  * [5302549] TT#28952 Replace 'ifdata' with 'sed' utility
+  * [ea47e14] TT#28952 Download sha1 file from deb.sipwise.com/files/grml
+  * [3df7e7b] TT#28952 Remove 'chroot umount -a'
+  * [72ed005] TT#36203 Remove services stop cycle
+  * [ae4e88f] TT#36203 Add check of dhclient for DHCP using
+  * [e7501de] TT#35967 Run deployment.sh with errexit
+  * [46bee70] TT#36203 Start/stop mysql to prepare translations
+  * [1f35eb3] TT#32751 Get VLAN params from current network config
+  * [4359ca2] TT#35967 Check boot parameters more carefully
+  * [ba560b6] TT#36453 Remove obsolete things of old releases
+
+  [ Alexander Lutay ]
+  * [87f7637] TT#35550 Improve debug output for sleep in 'ngcpstatus'
+  * [ab0d6bd] TT#28952 Install fai-setup-storage manually
+  * [036e84f] TT#28952 remove apt-transport-https manual installation inside GRML
+  * [3bae53f] TT#28952 Install git on GRML in case of puppet recovery
+  * [3ba6e78] TT#28952 Fix typo 'is missing'->'is missed'
+  * [6dfa933] TT#28952 Remove grml_debootstrap_upgrade() as current GRML uses version 0.81 already
+  * [68b409f] TT#28952 Remove debootstrap_upgrade() as current GRML uses version 1.0.95 already
+  * [7dbeda8] TT#36454 Move HOSTNAME definition after boot parameters loading section
+
+  [ Guillem Jover ]
+  * [ae0200e] TT#26264 Use service(8) instead of directly calling /etc/init.d/<service>
+
+  [ Michael Prokop ]
+  * [1165a1e] TT#35642 Disable systemd-tmpfiles-clean.timer.
+    Thanks to Guillem Jover <gjover@sipwise.com> for the suggestion to just mask it
+  * [078a0d5] TT#35642 disable_systemd_tmpfiles_clean: don't depend on lsb-functions.
+    Thanks to Mykola Malkov for spotting this bug
+  * [2f5a4b6] TT#28952 Drop usage of fai-setup-storage
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 29 May 2018 10:02:44 +0200
+
 ngcp-deployment-iso (6.3.0.0+0~mr6.3.0.0) unstable; urgency=medium
 
   [ Alexander Lutay ]
