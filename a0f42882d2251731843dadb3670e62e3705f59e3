@@ -16,6 +16,24 @@
       "revId": "a0f42882d2251731843dadb3670e62e3705f59e3",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fabf19d9_e6a48309",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-05-30T08:41:15Z",
+      "side": 1,
+      "message": "I\u0027m afraid for now we can\u0027t afford it. This review is for testing purposes so I added \u0027-u\u0027 to fix the obvious places but I can\u0027t test all the possible scenarios so in some cases it can break installation process in production.",
+      "parentUuid": "fabf19d9_e656c305",
+      "revId": "a0f42882d2251731843dadb3670e62e3705f59e3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
