@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fabf19d9_e656c305",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-05-30T08:13:21Z",
+      "side": 1,
+      "message": "maybe also consider usage of \"set -o pipefail\" while at it?",
+      "revId": "a0f42882d2251731843dadb3670e62e3705f59e3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
