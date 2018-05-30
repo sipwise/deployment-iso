@@ -128,7 +128,10 @@ deploy() {
 
   einfo "Running ${YELLOW}${version}${NORMAL} of deployment.sh..."; eend 0
   RC=0
-  TARGET_DISK="$TARGET_DISK" "${scripts_dir}/deployment.sh" || RC=$?
+  if [[ -f /tmp/netcardconfig ]]; then
+    NETCARDCONFIG_USED=true
+  fi
+  NETCARDCONFIG_USED="${NETCARDCONFIG_USED:-false}" TARGET_DISK="$TARGET_DISK" "${scripts_dir}/deployment.sh" || RC=$?
   if [ $RC -eq 0 ] ; then
     if dialog --yes-label Reboot --no-label Exit --yesno "Successfully finished deployment, enjoy your sip:provider system. Reboot system now?" 0 0 ; then
       reboot
