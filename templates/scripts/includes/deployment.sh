@@ -3,6 +3,7 @@
 ################################################################################
 
 set -e
+set -u
 
 INSTALL_LOG='/tmp/deployment-installer-debug.log'
 exec  > >(tee -a $INSTALL_LOG    )
@@ -33,15 +34,6 @@ unset SHELL
 
 # defaults
 DEBUG_MODE=false
-DEFAULT_INSTALL_DEV=eth0
-DEFAULT_IP1=192.168.255.251
-DEFAULT_IP2=192.168.255.252
-DEFAULT_IP_HA_SHARED=192.168.255.250
-DEFAULT_INTERNAL_NETMASK=255.255.255.248
-DEFAULT_MCASTADDR=226.94.1.1
-DEFAULT_EXT_IP=192.168.52.114
-DEFAULT_EXT_NETMASK=255.255.255.0
-DEFAULT_EXT_GW=192.168.52.1
 TARGET=/mnt
 PRO_EDITION=false
 CE_EDITION=false
@@ -54,15 +46,8 @@ PUPPET_GIT_BRANCH=master
 PUPPET_LOCAL_GIT="${TARGET}/tmp/puppet.git"
 PUPPET_RESCUE_PATH="/mnt/rescue_drive"
 PUPPET_RESCUE_LABEL="SIPWRESCUE*"
-RESTART_NETWORK=true
 INTERACTIVE=false
-DHCP=false
 LOGO=true
-BONDING=false
-VLAN=false
-VLANID=''
-VLANIF=''
-RETRIEVE_MGMT_CONFIG=false
 TRUNK_VERSION=false
 DEBIAN_RELEASE=stretch
 HALT=false
@@ -71,24 +56,17 @@ STATUS_DIRECTORY=/srv/deployment/
 STATUS_WAIT=0
 LVM=true
 VAGRANT=false
-ADJUST_FOR_LOW_PERFORMANCE=false
-ENABLE_VM_SERVICES=false
 FILESYSTEM="ext4"
 GPG_KEY_SERVER="pool.sks-keyservers.net"
 DEBIAN_REPO_HOST="debian.sipwise.com"
 DEBIAN_REPO_TRANSPORT="https"
 SIPWISE_REPO_HOST="deb.sipwise.com"
 SIPWISE_REPO_TRANSPORT="https"
-DPL_MYSQL_REPLICATION=true
-FILL_APPROX_CACHE=false
-VLAN_BOOT_INT=2
-VLAN_SSH_EXT=300
-VLAN_WEB_EXT=1718
-VLAN_SIP_EXT=1719
-VLAN_SIP_INT=1720
-VLAN_HA_INT=1721
-VLAN_RTP_EXT=1722
 NGCP_INIT_SYSTEM="systemd"
+NETSCRIPT=${NETSCRIPT:-''}
+
+# Get current IP
+
 
 ### helper functions {{{
 get_deploy_status() {
@@ -139,20 +117,6 @@ getBootParam() {
   result="${result%%[   ]*}"
   echo "$result"
   return 0
-}
-
-# load ":"-separated nfs ip into array BP[client-ip], BP[server-ip], ...
-# ip=<client-ip>:<server-ip>:<gw-ip>:<netmask>:<hostname>:<device>:<autoconf>
-# $1: Array name (needs "declare -A BP" before call), $2: ip=... string
-loadNfsIpArray() {
-  [ -n "$1" ] && [ -n "$2" ] || return 0
-  local IFS=":"
-  local ind=(client-ip server-ip gw-ip netmask hostname device autoconf)
-  local i
-  for i in $2 ; do
-    eval "$1[${ind[n++]}]=$i"
-  done
-  [ "$n" == "7" ] && return 0 || return 1
 }
 
 disable_systemd_tmpfiles_clean() {
@@ -370,36 +334,6 @@ if checkBootParam nocolorlogo ; then
   LOGO=false
 fi
 
-if checkBootParam ngcpnobonding ; then
-  BONDING=false
-fi
-
-if checkBootParam ngcpbonding ; then
-  BONDING=true
-fi
-
-if checkBootParam 'vlan=' ; then
-  VLANPARAMS=($(getBootParam vlan | tr ":" "\n"))
-  if [ ${#VLANPARAMS[@]} -eq 2 ] ; then
-    VLAN=true
-    VLANID=${VLANPARAMS[0]}
-    VLANIF=${VLANPARAMS[1]}
-  fi
-fi
-# if VLAN was configured via netcardconfig we need to collect the current configuration
-# from interface
-vlan_config=( $(ip link show | sed -rn 's/^[0-9]+: vlan([0-9]+)@([a-z0-9]+):.+$/\1 \2/p') )
-if [[ "${#vlan_config[@]}" -eq 2 ]]; then
-  VLAN=true
-  VLANID=${vlan_config[0]}
-  VLANIF=${vlan_config[1]}
-fi
-
-if checkBootParam 'ngcpmgmt=' ; then
-  MANAGEMENT_IP=$(getBootParam ngcpmgmt)
-  RETRIEVE_MGMT_CONFIG=true
-fi
-
 ## detect environment {{{
 CHASSIS="No physical chassis found"
 if dmidecode| grep -q 'Rack Mount Chassis' ; then
@@ -448,10 +382,6 @@ if checkBootParam "puppetgitbranch=" ; then
   PUPPET_GIT_BRANCH=$(getBootParam puppetgitbranch)
 fi
 
-if checkBootParam "debianrelease=" ; then
-  DEBIAN_RELEASE=$(getBootParam debianrelease)
-fi
-
 ARCH=$(dpkg --print-architecture)
 if checkBootParam "arch=" ; then
   ARCH=$(getBootParam arch)
@@ -478,45 +408,8 @@ if checkBootParam nongcp ; then
   NGCP_INSTALLER=false
 fi
 
-# configure static network in installed system?
-if checkBootParam ngcpnw.dhcp || pgrep dhclient &>/dev/null ; then
-  DHCP=true
-fi
-
 if checkBootParam 'ngcphostname=' ; then
   TARGET_HOSTNAME="$(getBootParam ngcphostname)" || true
-fi
-
-if checkBootParam 'ngcpip1=' ; then
-  IP1=$(getBootParam ngcpip1)
-fi
-
-if checkBootParam 'ngcpip2=' ; then
-  IP2=$(getBootParam ngcpip2)
-fi
-
-if checkBootParam 'ngcpipshared=' ; then
-  IP_HA_SHARED=$(getBootParam ngcpipshared)
-fi
-
-if checkBootParam 'ngcpnetmask=' ; then
-  INTERNAL_NETMASK=$(getBootParam ngcpnetmask)
-fi
-
-if checkBootParam 'ngcpextnetmask=' ; then
-  EXTERNAL_NETMASK=$(getBootParam ngcpextnetmask)
-fi
-
-if checkBootParam 'ngcpeaddr=' ; then
-  EADDR=$(getBootParam ngcpeaddr)
-fi
-
-if checkBootParam 'ngcpeiface=' ; then
-  EIFACE=$(getBootParam ngcpeiface)
-fi
-
-if checkBootParam 'ngcpmcast=' ; then
-  MCASTADDR=$(getBootParam ngcpmcast)
 fi
 
 if checkBootParam 'ngcpcrole=' ; then
@@ -547,61 +440,12 @@ if checkBootParam vagrant ; then
   VAGRANT=true
 fi
 
-if checkBootParam lowperformance ; then
-  ADJUST_FOR_LOW_PERFORMANCE=true
-fi
-
-if checkBootParam enablevmservices ; then
-  ENABLE_VM_SERVICES=true
-fi
-
-if checkBootParam ngcpnonwrecfg ; then
-  logit "Disabling reconfig network as requested via boot option ngcpnonwrecfg"
-  RESTART_NETWORK=false
-fi
-
 if checkBootParam "debianrepo=" ; then
   DEBIAN_REPO_HOST=$(getBootParam debianrepo)
 fi
 
 if checkBootParam "sipwiserepo=" ; then
   SIPWISE_REPO_HOST=$(getBootParam sipwiserepo)
-fi
-
-if checkBootParam ngcpnomysqlrepl ; then
-  DPL_MYSQL_REPLICATION=false
-fi
-
-if checkBootParam ngcpfillcache ; then
-  FILL_APPROX_CACHE=true
-fi
-
-if checkBootParam 'ngcpvlanbootint=' ; then
-  VLAN_BOOT_INT=$(getBootParam ngcpvlanbootint)
-fi
-
-if checkBootParam 'ngcpvlansshext=' ; then
-  VLAN_SSH_EXT=$(getBootParam ngcpvlansshext)
-fi
-
-if checkBootParam 'ngcpvlanwebext=' ; then
-  VLAN_WEB_EXT=$(getBootParam ngcpvlanwebext)
-fi
-
-if checkBootParam 'ngcpvlansipext=' ; then
-  VLAN_SIP_EXT=$(getBootParam ngcpvlansipext)
-fi
-
-if checkBootParam 'ngcpvlansipint=' ; then
-  VLAN_SIP_INT=$(getBootParam ngcpvlansipint)
-fi
-
-if checkBootParam 'ngcpvlanhaint=' ; then
-  VLAN_HA_INT=$(getBootParam ngcpvlanhaint)
-fi
-
-if checkBootParam 'ngcpvlanrtpext=' ; then
-  VLAN_RTP_EXT=$(getBootParam ngcpvlanrtpext)
 fi
 
 if checkBootParam 'ngcpppa=' ; then
@@ -656,32 +500,22 @@ Control installation parameters:
   ngcpinstvers=... - use specific NGCP installer version
   debianrepo=...   - hostname of Debian APT repository mirror
   sipwiserepo=...  - hostname of Sipwise APT repository mirror
-  ngcpnomysqlrepl  - skip MySQL sp1<->sp2 replication configuration/check
   ngcpppa=...      - use NGCP PPA Debian repository
 
 Control target system:
 
-  ngcpnw.dhcp      - use DHCP as network configuration in installed system
   ngcphostname=... - hostname of installed system (defaults to ngcp/sp[1,2])
                      NOTE: do NOT use when installing Pro Edition!
-  ngcpeiface=...   - external interface device (defaults to eth0)
-  ngcpip1=...      - IP address of first node
-  ngcpip2=...      - IP address of second node
-  ngcpipshared=... - HA shared IP address
-  ngcpnetmask=...  - netmask of ha_int interface
-  ngcpeaddr=...    - Cluster IP address
 
 The command line options correspond with the available bootoptions.
 Command line overrides any present bootoption.
 
 Usage examples:
 
-  # ngcp-deployment ngcpce ngcpnw.dhcp
+  # ngcp-deployment ngcpce
 
-  # netcardconfig # configure eth0 with static configuration
   # ngcp-deployment ngcppro ngcpsp1
 
-  # netcardconfig # configure eth0 with static configuration
   # ngcp-deployment ngcppro ngcpsp2
 "
 }
@@ -698,31 +532,10 @@ for param in "$@" ; do
     *noinstall*) NGCP_INSTALLER=false;;
     *ngcpinst*) NGCP_INSTALLER=true;;
     *ngcphostname=*) TARGET_HOSTNAME="${param//ngcphostname=/}";;
-    *ngcpeiface=*) EIFACE="${param//ngcpeiface=/}";;
-    *ngcpeaddr=*) EADDR="${param//ngcpeaddr=/}";;
-    *ngcpip1=*) IP1="${param//ngcpip1=/}";;
-    *ngcpip2=*) IP2="${param//ngcpip2=/}";;
-    *ngcpipshared=*) IP_HA_SHARED="${param//ngcpipshared=/}";;
-    *ngcpnetmask=*) INTERNAL_NETMASK="${param//ngcpnetmask=/}";;
-    *ngcpextnetmask=*) EXTERNAL_NETMASK="${param//ngcpextnetmask=/}";;
-    *ngcpmcast=*) MCASTADDR="${param//ngcpmcast=/}";;
     *ngcpcrole=*) CARRIER_EDITION=true; CROLE="${param//ngcpcrole=/}";;
-    *ngcpnw.dhcp*) DHCP=true;;
-    *ngcpnobonding*) BONDING=false;;
-    *ngcpbonding*) BONDING=true;;
     *ngcphalt*) HALT=true;;
     *ngcpreboot*) REBOOT=true;;
     *vagrant*) VAGRANT=true;;
-    *lowperformance*) ADJUST_FOR_LOW_PERFORMANCE=true;;
-    *enablevmservices*) ENABLE_VM_SERVICES=true;;
-    *ngcpfillcache*) FILL_APPROX_CACHE=true;;
-    *ngcpvlanbootint*) VLAN_BOOT_INT="${param//ngcpvlanbootint=/}";;
-    *ngcpvlansshext*) VLAN_SSH_EXT="${param//ngcpvlansshext=/}";;
-    *ngcpvlanwebext*) VLAN_WEB_EXT="${param//ngcpvlanwebext=/}";;
-    *ngcpvlansipext*) VLAN_SIP_EXT="${param//ngcpvlansipext=/}";;
-    *ngcpvlansipint*) VLAN_SIP_INT="${param//ngcpvlansipint=/}";;
-    *ngcpvlanhaint*) VLAN_HA_INT="${param//ngcpvlanhaint=/}";;
-    *ngcpvlanrtpext*) VLAN_RTP_EXT="${param//ngcpvlanrtpext=/}";;
     *ngcpppainstaller*) NGCP_PPA_INSTALLER="${param//ngcpppainstaller=/}";;
     *ngcpppa*) NGCP_PPA="${param//ngcpppa=/}";;
     *ngcpinitsystem*) NGCP_INIT_SYSTEM="${param//ngcpinitsystem=/}";;
@@ -777,93 +590,8 @@ if [ -n "$TARGET_HOSTNAME" ] ; then
 fi
 export HOSTNAME
 
-# get install device from "ip=<client-ip:<srv-ip>:..." boot arg
-if checkBootParam 'ip=' ; then
-  declare -A IP_ARR
-  if loadNfsIpArray IP_ARR "$(getBootParam ip)" ; then
-    INSTALL_DEV=${IP_ARR[device]}
-    EXT_GW=${IP_ARR[gw-ip]}
-  fi
-fi
-
-# set reasonable install device from other source
-if [ -z "$INSTALL_DEV" ] ; then
-  if [ -n "$EIFACE" ] ; then
-    INSTALL_DEV=$EIFACE
-  else
-    INSTALL_DEV=$DEFAULT_INSTALL_DEV
-  fi
-fi
-INSTALL_IP="$(ip -4 addr show "${INSTALL_DEV}" | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3}).*$/\1/p')"
+# ASM
 logit "INSTALL_IP is $INSTALL_IP"
-
-# if the default network device (eth0) is unconfigured try to retrieve configuration from eth1
-if [ "$INSTALL_IP" = "NON-IP" ] && [ "$INSTALL_DEV" = "$DEFAULT_INSTALL_DEV" ] ; then
-  logit "Falling back to device eth1 for INSTALL_IP because $DEFAULT_INSTALL_DEV is unconfigured"
-  INSTALL_IP="$(ip -4 addr show eth1 | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3}).*$/\1/p')"
-  logit "INSTALL_IP is $INSTALL_IP"
-fi
-
-# final external device and IP are same as installation
-[ -n "$EXTERNAL_DEV" ] || EXTERNAL_DEV=$INSTALL_DEV
-[ -n "$EXTERNAL_IP" ] || EXTERNAL_IP=$INSTALL_IP
-
-# hopefully set via bootoption/cmdline,
-# otherwise fall back to hopefully-safe-defaults
-# make sure the internal device (configured later) is not statically assigned,
-# since when booting with ip=....eth1:off then the internal device needs to be eth0
-if "$PRO_EDITION" ; then
-  if [ -z "$INTERNAL_DEV" ] ; then
-    INTERNAL_DEV='eth1'
-    if [[ "$EXTERNAL_DEV" = "eth1" ]] ; then
-      INTERNAL_DEV='eth0'
-    fi
-  fi
-
-  # needed for carrier
-  if "$RETRIEVE_MGMT_CONFIG" ; then
-    logit "Retrieving ha_int IPs configuration from management server"
-    wget --timeout=30 -O "/tmp/hosts" "${MANAGEMENT_IP}:3000/hostconfig/${TARGET_HOSTNAME}"
-    IP1=$(awk '/sp1/ { print $1 }' /tmp/hosts) || IP1=$DEFAULT_IP1
-    IP2=$(awk '/sp2/ { print $1 }' /tmp/hosts) || IP2=$DEFAULT_IP2
-    IP_HA_SHARED=$(awk '/sp(\s|$)/ { print $1 }' /tmp/hosts) || IP_HA_SHARED=$DEFAULT_IP_HA_SHARED
-
-    if [ -z "$INTERNAL_NETMASK" ]; then
-      wget --timeout=30 -O "/tmp/interfaces" "http://${MANAGEMENT_IP}:3000/nwconfig/${TARGET_HOSTNAME}"
-      INTERNAL_NETMASK=$(grep "$INTERNAL_DEV inet" -A2 /tmp/interfaces | awk '/netmask/ { print $2 }')
-    fi
-
-    if [ -z "$EXTERNAL_NETMASK" ]; then
-      wget --timeout=30 -O "/tmp/interfaces" "http://${MANAGEMENT_IP}:3000/nwconfig/${TARGET_HOSTNAME}"
-      EXTERNAL_NETMASK=$(grep "$EXTERNAL_DEV inet" -A2 /tmp/interfaces | awk '/netmask/ { print $2 }')
-    fi
-  fi
-
-  [ -n "$EXT_GW" ] || EXT_GW=$DEFAULT_EXT_GW
-  [ -n "$IP1" ] || IP1=$DEFAULT_IP1
-  [ -n "$IP2" ] || IP2=$DEFAULT_IP2
-  [ -n "$IP_HA_SHARED" ] || IP_HA_SHARED=$DEFAULT_IP_HA_SHARED
-  # Use $IP_HA_SHARED as $MANAGEMENT_IP on PRO (it is comming from boot option 'ngcpmgmt' on Carrier)
-  [ -n "$MANAGEMENT_IP" ] || MANAGEMENT_IP="${IP_HA_SHARED}"
-  case "$ROLE" in
-    sp1) INTERNAL_IP=$IP1 ;;
-    sp2) INTERNAL_IP=$IP2 ;;
-  esac
-  [ -n "$INTERNAL_NETMASK" ] || INTERNAL_NETMASK=$DEFAULT_INTERNAL_NETMASK
-  [ -n "$EXTERNAL_NETMASK" ] || EXTERNAL_NETMASK=$DEFAULT_EXT_NETMASK
-  [ -n "$MCASTADDR" ] || MCASTADDR=$DEFAULT_MCASTADDR
-
-  logit "ha_int sp1: $IP1 sp2: $IP2 shared sp: $IP_HA_SHARED netmask: $INTERNAL_NETMASK"
-fi
-
-[ -n "$EIFACE" ] || EIFACE=$INSTALL_DEV
-
-if "$CARRIER_EDITION" ; then
-  # The first Carrier node is booted via DHCP, while requires static HW config on reboot
-  [ -n "$EADDR" ] || EADDR=$DEFAULT_EXT_IP
-else
-  [ -n "$EADDR" ] || EADDR=$INSTALL_IP
-fi
 
 set_deploy_status "settings"
 
@@ -886,9 +614,7 @@ echo "
   Target disk:       /dev/$DISK
   Target Hostname:   $TARGET_HOSTNAME
   Installer version: $SP_VERSION_STR
-  Install NW iface:  $INSTALL_DEV
   Install IP:        $INSTALL_IP
-  Use DHCP in host:  $DHCP
 
   Installing in chassis? $CHASSIS
 
@@ -899,18 +625,6 @@ if "$PRO_EDITION" ; then
   Host Role:         $ROLE
   Host Role Carrier: $CROLE
   Profile:           $PROFILE
-
-  External NW iface: $EXTERNAL_DEV
-  Ext host IP:       $EXTERNAL_IP
-  Ext cluster iface: $EIFACE
-  Ext cluster IP:    $EADDR
-  Multicast addr:    $MCASTADDR
-  Internal NW iface: $INTERNAL_DEV
-  Int sp1 host IP:   $IP1
-  Int sp2 host IP:   $IP2
-  Int sp shared IP:  $IP_HA_SHARED
-  Int netmask:       $INTERNAL_NETMASK
-  MGMT address:      $MANAGEMENT_IP
 " | tee -a /tmp/installer-settings.txt
 fi
 
@@ -968,16 +682,6 @@ if "$LOGO" ; then
 fi
 
 if "$PRO_EDITION" ; then
-  if "$RETRIEVE_MGMT_CONFIG" && "$RESTART_NETWORK" ; then
-    echo "Skipping $INTERNAL_DEV config"
-  else
-    # internal network (default on eth1)
-    if ifconfig "$INTERNAL_DEV" &>/dev/null ; then
-      ifconfig "$INTERNAL_DEV" $INTERNAL_IP netmask $INTERNAL_NETMASK
-    else
-      die "Error: no $INTERNAL_DEV NIC found, can not deploy internal network. Exiting."
-    fi
-  fi
   # ipmi on IBM hardware
   if ifconfig usb0 &>/dev/null ; then
     ifconfig usb0 169.254.1.102 netmask 255.255.0.0
@@ -1309,18 +1013,10 @@ ca-certificates
 #kbd
 #laptop-detect
 #os-prober
-EOF
 
-echo  "Adding ifenslave package (because we're installing ${DEBIAN_RELEASE})"
-logit "Adding ifenslave package (because we're installing ${DEBIAN_RELEASE})"
-cat >> /etc/debootstrap/packages << EOF
 # support bonding
 ifenslave
-EOF
 
-echo  "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
-logit "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
-cat >> /etc/debootstrap/packages << EOF
 # required for dkms
 linux-headers-amd64
 EOF
@@ -1381,10 +1077,7 @@ EOF
 
 echo "deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
 echo "deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
-
-if [ "$DEBIAN_RELEASE" != "jessie" ] ; then
-  echo "deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
-fi
+echo "deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
 
 if [ "$DEBIAN_RELEASE" = "stretch" ] && [ ! -r /usr/share/debootstrap/scripts/stretch ] ; then
   echo  "Enabling stretch support for debootstrap via symlink to sid"
@@ -1459,64 +1152,6 @@ ff02::1         ip6-allnodes
 ff02::2         ip6-allrouters
 EOF
 
-if "$PRO_EDITION" && [[ $(imvirt) != "Physical" ]] ; then
-  echo "Generating udev persistent net rules."
-  INT_MAC=$(udevadm info -a -p /sys/class/net/${INTERNAL_DEV} | awk -F== '/ATTR{address}/ {print $2}')
-  EXT_MAC=$(udevadm info -a -p /sys/class/net/${EXTERNAL_DEV} | awk -F== '/ATTR{address}/ {print $2}')
-
-  if [ "$INT_MAC" = "$EXT_MAC" ] ; then
-    die "Error: MAC address for $INTERNAL_DEV is same as for $EXTERNAL_DEV"
-  fi
-
-  cat > $TARGET/etc/udev/rules.d/70-persistent-net.rules << EOF
-## Generated by Sipwise deployment script
-SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}==$INT_MAC, ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="eth*", NAME="$INTERNAL_DEV"
-SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}==$EXT_MAC, ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="eth*", NAME="$EXTERNAL_DEV"
-EOF
-fi
-
-if "$RETRIEVE_MGMT_CONFIG" ; then
-  # needs to be executed *after* udev rules have been set up,
-  # otherwise we get duplicated MAC address<->device name mappings
-  echo "Retrieving network configuration from management server"
-  wget --timeout=30 -O /etc/network/interfaces "${MANAGEMENT_IP}:3000/nwconfig/$(cat ${TARGET}/etc/hostname)"
-  cp /etc/network/interfaces "${TARGET}/etc/network/interfaces"
-  # can't be moved to ngcp-installer, otherwise Grml can't execute:
-  # > wget --timeout=30 -O Packages.gz "${repos_base_path}Packages.gz"
-  # because host 'web01' is unknown
-  echo "Retrieving /etc/hosts configuration from management server"
-  wget --timeout=30 -O "${TARGET}/etc/hosts" "${MANAGEMENT_IP}:3000/hostconfig/$(cat ${TARGET}/etc/hostname)"
-fi
-
-if "$RETRIEVE_MGMT_CONFIG" && "$RESTART_NETWORK" ; then
-  # restart networking for the time being only when running either in toram mode
-  # or not booting from NFS, once we've finished the carrier setup procedure we
-  # should be able to make this as our only supported default mode and drop
-  # everything inside the 'else' statement...
-  if grep -q 'toram' /proc/cmdline || ! grep -q 'root=/dev/nfs' /proc/cmdline ; then
-    logit 'Set /etc/hosts from TARGET'
-    cp ${TARGET}/etc/hosts /etc/hosts
-    echo  'Restarting networking'
-    logit 'Restarting networking'
-    service networking restart
-  else
-    # make sure we can access the management system which might be reachable
-    # through a specific VLAN only
-    ip link set dev "$INTERNAL_DEV" down # avoid conflicts with VLAN device(s)
-
-    # vlan-raw-device bond0 doesn't exist in the live environment, if we don't
-    # adjust it accordingly for our environment the vlan device(s) can't be
-    # brought up
-    # note: we do NOT modify the /e/n/i file from $TARGET here by intention
-    sed -i "s/vlan-raw-device .*/vlan-raw-device eth0/" /etc/network/interfaces
-
-    while IFS= read -r interface ; do
-      echo "Bringing up VLAN interface ${interface}"
-      ifup "${interface}"
-    done < <(awk '/^auto vlan/ {print $2}' /etc/network/interfaces)
-  fi # toram
-fi
-
 get_installer_path() {
   if [ -z "$SP_VERSION" ] && ! $TRUNK_VERSION ; then
     INSTALLER=ngcp-installer-latest.deb
@@ -1585,11 +1220,8 @@ EOF
 deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
 deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
 deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
+deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
 EOF
-
-  if [ "$DEBIAN_RELEASE" != "jessie" ] ; then
-    echo "deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free" >> "$TARGET/etc/apt/sources.list.d/debian.list"
-  fi
 
   # support testing rc releases without providing an according installer package ahead
   if [ -n "$AUTOBUILD_RELEASE" ] ; then
@@ -1604,104 +1236,9 @@ EOF
   fi
 }
 
-get_network_devices () {
-  # get list of available network devices (excl. some known-to-be-irrelevant ones, also see MT#8297)
-  net_devices=$(tail -n +3 /proc/net/dev | awk -F: '{print $1}'| sed "s/\s*//" | grep -ve '^vmnet' -ve '^vboxnet' -ve '^docker' -ve '^usb' | sort -u)
-
-  NETWORK_DEVICES=""
-  for network_device in $net_devices $DEFAULT_INSTALL_DEV $INTERNAL_DEV $EXTERNAL_DEV ; do
-    # avoid duplicates
-    echo "$NETWORK_DEVICES" | grep -wq "$network_device" || NETWORK_DEVICES="$NETWORK_DEVICES $network_device"
-  done
-  export NETWORK_DEVICES
-  unset net_devices
-}
-
-gen_installer_config () {
-  mkdir -p "${TARGET}/etc/ngcp-installer/"
-
-  # We are installing Carrier using DHCP but configure network.yml on static IPs
-  # as a result we cannot use "ip route show dev $DEFAULT_INSTALL_DEV"
-  if "$CARRIER_EDITION" ; then
-    if [ -n "$EXT_GW" ]; then
-      GW="$EXT_GW"
-    else
-      echo "Last resort, guesting gateway for external IP as first IP in EADDR"
-      GW=$(echo "$EADDR" | awk -F. '{print $1"."$2"."$3".1"}')
-    fi
-  else
-    GW="$(ip route show dev $DEFAULT_INSTALL_DEV | awk '/^default via/ {print $3}')"
-  fi
-
-  if "$CARRIER_EDITION" ; then
-    cat > ${TARGET}/etc/ngcp-installer/config_deploy.inc << EOF
-CROLE="${CROLE}"
-FILL_APPROX_CACHE="${FILL_APPROX_CACHE}"
-VLAN_BOOT_INT="${VLAN_BOOT_INT}"
-VLAN_SSH_EXT="${VLAN_SSH_EXT}"
-VLAN_WEB_EXT="${VLAN_WEB_EXT}"
-VLAN_SIP_EXT="${VLAN_SIP_EXT}"
-VLAN_SIP_INT="${VLAN_SIP_INT}"
-VLAN_HA_INT="${VLAN_HA_INT}"
-VLAN_RTP_EXT="${VLAN_RTP_EXT}"
-EOF
-  fi
-
-  if "$PRO_EDITION" ; then
-    get_network_devices
-    cat >> ${TARGET}/etc/ngcp-installer/config_deploy.inc << EOF
-HNAME="${ROLE}"
-IP1="${IP1}"
-IP2="${IP2}"
-IP_HA_SHARED="${IP_HA_SHARED}"
-EIFACE="${EIFACE}"
-EADDR="${EADDR}"
-MCASTADDR="${MCASTADDR}"
-DPL_MYSQL_REPLICATION="${DPL_MYSQL_REPLICATION}"
-TARGET_HOSTNAME="${TARGET_HOSTNAME}"
-DEFAULT_INSTALL_DEV="${DEFAULT_INSTALL_DEV}"
-INTERNAL_DEV="${INTERNAL_DEV}"
-GW="${GW}"
-EXTERNAL_DEV="${EXTERNAL_DEV}"
-NETWORK_DEVICES="${NETWORK_DEVICES}"
-DEFAULT_INTERNAL_NETMASK="${DEFAULT_INTERNAL_NETMASK}"
-# I would like to delete ${DEFAULT_INTERNAL_NETMASK} and use ${INTERNAL_NETMASK} into installer,
-# Lets test we have INTERNAL_NETMASK==DEFAULT_INTERNAL_NETMASK for CE/PRO/Carrier (in installer)
-# and switch code to INTERNAL_NETMASK then.
-INTERNAL_NETMASK="${INTERNAL_NETMASK}"
-EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
-RETRIEVE_MGMT_CONFIG="${RETRIEVE_MGMT_CONFIG}"
-MANAGEMENT_IP="${MANAGEMENT_IP}"
-EOF
-  fi
-
-  cat >> ${TARGET}/etc/ngcp-installer/config_deploy.inc << EOF
-FORCE=yes
-SKIP_SOURCES_LIST="${SKIP_SOURCES_LIST}"
-ADJUST_FOR_LOW_PERFORMANCE="${ADJUST_FOR_LOW_PERFORMANCE}"
-ENABLE_VM_SERVICES="${ENABLE_VM_SERVICES}"
-SIPWISE_REPO_HOST="${SIPWISE_REPO_HOST}"
-DEBIAN_REPO_TRANSPORT="${DEBIAN_REPO_TRANSPORT}"
-SIPWISE_REPO_TRANSPORT="${SIPWISE_REPO_TRANSPORT}"
-NAMESERVER="$(awk '/^nameserver/ {print $2}' /etc/resolv.conf)"
-NGCP_PPA="${NGCP_PPA}"
-DEBUG_MODE="${DEBUG_MODE}"
-NGCP_INIT_SYSTEM="${NGCP_INIT_SYSTEM}"
-EOF
-
-  cat "${TARGET}/etc/ngcp-installer/config_deploy.inc" > /tmp/ngcp-installer-cmdline.log
-}
-
-prepare_translations() {
-    set_deploy_status "prepare_translations"
-    grml-chroot "${TARGET}" apt-get -y install ngcp-dev-tools
-    grml-chroot "${TARGET}" service mysql start
-    if ! grml-chroot "${TARGET}" ngcp-prepare-translations ; then
-      grml-chroot "${TARGET}" service mysql stop
-      die "Error: Failed to prepare ngcp-panel translations. Exiting."
-    fi
-    grml-chroot "${TARGET}" service mysql stop
-    set_deploy_status "ngcp-installer"
+gen_installer_config() {
+  # ASM
+  return 0
 }
 
 if "$NGCP_INSTALLER" ; then
@@ -1745,10 +1282,6 @@ EOT
     die "Error during installation of ngcp. Find details at: ${TARGET}/tmp/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log"
   fi
 
-  if $TRUNK_VERSION && checkBootParam ngcpupload ; then
-    prepare_translations
-  fi
-
   # nuke files
   find "${TARGET}/var/log" -type f -size +0 -not -name \*.ini -exec sh -c ":> \${1}" sh {} \;
   :>$TARGET/var/run/utmp
@@ -1779,223 +1312,6 @@ case "$DEBIAN_RELEASE" in
     set_custom_grub_boot_options
     ;;
 esac
-
-cdr2mask ()
-{
-  # From https://stackoverflow.com/questions/20762575/explanation-of-convertor-of-cidr-to-netmask-in-linux-shell-netmask2cdir-and-cdir
-  # Number of args to shift, 255..255, first non-255 byte, zeroes
-  set -- $(( 5 - ("${1}" / 8) )) 255 255 255 255 $(( (255 << (8 - ("${1}" % 8))) & 255 )) 0 0 0
-  if [[ "${1}" -gt 1 ]] ; then
-    shift "${1}"
-  else
-    shift
-  fi
-  echo "${1:-0}.${2:-0}.${3:-0}.${4:-0}"
-}
-
-if "$CARRIER_EDITION" ; then
-  echo "Nothing to do on Carrier, /etc/network/interfaces was already set up."
-elif ! "$NGCP_INSTALLER" ; then
-  echo "Not modifying /etc/network/interfaces as installing plain Debian."
-elif "$DHCP" ; then
-  cat > $TARGET/etc/network/interfaces << EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-# The primary network interface
-auto $EXTERNAL_DEV
-iface $EXTERNAL_DEV inet dhcp
-EOF
-  # make sure internal network is available even with external
-  # device using DHCP
-  if "$PRO_EDITION" ; then
-  cat >> $TARGET/etc/network/interfaces << EOF
-
-auto $INTERNAL_DEV
-iface $INTERNAL_DEV inet static
-        address $INTERNAL_IP
-        netmask $INTERNAL_NETMASK
-
-EOF
-  fi
-else
-  external_ip_data=( $( ip -4 addr show "${EXTERNAL_DEV}" | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3})\/([0-9]+).*$/\1 \3/p' ) )
-  # assume host system has a valid configuration
-  if "$PRO_EDITION" && "$VLAN" ; then
-    cat > $TARGET/etc/network/interfaces << EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-auto vlan${VLANID}
-iface vlan${VLANID} inet static
-        address ${external_ip_data[0]}
-        netmask $( cdr2mask "${external_ip_data[1]}" )
-        gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
-        dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
-        vlan-raw-device $VLANIF
-
-auto $INTERNAL_DEV
-iface $INTERNAL_DEV inet static
-        address $INTERNAL_IP
-        netmask $INTERNAL_NETMASK
-
-# Example:
-# allow-hotplug eth0
-# iface eth0 inet static
-#         address 192.168.1.101
-#         netmask 255.255.255.0
-#         network 192.168.1.0
-#         broadcast 192.168.1.255
-#         gateway 192.168.1.1
-#         # dns-* options are implemented by the resolvconf package, if installed
-#         dns-nameservers 195.58.160.194 195.58.161.122
-#         dns-search sipwise.com
-EOF
-  elif "$PRO_EDITION" && "$BONDING" ; then
-    cat > $TARGET/etc/network/interfaces << EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-auto bond0
-iface bond0 inet static
-        bond-slaves $EXTERNAL_DEV $INTERNAL_DEV
-        bond_mode 802.3ad
-        bond_miimon 100
-        bond_lacp_rate 1
-        address ${external_ip_data[0]}
-        netmask $( cdr2mask "${external_ip_data[1]}" )
-        gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
-        dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
-
-# additional possible bonding mode
-# auto bond0
-# iface bond0 inet manual
-#         bond-slaves eth0 eth1
-#         bond_mode active-backup
-#         bond_miimon 100
-
-# Example:
-# allow-hotplug eth0
-# iface eth0 inet static
-#         address 192.168.1.101
-#         netmask 255.255.255.0
-#         network 192.168.1.0
-#         broadcast 192.168.1.255
-#         gateway 192.168.1.1
-#         # dns-* options are implemented by the resolvconf package, if installed
-#         dns-nameservers 195.58.160.194 195.58.161.122
-#         dns-search sipwise.com
-EOF
-  elif "$PRO_EDITION" ; then # no bonding but pro-edition
-    cat > $TARGET/etc/network/interfaces << EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-auto $EXTERNAL_DEV
-iface $EXTERNAL_DEV inet static
-        address ${external_ip_data[0]}
-        netmask $( cdr2mask "${external_ip_data[1]}" )
-        gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
-        dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
-
-auto $INTERNAL_DEV
-iface $INTERNAL_DEV inet static
-        address $INTERNAL_IP
-        netmask $INTERNAL_NETMASK
-
-# Example:
-# allow-hotplug eth0
-# iface eth0 inet static
-#         address 192.168.1.101
-#         netmask 255.255.255.0
-#         network 192.168.1.0
-#         broadcast 192.168.1.255
-#         gateway 192.168.1.1
-#         # dns-* options are implemented by the resolvconf package, if installed
-#         dns-nameservers 195.58.160.194 195.58.161.122
-#         dns-search sipwise.com
-EOF
-  else # ce edition
-    cat > $TARGET/etc/network/interfaces << EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-auto $EXTERNAL_DEV
-iface $EXTERNAL_DEV inet static
-        address ${external_ip_data[0]}
-        netmask $( cdr2mask "${external_ip_data[1]}" )
-        gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
-        dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
-
-### Further usage examples
-
-## Enable IPv6 autoconfiguration:
-# auto eth1
-# iface eth1 inet6 manual
-#  up ifconfig eth1 up
-
-## Specific manual configuration:
-# allow-hotplug eth2
-# iface eth2 inet static
-#         address 192.168.1.101
-#         netmask 255.255.255.0
-#         network 192.168.1.0
-#         broadcast 192.168.1.255
-#         gateway 192.168.1.1
-#         # dns-* options are implemented by the resolvconf package, if installed
-#         dns-nameservers 195.58.160.194 195.58.161.122
-#         dns-search sipwise.com
-EOF
-  fi
-fi # if $DHCP
-
-generate_etc_hosts() {
-
-  # finalise hostname configuration
-  cat > $TARGET/etc/hosts << EOF
-127.0.0.1 localhost
-
-# The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-
-EOF
-
-  # append hostnames of sp1/sp2 so they can talk to each other
-  # in the HA setup
-  if "$PRO_EDITION" ; then
-    cat >> $TARGET/etc/hosts << EOF
-$IP1 sp1
-$IP2 sp2
-$IP_HA_SHARED sp
-EOF
-  else
-    # otherwise 'hostname --fqdn' does not work and causes delays with exim4 startup
-    cat >> $TARGET/etc/hosts << EOF
-# required for FQDN, please adjust if needed
-127.0.0.2 $TARGET_HOSTNAME. $TARGET_HOSTNAME
-EOF
-  fi
-
-}
 
 fake_uname() {
    cat > "${TARGET}/tmp/uname.c" << EOF
@@ -2148,13 +1464,6 @@ vagrant_configuration() {
     chroot "$TARGET" etckeeper commit "Vagrant/VirtualBox changes on /etc/*"
   fi
 }
-
-if "$CARRIER_EDITION" ; then
-  echo "Nothing to do on Carrier, /etc/hosts was already set up."
-else
-  echo "Generating /etc/hosts"
-  generate_etc_hosts
-fi
 
 if "$VAGRANT" ; then
   echo "Bootoption vagrant present, executing vagrant_configuration."
@@ -2416,18 +1725,6 @@ EOF
   fi
 
 fi # if [ -n "$PUPPET" ] ; then
-
-# make sure we don't leave any running processes
-for i in asterisk atd collectd collectdmon dbus-daemon exim4 \
-         glusterd glusterfs glusterfsd glusterfs-server haveged monit nscd \
-	 redis-server snmpd voisniff-ng ; do
-  killall -9 $i >/dev/null 2>&1 || true
-done
-
-# remove retrieved and generated files
-rm -f ${TARGET}/config_*yml
-rm -f ${TARGET}/constants_*.yml
-rm -f ${TARGET}/ngcp-installer*deb
 
 if [ -r "${INSTALL_LOG}" ] && [ -d "${TARGET}"/var/log/ ] ; then
   cp "${INSTALL_LOG}" "${TARGET}"/var/log/
