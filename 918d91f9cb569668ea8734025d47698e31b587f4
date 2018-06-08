@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_c4562806",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1695,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-06-08T15:48:19Z",
+      "side": 0,
+      "message": "Where do we handle this instead then?",
+      "revId": "918d91f9cb569668ea8734025d47698e31b587f4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_e4512410",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-06-08T15:48:19Z",
+      "side": 0,
+      "message": "We don\u0027t need those removals anymore? (Just curious :))",
+      "revId": "918d91f9cb569668ea8734025d47698e31b587f4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}

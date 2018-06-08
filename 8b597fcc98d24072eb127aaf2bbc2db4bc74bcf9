@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_8441503c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-06-08T15:48:19Z",
+      "side": 1,
+      "message": "please mention that this is about ngcp-installer\u0027s ngcp-post-install.sh in the commit message\n\nYou also dropped some checks WRT jessie (which is great!), please mention this as well in the commit message.",
+      "revId": "8b597fcc98d24072eb127aaf2bbc2db4bc74bcf9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_a45b2c2e",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-06-08T15:48:19Z",
+      "side": 1,
+      "message": "indention?",
+      "revId": "8b597fcc98d24072eb127aaf2bbc2db4bc74bcf9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_044d4072",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 2082,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-06-08T15:48:19Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be \"systemctl reboot\"?",
+      "revId": "8b597fcc98d24072eb127aaf2bbc2db4bc74bcf9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_443458dd",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-06-08T15:48:19Z",
+      "side": 1,
+      "message": "No objections against this at all, but do we know that this always works in our environment? (Just curious, but I recall some troubles with this at least on Debian/jessie systems)",
+      "revId": "8b597fcc98d24072eb127aaf2bbc2db4bc74bcf9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_24315ced",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 2096,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-06-08T15:48:19Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be \"systemctl reboot\"?",
+      "revId": "8b597fcc98d24072eb127aaf2bbc2db4bc74bcf9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
