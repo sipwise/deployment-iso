@@ -1617,6 +1617,19 @@ get_network_devices () {
   unset net_devices
 }
 
+cdr2mask ()
+{
+  # From https://stackoverflow.com/questions/20762575/explanation-of-convertor-of-cidr-to-netmask-in-linux-shell-netmask2cdir-and-cdir
+  # Number of args to shift, 255..255, first non-255 byte, zeroes
+  set -- $(( 5 - ("${1}" / 8) )) 255 255 255 255 $(( (255 << (8 - ("${1}" % 8))) & 255 )) 0 0 0
+  if [[ "${1}" -gt 1 ]] ; then
+    shift "${1}"
+  else
+    shift
+  fi
+  echo "${1:-0}.${2:-0}.${3:-0}.${4:-0}"
+}
+
 gen_installer_config () {
   mkdir -p "${TARGET}/etc/ngcp-installer/"
 
@@ -1672,6 +1685,7 @@ INTERNAL_NETMASK="${INTERNAL_NETMASK}"
 EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
 RETRIEVE_MGMT_CONFIG="${RETRIEVE_MGMT_CONFIG}"
 MANAGEMENT_IP="${MANAGEMENT_IP}"
+DHCP="${DHCP}"
 EOF
   fi
 
@@ -1688,6 +1702,17 @@ NGCP_PPA="${NGCP_PPA}"
 DEBUG_MODE="${DEBUG_MODE}"
 NGCP_INIT_SYSTEM="${NGCP_INIT_SYSTEM}"
 EOF
+
+  external_ip_data=( $( ip -4 addr show "${EXTERNAL_DEV}" | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3})\/([0-9]+).*$/\1 \3/p' ) )
+  if "$CE_EDITION" ; then
+    cat >> ${TARGET}/etc/ngcp-installer/config_deploy.inc << EOF
+INSTALL_DEV="${EXTERNAL_DEV}"
+INSTALL_IP="${external_ip_data[0]}"
+DHCP="${DHCP}"
+GW="${GW}"
+NETMASK="$( cdr2mask "${external_ip_data[1]}" )"
+EOF
+  fi
 
   cat "${TARGET}/etc/ngcp-installer/config_deploy.inc" > /tmp/ngcp-installer-cmdline.log
 }
@@ -1779,19 +1804,6 @@ case "$DEBIAN_RELEASE" in
     set_custom_grub_boot_options
     ;;
 esac
-
-cdr2mask ()
-{
-  # From https://stackoverflow.com/questions/20762575/explanation-of-convertor-of-cidr-to-netmask-in-linux-shell-netmask2cdir-and-cdir
-  # Number of args to shift, 255..255, first non-255 byte, zeroes
-  set -- $(( 5 - ("${1}" / 8) )) 255 255 255 255 $(( (255 << (8 - ("${1}" % 8))) & 255 )) 0 0 0
-  if [[ "${1}" -gt 1 ]] ; then
-    shift "${1}"
-  else
-    shift
-  fi
-  echo "${1:-0}.${2:-0}.${3:-0}.${4:-0}"
-}
 
 if "$CARRIER_EDITION" ; then
   echo "Nothing to do on Carrier, /etc/network/interfaces was already set up."
