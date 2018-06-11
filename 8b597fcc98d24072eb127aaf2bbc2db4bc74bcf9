@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ad0253b_24171cef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-11T07:47:12Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "5ad0253b_8441503c",
+      "revId": "8b597fcc98d24072eb127aaf2bbc2db4bc74bcf9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_a45b2c2e",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 4
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "5ad0253b_44f1f8cc",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 2082,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-11T07:47:12Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "5ad0253b_044d4072",
+      "revId": "8b597fcc98d24072eb127aaf2bbc2db4bc74bcf9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_443458dd",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 4
@@ -64,6 +100,24 @@
       "writtenOn": "2018-06-08T15:48:19Z",
       "side": 1,
       "message": "No objections against this at all, but do we know that this always works in our environment? (Just curious, but I recall some troubles with this at least on Debian/jessie systems)",
+      "revId": "8b597fcc98d24072eb127aaf2bbc2db4bc74bcf9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_c4b3c809",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-11T07:47:12Z",
+      "side": 1,
+      "message": "deployment.sh is release specific already so these systemctl calls will be run on mr6.4 stretch with systemd-libpam and dbus. In this env it works as well.",
+      "parentUuid": "5ad0253b_443458dd",
       "revId": "8b597fcc98d24072eb127aaf2bbc2db4bc74bcf9",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
