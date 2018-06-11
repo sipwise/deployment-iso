@@ -802,6 +802,19 @@ fi
 [ -n "$EXTERNAL_DEV" ] || EXTERNAL_DEV=$INSTALL_DEV
 [ -n "$EXTERNAL_IP" ] || EXTERNAL_IP=$INSTALL_IP
 
+
+cdr2mask () {
+  # From https://stackoverflow.com/questions/20762575/explanation-of-convertor-of-cidr-to-netmask-in-linux-shell-netmask2cdir-and-cdir
+  # Number of args to shift, 255..255, first non-255 byte, zeroes
+  set -- $(( 5 - ("${1}" / 8) )) 255 255 255 255 $(( (255 << (8 - ("${1}" % 8))) & 255 )) 0 0 0
+  if [[ "${1}" -gt 1 ]] ; then
+    shift "${1}"
+  else
+    shift
+  fi
+  echo "${1:-0}.${2:-0}.${3:-0}.${4:-0}"
+}
+
 # hopefully set via bootoption/cmdline,
 # otherwise fall back to hopefully-safe-defaults
 # make sure the internal device (configured later) is not statically assigned,
@@ -848,6 +861,10 @@ if "$PRO_EDITION" ; then
   [ -n "$MCASTADDR" ] || MCASTADDR=$DEFAULT_MCASTADDR
 
   logit "ha_int sp1: $IP1 sp2: $IP2 shared sp: $IP_HA_SHARED netmask: $INTERNAL_NETMASK"
+elif "${CE_EDITION}" ; then
+  netmask="$( ip -4 addr show "${EXTERNAL_DEV}" | sed -rn 's/^[ ]+inet [0-9]+(\.[0-9]+){3}\/([0-9]+).*$/\2/p' )"
+  [[ -n "${EXTERNAL_NETMASK}" ]] || EXTERNAL_NETMASK="$( cdr2mask "${netmask}" )"
+  unset netmask
 fi
 
 [ -n "$EIFACE" ] || EIFACE=$INSTALL_DEV
@@ -1605,21 +1622,17 @@ IP1="${IP1}"
 IP2="${IP2}"
 IP_HA_SHARED="${IP_HA_SHARED}"
 EIFACE="${EIFACE}"
-EADDR="${EADDR}"
 MCASTADDR="${MCASTADDR}"
 DPL_MYSQL_REPLICATION="${DPL_MYSQL_REPLICATION}"
 TARGET_HOSTNAME="${TARGET_HOSTNAME}"
 DEFAULT_INSTALL_DEV="${DEFAULT_INSTALL_DEV}"
 INTERNAL_DEV="${INTERNAL_DEV}"
-GW="${GW}"
-EXTERNAL_DEV="${EXTERNAL_DEV}"
 NETWORK_DEVICES="${NETWORK_DEVICES}"
 DEFAULT_INTERNAL_NETMASK="${DEFAULT_INTERNAL_NETMASK}"
 # I would like to delete ${DEFAULT_INTERNAL_NETMASK} and use ${INTERNAL_NETMASK} into installer,
 # Lets test we have INTERNAL_NETMASK==DEFAULT_INTERNAL_NETMASK for CE/PRO/Carrier (in installer)
 # and switch code to INTERNAL_NETMASK then.
 INTERNAL_NETMASK="${INTERNAL_NETMASK}"
-EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
 RETRIEVE_MGMT_CONFIG="${RETRIEVE_MGMT_CONFIG}"
 MANAGEMENT_IP="${MANAGEMENT_IP}"
 EOF
@@ -1635,6 +1648,11 @@ NAMESERVER="$(awk '/^nameserver/ {print $2}' /etc/resolv.conf)"
 NGCP_PPA="${NGCP_PPA}"
 DEBUG_MODE="${DEBUG_MODE}"
 NGCP_INIT_SYSTEM="${NGCP_INIT_SYSTEM}"
+EADDR="${EADDR}"
+DHCP="${DHCP}"
+EXTERNAL_DEV="${EXTERNAL_DEV}"
+GW="${GW}"
+EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
 EOF
 
   cat "${TARGET}/etc/ngcp-installer/config_deploy.inc" > /tmp/ngcp-installer-cmdline.log
@@ -1727,19 +1745,6 @@ case "$DEBIAN_RELEASE" in
     set_custom_grub_boot_options
     ;;
 esac
-
-cdr2mask ()
-{
-  # From https://stackoverflow.com/questions/20762575/explanation-of-convertor-of-cidr-to-netmask-in-linux-shell-netmask2cdir-and-cdir
-  # Number of args to shift, 255..255, first non-255 byte, zeroes
-  set -- $(( 5 - ("${1}" / 8) )) 255 255 255 255 $(( (255 << (8 - ("${1}" % 8))) & 255 )) 0 0 0
-  if [[ "${1}" -gt 1 ]] ; then
-    shift "${1}"
-  else
-    shift
-  fi
-  echo "${1:-0}.${2:-0}.${3:-0}.${4:-0}"
-}
 
 if "$CARRIER_EDITION" ; then
   echo "Nothing to do on Carrier, /etc/network/interfaces was already set up."
