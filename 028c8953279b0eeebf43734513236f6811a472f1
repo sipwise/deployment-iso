@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_847cb021",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-06-11T09:15:13Z",
+      "side": 1,
+      "message": "I don\u0027t know if there\u0027s a special reason why this is split, but I wouldn\u0027t use it like that, I would either have a ${DEBIAN_REPO_URL} (*) with the exact string, or do\n\n  DEBIAN_REPO_URL\u003d\"${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}/debian\"\n\nin the beginning, then use ${DEBIAN_REPO_URL} in the rest of the file.\n\nSame with \"SIPWISE_REPO*\".\n\n\n(*) Not sure if it\u0027s \"URL\" or \"URI\", always get confused with them.",
+      "range": {
+        "startLine": 214,
+        "startChar": 12,
+        "endLine": 214,
+        "endChar": 58
+      },
+      "revId": "028c8953279b0eeebf43734513236f6811a472f1",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
