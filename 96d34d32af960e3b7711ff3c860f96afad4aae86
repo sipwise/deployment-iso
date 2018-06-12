@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_cab3cf09",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-12T12:00:07Z",
+      "side": 1,
+      "message": "Please split all this topics to separate reviews, one topic - one review. Easier to review and submit, also easy to revert necessary part only.",
+      "revId": "96d34d32af960e3b7711ff3c860f96afad4aae86",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
