@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_0a2c2749",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-12T11:21:04Z",
+      "side": 0,
+      "message": "I believe we can clean more code if we consider \"$LVM\" is always true. Are you sure removing condition here?",
+      "range": {
+        "startLine": 1334,
+        "startChar": 3,
+        "endLine": 1334,
+        "endChar": 10
+      },
+      "revId": "d4cb7b10c61b747b8de4bda21545e8338b3d7887",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
