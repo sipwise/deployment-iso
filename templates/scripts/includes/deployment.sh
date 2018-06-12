@@ -69,7 +69,6 @@ HALT=false
 REBOOT=false
 STATUS_DIRECTORY=/srv/deployment/
 STATUS_WAIT=0
-LVM=true
 VAGRANT=false
 ADJUST_FOR_LOW_PERFORMANCE=false
 ENABLE_VM_SERVICES=false
@@ -526,17 +525,6 @@ if checkBootParam 'ngcpcrole=' ; then
   CARRIER_EDITION=true
 fi
 
-if checkBootParam ngcpnolvm ; then
-  logit "Disabling LVM due to ngcpnolvm boot option"
-  LVM=false
-fi
-
-# allow forcing LVM mode
-if checkBootParam ngcplvm ; then
-  logit "Enabling LVM due to ngcplvm boot option"
-  LVM=true
-fi
-
 if checkBootParam ngcphalt ; then
   HALT=true
 fi
@@ -904,7 +892,6 @@ if "$PRO_EDITION" ; then
   echo "
   Host Role:         $ROLE
   Host Role Carrier: $CROLE
-  Profile:           $PROFILE
 
   External NW iface: $EXTERNAL_DEV
   Ext host IP:       $EXTERNAL_IP
@@ -923,8 +910,8 @@ fi
 if "$INTERACTIVE" ; then
   echo "WARNING: Execution will override any existing data!"
   echo "Settings OK? y/N"
-  read a
-  if [[ "$a" != "y" ]] ; then
+  read -r a
+  if [[ "${a,,}" != "y" ]] ; then
     echo "Exiting as requested."
     exit 2
   fi
@@ -1031,9 +1018,9 @@ check_for_supported_disk() {
   echo "WARNING: Cannot detect supported device vendor/model." >&2
   echo "(Disk: ${DISK}  Vendor: ${disk_vendor}  Model: ${disk_model})" >&2
   echo "Would you like to continue anyway? (yes/NO)" >&2
-  read a
-  case "$a" in
-    y|Y|yes|YES)
+  read -r a
+  case "${a,,}" in
+    y|yes)
       echo "Continue anyway as requested."
       return 0
       ;;
@@ -1104,12 +1091,10 @@ else
   TABLE=msdos
 fi
 
-if "$LVM" ; then
-  if "$NGCP_INSTALLER" ; then
-    VG_NAME="ngcp"
-  else
-    VG_NAME="vg0"
-  fi
+if "$NGCP_INSTALLER" ; then
+  VG_NAME="ngcp"
+else
+  VG_NAME="vg0"
 fi
 
 clear_partition_table() {
@@ -1245,35 +1230,16 @@ lvm_setup() {
   eval "$saved_options"
 }
 
-plain_disk_setup() {
-  parted -s -a optimal "/dev/${DISK}" mktable "${TABLE}" || die "Failed to set up partition table"
-  # hw-raid with rootfs + swap partition
-  parted -s -a optimal "/dev/${DISK}" 'mkpart primary ext4 2048s 95%' || die "Failed to set up primary partition"
-  parted -s -a optimal "/dev/${DISK}" 'mkpart primary linux-swap 95% -1' || die "Failed to set up swap partition"
-  sync
-
-  # used later by installer
-  ROOT_FS="/dev/${DISK}1"
-  SWAP_PARTITION="/dev/${DISK}2"
-
-  echo "Initialising swap partition $SWAP_PARTITION"
-  mkswap -L ngcp-swap "$SWAP_PARTITION" || die "Failed to initialise swap partition"
-
-  # for later usage in /etc/fstab use /dev/disk/by-label/ngcp-swap instead of /dev/${DISK}2
-  SWAP_PARTITION="/dev/disk/by-label/ngcp-swap"
-}
-
-if "$LVM" ; then
-  lvm_setup
-else # no LVM
-  plain_disk_setup
-fi
+lvm_setup
 
 # otherwise e2fsck fails with "need terminal for interactive repairs"
 echo FSCK=no >>/etc/debootstrap/config
 
 # package selection
 cat > /etc/debootstrap/packages << EOF
+# update: we need only the following packages
+# eject locales-all firmware-bnx2 firmware-bnx2x ethtool acpi
+# all others are already present in debian stretch
 # addons: packages which d-i installs but debootstrap doesn't
 eject
 grub-pc
@@ -1315,28 +1281,13 @@ ca-certificates
 #kbd
 #laptop-detect
 #os-prober
-EOF
-
-echo  "Adding ifenslave package (because we're installing ${DEBIAN_RELEASE})"
-logit "Adding ifenslave package (because we're installing ${DEBIAN_RELEASE})"
-cat >> /etc/debootstrap/packages << EOF
 # support bonding
 ifenslave
-EOF
-
-echo  "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
-logit "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
-cat >> /etc/debootstrap/packages << EOF
 # required for dkms
 linux-headers-amd64
-EOF
-
-if "$LVM" ; then
-  cat >> /etc/debootstrap/packages << EOF
 # support LVM
 lvm2
 EOF
-fi
 
 if [ -n "$FIRMWARE_PACKAGES" ] ; then
   cat >> /etc/debootstrap/packages << EOF
@@ -1383,14 +1334,10 @@ logit "Setting up /etc/debootstrap/etc/apt/sources.list"
 cat > /etc/debootstrap/etc/apt/sources.list << EOF
 # Set up via deployment.sh for grml-debootstrap usage
 deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
+deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
+deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
+deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
 EOF
-
-echo "deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
-echo "deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
-
-if [ "$DEBIAN_RELEASE" != "jessie" ] ; then
-  echo "deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
-fi
 
 if [ "$DEBIAN_RELEASE" = "stretch" ] && [ ! -r /usr/share/debootstrap/scripts/stretch ] ; then
   echo  "Enabling stretch support for debootstrap via symlink to sid"
@@ -1591,11 +1538,8 @@ EOF
 deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
 deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
 deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
+deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
 EOF
-
-  if [ "$DEBIAN_RELEASE" != "jessie" ] ; then
-    echo "deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free" >> "$TARGET/etc/apt/sources.list.d/debian.list"
-  fi
 
   # support testing rc releases without providing an according installer package ahead
   if [ -n "$AUTOBUILD_RELEASE" ] ; then
@@ -2186,7 +2130,7 @@ check_puppet_rerun() {
   if ! checkBootParam nopuppetrepeat && [ "$(get_deploy_status)" = "error" ] ; then
     echo "Do you want to [r]epeat puppet run or [c]ontinue?"
     while true; do
-      read a
+      read -r a
       case "${a,,}" in
         r)
           echo "Repeating puppet run."
@@ -2222,7 +2166,7 @@ check_puppetserver_time() {
     else
       echo "WARNING: time difference between the current server and $PUPPET_SERVER is ${seconds} seconds (bigger than 10 seconds)."
       echo "Please synchronize time and press any key to recheck or [c]ontinue with puppet run."
-      read a
+      read -r a
       case "${a,,}" in
         c)
           echo "Continue ignoring time offset check."
@@ -2421,12 +2365,18 @@ EOF
 
 fi # if [ -n "$PUPPET" ] ; then
 
+# check the processes which are not stopped in installer and running
+logit "Before stopping all the services"
+ps auxwww || true
 # make sure we don't leave any running processes
 for i in asterisk atd collectd collectdmon dbus-daemon exim4 \
          glusterd glusterfs glusterfsd glusterfs-server haveged monit nscd \
 	 redis-server snmpd voisniff-ng ; do
   killall -9 $i >/dev/null 2>&1 || true
 done
+# check the processes which are not stopped in installer and running
+logit "After stopping all the services"
+ps auxwww || true
 
 # remove retrieved and generated files
 rm -f ${TARGET}/config_*yml
@@ -2439,22 +2389,19 @@ fi
 
 # don't leave any mountpoints
 sync
-umount ${TARGET}/proc       2>/dev/null || true
-umount ${TARGET}/sys        2>/dev/null || true
-umount ${TARGET}/dev/pts    2>/dev/null || true
-umount ${TARGET}/dev        2>/dev/null || true
+umount ${TARGET}/proc    || true
+umount ${TARGET}/sys     || true
+umount ${TARGET}/dev/pts || true
+umount ${TARGET}/dev     || true
 sync
 
 # unmount chroot - what else?
 umount $TARGET || umount -l $TARGET # fall back if a process is still being active
 
-if "$LVM" ; then
-  # make sure no device mapper handles are open, otherwise
-  # rereading partition table won't work
-  dmsetup remove_all || true
-fi
+# make sure no device mapper handles are open, otherwise
+# rereading partition table won't work
+dmsetup remove_all || true
 
-# make sure /etc/fstab is up2date
 if ! blockdev --rereadpt "/dev/${DISK}" ; then
   echo "Something on disk /dev/${DISK} (mountpoint $TARGET) seems to be still active, debugging output follows:"
   ps auxwww || true
@@ -2488,40 +2435,25 @@ fi
 # do not prompt when running in automated mode
 if "$REBOOT" ; then
   echo "Rebooting system as requested via ngcpreboot"
-  for key in s u b ; do
-    echo $key > /proc/sysrq-trigger
-    sleep 2
-  done
+  systemctl reboot
 fi
 
 if "$HALT" ; then
   echo "Halting system as requested via ngcphalt"
-
-  for key in s u o ; do
-    echo $key > /proc/sysrq-trigger
-    sleep 2
-  done
+  systemctl poweroff
 fi
 
 echo "Do you want to [r]eboot or [h]alt the system now? (Press any other key to cancel.)"
 unset a
-read a
-case "$a" in
+read -r a
+case "${a,,}" in
   r)
     echo "Rebooting system as requested."
-    # reboot is for losers
-    for key in s u b ; do
-      echo $key > /proc/sysrq-trigger
-      sleep 2
-    done
+    systemctl reboot
   ;;
   h)
     echo "Halting system as requested."
-    # halt(8) is for losers
-    for key in s u o ; do
-      echo $key > /proc/sysrq-trigger
-      sleep 2
-    done
+    systemctl poweroff
   ;;
   *)
     echo "Not halting system as requested. Please do not forget to reboot."
