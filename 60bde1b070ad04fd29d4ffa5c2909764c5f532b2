@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_ca406f0a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-06-12T10:49:31Z",
+      "side": 1,
+      "message": "Does \"already present in stretch\" mean \"are essential / in the base set of stretch\", or \"installation images\" or similar? Because locales-all at least is present in stretch, and I suppose that at least eject, ethtool and acpi are there too.",
+      "revId": "60bde1b070ad04fd29d4ffa5c2909764c5f532b2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
