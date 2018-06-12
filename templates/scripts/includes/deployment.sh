@@ -904,7 +904,6 @@ if "$PRO_EDITION" ; then
   echo "
   Host Role:         $ROLE
   Host Role Carrier: $CROLE
-  Profile:           $PROFILE
 
   External NW iface: $EXTERNAL_DEV
   Ext host IP:       $EXTERNAL_IP
@@ -923,8 +922,8 @@ fi
 if "$INTERACTIVE" ; then
   echo "WARNING: Execution will override any existing data!"
   echo "Settings OK? y/N"
-  read a
-  if [[ "$a" != "y" ]] ; then
+  read -r a
+  if [[ "${a,,}" != "y" ]] ; then
     echo "Exiting as requested."
     exit 2
   fi
@@ -1031,9 +1030,9 @@ check_for_supported_disk() {
   echo "WARNING: Cannot detect supported device vendor/model." >&2
   echo "(Disk: ${DISK}  Vendor: ${disk_vendor}  Model: ${disk_model})" >&2
   echo "Would you like to continue anyway? (yes/NO)" >&2
-  read a
-  case "$a" in
-    y|Y|yes|YES)
+  read -r a
+  case "${a,,}" in
+    y|yes)
       echo "Continue anyway as requested."
       return 0
       ;;
@@ -1274,6 +1273,9 @@ echo FSCK=no >>/etc/debootstrap/config
 
 # package selection
 cat > /etc/debootstrap/packages << EOF
+# update: we need only the following packages
+# eject locales-all firmware-bnx2 firmware-bnx2x ethtool acpi
+# all others are already present in debian stretch
 # addons: packages which d-i installs but debootstrap doesn't
 eject
 grub-pc
@@ -1315,28 +1317,13 @@ ca-certificates
 #kbd
 #laptop-detect
 #os-prober
-EOF
-
-echo  "Adding ifenslave package (because we're installing ${DEBIAN_RELEASE})"
-logit "Adding ifenslave package (because we're installing ${DEBIAN_RELEASE})"
-cat >> /etc/debootstrap/packages << EOF
 # support bonding
 ifenslave
-EOF
-
-echo  "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
-logit "Adding linux-headers-amd64 package (because we're installing ${DEBIAN_RELEASE})"
-cat >> /etc/debootstrap/packages << EOF
 # required for dkms
 linux-headers-amd64
-EOF
-
-if "$LVM" ; then
-  cat >> /etc/debootstrap/packages << EOF
 # support LVM
 lvm2
 EOF
-fi
 
 if [ -n "$FIRMWARE_PACKAGES" ] ; then
   cat >> /etc/debootstrap/packages << EOF
@@ -1383,14 +1370,10 @@ logit "Setting up /etc/debootstrap/etc/apt/sources.list"
 cat > /etc/debootstrap/etc/apt/sources.list << EOF
 # Set up via deployment.sh for grml-debootstrap usage
 deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
+deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
+deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
+deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
 EOF
-
-echo "deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
-echo "deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
-
-if [ "$DEBIAN_RELEASE" != "jessie" ] ; then
-  echo "deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free" >> /etc/debootstrap/etc/apt/sources.list
-fi
 
 if [ "$DEBIAN_RELEASE" = "stretch" ] && [ ! -r /usr/share/debootstrap/scripts/stretch ] ; then
   echo  "Enabling stretch support for debootstrap via symlink to sid"
@@ -1591,11 +1574,8 @@ EOF
 deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
 deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
 deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
+deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
 EOF
-
-  if [ "$DEBIAN_RELEASE" != "jessie" ] ; then
-    echo "deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free" >> "$TARGET/etc/apt/sources.list.d/debian.list"
-  fi
 
   # support testing rc releases without providing an according installer package ahead
   if [ -n "$AUTOBUILD_RELEASE" ] ; then
@@ -2186,7 +2166,7 @@ check_puppet_rerun() {
   if ! checkBootParam nopuppetrepeat && [ "$(get_deploy_status)" = "error" ] ; then
     echo "Do you want to [r]epeat puppet run or [c]ontinue?"
     while true; do
-      read a
+      read -r a
       case "${a,,}" in
         r)
           echo "Repeating puppet run."
@@ -2222,7 +2202,7 @@ check_puppetserver_time() {
     else
       echo "WARNING: time difference between the current server and $PUPPET_SERVER is ${seconds} seconds (bigger than 10 seconds)."
       echo "Please synchronize time and press any key to recheck or [c]ontinue with puppet run."
-      read a
+      read -r a
       case "${a,,}" in
         c)
           echo "Continue ignoring time offset check."
@@ -2460,7 +2440,6 @@ if "$LVM" ; then
   dmsetup remove_all || true
 fi
 
-# make sure /etc/fstab is up2date
 if ! blockdev --rereadpt "/dev/${DISK}" ; then
   echo "Something on disk /dev/${DISK} (mountpoint $TARGET) seems to be still active, debugging output follows:"
   ps auxwww || true
