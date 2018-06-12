@@ -16,6 +16,24 @@
       "revId": "60bde1b070ad04fd29d4ffa5c2909764c5f532b2",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_6a6f1b93",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-12T11:13:54Z",
+      "side": 1,
+      "message": "I mean that we do not need to add them to package list as they are installed by debootstrap",
+      "parentUuid": "5ad0253b_ca406f0a",
+      "revId": "60bde1b070ad04fd29d4ffa5c2909764c5f532b2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
