@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_cf34014c",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-12T08:02:09Z",
+      "side": 1,
+      "message": "one line please\n  \n\u003e cdr2mask () {",
+      "range": {
+        "startLine": 1620,
+        "startChar": 0,
+        "endLine": 1621,
+        "endChar": 1
+      },
+      "revId": "c9a070779eab42937165ba99634fde52d9c0d205",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_8f3f2925",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1715,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-12T08:02:09Z",
+      "side": 1,
+      "message": "please merge it into \"common part above\" as discussed in personal.",
+      "revId": "c9a070779eab42937165ba99634fde52d9c0d205",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
