@@ -2421,12 +2421,18 @@ EOF
 
 fi # if [ -n "$PUPPET" ] ; then
 
+# check the processes which are not stopped in installer and running
+logit "Before stopping all the services"
+ps auxwww || true
 # make sure we don't leave any running processes
 for i in asterisk atd collectd collectdmon dbus-daemon exim4 \
          glusterd glusterfs glusterfsd glusterfs-server haveged monit nscd \
 	 redis-server snmpd voisniff-ng ; do
   killall -9 $i >/dev/null 2>&1 || true
 done
+# check the processes which are not stopped in installer and running
+logit "After stopping all the services"
+ps auxwww || true
 
 # remove retrieved and generated files
 rm -f ${TARGET}/config_*yml
@@ -2439,10 +2445,10 @@ fi
 
 # don't leave any mountpoints
 sync
-umount ${TARGET}/proc       2>/dev/null || true
-umount ${TARGET}/sys        2>/dev/null || true
-umount ${TARGET}/dev/pts    2>/dev/null || true
-umount ${TARGET}/dev        2>/dev/null || true
+umount ${TARGET}/proc    || true
+umount ${TARGET}/sys     || true
+umount ${TARGET}/dev/pts || true
+umount ${TARGET}/dev     || true
 sync
 
 # unmount chroot - what else?
