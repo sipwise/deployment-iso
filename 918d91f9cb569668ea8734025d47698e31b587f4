@@ -22,6 +22,30 @@
       "revId": "918d91f9cb569668ea8734025d47698e31b587f4",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_ca0e2fe5",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-12T11:16:06Z",
+      "side": 0,
+      "message": "They are changed here https://gerrit.mgm.sipwise.com/#/c/21786/\n\nbtw DEBIAN_* aren\u0027t used in installer",
+      "parentUuid": "5ad0253b_8a72777b",
+      "range": {
+        "startLine": 1685,
+        "startChar": 50,
+        "endLine": 1685,
+        "endChar": 50
+      },
+      "revId": "918d91f9cb569668ea8734025d47698e31b587f4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
