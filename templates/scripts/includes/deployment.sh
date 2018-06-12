@@ -69,7 +69,6 @@ HALT=false
 REBOOT=false
 STATUS_DIRECTORY=/srv/deployment/
 STATUS_WAIT=0
-LVM=true
 VAGRANT=false
 ADJUST_FOR_LOW_PERFORMANCE=false
 ENABLE_VM_SERVICES=false
@@ -524,17 +523,6 @@ fi
 if checkBootParam 'ngcpcrole=' ; then
   CROLE=$(getBootParam ngcpcrole)
   CARRIER_EDITION=true
-fi
-
-if checkBootParam ngcpnolvm ; then
-  logit "Disabling LVM due to ngcpnolvm boot option"
-  LVM=false
-fi
-
-# allow forcing LVM mode
-if checkBootParam ngcplvm ; then
-  logit "Enabling LVM due to ngcplvm boot option"
-  LVM=true
 fi
 
 if checkBootParam ngcphalt ; then
@@ -1103,12 +1091,10 @@ else
   TABLE=msdos
 fi
 
-if "$LVM" ; then
-  if "$NGCP_INSTALLER" ; then
-    VG_NAME="ngcp"
-  else
-    VG_NAME="vg0"
-  fi
+if "$NGCP_INSTALLER" ; then
+  VG_NAME="ngcp"
+else
+  VG_NAME="vg0"
 fi
 
 clear_partition_table() {
@@ -1244,29 +1230,7 @@ lvm_setup() {
   eval "$saved_options"
 }
 
-plain_disk_setup() {
-  parted -s -a optimal "/dev/${DISK}" mktable "${TABLE}" || die "Failed to set up partition table"
-  # hw-raid with rootfs + swap partition
-  parted -s -a optimal "/dev/${DISK}" 'mkpart primary ext4 2048s 95%' || die "Failed to set up primary partition"
-  parted -s -a optimal "/dev/${DISK}" 'mkpart primary linux-swap 95% -1' || die "Failed to set up swap partition"
-  sync
-
-  # used later by installer
-  ROOT_FS="/dev/${DISK}1"
-  SWAP_PARTITION="/dev/${DISK}2"
-
-  echo "Initialising swap partition $SWAP_PARTITION"
-  mkswap -L ngcp-swap "$SWAP_PARTITION" || die "Failed to initialise swap partition"
-
-  # for later usage in /etc/fstab use /dev/disk/by-label/ngcp-swap instead of /dev/${DISK}2
-  SWAP_PARTITION="/dev/disk/by-label/ngcp-swap"
-}
-
-if "$LVM" ; then
-  lvm_setup
-else # no LVM
-  plain_disk_setup
-fi
+lvm_setup
 
 # otherwise e2fsck fails with "need terminal for interactive repairs"
 echo FSCK=no >>/etc/debootstrap/config
@@ -2434,11 +2398,9 @@ sync
 # unmount chroot - what else?
 umount $TARGET || umount -l $TARGET # fall back if a process is still being active
 
-if "$LVM" ; then
-  # make sure no device mapper handles are open, otherwise
-  # rereading partition table won't work
-  dmsetup remove_all || true
-fi
+# make sure no device mapper handles are open, otherwise
+# rereading partition table won't work
+dmsetup remove_all || true
 
 if ! blockdev --rereadpt "/dev/${DISK}" ; then
   echo "Something on disk /dev/${DISK} (mountpoint $TARGET) seems to be still active, debugging output follows:"
