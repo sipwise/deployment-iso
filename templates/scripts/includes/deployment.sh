@@ -79,6 +79,8 @@ DEBIAN_REPO_HOST="debian.sipwise.com"
 DEBIAN_REPO_TRANSPORT="https"
 SIPWISE_REPO_HOST="deb.sipwise.com"
 SIPWISE_REPO_TRANSPORT="https"
+DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
+SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
 DPL_MYSQL_REPLICATION=true
 FILL_APPROX_CACHE=false
 VLAN_BOOT_INT=2
@@ -183,9 +185,9 @@ install_sipwise_key() {
   for x in 1 2 3; do
 
     if "$PRO_EDITION" ; then
-      wget -O /etc/apt/trusted.gpg.d/sipwise.gpg ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/sipwise.gpg
+      wget -O /etc/apt/trusted.gpg.d/sipwise.gpg "${SIPWISE_URL}/sppro/sipwise.gpg"
     else
-      wget -O /etc/apt/trusted.gpg.d/sipwise.gpg ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/spce/sipwise.gpg
+      wget -O /etc/apt/trusted.gpg.d/sipwise.gpg "${SIPWISE_URL}/spce/sipwise.gpg"
     fi
 
     md5sum_sipwise_key_expected=bcd09c9ad563b2d380152a97d5a0ea83
@@ -218,7 +220,7 @@ install_package_git () {
   TMPDIR=$(mktemp -d)
   mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
     "${TMPDIR}/cachedir/archives/partial"
-  echo "deb http://${DEBIAN_REPO_HOST}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
+  echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
     "${TMPDIR}/etc/sources.list"
 
   DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
@@ -270,7 +272,7 @@ ensure_augtool_present() {
   TMPDIR=$(mktemp -d)
   mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
     "${TMPDIR}/cachedir/archives/partial"
-  echo "deb http://${DEBIAN_REPO_HOST}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
+  echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
     "${TMPDIR}/etc/sources.list"
 
   DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
@@ -628,6 +630,10 @@ if checkBootParam 'ngcpinitsystem=' ; then
   NGCP_INIT_SYSTEM=$(getBootParam ngcpinitsystem)
   logit "Using init system '${NGCP_INIT_SYSTEM}' as requested via boot option ngcpinitsystem"
 fi
+
+DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
+SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
+
 ## }}}
 
 ## interactive mode {{{
@@ -1342,9 +1348,9 @@ fi
 # NOTE: we use the debian.sipwise.com CNAME by intention here
 # to avoid conflicts with apt-pinning, preferring deb.sipwise.com
 # over official Debian
-MIRROR="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}/debian/"
-SEC_MIRROR="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}/debian-security/"
-DBG_MIRROR="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}/debian-debug/"
+MIRROR="${DEBIAN_URL}/debian/"
+SEC_MIRROR="${DEBIAN_URL}/debian-security/"
+DBG_MIRROR="${DEBIAN_URL}/debian-debug/"
 
 if [ -z "${GPG_KEY}" ] ; then
   KEYRING='/etc/apt/trusted.gpg.d/sipwise.gpg'
@@ -1522,9 +1528,9 @@ get_installer_path() {
     INSTALLER=ngcp-installer-latest.deb
 
     if "$PRO_EDITION" ; then
-      INSTALLER_PATH="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/"
+      INSTALLER_PATH="${SIPWISE_URL}/sppro/"
     else
-      INSTALLER_PATH="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/spce/"
+      INSTALLER_PATH="${SIPWISE_URL}/spce/"
     fi
 
     return # we don't want to run any further code from this function
@@ -1537,23 +1543,23 @@ get_installer_path() {
     else
       local installer_package='ngcp-installer-pro'
     fi
-    local repos_base_path="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
-    INSTALLER_PATH="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/${SP_VERSION}/pool/main/n/ngcp-installer/"
+    local repos_base_path="${SIPWISE_URL}/sppro/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
+    INSTALLER_PATH="${SIPWISE_URL}/sppro/${SP_VERSION}/pool/main/n/ngcp-installer/"
   else
     local installer_package='ngcp-installer-ce'
-    local repos_base_path="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/spce/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
-    INSTALLER_PATH="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/spce/${SP_VERSION}/pool/main/n/ngcp-installer/"
+    local repos_base_path="${SIPWISE_URL}/spce/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
+    INSTALLER_PATH="${SIPWISE_URL}/spce/${SP_VERSION}/pool/main/n/ngcp-installer/"
   fi
 
   # use a separate repos for trunk releases
   if $TRUNK_VERSION ; then
-    local repos_base_path="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
-    INSTALLER_PATH="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/autobuild/pool/main/n/ngcp-installer/"
+    local repos_base_path="${SIPWISE_URL}/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
+    INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
   fi
 
   if [ -n "$NGCP_PPA_INSTALLER" ] ; then
-    local repos_base_path="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/autobuild/dists/${NGCP_PPA_INSTALLER}/main/binary-amd64/"
-    INSTALLER_PATH="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/autobuild/pool/main/n/ngcp-installer/"
+    local repos_base_path="${SIPWISE_URL}/autobuild/dists/${NGCP_PPA_INSTALLER}/main/binary-amd64/"
+    INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
   fi
 
   wget --timeout=30 -O Packages.gz "${repos_base_path}Packages.gz"
@@ -1599,7 +1605,7 @@ EOF
 ## custom sources.list, deployed via deployment.sh
 
 # Sipwise repositories
-deb [arch=amd64] ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/autobuild/release/release-${AUTOBUILD_RELEASE} release-${AUTOBUILD_RELEASE} main
+deb [arch=amd64] ${SIPWISE_URL}/autobuild/release/release-${AUTOBUILD_RELEASE} release-${AUTOBUILD_RELEASE} main
 EOF
   fi
 }
@@ -1681,7 +1687,6 @@ SKIP_SOURCES_LIST="${SKIP_SOURCES_LIST}"
 ADJUST_FOR_LOW_PERFORMANCE="${ADJUST_FOR_LOW_PERFORMANCE}"
 ENABLE_VM_SERVICES="${ENABLE_VM_SERVICES}"
 SIPWISE_REPO_HOST="${SIPWISE_REPO_HOST}"
-DEBIAN_REPO_TRANSPORT="${DEBIAN_REPO_TRANSPORT}"
 SIPWISE_REPO_TRANSPORT="${SIPWISE_REPO_TRANSPORT}"
 NAMESERVER="$(awk '/^nameserver/ {print $2}' /etc/resolv.conf)"
 NGCP_PPA="${NGCP_PPA}"
@@ -2372,7 +2377,7 @@ EOF
 
   echo "Installing 'puppet-agent' with dependencies"
   cat >> ${TARGET}/etc/apt/sources.list.d/puppetlabs.list << EOF
-deb ${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}/puppetlabs/ ${DEBIAN_RELEASE} main puppet dependencies
+deb ${DEBIAN_URL}/puppetlabs/ ${DEBIAN_RELEASE} main puppet dependencies
 EOF
 
   PUPPET_GPG_KEY="6F6B15509CF8E59E6E469F327F438280EF8D349F"
