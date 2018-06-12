@@ -2488,40 +2488,25 @@ fi
 # do not prompt when running in automated mode
 if "$REBOOT" ; then
   echo "Rebooting system as requested via ngcpreboot"
-  for key in s u b ; do
-    echo $key > /proc/sysrq-trigger
-    sleep 2
-  done
+  systemctl reboot
 fi
 
 if "$HALT" ; then
   echo "Halting system as requested via ngcphalt"
-
-  for key in s u o ; do
-    echo $key > /proc/sysrq-trigger
-    sleep 2
-  done
+  systemctl poweroff
 fi
 
 echo "Do you want to [r]eboot or [h]alt the system now? (Press any other key to cancel.)"
 unset a
-read a
-case "$a" in
+read -r a
+case "${a,,}" in
   r)
     echo "Rebooting system as requested."
-    # reboot is for losers
-    for key in s u b ; do
-      echo $key > /proc/sysrq-trigger
-      sleep 2
-    done
+    systemctl reboot
   ;;
   h)
     echo "Halting system as requested."
-    # halt(8) is for losers
-    for key in s u o ; do
-      echo $key > /proc/sysrq-trigger
-      sleep 2
-    done
+    systemctl poweroff
   ;;
   *)
     echo "Not halting system as requested. Please do not forget to reboot."
