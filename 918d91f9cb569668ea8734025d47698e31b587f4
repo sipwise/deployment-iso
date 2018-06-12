@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_8a72777b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-12T11:14:10Z",
+      "side": 0,
+      "message": "are you sure here? those options are still in use into installer (as for now). IMHO they should stay until you remove them from installer. sure you can pass additionaly SIPWISE_URL + DEBIAN_URL right now.",
+      "range": {
+        "startLine": 1685,
+        "startChar": 50,
+        "endLine": 1685,
+        "endChar": 50
+      },
+      "revId": "918d91f9cb569668ea8734025d47698e31b587f4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
