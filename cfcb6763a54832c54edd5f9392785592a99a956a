@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_a13f9924",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-06-13T15:19:35Z",
+      "side": 0,
+      "message": "This is unrelated to \"Remove network related and configuration code\" and not mentioned in the commit message. Either handle it through separate commit or otherwise mention it in the commit message?",
+      "revId": "cfcb6763a54832c54edd5f9392785592a99a956a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
