@@ -16,6 +16,41 @@
       "revId": "58e993cdad519f44ec17d625b080e66caa3eebd8",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_c1861513",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-13T13:24:25Z",
+      "side": 1,
+      "message": "Meh... right, I missed it...",
+      "parentUuid": "5ad0253b_c1af3593",
+      "revId": "58e993cdad519f44ec17d625b080e66caa3eebd8",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_a17c3921",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 2143,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-13T13:24:25Z",
+      "side": 1,
+      "message": "|| true\nplease",
+      "revId": "58e993cdad519f44ec17d625b080e66caa3eebd8",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
