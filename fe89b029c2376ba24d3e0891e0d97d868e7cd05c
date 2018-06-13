@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_8137fde2",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 2144,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-13T11:01:32Z",
+      "side": 1,
+      "message": "del, since systemctl just duplicate the output here.",
+      "range": {
+        "startLine": 2144,
+        "startChar": 0,
+        "endLine": 2144,
+        "endChar": 19
+      },
+      "revId": "fe89b029c2376ba24d3e0891e0d97d868e7cd05c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
