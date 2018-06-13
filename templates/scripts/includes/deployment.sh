@@ -2140,7 +2140,7 @@ dmsetup remove_all || true
 
 if ! blockdev --rereadpt "/dev/${DISK}" ; then
   echo "Something on disk /dev/${DISK} (mountpoint $TARGET) seems to be still active, debugging output follows:"
-  systemctl status
+  systemctl status || true
 fi
 
 # party time! who brings the whiskey?
