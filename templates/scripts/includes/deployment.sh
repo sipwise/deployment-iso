@@ -1917,39 +1917,6 @@ EOF
   fi
 fi # if $DHCP
 
-generate_etc_hosts() {
-
-  # finalise hostname configuration
-  cat > $TARGET/etc/hosts << EOF
-127.0.0.1 localhost
-
-# The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-
-EOF
-
-  # append hostnames of sp1/sp2 so they can talk to each other
-  # in the HA setup
-  if "$PRO_EDITION" ; then
-    cat >> $TARGET/etc/hosts << EOF
-$IP1 sp1
-$IP2 sp2
-$IP_HA_SHARED sp
-EOF
-  else
-    # otherwise 'hostname --fqdn' does not work and causes delays with exim4 startup
-    cat >> $TARGET/etc/hosts << EOF
-# required for FQDN, please adjust if needed
-127.0.0.2 $TARGET_HOSTNAME. $TARGET_HOSTNAME
-EOF
-  fi
-
-}
-
 fake_uname() {
    cat > "${TARGET}/tmp/uname.c" << EOF
 #include <stdio.h>
@@ -2101,13 +2068,6 @@ vagrant_configuration() {
     chroot "$TARGET" etckeeper commit "Vagrant/VirtualBox changes on /etc/*"
   fi
 }
-
-if "$CARRIER_EDITION" ; then
-  echo "Nothing to do on Carrier, /etc/hosts was already set up."
-else
-  echo "Generating /etc/hosts"
-  generate_etc_hosts
-fi
 
 if "$VAGRANT" ; then
   echo "Bootoption vagrant present, executing vagrant_configuration."
@@ -2297,20 +2257,6 @@ puppet_install_from_puppet () {
 }
 
   set_deploy_status "puppet"
-
-  echo "Rebuilding /etc/hosts"
-  cat > $TARGET/etc/hosts << EOF
-# Generated via deployment.sh
-127.0.0.1 localhost
-
-# The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-
-EOF
 
   echo "Setting hostname to $TARGET_HOSTNAME"
   echo "$TARGET_HOSTNAME" > ${TARGET}/etc/hostname
