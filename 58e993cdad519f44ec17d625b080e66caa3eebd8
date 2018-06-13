@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_c1af3593",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-06-13T13:14:02Z",
+      "side": 1,
+      "message": "It\u0027s to late sadly, but please keep in mind that deployment-iso is a public repos and paste.mgm is an internal-only service :)",
+      "revId": "58e993cdad519f44ec17d625b080e66caa3eebd8",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
