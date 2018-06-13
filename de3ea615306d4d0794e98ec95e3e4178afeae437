@@ -1,0 +1,7 @@
+Verified+1: Jenkins Jenkins
+Code-Review+2: Alexander Lutay <alutay@sipwise.com>
+Submitted-by: Mykola Malkov <mmalkov@sipwise.com>
+Submitted-at: Wed, 13 Jun 2018 15:00:40 +0200
+Reviewed-on: http://gerrit.mgm.sipwise.com/21857
+Project: deployment-iso
+Branch: refs/heads/master
