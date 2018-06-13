@@ -58,10 +58,6 @@ RESTART_NETWORK=true
 INTERACTIVE=false
 DHCP=false
 LOGO=true
-BONDING=false
-VLAN=false
-VLANID=''
-VLANIF=''
 RETRIEVE_MGMT_CONFIG=false
 TRUNK_VERSION=false
 DEBIAN_RELEASE=stretch
@@ -371,31 +367,6 @@ if checkBootParam nocolorlogo ; then
   LOGO=false
 fi
 
-if checkBootParam ngcpnobonding ; then
-  BONDING=false
-fi
-
-if checkBootParam ngcpbonding ; then
-  BONDING=true
-fi
-
-if checkBootParam 'vlan=' ; then
-  VLANPARAMS=($(getBootParam vlan | tr ":" "\n"))
-  if [ ${#VLANPARAMS[@]} -eq 2 ] ; then
-    VLAN=true
-    VLANID=${VLANPARAMS[0]}
-    VLANIF=${VLANPARAMS[1]}
-  fi
-fi
-# if VLAN was configured via netcardconfig we need to collect the current configuration
-# from interface
-vlan_config=( $(ip link show | sed -rn 's/^[0-9]+: vlan([0-9]+)@([a-z0-9]+):.+$/\1 \2/p') )
-if [[ "${#vlan_config[@]}" -eq 2 ]]; then
-  VLAN=true
-  VLANID=${vlan_config[0]}
-  VLANIF=${vlan_config[1]}
-fi
-
 if checkBootParam 'ngcpmgmt=' ; then
   MANAGEMENT_IP=$(getBootParam ngcpmgmt)
   RETRIEVE_MGMT_CONFIG=true
@@ -702,8 +673,6 @@ for param in "$@" ; do
     *ngcpmcast=*) MCASTADDR="${param//ngcpmcast=/}";;
     *ngcpcrole=*) CARRIER_EDITION=true; CROLE="${param//ngcpcrole=/}";;
     *ngcpnw.dhcp*) DHCP=true;;
-    *ngcpnobonding*) BONDING=false;;
-    *ngcpbonding*) BONDING=true;;
     *ngcphalt*) HALT=true;;
     *ngcpreboot*) REBOOT=true;;
     *vagrant*) VAGRANT=true;;
@@ -1745,177 +1714,6 @@ case "$DEBIAN_RELEASE" in
     set_custom_grub_boot_options
     ;;
 esac
-
-if "$CARRIER_EDITION" ; then
-  echo "Nothing to do on Carrier, /etc/network/interfaces was already set up."
-elif ! "$NGCP_INSTALLER" ; then
-  echo "Not modifying /etc/network/interfaces as installing plain Debian."
-elif "$DHCP" ; then
-  cat > $TARGET/etc/network/interfaces << EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-# The primary network interface
-auto $EXTERNAL_DEV
-iface $EXTERNAL_DEV inet dhcp
-EOF
-  # make sure internal network is available even with external
-  # device using DHCP
-  if "$PRO_EDITION" ; then
-  cat >> $TARGET/etc/network/interfaces << EOF
-
-auto $INTERNAL_DEV
-iface $INTERNAL_DEV inet static
-        address $INTERNAL_IP
-        netmask $INTERNAL_NETMASK
-
-EOF
-  fi
-else
-  external_ip_data=( $( ip -4 addr show "${EXTERNAL_DEV}" | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3})\/([0-9]+).*$/\1 \3/p' ) )
-  # assume host system has a valid configuration
-  if "$PRO_EDITION" && "$VLAN" ; then
-    cat > $TARGET/etc/network/interfaces << EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-auto vlan${VLANID}
-iface vlan${VLANID} inet static
-        address ${external_ip_data[0]}
-        netmask $( cdr2mask "${external_ip_data[1]}" )
-        gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
-        dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
-        vlan-raw-device $VLANIF
-
-auto $INTERNAL_DEV
-iface $INTERNAL_DEV inet static
-        address $INTERNAL_IP
-        netmask $INTERNAL_NETMASK
-
-# Example:
-# allow-hotplug eth0
-# iface eth0 inet static
-#         address 192.168.1.101
-#         netmask 255.255.255.0
-#         network 192.168.1.0
-#         broadcast 192.168.1.255
-#         gateway 192.168.1.1
-#         # dns-* options are implemented by the resolvconf package, if installed
-#         dns-nameservers 195.58.160.194 195.58.161.122
-#         dns-search sipwise.com
-EOF
-  elif "$PRO_EDITION" && "$BONDING" ; then
-    cat > $TARGET/etc/network/interfaces << EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-auto bond0
-iface bond0 inet static
-        bond-slaves $EXTERNAL_DEV $INTERNAL_DEV
-        bond_mode 802.3ad
-        bond_miimon 100
-        bond_lacp_rate 1
-        address ${external_ip_data[0]}
-        netmask $( cdr2mask "${external_ip_data[1]}" )
-        gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
-        dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
-
-# additional possible bonding mode
-# auto bond0
-# iface bond0 inet manual
-#         bond-slaves eth0 eth1
-#         bond_mode active-backup
-#         bond_miimon 100
-
-# Example:
-# allow-hotplug eth0
-# iface eth0 inet static
-#         address 192.168.1.101
-#         netmask 255.255.255.0
-#         network 192.168.1.0
-#         broadcast 192.168.1.255
-#         gateway 192.168.1.1
-#         # dns-* options are implemented by the resolvconf package, if installed
-#         dns-nameservers 195.58.160.194 195.58.161.122
-#         dns-search sipwise.com
-EOF
-  elif "$PRO_EDITION" ; then # no bonding but pro-edition
-    cat > $TARGET/etc/network/interfaces << EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-auto $EXTERNAL_DEV
-iface $EXTERNAL_DEV inet static
-        address ${external_ip_data[0]}
-        netmask $( cdr2mask "${external_ip_data[1]}" )
-        gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
-        dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
-
-auto $INTERNAL_DEV
-iface $INTERNAL_DEV inet static
-        address $INTERNAL_IP
-        netmask $INTERNAL_NETMASK
-
-# Example:
-# allow-hotplug eth0
-# iface eth0 inet static
-#         address 192.168.1.101
-#         netmask 255.255.255.0
-#         network 192.168.1.0
-#         broadcast 192.168.1.255
-#         gateway 192.168.1.1
-#         # dns-* options are implemented by the resolvconf package, if installed
-#         dns-nameservers 195.58.160.194 195.58.161.122
-#         dns-search sipwise.com
-EOF
-  else # ce edition
-    cat > $TARGET/etc/network/interfaces << EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-auto $EXTERNAL_DEV
-iface $EXTERNAL_DEV inet static
-        address ${external_ip_data[0]}
-        netmask $( cdr2mask "${external_ip_data[1]}" )
-        gateway $(route -n | awk '/^0\.0\.0\.0/{print $2; exit}')
-        dns-nameservers $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | xargs echo -n)
-
-### Further usage examples
-
-## Enable IPv6 autoconfiguration:
-# auto eth1
-# iface eth1 inet6 manual
-#  up ifconfig eth1 up
-
-## Specific manual configuration:
-# allow-hotplug eth2
-# iface eth2 inet static
-#         address 192.168.1.101
-#         netmask 255.255.255.0
-#         network 192.168.1.0
-#         broadcast 192.168.1.255
-#         gateway 192.168.1.1
-#         # dns-* options are implemented by the resolvconf package, if installed
-#         dns-nameservers 195.58.160.194 195.58.161.122
-#         dns-search sipwise.com
-EOF
-  fi
-fi # if $DHCP
 
 fake_uname() {
    cat > "${TARGET}/tmp/uname.c" << EOF
