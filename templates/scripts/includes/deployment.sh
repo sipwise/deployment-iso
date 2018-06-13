@@ -2114,19 +2114,6 @@ EOF
 
 fi # if [ -n "$PUPPET" ] ; then
 
-# check the processes which are not stopped in installer and running
-logit "Before stopping all the services"
-ps auxwww || true
-# make sure we don't leave any running processes
-for i in asterisk atd collectd collectdmon dbus-daemon exim4 \
-         glusterd glusterfs glusterfsd glusterfs-server haveged monit nscd \
-	 redis-server snmpd voisniff-ng ; do
-  killall -9 $i >/dev/null 2>&1 || true
-done
-# check the processes which are not stopped in installer and running
-logit "After stopping all the services"
-ps auxwww || true
-
 # remove retrieved and generated files
 rm -f ${TARGET}/config_*yml
 rm -f ${TARGET}/constants_*.yml
@@ -2153,6 +2140,7 @@ dmsetup remove_all || true
 
 if ! blockdev --rereadpt "/dev/${DISK}" ; then
   echo "Something on disk /dev/${DISK} (mountpoint $TARGET) seems to be still active, debugging output follows:"
+  systemctl status
   ps auxwww || true
 fi
 
