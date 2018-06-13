@@ -240,7 +240,7 @@ install_vbox_iso() {
 
   mkdir -p "/usr/share/virtualbox/"
   vbox_isofile="/usr/share/virtualbox/${vbox_iso}"
-  wget -c -O "$vbox_isofile" "https://deb.sipwise.com/files/${vbox_iso}"
+  wget -c -O "$vbox_isofile" "${SIPWISE_URL}/files/${vbox_iso}"
 
   echo "${vbox_checksum} ${vbox_isofile}" | sha256sum --check || die "Error: failed to compute checksum for Virtualbox ISO. Exiting."
 }
