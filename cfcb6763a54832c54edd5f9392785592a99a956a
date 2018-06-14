@@ -16,6 +16,24 @@
       "revId": "cfcb6763a54832c54edd5f9392785592a99a956a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_94f97dcb",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-14T09:33:32Z",
+      "side": 0,
+      "message": "Agree. It has to be rebased on master, since huge part is merged already master as separate atomic commits.",
+      "parentUuid": "5ad0253b_a13f9924",
+      "revId": "cfcb6763a54832c54edd5f9392785592a99a956a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
