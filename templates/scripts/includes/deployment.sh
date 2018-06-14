@@ -569,10 +569,6 @@ if checkBootParam 'ngcpppa=' ; then
   NGCP_PPA=$(getBootParam ngcpppa)
 fi
 
-if checkBootParam 'ngcpppainstaller=' ; then
-  NGCP_PPA_INSTALLER=$(getBootParam ngcpppainstaller)
-fi
-
 if checkBootParam 'debianrepotransport=' ; then
   DEBIAN_REPO_TRANSPORT=$(getBootParam debianrepotransport)
 fi
@@ -686,7 +682,6 @@ for param in "$@" ; do
     *ngcpvlansipint*) VLAN_SIP_INT="${param//ngcpvlansipint=/}";;
     *ngcpvlanhaint*) VLAN_HA_INT="${param//ngcpvlanhaint=/}";;
     *ngcpvlanrtpext*) VLAN_RTP_EXT="${param//ngcpvlanrtpext=/}";;
-    *ngcpppainstaller*) NGCP_PPA_INSTALLER="${param//ngcpppainstaller=/}";;
     *ngcpppa*) NGCP_PPA="${param//ngcpppa=/}";;
     *ngcpinitsystem*) NGCP_INIT_SYSTEM="${param//ngcpinitsystem=/}";;
   esac
@@ -922,9 +917,6 @@ if "$LOGO" ; then
   INSTALLER_TYPE="Install CE: $CE_EDITION PRO: $PRO_EDITION [$ROLE] Carrier: $CARRIER_EDITION [$CROLE]"
   if [ -n "$NGCP_PPA" ] ; then
     PPA_INFO="| PPA: ${NGCP_PPA} "
-  fi
-  if [ -n "$NGCP_PPA_INSTALLER" ] ; then
-    PPA_INFO+="| Installer PPA: ${NGCP_PPA_INSTALLER}"
   fi
   # color
   echo -ne "\ec\e[1;32m"
@@ -1490,8 +1482,8 @@ get_installer_path() {
     INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
   fi
 
-  if [ -n "$NGCP_PPA_INSTALLER" ] ; then
-    local repos_base_path="${SIPWISE_URL}/autobuild/dists/${NGCP_PPA_INSTALLER}/main/binary-amd64/"
+  if [ -n "$NGCP_PPA" ] ; then
+    local repos_base_path="${SIPWISE_URL}/autobuild/dists/${NGCP_PPA}/main/binary-amd64/"
     INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
   fi
 
