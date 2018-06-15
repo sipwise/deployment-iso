@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "5ad0253b_32dd1915",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-15T15:12:48Z",
+      "side": 1,
+      "message": "This looks confusing, aren\u0027t we moving when this gets installed instead of just removing it?",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 31
+      },
+      "revId": "78fd9eecc2e896f21029dc86dcd48e0e788b6ce5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_12e21dd6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-15T15:12:48Z",
+      "side": 1,
+      "message": "“used for recovery”, or “used to recover“",
+      "range": {
+        "startLine": 11,
+        "startChar": 31,
+        "endLine": 11,
+        "endChar": 39
+      },
+      "revId": "78fd9eecc2e896f21029dc86dcd48e0e788b6ce5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_d2b4a5d2",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
