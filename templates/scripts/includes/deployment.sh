@@ -1206,11 +1206,8 @@ lvm_setup
 # otherwise e2fsck fails with "need terminal for interactive repairs"
 echo FSCK=no >>/etc/debootstrap/config
 
-# package selection
+# WARNING: consider to add NGCP packages to NGCP metapackage!
 cat > /etc/debootstrap/packages << EOF
-# update: we need only the following packages
-# eject locales-all firmware-bnx2 firmware-bnx2x ethtool acpi
-# all others are already present in debian stretch
 # addons: packages which d-i installs but debootstrap doesn't
 eject
 grub-pc
@@ -1232,15 +1229,9 @@ openssh-server
 # TT#5444 ca-certificates is necessary to wget ngcp-installer over https
 ca-certificates
 
-# packages d-i installs but we ignore/skip:
-#discover
-#gettext-base
-#installation-report
-#kbd
-#laptop-detect
-#os-prober
 # required for dkms
 linux-headers-amd64
+
 # support LVM
 lvm2
 EOF
