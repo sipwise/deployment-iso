@@ -1226,9 +1226,6 @@ locales-all
 firmware-bnx2
 firmware-bnx2x
 
-# MT#7999 ethtool used in bonding
-ethtool
-
 # be able to login on the system, even if just installing plain Debian
 openssh-server
 
