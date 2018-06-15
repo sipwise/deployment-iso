@@ -1231,9 +1231,6 @@ ca-certificates
 
 # required for dkms
 linux-headers-amd64
-
-# support LVM
-lvm2
 EOF
 
 # NOTE: we use the debian.sipwise.com CNAME by intention here
