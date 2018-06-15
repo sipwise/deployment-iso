@@ -1483,8 +1483,21 @@ get_installer_path() {
   fi
 
   if [ -n "${NGCP_PPA}" ] ; then
-    local repos_base_path="${SIPWISE_URL}/autobuild/dists/${NGCP_PPA}/main/binary-amd64/"
-    INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
+    echo "NGCP PPA requested, checking ngcp-installer package availability in PPA repo"
+    local ppa_repos_base_path="${SIPWISE_URL}/autobuild/dists/${NGCP_PPA}/main/binary-amd64/"
+    wget --timeout=30 -O /tmp/PPA_Packages.gz "${ppa_repos_base_path}/Packages.gz"
+
+    local installer_ppa_version
+    installer_ppa_version=$(zcat /tmp/PPA_Packages.gz | sed "/./{H;\$!d;};x;/Package: ${installer_package}/b;d" | awk '/^Version: / {print $2}' | sort -u)
+    rm -f /tmp/PPA_Packages.gz
+
+    if [ -n "${installer_ppa_version}" ]; then
+      echo "NGCP PPA contains ngcp-installer, using it, version '${installer_ppa_version}'"
+      local repos_base_path="${ppa_repos_base_path}"
+      INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
+    else
+      echo "NGCP PPA does NOT contains ngcp-installer, using default ngcp-installer package"
+    fi
   fi
 
   wget --timeout=30 -O Packages.gz "${repos_base_path}Packages.gz"
