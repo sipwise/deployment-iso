@@ -1207,10 +1207,13 @@ lvm_setup
 echo FSCK=no >>/etc/debootstrap/config
 
 if ! "$NGCP_INSTALLER" ; then
-  echo "Install openssh-server be able to login on the Debian plain system"
+  echo "Install some packages be able to login on the Debian plain system"
   cat > /etc/debootstrap/packages << EOF
-# be able to login on the system, even if just installing plain Debian
+# to be able to login on the Debian plain system via SSH
 openssh-server
+
+# deployment supports LVM only
+lvm2
 EOF
 fi
 
