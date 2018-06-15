@@ -1235,10 +1235,6 @@ acpi acpid acpi-support-base
 # be able to login on the system, even if just installing plain Debian
 openssh-server
 
-# support bridge / vlan
-bridge-utils
-vlan
-
 # TT#5444 ca-certificates is necessary to wget ngcp-installer over https
 ca-certificates
 
