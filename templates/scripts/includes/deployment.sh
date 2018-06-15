@@ -1231,12 +1231,6 @@ ucf
 # locales -> but we want locales-all instead:
 locales-all
 
-# required e.g. for "Broadcom NetXtreme II BCM5709S Gigabit Ethernet"
-# lacking the firmware will result in non-working network on
-# too many physical server systems, so just install it by default
-firmware-bnx2
-firmware-bnx2x
-
 # required for dkms
 linux-headers-amd64
 EOF
