@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_92ce2d59",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-15T15:15:15Z",
+      "side": 1,
+      "message": "As mentioned i the other review, this indicates to me the order of the change is wrong, and this commit should go before the section above was split.",
+      "revId": "25600e2309790b7dcd4ab58bf3e7779b79072697",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
