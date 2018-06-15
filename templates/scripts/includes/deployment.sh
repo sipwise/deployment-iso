@@ -1229,9 +1229,6 @@ firmware-bnx2x
 # MT#7999 ethtool used in bonding
 ethtool
 
-# support acpi (d-i installs them as well)
-acpi acpid acpi-support-base
-
 # be able to login on the system, even if just installing plain Debian
 openssh-server
 
