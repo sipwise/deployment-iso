@@ -46,6 +46,30 @@
       "revId": "17f1803c91b7e14441601830c7076b695ce0de00",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_b202493d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-15T15:44:40Z",
+      "side": 1,
+      "message": "https://gerrit.mgm.sipwise.com/#/c/21967/",
+      "parentUuid": "5ad0253b_f2d0c1cb",
+      "range": {
+        "startLine": 11,
+        "startChar": 41,
+        "endLine": 11,
+        "endChar": 68
+      },
+      "revId": "17f1803c91b7e14441601830c7076b695ce0de00",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
