@@ -1206,8 +1206,19 @@ lvm_setup
 # otherwise e2fsck fails with "need terminal for interactive repairs"
 echo FSCK=no >>/etc/debootstrap/config
 
+echo "Clean the default /etc/debootstrap/packages"
+echo > /etc/debootstrap/packages
+
+if ! "$NGCP_INSTALLER" ; then
+  echo "Install openssh-server be able to login on the Debian plain system"
+  cat >> /etc/debootstrap/packages << EOF
+# to be able to login on the Debian plain system via SSH
+openssh-server
+EOF
+fi
+
 # WARNING: consider to add NGCP packages to NGCP metapackage!
-cat > /etc/debootstrap/packages << EOF
+cat >> /etc/debootstrap/packages << EOF
 # addons: packages which d-i installs but debootstrap doesn't
 eject
 grub-pc
@@ -1222,9 +1233,6 @@ locales-all
 # too many physical server systems, so just install it by default
 firmware-bnx2
 firmware-bnx2x
-
-# be able to login on the system, even if just installing plain Debian
-openssh-server
 
 # TT#5444 ca-certificates is necessary to wget ngcp-installer over https
 ca-certificates
