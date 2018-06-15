@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_52d8951d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-15T15:17:52Z",
+      "side": 1,
+      "message": "A recommends is not a guarantee we\u0027ll have the package installed. So if we require this it should get pulled by the metapackages.",
+      "range": {
+        "startLine": 11,
+        "startChar": 41,
+        "endLine": 11,
+        "endChar": 68
+      },
+      "revId": "17f1803c91b7e14441601830c7076b695ce0de00",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
