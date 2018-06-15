@@ -91,6 +91,29 @@
       "revId": "78fd9eecc2e896f21029dc86dcd48e0e788b6ce5",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_d2eb85af",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-15T15:14:35Z",
+      "side": 1,
+      "message": "as spotted in the other review, this should be changed here to be \u003e\u003e. Or better, move the other one refactoring the creation from the appending into a previous commit to both this and the other one.",
+      "range": {
+        "startLine": 1218,
+        "startChar": 3,
+        "endLine": 1218,
+        "endChar": 6
+      },
+      "revId": "78fd9eecc2e896f21029dc86dcd48e0e788b6ce5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
