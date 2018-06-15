@@ -1246,9 +1246,6 @@ openssh-server
 bridge-utils
 vlan
 
-# MT#13637 support https in sources.list
-apt-transport-https
-
 # TT#5444 ca-certificates is necessary to wget ngcp-installer over https
 ca-certificates
 
