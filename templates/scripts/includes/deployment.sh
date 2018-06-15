@@ -1234,9 +1234,6 @@ locales-all
 firmware-bnx2
 firmware-bnx2x
 
-# TT#5444 ca-certificates is necessary to wget ngcp-installer over https
-ca-certificates
-
 # required for dkms
 linux-headers-amd64
 EOF
