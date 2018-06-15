@@ -981,13 +981,6 @@ check_for_supported_disk() {
     return 0
   fi
 
-  # proxmox on blade, internal system
-  if grep -q 'COMSTAR' "/sys/block/${DISK}/device/model" && \
-    grep -q "OI" "/sys/block/${DISK}/device/vendor" ; then
-    FIRMWARE_PACKAGES="$FIRMWARE_PACKAGES firmware-qlogic"
-    return 0
-  fi
-
   local disk_model
   disk_model=$(cat "/sys/block/${DISK}/device/model") || true
   local disk_vendor
@@ -1263,13 +1256,6 @@ linux-headers-amd64
 # support LVM
 lvm2
 EOF
-
-if [ -n "$FIRMWARE_PACKAGES" ] ; then
-  cat >> /etc/debootstrap/packages << EOF
-# firmware packages for hardware specific needs
-$FIRMWARE_PACKAGES
-EOF
-fi
 
 # NOTE: we use the debian.sipwise.com CNAME by intention here
 # to avoid conflicts with apt-pinning, preferring deb.sipwise.com
