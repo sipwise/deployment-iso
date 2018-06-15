@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_72583157",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-15T17:08:59Z",
+      "side": 1,
+      "message": "If this can happen on an already installed Debian system, then this is a security issue. We should really stop with the habit of using files directly hardcoded under /tmp. :)",
+      "range": {
+        "startLine": 1455,
+        "startChar": 25,
+        "endLine": 1455,
+        "endChar": 45
+      },
+      "revId": "e5c824cdf4c63872a46d6986c7aa093d389170d8",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
