@@ -1249,8 +1249,6 @@ ca-certificates
 #kbd
 #laptop-detect
 #os-prober
-# support bonding
-ifenslave
 # required for dkms
 linux-headers-amd64
 # support LVM
