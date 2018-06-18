@@ -1222,15 +1222,6 @@ fi
 
 # WARNING: consider to add NGCP packages to NGCP metapackage!
 cat >> /etc/debootstrap/packages << EOF
-# addons: packages which d-i installs but debootstrap doesn't
-eject
-grub-pc
-pciutils
-usbutils
-ucf
-# locales -> but we want locales-all instead:
-locales-all
-
 # required for dkms
 linux-headers-amd64
 EOF
