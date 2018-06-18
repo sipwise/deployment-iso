@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_2d9b78cb",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-06-18T07:38:09Z",
+      "side": 1,
+      "message": "Maybe we can avoid creating a file here? we need just version here so can use a pipeline",
+      "range": {
+        "startLine": 1458,
+        "startChar": 28,
+        "endLine": 1458,
+        "endChar": 44
+      },
+      "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
