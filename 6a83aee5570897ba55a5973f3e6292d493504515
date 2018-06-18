@@ -69,6 +69,30 @@
       "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_2d5ed8e9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-18T08:44:07Z",
+      "side": 1,
+      "message": "Tnx, I have tested it on PPA without installer https://paste.mgm.sipwise.com/show/4129/\n\nI will repeat the test on PPA with installer.",
+      "parentUuid": "5ad0253b_8d484c2f",
+      "range": {
+        "startLine": 1461,
+        "startChar": 28,
+        "endLine": 1461,
+        "endChar": 54
+      },
+      "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
