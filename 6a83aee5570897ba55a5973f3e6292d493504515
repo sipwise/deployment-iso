@@ -213,6 +213,30 @@
       "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_2d7938fd",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-18T11:39:55Z",
+      "side": 1,
+      "message": "BTW, can you share the good code example of \"apt-get download directly\" here?",
+      "parentUuid": "5ad0253b_ed34604b",
+      "range": {
+        "startLine": 1461,
+        "startChar": 28,
+        "endLine": 1461,
+        "endChar": 54
+      },
+      "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
