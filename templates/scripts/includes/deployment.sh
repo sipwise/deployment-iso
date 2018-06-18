@@ -1211,6 +1211,7 @@ echo > /etc/debootstrap/packages
 
 if ! "$NGCP_INSTALLER" ; then
   echo "Install some packages to be able to login on the Debian plain system"
+  # WARNING: consider to add NGCP packages to NGCP metapackage!
   cat >> /etc/debootstrap/packages << EOF
 # to be able to login on the Debian plain system via SSH
 openssh-server
@@ -1219,12 +1220,6 @@ openssh-server
 lvm2
 EOF
 fi
-
-# WARNING: consider to add NGCP packages to NGCP metapackage!
-cat >> /etc/debootstrap/packages << EOF
-# required for dkms
-linux-headers-amd64
-EOF
 
 # NOTE: we use the debian.sipwise.com CNAME by intention here
 # to avoid conflicts with apt-pinning, preferring deb.sipwise.com
