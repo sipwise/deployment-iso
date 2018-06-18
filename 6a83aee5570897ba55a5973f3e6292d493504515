@@ -261,6 +261,30 @@
       "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_28ffe602",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-18T14:02:09Z",
+      "side": 1,
+      "message": "I will play with this on background. so far the requested migration here will go outside of NGCP_PPA , see line 1477\nso I would submit this as it is consistent with the current code and will be improved together.",
+      "parentUuid": "5ad0253b_ed43406b",
+      "range": {
+        "startLine": 1461,
+        "startChar": 28,
+        "endLine": 1461,
+        "endChar": 54
+      },
+      "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
