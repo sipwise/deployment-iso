@@ -189,6 +189,30 @@
       "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_ed34604b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-18T11:25:55Z",
+      "side": 1,
+      "message": "Yes I did, while first we need to polish here sipwise.gpg installation (using ngcp-keyring). At the moment it is a copy of the next line 1477.\n\nP.S. if you check ngcp-installer, we use --allow-unauthenticated for keyring installation , which is horrible as well :(\n\nStep-by-step. the commit here is to address regression for PPA usage and we will continue cleanup here for sure ;-)",
+      "parentUuid": "5ad0253b_ad954841",
+      "range": {
+        "startLine": 1461,
+        "startChar": 28,
+        "endLine": 1461,
+        "endChar": 54
+      },
+      "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
