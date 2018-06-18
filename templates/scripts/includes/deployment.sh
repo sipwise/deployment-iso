@@ -324,6 +324,7 @@ set_deploy_status "checkBootParam"
 if checkBootParam debugmode ; then
   DEBUG_MODE=true
   enable_trace
+  logit "CMD_LINE: ${CMD_LINE}"
 fi
 
 disable_systemd_tmpfiles_clean
@@ -1633,14 +1634,6 @@ EOT
   if [ -r /tmp/grml-debootstrap.log ] ; then
     cp /tmp/grml-debootstrap.log "${TARGET}"/var/log/
   fi
-
-  {
-    echo "# deployment.sh running on $(date)"
-    echo "SCRIPT_VERSION=${SCRIPT_VERSION}"
-    echo "CMD_LINE=\"${CMD_LINE}\""
-    echo "NGCP_INSTALLER_CMDLINE=\"ngcp-installer $ROLE $IP1 $IP2 $EADDR $EIFACE $IP_HA_SHARED\""
-  } > "${TARGET}"/var/log/deployment.log
-
 fi
 
 case "$DEBIAN_RELEASE" in
