@@ -114,7 +114,6 @@ enable_deploy_status_server() {
   )
 }
 
-CMD_LINE=$(cat /proc/cmdline)
 stringInString() {
   local to_test_="$1"   # matching pattern
   local source_="$2"    # string to search in
@@ -301,6 +300,11 @@ disable_trace() {
 }
 # }}}
 
+###################################################
+# the script execution begins here
+
+CMD_LINE=$(cat /proc/cmdline)
+
 echo "Host IP: $(ip-screen)"
 echo "Deployment version: $SCRIPT_VERSION"
 
@@ -342,7 +346,7 @@ fi
 [ -z "${DISK}" ] && die "Error: No non-removable disk suitable for installation found"
 
 if checkBootParam 'ngcpstatus=' ; then
-  STATUS_WAIT=$(getBootParam ngcpstatus || true)
+  STATUS_WAIT=$(getBootParam ngcpstatus)
   [ -n "$STATUS_WAIT" ] || STATUS_WAIT=30
 fi
 
