@@ -279,20 +279,8 @@ ensure_augtool_present() {
     -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
     -y --no-install-recommends install augeas-tools
 }
-### }}}
-
-# logging {{{
-#cat > /etc/rsyslog.d/logsend.conf << EOF
-#*.*  @@192.168.51.28
-#EOF
-#service rsyslog restart
-
-logit() {
-  logger -t grml-deployment "$@"
-}
 
 die() {
-  logger -t grml-deployment "$@"
   echo "$@" >&2
   set_deploy_status "error"
   exit 1
@@ -311,11 +299,10 @@ disable_trace() {
     PS4=''
   fi
 }
-
-
-logit "host-IP: $(ip-screen)"
-logit "deployment-version: $SCRIPT_VERSION"
 # }}}
+
+echo "Host IP: $(ip-screen)"
+echo "Deployment version: $SCRIPT_VERSION"
 
 enable_deploy_status_server
 
@@ -324,7 +311,7 @@ set_deploy_status "checkBootParam"
 if checkBootParam debugmode ; then
   DEBUG_MODE=true
   enable_trace
-  logit "CMD_LINE: ${CMD_LINE}"
+  echo "CMD_LINE: ${CMD_LINE}"
 fi
 
 disable_systemd_tmpfiles_clean
@@ -510,7 +497,7 @@ if checkBootParam enablevmservices ; then
 fi
 
 if checkBootParam ngcpnonwrecfg ; then
-  logit "Disabling reconfig network as requested via boot option ngcpnonwrecfg"
+  echo "Disabling reconfig network as requested via boot option ngcpnonwrecfg"
   RESTART_NETWORK=false
 fi
 
@@ -576,7 +563,7 @@ fi
 
 if checkBootParam 'ngcpinitsystem=' ; then
   NGCP_INIT_SYSTEM=$(getBootParam ngcpinitsystem)
-  logit "Using init system '${NGCP_INIT_SYSTEM}' as requested via boot option ngcpinitsystem"
+  echo "Using init system '${NGCP_INIT_SYSTEM}' as requested via boot option ngcpinitsystem"
 fi
 
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
@@ -746,13 +733,13 @@ if [ -z "$INSTALL_DEV" ] ; then
   fi
 fi
 INSTALL_IP="$(ip -4 addr show "${INSTALL_DEV}" | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3}).*$/\1/p')"
-logit "INSTALL_IP is $INSTALL_IP"
+echo "INSTALL_IP is $INSTALL_IP"
 
 # if the default network device (eth0) is unconfigured try to retrieve configuration from eth1
 if [ "$INSTALL_IP" = "NON-IP" ] && [ "$INSTALL_DEV" = "$DEFAULT_INSTALL_DEV" ] ; then
-  logit "Falling back to device eth1 for INSTALL_IP because $DEFAULT_INSTALL_DEV is unconfigured"
+  echo "Falling back to device eth1 for INSTALL_IP because $DEFAULT_INSTALL_DEV is unconfigured"
   INSTALL_IP="$(ip -4 addr show eth1 | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3}).*$/\1/p')"
-  logit "INSTALL_IP is $INSTALL_IP"
+  echo "New INSTALL_IP is $INSTALL_IP"
 fi
 
 # final external device and IP are same as installation
@@ -786,7 +773,7 @@ if "$PRO_EDITION" ; then
 
   # needed for carrier
   if "$RETRIEVE_MGMT_CONFIG" ; then
-    logit "Retrieving ha_int IPs configuration from management server"
+    echo "Retrieving ha_int IPs configuration from management server..."
     wget --timeout=30 -O "/tmp/hosts" "${MANAGEMENT_IP}:3000/hostconfig/${TARGET_HOSTNAME}"
     IP1=$(awk '/sp1/ { print $1 }' /tmp/hosts) || IP1=$DEFAULT_IP1
     IP2=$(awk '/sp2/ { print $1 }' /tmp/hosts) || IP2=$DEFAULT_IP2
@@ -817,7 +804,7 @@ if "$PRO_EDITION" ; then
   [ -n "$EXTERNAL_NETMASK" ] || EXTERNAL_NETMASK=$DEFAULT_EXT_NETMASK
   [ -n "$MCASTADDR" ] || MCASTADDR=$DEFAULT_MCASTADDR
 
-  logit "ha_int sp1: $IP1 sp2: $IP2 shared sp: $IP_HA_SHARED netmask: $INTERNAL_NETMASK"
+  echo "ha_int sp1: $IP1 sp2: $IP2 shared sp: $IP_HA_SHARED netmask: $INTERNAL_NETMASK"
 elif "${CE_EDITION}" ; then
   netmask="$( ip -4 addr show "${EXTERNAL_DEV}" | sed -rn 's/^[ ]+inet [0-9]+(\.[0-9]+){3}\/([0-9]+).*$/\2/p' )"
   [[ -n "${EXTERNAL_NETMASK}" ]] || EXTERNAL_NETMASK="$( cdr2mask "${netmask}" )"
@@ -1001,7 +988,7 @@ check_for_supported_disk() {
 
 # run in according environment only
 if [ -n "$TARGET_DISK" ] ; then
-  logit "Skipping check for supported disk as TARGET_DISK variable is set."
+  echo "Skipping check for supported disk as TARGET_DISK variable is set."
 else
   if [[ $(imvirt 2>/dev/null) == "Physical" ]] ; then
 
@@ -1074,12 +1061,12 @@ clear_partition_table() {
     existing_pvs=$(pvs "$disk" -o vg_name --noheadings 2>/dev/null || true)
     if [ -n "$existing_pvs" ] ; then
       for pv in $existing_pvs ; do
-        logit "Getting rid of existing VG $pv"
+        echo "Getting rid of existing VG $pv"
         vgremove -ff "$pv"
       done
     fi
 
-    logit "Removing possibly existing LVM/PV label from $disk"
+    echo "Removing possibly existing LVM/PV label from $disk"
     pvremove "$disk" --force --force --yes || true
   done
 
@@ -1247,7 +1234,6 @@ else
   KEYRING='/etc/apt/trusted.gpg'
 
   echo "Fetching debootstrap keyring as GPG key '${GPG_KEY}'..."
-  logit "Fetching debootstrap keyring as GPG key '${GPG_KEY}'..."
 
   TRY=60
   while ! gpg --keyserver "${GPG_KEY_SERVER}" --recv-keys "${GPG_KEY}" ; do
@@ -1268,7 +1254,7 @@ fi
 set_deploy_status "debootstrap"
 
 mkdir -p /etc/debootstrap/etc/apt/
-logit "Setting up /etc/debootstrap/etc/apt/sources.list"
+echo "Setting up /etc/debootstrap/etc/apt/sources.list"
 cat > /etc/debootstrap/etc/apt/sources.list << EOF
 # Set up via deployment.sh for grml-debootstrap usage
 deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
@@ -1385,10 +1371,9 @@ if "$RETRIEVE_MGMT_CONFIG" && "$RESTART_NETWORK" ; then
   # should be able to make this as our only supported default mode and drop
   # everything inside the 'else' statement...
   if grep -q 'toram' /proc/cmdline || ! grep -q 'root=/dev/nfs' /proc/cmdline ; then
-    logit 'Set /etc/hosts from TARGET'
+    echo 'Set /etc/hosts from TARGET'
     cp ${TARGET}/etc/hosts /etc/hosts
     echo  'Restarting networking'
-    logit 'Restarting networking'
     service networking restart
   else
     # make sure we can access the management system which might be reachable
@@ -1588,7 +1573,7 @@ if "$NGCP_INSTALLER" ; then
   set_deploy_status "ngcp-installer"
 
   # install ngcp-installer
-  logit "ngcp-installer: $INSTALLER"
+  echo "ngcp-installer: $INSTALLER"
   cat << EOT | grml-chroot $TARGET /bin/bash
 wget ${INSTALLER_PATH}/${INSTALLER}
 dpkg -i $INSTALLER
@@ -1613,9 +1598,8 @@ EOT
 
   # execute ngcp-installer
   if grml-chroot "${TARGET}" /bin/bash /tmp/ngcp-installer-deployment.sh ; then
-    logit "installer: success"
+    echo "ngcp-installer finished successfully"
   else
-    logit "installer: error"
     die "Error during installation of ngcp. Find details at: ${TARGET}/tmp/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log"
   fi
 
@@ -2080,7 +2064,6 @@ echo
 echo
 
 [ -n "$start_seconds" ] && SECONDS="$(( $(cut -d . -f 1 /proc/uptime) - start_seconds))" || SECONDS="unknown"
-logit "Successfully finished deployment process [$(date) - running ${SECONDS} seconds]"
 echo "Successfully finished deployment process [$(date) - running ${SECONDS} seconds]"
 
 if [ "$(get_deploy_status)" != "error" ] ; then
