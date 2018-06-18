@@ -237,6 +237,30 @@
       "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_ed43406b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-18T13:54:35Z",
+      "side": 1,
+      "message": "There are several ways we could do this. One could be to configure a temporary sources.list for the PPA (either in $ROOT/etc or in a $TMP/etc/apt/ dir, update and install from there.\n\nThe other more manual way, but probably better than what we have here would be to download the Packages file and pass it to apt-get install or apt-get download using --with-source Packges.gz or similar. Then we should not need to check the version string etc.",
+      "parentUuid": "5ad0253b_2d7938fd",
+      "range": {
+        "startLine": 1461,
+        "startChar": 28,
+        "endLine": 1461,
+        "endChar": 54
+      },
+      "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
