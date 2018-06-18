@@ -22,6 +22,30 @@
       "revId": "e5c824cdf4c63872a46d6986c7aa093d389170d8",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_cd72c4ad",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-18T07:33:16Z",
+      "side": 1,
+      "message": "It is debootstrap process here, thile agree, I will change it to mktemp.",
+      "parentUuid": "5ad0253b_72583157",
+      "range": {
+        "startLine": 1455,
+        "startChar": 25,
+        "endLine": 1455,
+        "endChar": 45
+      },
+      "revId": "e5c824cdf4c63872a46d6986c7aa093d389170d8",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
