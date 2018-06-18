@@ -93,6 +93,30 @@
       "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_6d03b0b9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-06-18T09:45:52Z",
+      "side": 1,
+      "message": "Also, another idea.\n\nNot fully sure what the sed line is trying to do, but if it\u0027s extracting the version of \"ngcp-installer\", consider this example:\n\n  m$ packages_file\u003d/var/lib/apt/lists/deb.debian.org_debian_dists_stretch_main_binary-amd64_Packages\n\n  $ installer_package\u003daptitude\n\n  $ cat \"${packages_file}\" | sed -n \"/^Package: ${installer_package}$/,/^Version: / s|^Version: ||p\"\n0.8.7-1\n\nWhat it does is to take the section of the file starting with \"Package: $installer\" (using aptitude as example :-P) until the next Version field (which should be after it, and it should be the version of the package and not for other package).\n\nAlso in this way, it\u0027s easier to use with the \"wget\" in the same line:\n\n  $ wget --timeout\u003d30 -O - \"${ppa_repos_base_path}/Packages.gz\" | gzip -dc | sed -n \"/^Package: ${installer_package}$/,/^Version: / s|^Version: ||p\"\n\n\nHope that helps.\n\n(But for me, your version is fine too, so it\u0027s just an idea).",
+      "parentUuid": "5ad0253b_2d5ed8e9",
+      "range": {
+        "startLine": 1461,
+        "startChar": 28,
+        "endLine": 1461,
+        "endChar": 54
+      },
+      "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
