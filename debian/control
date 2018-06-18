@@ -11,6 +11,7 @@ Build-Depends:
 Package: ngcp-deployment-scripts
 Architecture: any
 Depends:
+ dmidecode,
  ${misc:Depends},
  ${shlibs:Depends},
 Provides:
