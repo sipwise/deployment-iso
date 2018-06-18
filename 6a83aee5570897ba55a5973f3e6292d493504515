@@ -22,6 +22,30 @@
       "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_cd808449",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-18T07:54:04Z",
+      "side": 1,
+      "message": "I am trying to avoid long-long and unreadable line.",
+      "parentUuid": "5ad0253b_2d9b78cb",
+      "range": {
+        "startLine": 1458,
+        "startChar": 28,
+        "endLine": 1458,
+        "endChar": 44
+      },
+      "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
