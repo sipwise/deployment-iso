@@ -429,13 +429,6 @@ if checkBootParam "arch=" ; then
   ARCH=$(getBootParam arch)
 fi
 
-# test unfinished releases against
-# "https://deb.sipwise.com/autobuild/ release-$AUTOBUILD_RELEASE"
-if checkBootParam 'ngcpautobuildrelease=' ; then
-  AUTOBUILD_RELEASE=$(getBootParam ngcpautobuildrelease)
-  export SKIP_SOURCES_LIST=true # make sure it's available within grml-chroot subshell
-fi
-
 # existing ngcp releases (like 2.2) with according repository and installer
 if checkBootParam 'ngcpvers=' ; then
   SP_VERSION=$(getBootParam ngcpvers)
@@ -1481,18 +1474,6 @@ deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
 deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
 deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
 EOF
-
-  # support testing rc releases without providing an according installer package ahead
-  if [ -n "$AUTOBUILD_RELEASE" ] ; then
-    echo "Running installer with sources.list for $DEBIAN_RELEASE + autobuild release-$AUTOBUILD_RELEASE"
-
-    cat > $TARGET/etc/apt/sources.list.d/sipwise.list << EOF
-## custom sources.list, deployed via deployment.sh
-
-# Sipwise repositories
-deb [arch=amd64] ${SIPWISE_URL}/autobuild/release/release-${AUTOBUILD_RELEASE} release-${AUTOBUILD_RELEASE} main
-EOF
-  fi
 }
 
 get_network_devices () {
@@ -1564,7 +1545,6 @@ EOF
 
   cat >> ${TARGET}/etc/ngcp-installer/config_deploy.inc << EOF
 FORCE=yes
-SKIP_SOURCES_LIST="${SKIP_SOURCES_LIST}"
 ADJUST_FOR_LOW_PERFORMANCE="${ADJUST_FOR_LOW_PERFORMANCE}"
 ENABLE_VM_SERVICES="${ENABLE_VM_SERVICES}"
 SIPWISE_URL="${SIPWISE_URL}"
@@ -1659,7 +1639,7 @@ EOT
     echo "# deployment.sh running on $(date)"
     echo "SCRIPT_VERSION=${SCRIPT_VERSION}"
     echo "CMD_LINE=\"${CMD_LINE}\""
-    echo "NGCP_INSTALLER_CMDLINE=\"TRUNK_VERSION=$TRUNK_VERSION SKIP_SOURCES_LIST=$SKIP_SOURCES_LIST ngcp-installer $ROLE $IP1 $IP2 $EADDR $EIFACE $IP_HA_SHARED\""
+    echo "NGCP_INSTALLER_CMDLINE=\"TRUNK_VERSION=$TRUNK_VERSION ngcp-installer $ROLE $IP1 $IP2 $EADDR $EIFACE $IP_HA_SHARED\""
   } > "${TARGET}"/var/log/deployment.log
 
 fi
