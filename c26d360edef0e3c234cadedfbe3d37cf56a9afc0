@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_edaa2085",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-18T10:40:42Z",
+      "side": 0,
+      "message": "Ah, I see now, I still think this (ucf) was wrong in here. :)",
+      "revId": "c26d360edef0e3c234cadedfbe3d37cf56a9afc0",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
