@@ -141,6 +141,30 @@
       "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_2dd3783a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-06-18T10:06:09Z",
+      "side": 1,
+      "message": "\u003e I am afraid your\u0027s version will mask downloading errors and the\n \u003e result will be thread as \"missing version\" in Packages.gz file -\u003e\n \u003e not using PPA. We do not have \"pipefail\" here historically.\n\nThat\u0027s right.  Let\u0027s go with your submitted version then :-)",
+      "parentUuid": "5ad0253b_2d2c9849",
+      "range": {
+        "startLine": 1461,
+        "startChar": 28,
+        "endLine": 1461,
+        "endChar": 54
+      },
+      "revId": "6a83aee5570897ba55a5973f3e6292d493504515",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
