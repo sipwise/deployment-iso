@@ -435,7 +435,6 @@ if checkBootParam 'ngcpvers=' ; then
   if [ "${SP_VERSION:-}" = "trunk" ] ; then
     TRUNK_VERSION=true
   fi
-  export TRUNK_VERSION # make sure it's available within grml-chroot subshell
 fi
 
 if checkBootParam nongcp ; then
@@ -1639,7 +1638,7 @@ EOT
     echo "# deployment.sh running on $(date)"
     echo "SCRIPT_VERSION=${SCRIPT_VERSION}"
     echo "CMD_LINE=\"${CMD_LINE}\""
-    echo "NGCP_INSTALLER_CMDLINE=\"TRUNK_VERSION=$TRUNK_VERSION ngcp-installer $ROLE $IP1 $IP2 $EADDR $EIFACE $IP_HA_SHARED\""
+    echo "NGCP_INSTALLER_CMDLINE=\"ngcp-installer $ROLE $IP1 $IP2 $EADDR $EIFACE $IP_HA_SHARED\""
   } > "${TARGET}"/var/log/deployment.log
 
 fi
