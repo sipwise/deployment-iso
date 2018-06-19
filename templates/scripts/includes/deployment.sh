@@ -1576,7 +1576,8 @@ if "$NGCP_INSTALLER" ; then
   echo "ngcp-installer: $INSTALLER"
   cat << EOT | grml-chroot $TARGET /bin/bash
 wget ${INSTALLER_PATH}/${INSTALLER}
-dpkg -i $INSTALLER
+dpkg -i ${INSTALLER}
+rm -f "${INSTALLER}"
 EOT
 
   # generate installer configs
@@ -2028,11 +2029,6 @@ EOF
   fi
 
 fi # if [ -n "$PUPPET" ] ; then
-
-# remove retrieved and generated files
-rm -f ${TARGET}/config_*yml
-rm -f ${TARGET}/constants_*.yml
-rm -f ${TARGET}/ngcp-installer*deb
 
 if [ -r "${INSTALL_LOG}" ] && [ -d "${TARGET}"/var/log/ ] ; then
   cp "${INSTALL_LOG}" "${TARGET}"/var/log/
