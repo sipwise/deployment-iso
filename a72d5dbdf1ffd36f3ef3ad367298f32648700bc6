@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_43efa5b0",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-19T13:27:41Z",
+      "side": 0,
+      "message": "you should properly deprecate/delete it from NGCP codebase , at least iPXE config and documentation I believe.",
+      "range": {
+        "startLine": 503,
+        "startChar": 18,
+        "endLine": 503,
+        "endChar": 31
+      },
+      "revId": "a72d5dbdf1ffd36f3ef3ad367298f32648700bc6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_e334714b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-19T13:27:41Z",
+      "side": 0,
+      "message": "IMHO it should be independent commit, migration into ngcp-installer. In case if the current commit will have to be revert due to list of possible reasons like huge risk due to heavy destructions, the migration will stay in trunk codebase.",
+      "revId": "a72d5dbdf1ffd36f3ef3ad367298f32648700bc6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_232b89ed",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 2034,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-19T13:27:41Z",
+      "side": 0,
+      "message": "IMHO separate commit which can be merged asap.\nIt is leftovers from old times when we created and uploaded to git cfg schema dumps every night.",
+      "range": {
+        "startLine": 2033,
+        "startChar": 0,
+        "endLine": 2034,
+        "endChar": 31
+      },
+      "revId": "a72d5dbdf1ffd36f3ef3ad367298f32648700bc6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
