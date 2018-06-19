@@ -1547,8 +1547,6 @@ EXTERNAL_DEV="${EXTERNAL_DEV}"
 GW="${GW}"
 EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
 EOF
-
-  cat "${TARGET}/etc/ngcp-installer/config_deploy.inc" > /tmp/ngcp-installer-cmdline.log
 }
 
 prepare_translations() {
