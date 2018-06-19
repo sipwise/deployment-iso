@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_63dbc11c",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-19T13:14:37Z",
+      "side": 1,
+      "message": "As a next commit I would change it to:\n  \nget_network_devices () {\n  local net_devices\u003d()\n\n  # get list of available network devices\n  # (excl. some known-to-be-irrelevant ones, also see MT#8297)\n  net_devices+\u003d( $(tail -n +3 /proc/net/dev | awk -F: \u0027{print $1}\u0027| sed \"s/\\s*//\" | grep -ve \u0027^vmnet\u0027 -ve \u0027^vboxnet\u0027 -ve \u0027^docker\u0027 -ve \u0027^usb\u0027 | sort -u) )\n  net_devices+\u003d(\"${DEFAULT_INSTALL_DEV}\")\n  net_devices+\u003d(\"${INTERNAL_DEV}\")\n  net_devices+\u003d(\"${EXTERNAL_DEV}\")\n\n  # avoid duplicates\n  NETWORK_DEVICES\u003d\"$(printf \"%s\\n\" \"${net_devices[@]}\" | sort -u)\"\n\n  export NETWORK_DEVICES\n}\n\n\nWhile it is minor here..",
+      "revId": "a72d5dbdf1ffd36f3ef3ad367298f32648700bc6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_0309ad95",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-06-19T13:14:37Z",
+      "side": 1,
+      "message": "I would say we should check above $mac is MAC , then we do not need hardcoded magic line \u0027syspath not found\u0027 which can be changed in the next release:\n  \n if [[ \"${mac}\" !\u003d \u0027syspath not found\u0027 ]]; then",
+      "range": {
+        "startLine": 1346,
+        "startChar": 63,
+        "endLine": 1346,
+        "endChar": 70
+      },
+      "revId": "a72d5dbdf1ffd36f3ef3ad367298f32648700bc6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
