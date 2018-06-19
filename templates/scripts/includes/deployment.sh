@@ -1547,6 +1547,10 @@ EXTERNAL_DEV="${EXTERNAL_DEV}"
 GW="${GW}"
 EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
 EOF
+
+  if "${TRUNK_VERSION}" && checkBootParam ngcpupload ; then
+    echo "NGCPUPLOAD=true" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
+  fi
 }
 
 prepare_translations() {
@@ -1600,10 +1604,6 @@ EOT
     echo "ngcp-installer finished successfully"
   else
     die "Error during installation of ngcp. Find details at: ${TARGET}/tmp/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log"
-  fi
-
-  if $TRUNK_VERSION && checkBootParam ngcpupload ; then
-    prepare_translations
   fi
 
   # nuke files
