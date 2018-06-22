@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_0c9f9904",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-22T10:08:30Z",
+      "side": 1,
+      "message": "Or «cut -d: -f1| tr -d \u0027 \u0027» or «sed -e \u0027s/^\\s*\\([^:]\\+\\):.*$/\\1/g\u0027» :)",
+      "range": {
+        "startLine": 1325,
+        "startChar": 43,
+        "endLine": 1325,
+        "endChar": 80
+      },
+      "revId": "a1446e3e8c5579b33ace12aca0f5b870c90daeb9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
