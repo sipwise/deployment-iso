@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_4cbc716c",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-22T10:17:19Z",
+      "side": 1,
+      "message": "missing from",
+      "range": {
+        "startLine": 281,
+        "startChar": 44,
+        "endLine": 281,
+        "endChar": 53
+      },
+      "revId": "42352997c1a6a6a67aef9eab41491e4fe76f4a2b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_0cb6798a",
+        "filename": "templates/scripts/includes/network_configuration.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-22T10:17:19Z",
+      "side": 1,
+      "message": "Please use /run instead of using insecure /tmp, in case this gets run on a live system.",
+      "revId": "42352997c1a6a6a67aef9eab41491e4fe76f4a2b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_ecba1d6e",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-06-22T10:17:19Z",
+      "side": 1,
+      "message": "ditto insecure.",
+      "range": {
+        "startLine": 131,
+        "startChar": 11,
+        "endLine": 131,
+        "endChar": 15
+      },
+      "revId": "42352997c1a6a6a67aef9eab41491e4fe76f4a2b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
