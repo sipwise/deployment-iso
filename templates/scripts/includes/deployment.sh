@@ -1046,24 +1046,34 @@ check_for_supported_disk() {
 if [ -n "$TARGET_DISK" ] ; then
   logit "Skipping check for supported disk as TARGET_DISK variable is set."
 else
-  if [[ $(imvirt 2>/dev/null) == "Physical" ]] ; then
+  imvirt_output="$(imvirt 2>/dev/null)"
+  if [[ "${imvirt_output}" == "Physical" ]] ; then
 
     if ! check_for_supported_disk ; then
       die "Error: /dev/${DISK} does not look like a VirtIO, ServeRAID, LSILOGIC or PowerEdge disk/controller. Exiting to avoid possible data damage."
     fi
 
   else
-    # make sure it runs only within qemu/kvm
     if [[ "${DISK}" == "vda" ]] && readlink -f /sys/block/vda/device | grep -q 'virtio' ; then
       echo "Looks like a virtio disk, ok."
     elif grep -q 'QEMU HARDDISK' "/sys/block/${DISK}/device/model" ; then
       echo "Looks like a QEMU harddisk, ok."
     elif grep -q 'VBOX HARDDISK' "/sys/block/${DISK}/device/model" ; then
       echo "Looks like a VBOX harddisk, ok."
-    elif grep -q 'Virtual disk' "/sys/block/${DISK}/device/model" && [[ $(imvirt) == "VMware ESX Server" ]] ; then
+    elif grep -q 'Virtual disk' "/sys/block/${DISK}/device/model" && [[ "${imvirt_output}" == "VMware ESX Server" ]] ; then
       echo "Looks like a VMware ESX Server harddisk, ok."
+    elif [[ "${imvirt_output}" == 'Microsoft Hyper-V' ]] ; then
+      echo "Looks like a Hyper-V harddisk, ok."
     else
-      die "Error: /dev/${DISK} does not look like a virtual disk. Exiting to avoid possible data damage. Note: imvirt output is $(imvirt)"
+      echo "Looks like running on some virtualized system: '${imvirt_output}'"
+      if "${INTERACTIVE}" ; then
+        echo "Run anyway? y/N"
+        read -r a
+        if [[ "${a,,}" != "y" ]] ; then
+          die "Exiting as requested."
+        fi
+        unset a
+      fi
     fi
   fi
 fi
