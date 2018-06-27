@@ -169,14 +169,30 @@ scanwlan(){
 }
 
 configiface() {
+  local METHOD
+  METHOD="${1,,}"
+  if [[ -n "${METHOD}" ]] && [[ "${METHOD}" != 'dhcp' ]]; then
+    local IP
+    IP="${2}"
+    local NM
+    NM="${3}"
+    local DG
+    DG="${4}"
+    local NS
+    NS="${5}"
+    local BC
+    BC="${IP%.*}.255"
+  fi
+
   [ ! -r /etc/network/interfaces ] && touch /etc/network/interfaces
   DEVICE=${NETDEVICES[$DV]}
   device2props
   DV=$DEVICENAME
-  ifdown "$DV"
+  ifdown "${DV}" --force
   sleep 3
   # wireless config
   WLDEVICECOUNT="$(LANG=C LC_MESSAGEWS=C iwconfig "$DV" 2>/dev/null | wc -l)"
+  if "${INTERACTIVE}" ; then
   if [ $iswireless -gt 0 ] && $DIALOG --yesno "$MESSAGE13" 8 45; then
     ESSID=""
     NWID=""
@@ -429,8 +445,10 @@ configiface() {
       DV="vlan$VLAN"
     fi
   fi
+  fi
 
-  if $DIALOG --yesno "$MESSAGE2" 8 45; then
+  if ("${INTERACTIVE}" && "${DIALOG}" --yesno "${MESSAGE2}" 8 45) || \
+    (! "${INTERACTIVE}" && [[ "${METHOD}" == 'dhcp' ]]) ; then
     if [ -w /etc/network/interfaces ]; then
       rm -f "$TMP"
       awk '/iface/{if(/'"$DV"'/){found=1}else{found=0}}
@@ -447,6 +465,7 @@ configiface() {
       #addauto
     fi
   else
+    if "${INTERACTIVE}" ; then
     if [ -f /etc/network/interfaces ]; then
       awk '/iface/{if(/'"$DV"'/){found=1}else{found=0}}
         /address/{if(found){address=$NF}}
@@ -477,6 +496,7 @@ configiface() {
 
     $DIALOG --inputbox "$MESSAGE10" 10 45 "${NS:-$DG}" 2>"$TMP"
     read -r NS <"$TMP" ; rm -f "$TMP"
+    fi
 
     if [ -w /etc/network/interfaces ]; then
       awk '/iface/{if(/'"$DV"'/){found=1}else{found=0}}
@@ -493,6 +513,14 @@ configiface() {
 
   fi
   echo "Done."
+}
+
+enable_auto_if () {
+  addauto
+  # get persistent interface names across reboots
+  generate_udev_entry
+  # make sure we don't run the dhcp stuff when using /etc/network/interfaces
+  disable_config_dhcp
 }
 
 DIALOG="dialog"
@@ -539,11 +567,40 @@ MESSAGEW26=")?   If you say no, your wep key will be stored in /etc/network/inte
 MESSAGEWSCAN1="Scan for available wireless networks?"
 MESSAGEWSCAN2="Please choose a wireless network from below:"
 
+NET_DEV="${NET_DEV:-}"
+METHOD="${METHOD,,:-}"
+IPADDR="${IPADDR:-}"
+NETMASK="${NETMASK:-}"
+GATEWAY="${GATEWAY:-}"
+DNS="${DNS:-}"
+INTERACTIVE=true
+
 NETDEVICESCOUNT=0
 if [ -r /proc/net/dev ] ; then
    LAN=$(tail -n +3 /proc/net/dev | awk -F: '{print $1}'| sed "s/\s*//" | grep -v -e ^lo -e ^vmnet | sort)
 else
    LAN=""
+fi
+
+if [[ -n "${NET_DEV}" ]] && [[ -n "${METHOD}" ]]; then
+  if [[ "${METHOD}" != 'dhcp' ]]; then
+    missed=0
+    if [[ -z "${IPADDR}" ]]; then
+      echo "Mandatory parameter IPADDR for method ${METHOD} is missed" >&2
+      ((missed++))
+    fi
+    if [[ -z "${NETMASK}" ]]; then
+      echo "Mandatory parameter NETMASK for method ${METHOD} is missed" >&2
+      ((missed++))
+    fi
+    if [[ "${missed}" -gt 0 ]]; then
+      echo "Can not proceed, exiting..." >&2
+      bailout 1
+    fi
+    unset missed
+  fi
+  LAN="${NET_DEV}"
+  INTERACTIVE=false
 fi
 
 if [ -z "${WLAN[*]}" ] ; then
@@ -621,9 +678,13 @@ EXITMENU=( $EXITKEY Exit )
 while (true); do
   # first get the device
   if [ "$count" -gt 1 ]; then
-    rm -f "$TMP"
-    $DIALOG --menu "$MESSAGE1" 18 60 12 "${DEVICELIST[@]}" "${EXITMENU[@]}" 2>"$TMP" || bailout
-    read -r DV <"$TMP" ; rm -f "$TMP"
+    if "${INTERACTIVE}" ; then
+      rm -f "$TMP"
+      $DIALOG --menu "$MESSAGE1" 18 60 12 "${DEVICELIST[@]}" "${EXITMENU[@]}" 2>"$TMP" || bailout
+      read -r DV <"$TMP" ; rm -f "$TMP"
+    else
+      DV="${NET_DEV}"
+    fi
     [ "$DV" = "$EXITKEY" ] && bailout
   else
     # Only one device
@@ -634,18 +695,23 @@ while (true); do
   # device config loop
   IFACEDONE=""
   while [ -n "$DV" ] && [ -z "$IFACEDONE" ]; do
-    configiface
+    configiface "${METHOD}" "${IPADDR}" "${NETMASK}" "${GATEWAY}" "${DNS}"
     if ! ifup $DV; then
-      $DIALOG --yesno "$MESSAGE14" 15 50 || IFACEDONE="DONE"
-    else
-      if $DIALOG --yesno "$MESSAGE15" 12 50 ; then
-         addauto
-         # get persistent interface names across reboots
-         generate_udev_entry
-	 # make sure we don't run the dhcp stuff when using /etc/network/interfaces
-	 disable_config_dhcp
+      if "${INTERACTIVE}" ; then
+        $DIALOG --yesno "$MESSAGE14" 15 50 || IFACEDONE="DONE"
       else
-         remauto
+        echo "${MESSAGE14}" >&2
+        bailout 1
+      fi
+    else
+      if "${INTERACTIVE}" ; then
+        if $DIALOG --yesno "$MESSAGE15" 12 50 ; then
+          enable_auto_if
+        else
+          remauto
+        fi
+      else
+        enable_auto_if
       fi
       IFACEDONE="DONE"
     fi
