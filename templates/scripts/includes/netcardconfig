@@ -10,9 +10,6 @@
 # http://svn.berlios.de/wsvn/fullstory/configure-networkcard/trunk/
 ################################################################################
 
-# This script here only for old grml 2014.11
-# When the disk is rebuilt from newer version - remove this script and use provided /sbin/netcardconfig
-
 PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 LANGUAGE=C LANG=C
 export PATH LANGUAGE LANG
@@ -59,7 +56,7 @@ writeiwline() {
 
   for mod in /sys/module/rt2??0/ ; do
     if [ -d "$mod" ]; then
-      IWPREUPLINE="$IWPREUPLINE pre-up /sbin/ifconfig $DV up\n"
+      IWPREUPLINE="$IWPREUPLINE pre-up /sbin/ip link set $DV up\n"
       break
     fi
   done
@@ -96,7 +93,7 @@ generate_udev_entry() {
 # Executing this script generates an entry in /etc/udev/rules.d/z25_persistent-net.rules
 # for you, please check z25_persistent-net.rules for existing entries before
 # running this script (once more)." > /etc/udev/scripts/netcardconfig
-  for interface in $(ifconfig | awk '/^[a-z]/ &&!/^lo/{ print $1} ') ; do
+  for interface in $(ip -oneline link | awk '!/ lo: / {print $2}' | sed 's/:$//; s/@.*//') ; do
       echo -n "INTERFACE=$interface /lib/udev/write_net_rules " >> /etc/udev/scripts/netcardconfig && \
       if which udevadm >/dev/null 2>&1; then
         udevadm info -a -p "/sys/class/net/$interface" | awk -F'==' '/address/ {print $2}' >> /etc/udev/scripts/netcardconfig
@@ -161,7 +158,7 @@ remauto(){
 
 scanwlan(){
   i=0
-  ifconfig "$DV" up
+  ip link set "$DV" up
   iwlist "$DV" scanning | grep "ESSID\|Quality" | sed -e "s/^.*ESSID:\"\|\"$//g" | tac > "$TMP"
   while read -r line
   do
@@ -423,10 +420,11 @@ configiface() {
   fi
 
   # Configure VLAN on this interface?
-  if $DIALOG --yesno "$MESSAGE16" 8 45; then
+  if $DIALOG --defaultno --yesno "$MESSAGE16" 8 45; then
     $DIALOG --inputbox "$MESSAGE17 $DV" 10 45 2>"$TMP" || bailout 1
     read -r VLAN <"$TMP" ; rm -f "$TMP"
     if [ -n "$VLAN" ]; then
+      modprobe 8021q # avoid warning that VLAN support isn't present yet
       PDV=$DV
       DV="vlan$VLAN"
     fi
