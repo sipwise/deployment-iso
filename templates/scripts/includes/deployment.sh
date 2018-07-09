@@ -439,7 +439,7 @@ if checkBootParam ngcpnw.dhcp || pgrep dhclient &>/dev/null ; then
 fi
 
 if checkBootParam 'ngcphostname=' ; then
-  TARGET_HOSTNAME="$(getBootParam ngcphostname)" || true
+  TARGET_HOSTNAME="$(getBootParam ngcphostname)"
 fi
 
 if checkBootParam 'ngcpip1=' ; then
