@@ -22,6 +22,30 @@
       "revId": "e53229cc6ed926da5a9c57477d97f1f64e4f905f",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_31306556",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-09T16:11:25Z",
+      "side": 1,
+      "message": "Ah OK.  Will skip if I find this parameter and leave the following code deal with that.",
+      "parentUuid": "5ad0253b_91c4d940",
+      "range": {
+        "startLine": 393,
+        "startChar": 0,
+        "endLine": 396,
+        "endChar": 2
+      },
+      "revId": "e53229cc6ed926da5a9c57477d97f1f64e4f905f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
