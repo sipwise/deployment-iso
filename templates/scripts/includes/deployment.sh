@@ -85,7 +85,6 @@ VLAN_SIP_EXT=1719
 VLAN_SIP_INT=1720
 VLAN_HA_INT=1721
 VLAN_RTP_EXT=1722
-NGCP_INIT_SYSTEM="systemd"
 
 ### helper functions {{{
 get_deploy_status() {
@@ -565,11 +564,6 @@ if checkBootParam 'debootstrapkey=' ; then
   GPG_KEY=$(getBootParam debootstrapkey)
 fi
 
-if checkBootParam 'ngcpinitsystem=' ; then
-  NGCP_INIT_SYSTEM=$(getBootParam ngcpinitsystem)
-  echo "Using init system '${NGCP_INIT_SYSTEM}' as requested via boot option ngcpinitsystem"
-fi
-
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
 
@@ -667,7 +661,6 @@ for param in "$@" ; do
     *ngcpvlanhaint*) VLAN_HA_INT="${param//ngcpvlanhaint=/}";;
     *ngcpvlanrtpext*) VLAN_RTP_EXT="${param//ngcpvlanrtpext=/}";;
     *ngcpppa*) NGCP_PPA="${param//ngcpppa=/}";;
-    *ngcpinitsystem*) NGCP_INIT_SYSTEM="${param//ngcpinitsystem=/}";;
   esac
   shift
 done
@@ -1550,7 +1543,6 @@ SIPWISE_URL="${SIPWISE_URL}"
 NAMESERVER="$(awk '/^nameserver/ {print $2}' /etc/resolv.conf)"
 NGCP_PPA="${NGCP_PPA}"
 DEBUG_MODE="${DEBUG_MODE}"
-NGCP_INIT_SYSTEM="${NGCP_INIT_SYSTEM}"
 EADDR="${EADDR}"
 DHCP="${DHCP}"
 EXTERNAL_DEV="${EXTERNAL_DEV}"
