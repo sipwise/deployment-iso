@@ -22,6 +22,30 @@
       "revId": "bced59939c0f4bf6cc8f5b8c6d88daa5d6b85a9a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_11820901",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1553,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-09T14:35:42Z",
+      "side": 0,
+      "message": "\u003e Is it used in installer? pls check\n\nGood point.  Nope, it doesn\u0027t exist now, it was removed in: f57d9d885627dabccd391f761a175a356360469a",
+      "parentUuid": "5ad0253b_919f395f",
+      "range": {
+        "startLine": 1553,
+        "startChar": 0,
+        "endLine": 1553,
+        "endChar": 16
+      },
+      "revId": "bced59939c0f4bf6cc8f5b8c6d88daa5d6b85a9a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
