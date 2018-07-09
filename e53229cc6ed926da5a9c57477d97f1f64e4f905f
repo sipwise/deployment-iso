@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_91c4d940",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2018-07-09T15:10:26Z",
+      "side": 1,
+      "message": "this block will break installation from puppet. We should just continue here even if edition is not determined or add one more edition \u0027puppet\u0027 and check it before the final else clause\n\nWe can use this check for puppet edition\nif checkBootParam \"puppetenv\u003d\" ; then\n  # we expected to get the environment for puppet\n  PUPPET\u003d$(getBootParam puppetenv)\nfi",
+      "range": {
+        "startLine": 393,
+        "startChar": 0,
+        "endLine": 396,
+        "endChar": 2
+      },
+      "revId": "e53229cc6ed926da5a9c57477d97f1f64e4f905f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
