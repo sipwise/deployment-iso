@@ -380,18 +380,19 @@ fi
 
 if checkBootParam ngcpce ; then
   CE_EDITION=true
-fi
-
-if checkBootParam ngcppro || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 ; then
+elif checkBootParam ngcppro || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 ; then
   PRO_EDITION=true
-fi
-
-if "$PRO_EDITION" ; then
-  ROLE=sp1
-
   if checkBootParam ngcpsp2 ; then
     ROLE=sp2
+  else
+    ROLE=sp1
   fi
+elif checkBootParam 'ngcpcrole=' ; then
+  CROLE=$(getBootParam ngcpcrole)
+  CARRIER_EDITION=true
+else
+  echo "Error: Could not determine 'edition' (spce, sppro, carrier)."
+  exit 1
 fi
 
 if checkBootParam "puppetenv=" ; then
@@ -472,11 +473,6 @@ fi
 
 if checkBootParam 'ngcpmcast=' ; then
   MCASTADDR=$(getBootParam ngcpmcast)
-fi
-
-if checkBootParam 'ngcpcrole=' ; then
-  CROLE=$(getBootParam ngcpcrole)
-  CARRIER_EDITION=true
 fi
 
 if checkBootParam ngcphalt ; then
