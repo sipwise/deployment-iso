@@ -200,12 +200,26 @@ install_sipwise_key() {
   debootstrap_sipwise_key
 }
 
-install_package_git () {
-  echo "Installing package git (it is missed on GRML 'small')"
+is_package_installed () {
+  local pkg="$1"
 
-  if [ "$(dpkg-query -f "\${db:Status-Status} \${db:Status-Eflag}" -W git 2>/dev/null)" = 'installed ok' ]; then
-    echo "git is already installed, nothing to do about it."
+  if [ "$(dpkg-query -f "\${db:Status-Status} \${db:Status-Eflag}" -W "${pkg}" 2>/dev/null)" = 'installed ok' ]; then
     return 0
+  else
+    return 1
+  fi
+}
+
+ensure_package_installed () {
+  local pkg="$1"
+
+  echo "Ensuring package installed: ${pkg}"
+
+  if is_package_installed "${pkg}"; then
+    echo "Package '${pkg}' is already installed, nothing to do."
+    return 0
+  else
+    echo "Package '${pkg}' is not installed, proceeding..."
   fi
 
   # use temporary apt database for speed reasons
@@ -223,7 +237,11 @@ install_package_git () {
   DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
     -o dir::etc="${TMPDIR}/etc" -o dir::state="${TMPDIR}/statedir" \
     -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
-    -y --no-install-recommends install git
+    -y --no-install-recommends install "${pkg}"
+
+  if is_package_installed "${pkg}"; then
+    die "Error: Package '${pkg}' was not installed correctly, aborting."
+  fi
 }
 
 install_vbox_iso() {
@@ -250,32 +268,6 @@ set_custom_grub_boot_options() {
     echo "Commit /etc/default/grub changes using etckeeper"
     chroot "$TARGET" etckeeper commit "/etc/default/grub changes"
   fi
-}
-
-ensure_augtool_present() {
-  if [ -x /usr/bin/augtool ] ; then
-    echo "/usr/bin/augtool is present, nothing to do"
-    return 0
-  fi
-
-  echo "augtool isn't present, installing augeas-tools package:"
-
-  # use temporary apt database for speed reasons
-  local TMPDIR
-  TMPDIR=$(mktemp -d)
-  mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
-    "${TMPDIR}/cachedir/archives/partial"
-  echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
-    "${TMPDIR}/etc/sources.list"
-
-  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
-    -o dir::state="${TMPDIR}/statedir" -o dir::etc="${TMPDIR}/etc" \
-    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" update
-
-  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
-    -o dir::etc="${TMPDIR}/etc" -o dir::state="${TMPDIR}/statedir" \
-    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
-    -y --no-install-recommends install augeas-tools
 }
 
 die() {
@@ -677,7 +669,13 @@ install_sipwise_key
 
 if "$NGCP_INSTALLER" ; then
   set_deploy_status "ensure_augtool_present"
-  ensure_augtool_present
+
+  if [ -x /usr/bin/augtool ] ; then
+    echo "/usr/bin/augtool is present, nothing to do"
+    return 0
+  else
+    ensure_package_installed "augeas-tools"
+  fi
 fi
 
 set_deploy_status "getconfig"
@@ -1885,7 +1883,7 @@ puppet_install_from_git () {
   rmdir "${PUPPET_RESCUE_PATH}"
 
   echo "Cloning Puppet git repository from '${PUPPET_GIT_REPO}' to '${PUPPET_LOCAL_GIT}' (branch '${PUPPET_GIT_BRANCH}')"
-  install_package_git
+  ensure_package_installed "git"
   echo 'ssh -i ~/.ssh/id_rsa_r10k -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $*' > ssh
   chmod +x ssh
   if ! GIT_SSH="${PWD}/ssh" git clone --depth 1 -b "${PUPPET_GIT_BRANCH}" "${PUPPET_GIT_REPO}" "${PUPPET_LOCAL_GIT}" ; then
