@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_b969fb8d",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2018-07-10T11:26:14Z",
+      "side": 0,
+      "message": "why \u0027return\u0027 is it needed here?\nNow line 680 will be executed only after installing missed package but will be skipped if augtool is already there. The logic seems a bit condusing",
+      "range": {
+        "startLine": 674,
+        "startChar": 4,
+        "endLine": 674,
+        "endChar": 12
+      },
+      "revId": "d2afaf90d7f5e4a439f674e310efcda4dad3f918",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
