@@ -383,9 +383,12 @@ elif checkBootParam ngcppro || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 
   else
     ROLE=sp1
   fi
-elif checkBootParam 'ngcpcrole=' ; then
-  CROLE=$(getBootParam ngcpcrole)
-  CARRIER_EDITION=true
+
+  # Carrier is a specialisation of Pro
+  if checkBootParam 'ngcpcrole=' ; then
+    CROLE=$(getBootParam ngcpcrole)
+    CARRIER_EDITION=true
+  fi
 elif checkBootParam "puppetenv=" ; then
   # will be determined later
   :
