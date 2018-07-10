@@ -46,6 +46,30 @@
       "revId": "d2afaf90d7f5e4a439f674e310efcda4dad3f918",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_992cff4b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-10T11:49:46Z",
+      "side": 0,
+      "message": "Oh, additionally, for extra clarification: Since the \"return\" is wrong it is one of the logic errors added in a previous commit, and has to be removed.\n\nYour comment seems to imply that we\u0027re adding it in this commit, but this latest commits does remove it, doesn\u0027t add it.",
+      "parentUuid": "5ad0253b_d90397b7",
+      "range": {
+        "startLine": 674,
+        "startChar": 4,
+        "endLine": 674,
+        "endChar": 12
+      },
+      "revId": "d2afaf90d7f5e4a439f674e310efcda4dad3f918",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
