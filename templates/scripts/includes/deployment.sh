@@ -272,6 +272,8 @@ ensure_package_installed() {
   TMPDIR=$(mktemp -d)
   mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
     "${TMPDIR}/cachedir/archives/partial"
+  chown _apt "${TMPDIR}/cachedir/archives/partial"
+
   echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
     "${TMPDIR}/etc/sources.list"
 
