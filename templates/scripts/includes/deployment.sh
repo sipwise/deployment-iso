@@ -199,51 +199,6 @@ install_sipwise_key() {
 
   debootstrap_sipwise_key
 }
-
-is_package_installed () {
-  local pkg="$1"
-
-  if [ "$(dpkg-query -f "\${db:Status-Status} \${db:Status-Eflag}" -W "${pkg}" 2>/dev/null)" = 'installed ok' ]; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-ensure_package_installed () {
-  local pkg="$1"
-
-  echo "Ensuring package installed: ${pkg}"
-
-  if is_package_installed "${pkg}"; then
-    echo "Package '${pkg}' is already installed, nothing to do."
-    return 0
-  else
-    echo "Package '${pkg}' is not installed, proceeding..."
-  fi
-
-  # use temporary apt database for speed reasons
-  local TMPDIR
-  TMPDIR=$(mktemp -d)
-  mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
-    "${TMPDIR}/cachedir/archives/partial"
-  echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
-    "${TMPDIR}/etc/sources.list"
-
-  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
-    -o dir::state="${TMPDIR}/statedir" -o dir::etc="${TMPDIR}/etc" \
-    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" update
-
-  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
-    -o dir::etc="${TMPDIR}/etc" -o dir::state="${TMPDIR}/statedir" \
-    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
-    -y --no-install-recommends install "${pkg}"
-
-  if is_package_installed "${pkg}"; then
-    die "Error: Package '${pkg}' was not installed correctly, aborting."
-  fi
-}
-
 install_vbox_iso() {
   echo "Downloading virtualbox-guest-additions ISO"
 
@@ -287,6 +242,53 @@ disable_trace() {
   if "${DEBUG_MODE}" ; then
     set +x
     PS4=''
+  fi
+}
+
+is_package_installed() {
+  local pkg="$1"
+
+  if [ "$(dpkg-query -f "\${db:Status-Status} \${db:Status-Eflag}" -W "${pkg}" 2>/dev/null)" = 'installed ok' ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+ensure_package_installed() {
+  local pkg="$1"
+
+  echo "Ensuring package installed: ${pkg}"
+
+  if is_package_installed "${pkg}"; then
+    echo "Package '${pkg}' is already installed, nothing to do."
+    return 0
+  else
+    echo "Package '${pkg}' is not installed, proceeding..."
+  fi
+
+  # use temporary apt database for speed reasons
+  local TMPDIR
+  TMPDIR=$(mktemp -d)
+  mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
+    "${TMPDIR}/cachedir/archives/partial"
+  echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
+    "${TMPDIR}/etc/sources.list"
+
+  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" -o dir::etc="${TMPDIR}/etc" \
+    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" update
+
+  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::etc="${TMPDIR}/etc" -o dir::state="${TMPDIR}/statedir" \
+    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
+    -y --no-install-recommends install "${pkg}"
+
+  if is_package_installed "${pkg}"; then
+    echo "Package '${pkg}' was installed correctly."
+    return 0
+  else
+    die "Error: Package '${pkg}' was not installed correctly, aborting."
   fi
 }
 # }}}
@@ -671,7 +673,6 @@ if "$NGCP_INSTALLER" ; then
 
   if [ -x /usr/bin/augtool ] ; then
     echo "/usr/bin/augtool is present, nothing to do"
-    return 0
   else
     ensure_package_installed "augeas-tools"
   fi
