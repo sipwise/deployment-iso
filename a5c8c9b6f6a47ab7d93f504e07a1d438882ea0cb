@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_99b63fdb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-07-10T14:27:05Z",
+      "side": 1,
+      "message": "s/of/for/",
+      "revId": "a5c8c9b6f6a47ab7d93f504e07a1d438882ea0cb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_79bb63c5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-07-10T14:27:05Z",
+      "side": 1,
+      "message": "s/of/for/",
+      "revId": "a5c8c9b6f6a47ab7d93f504e07a1d438882ea0cb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_59b0a7dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-07-10T14:27:05Z",
+      "side": 1,
+      "message": "Please also document the actual variables that are supported + should be used to enable that feature in the commit message.",
+      "revId": "a5c8c9b6f6a47ab7d93f504e07a1d438882ea0cb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_f9a09392",
+        "filename": "templates/scripts/includes/netcardconfig",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-07-10T14:27:05Z",
+      "side": 1,
+      "message": "No objections, though why this change (does it fix a situation/problem we currently face)? Please also mention it in the commit message",
+      "revId": "a5c8c9b6f6a47ab7d93f504e07a1d438882ea0cb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_d9add789",
+        "filename": "templates/scripts/includes/netcardconfig",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-07-10T14:27:05Z",
+      "side": 1,
+      "message": "s/is missed/missing/",
+      "revId": "a5c8c9b6f6a47ab7d93f504e07a1d438882ea0cb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_b9aa1b6f",
+        "filename": "templates/scripts/includes/netcardconfig",
+        "patchSetId": 1
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-07-10T14:27:05Z",
+      "side": 1,
+      "message": "s/is missed/missing/",
+      "revId": "a5c8c9b6f6a47ab7d93f504e07a1d438882ea0cb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
