@@ -1742,12 +1742,6 @@ vagrant_configuration() {
   tail -10 "${TARGET}/var/log/VBoxGuestAdditions.log"
   umount "${TARGET}/media/cdrom/"
 
-  # work around regression in virtualbox-guest-additions-iso 4.3.10
-  if [ -d ${TARGET}/opt/VBoxGuestAdditions-4.3.10 ] ; then
-    echo "Installing VBoxGuestAddition symlink to work around vbox 4.3.10 issue"
-    ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions ${TARGET}/usr/lib/VBoxGuestAdditions
-  fi
-
   # VBoxLinuxAdditions.run chooses /usr/lib64 as soon as this directory exists, which
   # is the case for our PRO systems shipping the heartbeat-2 package; then the
   # symlink /sbin/mount.vboxsf points to the non-existing /usr/lib64/VBoxGuestAdditions/mount.vboxsf
