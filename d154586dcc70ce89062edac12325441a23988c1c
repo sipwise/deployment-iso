@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5ad0253b_7c791193",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-11T14:10:21Z",
+      "side": 1,
+      "message": "\u003e why escaping is needed here?\n\nSIPWISE_URL can change depending on arguments/parameters to the script, parsed at a later point in the execution of the script.\n\nThe idea is to have an indirection, so when $SIPWISE_APT_KEY_URL is invoked it gets the value of $SIPWISE_URL at that time.\n\nNot 100% sure that it works though.  Maybe I should use the same as for VIRTUALBOX_ISO_URL_PATH and decompose server and path.\n\nOn the other hand, since the file that we\u0027re retrieving is unique (we\u0027re matching it with only one checksum), I think that we should probably use /spce for all, or /files as with VIRTUALBOX_ISO_URL_PATH again.",
+      "parentUuid": "5ad0253b_fc108150",
+      "range": {
+        "startLine": 96,
+        "startChar": 21,
+        "endLine": 96,
+        "endChar": 22
+      },
+      "revId": "d154586dcc70ce89062edac12325441a23988c1c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_5c20959b",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-11T13:29:03Z",
       "side": 1,
       "message": "the same here - why escaping?",
+      "range": {
+        "startLine": 379,
+        "startChar": 23,
+        "endLine": 379,
+        "endChar": 24
+      },
+      "revId": "d154586dcc70ce89062edac12325441a23988c1c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_5c6e55ca",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-11T14:10:21Z",
+      "side": 1,
+      "message": "Same reply as the one for skipot.",
+      "parentUuid": "5ad0253b_5c20959b",
       "range": {
         "startLine": 379,
         "startChar": 23,
