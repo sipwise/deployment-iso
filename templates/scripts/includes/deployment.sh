@@ -376,8 +376,10 @@ fi
 
 if checkBootParam ngcpce ; then
   CE_EDITION=true
+  NGCP_INSTALLER_EDITION_STR="sip:provider:      CE"
 elif checkBootParam ngcppro || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 ; then
   PRO_EDITION=true
+  NGCP_INSTALLER_EDITION_STR="sip:provider:      PRO"
   if checkBootParam ngcpsp2 ; then
     ROLE=sp2
   else
@@ -395,6 +397,7 @@ fi
 if checkBootParam 'ngcpcrole=' ; then
   CROLE=$(getBootParam ngcpcrole)
   CARRIER_EDITION=true
+  NGCP_INSTALLER_EDITION_STR="sip:carrier"
 fi
 
 if checkBootParam "puppetenv=" ; then
@@ -827,17 +830,9 @@ set_deploy_status "settings"
 
 echo "Deployment Settings:
 
-  Install ngcp:      $NGCP_INSTALLER"
+  Install ngcp:      $NGCP_INSTALLER
+  $NGCP_INSTALLER_EDITION_STR
 
-if "$CARRIER_EDITION" ; then
-  echo "  sip:carrier"
-elif "$PRO_EDITION" ; then
-  echo "  sip:provider:      PRO"
-elif "$CE_EDITION" ; then
-  echo "  sip:provider:      CE"
-fi
-
-echo "
   Target disk:       /dev/$DISK
   Target Hostname:   $TARGET_HOSTNAME
   Installer version: $SP_VERSION_STR
