@@ -667,17 +667,15 @@ for param in "$@" ; do
   shift
 done
 
+set_deploy_status "installing_sipwise_keys"
+install_sipwise_key
+
 if ! "$NGCP_INSTALLER" ; then
   CARRIER_EDITION=false
   PRO_EDITION=false
   CE_EDITION=false
   unset ROLE
-fi
-
-set_deploy_status "installing_sipwise_keys"
-install_sipwise_key
-
-if "$NGCP_INSTALLER" ; then
+else
   set_deploy_status "ensure_augtool_present"
 
   if [ -x /usr/bin/augtool ] ; then
@@ -695,9 +693,7 @@ set_deploy_status "getconfig"
 if [ -z "$TARGET_HOSTNAME" ] ; then
   if "$PRO_EDITION" ; then
     TARGET_HOSTNAME="$ROLE"
-  fi
-
-  if "$CE_EDITION" ; then
+  elif "$CE_EDITION" ; then
     TARGET_HOSTNAME="spce"
   fi
 
