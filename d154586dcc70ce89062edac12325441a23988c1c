@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5ad0253b_dc6265d8",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2018-07-11T14:26:59Z",
+      "side": 1,
+      "message": "From my understanding such thing will work only if $SIPWISE_URL is exported because wget will be started with \u0027$SIPWISE_URL\u0027 command argument which should be translated to proper value in subshell. But if it works in your tests then ok.",
+      "parentUuid": "5ad0253b_7c791193",
+      "range": {
+        "startLine": 96,
+        "startChar": 21,
+        "endLine": 96,
+        "endChar": 22
+      },
+      "revId": "d154586dcc70ce89062edac12325441a23988c1c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_5c20959b",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
