@@ -85,6 +85,10 @@ VLAN_SIP_EXT=1719
 VLAN_SIP_INT=1720
 VLAN_HA_INT=1721
 VLAN_RTP_EXT=1722
+VIRTUALBOX_DIR="/usr/share/virtualbox"
+VIRTUALBOX_ISO="VBoxGuestAdditions_5.1.26.iso"
+VIRTUALBOX_ISO_CHECKSUM="6df8c8ab6e7ac3a70a5e29116f8a5dcdb7dfbd0b226ef849a5cd9502e956b06f" # sha256
+VIRTUALBOX_ISO_URL_PATH="/files/${VIRTUALBOX_ISO}"
 
 ### helper functions {{{
 get_deploy_status() {
@@ -199,17 +203,15 @@ install_sipwise_key() {
 
   debootstrap_sipwise_key
 }
+
 install_vbox_iso() {
   echo "Downloading virtualbox-guest-additions ISO"
 
-  local vbox_checksum="6df8c8ab6e7ac3a70a5e29116f8a5dcdb7dfbd0b226ef849a5cd9502e956b06f" # sha256
-  local vbox_iso="VBoxGuestAdditions_5.1.26.iso"
+  mkdir -p "${VIRTUALBOX_DIR}"
+  vbox_isofile="${VIRTUALBOX_DIR}/${VIRTUALBOX_ISO}"
+  wget --retry-connrefused --no-verbose -c -O "$vbox_isofile" "${SIPWISE_URL}${VIRTUALBOX_ISO_URL_PATH}"
 
-  mkdir -p "/usr/share/virtualbox/"
-  vbox_isofile="/usr/share/virtualbox/${vbox_iso}"
-  wget -c -O "$vbox_isofile" "${SIPWISE_URL}/files/${vbox_iso}"
-
-  echo "${vbox_checksum} ${vbox_isofile}" | sha256sum --check || die "Error: failed to compute checksum for Virtualbox ISO. Exiting."
+  echo "${VIRTUALBOX_ISO_CHECKSUM} ${vbox_isofile}" | sha256sum --check || die "Error: failed to compute checksum for Virtualbox ISO. Exiting."
 }
 
 set_custom_grub_boot_options() {
