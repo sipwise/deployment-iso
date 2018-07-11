@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_fc108150",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2018-07-11T13:24:13Z",
+      "side": 1,
+      "message": "why escaping is needed here?",
+      "range": {
+        "startLine": 96,
+        "startChar": 21,
+        "endLine": 96,
+        "endChar": 22
+      },
+      "revId": "d154586dcc70ce89062edac12325441a23988c1c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
