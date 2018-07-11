@@ -89,6 +89,11 @@ VIRTUALBOX_DIR="/usr/share/virtualbox"
 VIRTUALBOX_ISO="VBoxGuestAdditions_5.1.26.iso"
 VIRTUALBOX_ISO_CHECKSUM="6df8c8ab6e7ac3a70a5e29116f8a5dcdb7dfbd0b226ef849a5cd9502e956b06f" # sha256
 VIRTUALBOX_ISO_URL_PATH="/files/${VIRTUALBOX_ISO}"
+SIPWISE_APT_KEY_CHECKSUM="f4cdbe4994ae8ca6c4b24eb164e82a20579b335da4eca0907ecaace832e9a0a7" # sha256
+SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise.gpg"
+# overriden later, although since the checksum is the same we could use this URL
+# also for Pro/Carrier installations
+SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
 
 ### helper functions {{{
 get_deploy_status() {
@@ -164,44 +169,36 @@ debootstrap_sipwise_key() {
   cat > /etc/debootstrap/pre-scripts/install-sipwise-key.sh << EOF
 #!/bin/bash
 # installed via deployment.sh
-cp /etc/apt/trusted.gpg.d/sipwise.gpg "\${MNTPOINT}"/etc/apt/trusted.gpg.d/
+cp ${SIPWISE_APT_KEY_PATH} "\${MNTPOINT}"/etc/apt/trusted.gpg.d/
 EOF
   chmod 775 /etc/debootstrap/pre-scripts/install-sipwise-key.sh
 }
 
 install_sipwise_key() {
-  if [ -f "/etc/apt/trusted.gpg.d/sipwise.gpg" ]; then
-    md5sum_sipwise_key=$(md5sum /etc/apt/trusted.gpg.d/sipwise.gpg | awk '{print $1}')
-    echo "Sipwise keyring already installed (MD5: [${md5sum_sipwise_key}]), debootstrap sipwise key"
+  local sipwise_key_checksum="invalid"
+  if [ -f "${SIPWISE_APT_KEY_PATH}" ]; then
+    sipwise_key_checksum=$(sha256sum "${SIPWISE_APT_KEY_PATH}" | awk '{print $1}')
+    echo "Sipwise keyring already installed (sha256sum: [${sipwise_key_checksum}]), debootstrap sipwise key"
     debootstrap_sipwise_key
     return
   else
     echo "Sipwise keyring not found, downloading."
   fi
 
-  for x in 1 2 3; do
+  for try in 1 2 3; do
+    wget --retry-connrefused --no-verbose -O "${SIPWISE_APT_KEY_PATH}" "${SIPWISE_URL}${SIPWISE_APT_KEY_URL_PATH}"
+    sipwise_key_checksum=$(sha256sum "${SIPWISE_APT_KEY_PATH}" | awk '{print $1}')
 
-    if "$PRO_EDITION" ; then
-      wget -O /etc/apt/trusted.gpg.d/sipwise.gpg "${SIPWISE_URL}/sppro/sipwise.gpg"
+    if [ "${sipwise_key_checksum}" != "${SIPWISE_APT_KEY_CHECKSUM}" ] ; then
+      echo "Sipwise keyring downloaded has wrong checksum (expected: [${SIPWISE_APT_KEY_CHECKSUM}] - got: [${sipwise_key_checksum}]), retry $try" >&2
     else
-      wget -O /etc/apt/trusted.gpg.d/sipwise.gpg "${SIPWISE_URL}/spce/sipwise.gpg"
-    fi
-
-    md5sum_sipwise_key_expected=bcd09c9ad563b2d380152a97d5a0ea83
-    md5sum_sipwise_key_calculated=$(md5sum /etc/apt/trusted.gpg.d/sipwise.gpg | awk '{print $1}')
-
-    if [ "$md5sum_sipwise_key_calculated" != "$md5sum_sipwise_key_expected" ] ; then
-      echo "Sipwise keyring has wrong checksum (expected: [$md5sum_sipwise_key_expected] - got: [$md5sum_sipwise_key_calculated]), retry $x"
-    else
-      break
+      echo "Sipwise keyring downloaded with expected checksum (sha256sum: [${SIPWISE_APT_KEY_CHECKSUM}]), debootstrap sipwise key"
+      debootstrap_sipwise_key
+      return
     fi
   done
 
-  if [ "$md5sum_sipwise_key_calculated" != "$md5sum_sipwise_key_expected" ] ; then
-    die "Error validating sipwise keyring for apt usage, aborting installation."
-  fi
-
-  debootstrap_sipwise_key
+  die "Error validating sipwise keyring for apt usage, aborting installation."
 }
 
 install_vbox_iso() {
@@ -379,9 +376,11 @@ fi
 if checkBootParam ngcpce ; then
   CE_EDITION=true
   NGCP_INSTALLER_EDITION_STR="sip:provider:      CE"
+  SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
 elif checkBootParam ngcppro || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 ; then
   PRO_EDITION=true
   NGCP_INSTALLER_EDITION_STR="sip:provider:      PRO"
+  SIPWISE_APT_KEY_URL_PATH="/sppro/sipwise.gpg"
   if checkBootParam ngcpsp2 ; then
     ROLE=sp2
   else
@@ -1213,7 +1212,7 @@ SEC_MIRROR="${DEBIAN_URL}/debian-security/"
 DBG_MIRROR="${DEBIAN_URL}/debian-debug/"
 
 if [ -z "${GPG_KEY}" ] ; then
-  KEYRING='/etc/apt/trusted.gpg.d/sipwise.gpg'
+  KEYRING="${SIPWISE_APT_KEY_PATH}"
 else
   KEYRING='/etc/apt/trusted.gpg'
 
