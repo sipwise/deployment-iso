@@ -16,6 +16,24 @@
       "revId": "06be269705d7cc717db4c65989c0685f3b3a05a4",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_bc9c496a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-12T12:35:29Z",
+      "side": 1,
+      "message": "\u003e I haven\u0027t studied/understood all the changes, but if we can get rid\n \u003e of having the definitive network config at this stage it will be\n \u003e great.\n\nYes this is the core idea. deployment.sh/installer only create partitions and installs packages. Dot.\n\n\n \u003e However, w.r.t. this change, I think that we should pile up\n \u003e packages to be installed and install them at once, or at least in\n \u003e bigger batches if possible, because installing them separately\n \u003e causes a very significant overhead.\n\nI\u0027m going to update GRML (it is required in any case) so will cooperate with Mika how to built-in all the used packages into it.",
+      "parentUuid": "5ad0253b_fc92c156",
+      "revId": "06be269705d7cc717db4c65989c0685f3b3a05a4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
