@@ -1319,19 +1319,16 @@ ff02::1         ip6-allnodes
 ff02::2         ip6-allrouters
 EOF
 
-get_network_devices () {
-  # get list of available network devices (excl. some known-to-be-irrelevant ones, also see MT#8297)
-  net_devices=$(tail -n +3 /proc/net/dev | awk -F: '{print $1}'| sed "s/\s*//" | grep -ve '^vmnet' -ve '^vboxnet' -ve '^docker' -ve '^usb' | sort -u)
-  NETWORK_DEVICES=""
-  for network_device in ${net_devices} ${DEFAULT_INSTALL_DEV} ${INTERNAL_DEV} ${EXTERNAL_DEV} ; do
-    # avoid duplicates
-    echo "${NETWORK_DEVICES}" | grep -wq "${network_device}" || NETWORK_DEVICES="${NETWORK_DEVICES} ${network_device}"
-  done
-  export NETWORK_DEVICES
-  unset net_devices
-}
-
-get_network_devices
+# get list of available network devices
+# (excl. some known-to-be-irrelevant ones, also see MT#8297)
+net_devices=( $(tail -n +3 /proc/net/dev | sed -r 's/^ *([0-9a-zA-Z]+):.*$/\1/g' | \
+  grep -ve '^vmnet' -ve '^vboxnet' -ve '^docker' -ve '^usb' | sort -u) )
+net_devices+=("${DEFAULT_INSTALL_DEV}")
+net_devices+=("${INTERNAL_DEV}")
+net_devices+=("${EXTERNAL_DEV}")
+# avoid duplicates
+NETWORK_DEVICES="$(printf "%s\n" "${net_devices[@]}" | sort -u)"
+unset net_devices
 
 if "$PRO_EDITION" && [[ $(imvirt) != "Physical" ]] ; then
   echo "Generating udev persistent net rules."
