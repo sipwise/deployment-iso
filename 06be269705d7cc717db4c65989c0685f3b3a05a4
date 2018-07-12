@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_fc92c156",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-12T12:03:38Z",
+      "side": 1,
+      "message": "I haven\u0027t studied/understood all the changes, but if we can get rid of having the definitive network config at this stage it will be great.\n\nHowever, w.r.t. this change, I think that we should pile up packages to be installed and install them at once, or at least in bigger batches if possible, because installing them separately causes a very significant overhead.\n\nSo the function that I created should probably be changed to accept many packages at once, and then we can group them, for example moreutils+augeas-tools or also git if we detect the need for the section of puppet at the same time.\n\n(I\u0027m not suggesting that you also change the function installing packages, I can try this afternoon, but better if we do it soon.  You can submit this change as is if not ready, we can group the installation of packages later).",
+      "revId": "06be269705d7cc717db4c65989c0685f3b3a05a4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
