@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_dcadc589",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-12T14:36:02Z",
+      "side": 1,
+      "message": "Reading through the comments, it seems that we all have a different way to suggest to change this.\n\nMine is:\n\n  NETWORK_DEVICES\u003d$((echo -e \"${DEFAULT_INSTALL_DEV}\\n${INTERNAL_DEV}\\n${EXTERNAL_DEV}\"; sed -n \u0027/^\\s*\\(vmnet\\|vboxnet\\|docker\\|usb\\)/ d; /:/ s/:.*//p;\u0027 /proc/net/dev) | sort -u)\n\nwhich puts the devices from $envvars in different lines, the existing devices from /proc/net/dev excluding undesired ones, and sorts-uniquifies the lines to get a single list like:\n\n  bond0 eth0 eth1 lo vlan1718 vlan1720 vlan1721 vlan300\n\nIn any case I think that all the suggestions come because noone likes to have this difficult to understand function, that takes us some minute(s) to understand, and by that time you think how much easier/efficient it would be in your way.  This tends to point a flaw in the existing code, so I think that it\u0027s better to change it in some way.\n\nIf you prefer to keep it as it is for this change, fine, I\u0027ll propose another change later.",
+      "range": {
+        "startLine": 1322,
+        "startChar": 0,
+        "endLine": 1332,
+        "endChar": 1
+      },
+      "revId": "0510b3211b3231f733b5611ff559899d887d8b03",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
