@@ -34,6 +34,41 @@
       "revId": "06be269705d7cc717db4c65989c0685f3b3a05a4",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_5cb095dd",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-12T15:01:25Z",
+      "side": 1,
+      "message": "\u003e I\u0027m going to update GRML (it is required in any case) so will\n \u003e cooperate with Mika how to built-in all the used packages into it.\n\nAh, that\u0027s even better :)",
+      "parentUuid": "5ad0253b_bc9c496a",
+      "revId": "06be269705d7cc717db4c65989c0685f3b3a05a4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_3cb5d9cc",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-12T15:01:25Z",
+      "side": 1,
+      "message": "Where\u0027s /e/n/interfaces coming from at this point?  grml installation?",
+      "revId": "06be269705d7cc717db4c65989c0685f3b3a05a4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
