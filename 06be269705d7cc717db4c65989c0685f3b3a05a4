@@ -55,6 +55,23 @@
     },
     {
       "key": {
+        "uuid": "5ad0253b_fc6ac119",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-07-13T09:49:31Z",
+      "side": 1,
+      "message": "If INSTALL_DEV is set then INSTALL_IP and the code below is never executed, is that intended?",
+      "revId": "06be269705d7cc717db4c65989c0685f3b3a05a4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_3cb5d9cc",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 20
