@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_fc23e103",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-07-13T09:31:18Z",
+      "side": 1,
+      "message": "Are INTERNAL_DEV + EXTERNAL_DEV guaranteed to always be set? (Otherwise we might add empty stuff to $NETWORK_DEVICES, unless I\u0027m mistaken)",
+      "revId": "320a5b253d7dc4d8e4d70e8b1d07649cfce2523c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
