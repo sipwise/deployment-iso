@@ -22,6 +22,30 @@
       "revId": "0510b3211b3231f733b5611ff559899d887d8b03",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_3c1159ad",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-13T09:04:15Z",
+      "side": 1,
+      "message": "Right. This is just a copy of current code I\u0027ve changed it in the next review.",
+      "parentUuid": "5ad0253b_dcadc589",
+      "range": {
+        "startLine": 1322,
+        "startChar": 0,
+        "endLine": 1332,
+        "endChar": 1
+      },
+      "revId": "0510b3211b3231f733b5611ff559899d887d8b03",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
