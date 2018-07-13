@@ -46,6 +46,23 @@
       "revId": "0510b3211b3231f733b5611ff559899d887d8b03",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_bc1d69bf",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-07-13T09:34:12Z",
+      "side": 1,
+      "message": "Aren\u0027t we also generating static configs for bond0/vlan/... and even the loopback devices here too now? Is that really what we want and works as expected?",
+      "revId": "0510b3211b3231f733b5611ff559899d887d8b03",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
