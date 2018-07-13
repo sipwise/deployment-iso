@@ -63,6 +63,24 @@
       "revId": "0510b3211b3231f733b5611ff559899d887d8b03",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_fc7401d0",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-13T10:33:43Z",
+      "side": 1,
+      "message": "Yeah, they are not supposed to be there. I\u0027ll change it.",
+      "parentUuid": "5ad0253b_bc1d69bf",
+      "revId": "0510b3211b3231f733b5611ff559899d887d8b03",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
