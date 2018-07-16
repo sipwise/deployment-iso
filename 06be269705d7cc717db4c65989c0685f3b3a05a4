@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "5ad0253b_df813791",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-16T08:07:26Z",
+      "side": 1,
+      "message": "Actually wise-versa:\n\n1. If it is empty then ipv6 branch is used.\n\n2. If it is set - this code is executed.",
+      "parentUuid": "5ad0253b_fc6ac119",
+      "revId": "06be269705d7cc717db4c65989c0685f3b3a05a4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_3cb5d9cc",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 20
