@@ -94,6 +94,8 @@ SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise.gpg"
 # overriden later, although since the checksum is the same we could use this URL
 # also for Pro/Carrier installations
 SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
+ADDITINAL_PACKAGES=(git augeas-tools)
+
 
 ### helper functions {{{
 get_deploy_status() {
@@ -254,43 +256,32 @@ is_package_installed() {
   fi
 }
 
-ensure_package_installed() {
-  local pkg="$1"
+ensure_packages_installed() {
+  [[ -z "${ADDITINAL_PACKAGES[@]}" ]] && return 0
 
-  echo "Ensuring package installed: ${pkg}"
+  local install_packages
+  install_packages=()
+  echo "Ensuring packages installed: ${ADDITINAL_PACKAGES[*]}"
+  for pkg in "${ADDITINAL_PACKAGES[@]}"; do
+    if is_package_installed "${pkg}"; then
+      echo "Package '${pkg}' is already installed, nothing to do."
+    else
+      echo "Package '${pkg}' is not installed, scheduling..."
+      install_packages+=("${pkg}")
+    fi
+  done
 
-  if is_package_installed "${pkg}"; then
-    echo "Package '${pkg}' is already installed, nothing to do."
-    return 0
-  else
-    echo "Package '${pkg}' is not installed, proceeding..."
-  fi
+  DEBIAN_FRONTEND='noninteractive' apt-get update
+  DEBIAN_FRONTEND='noninteractive' apt-get -y --no-install-recommends install "${install_packages[@]}"
 
-  # use temporary apt database for speed reasons
-  local TMPDIR
-  TMPDIR=$(mktemp -d)
-  mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
-    "${TMPDIR}/cachedir/archives/partial"
-  chown _apt "${TMPDIR}/cachedir/archives/partial"
-
-  echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
-    "${TMPDIR}/etc/sources.list"
-
-  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
-    -o dir::state="${TMPDIR}/statedir" -o dir::etc="${TMPDIR}/etc" \
-    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" update
-
-  DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
-    -o dir::etc="${TMPDIR}/etc" -o dir::state="${TMPDIR}/statedir" \
-    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
-    -y --no-install-recommends install "${pkg}"
-
-  if is_package_installed "${pkg}"; then
-    echo "Package '${pkg}' was installed correctly."
-    return 0
-  else
-    die "Error: Package '${pkg}' was not installed correctly, aborting."
-  fi
+  for pkg in "${install_packages[@]}"; do
+    if is_package_installed "${pkg}"; then
+      echo "Package '${pkg}' was installed correctly."
+      return 0
+    else
+      die "Error: Package '${pkg}' was not installed correctly, aborting."
+    fi
+  done
 }
 # }}}
 
@@ -669,20 +660,13 @@ done
 
 set_deploy_status "installing_sipwise_keys"
 install_sipwise_key
+ensure_packages_installed
 
 if ! "$NGCP_INSTALLER" ; then
   CARRIER_EDITION=false
   PRO_EDITION=false
   CE_EDITION=false
   unset ROLE
-else
-  set_deploy_status "ensure_augtool_present"
-
-  if [ -x /usr/bin/augtool ] ; then
-    echo "/usr/bin/augtool is present, nothing to do"
-  else
-    ensure_package_installed "augeas-tools"
-  fi
 fi
 
 set_deploy_status "getconfig"
@@ -1874,7 +1858,6 @@ puppet_install_from_git () {
   rmdir "${PUPPET_RESCUE_PATH}"
 
   echo "Cloning Puppet git repository from '${PUPPET_GIT_REPO}' to '${PUPPET_LOCAL_GIT}' (branch '${PUPPET_GIT_BRANCH}')"
-  ensure_package_installed "git"
   echo 'ssh -i ~/.ssh/id_rsa_r10k -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $*' > ssh
   chmod +x ssh
   if ! GIT_SSH="${PWD}/ssh" git clone --depth 1 -b "${PUPPET_GIT_BRANCH}" "${PUPPET_GIT_REPO}" "${PUPPET_LOCAL_GIT}" ; then
