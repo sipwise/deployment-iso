@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_774b8a2c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-18T08:37:34Z",
+      "side": 1,
+      "message": "vice",
+      "range": {
+        "startLine": 14,
+        "startChar": 36,
+        "endLine": 14,
+        "endChar": 40
+      },
+      "revId": "5bdda59ad9490f723f23d3156d64c0c3580e2d17",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_b7400209",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-18T08:37:34Z",
+      "side": 1,
+      "message": "If not using a different sources.list from the main system, the use of a separate cache and state dirs is unnecessary, so it\u0027s better to remove $TMPDIR and the -odir:: options, unless there\u0027s another reason to force us to keep using that.\n\nThe comment about speed reasons, that I inherited before refactoring the functions into a single one, is dubious too -- the \"apt-get update\" operation is quite costly, and doing it separately for every package was not a very good idea, and probably defeating the purpose.\n\ntl;dr: remove $TMPDIR and the -odir:: options, unless there\u0027s another reason to force us to keep using that.",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 288,
+        "endChar": 63
+      },
+      "revId": "5bdda59ad9490f723f23d3156d64c0c3580e2d17",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
