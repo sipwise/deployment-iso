@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3acd31a7_97ce26b3",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 30
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-18T08:07:42Z",
+      "side": 1,
+      "message": "The main idea was to simplify the process of adding/removing these packages, from this POV it\u0027s better to have the list on the top as global constant.",
+      "parentUuid": "3acd31a7_77ddca6f",
+      "revId": "d82431c6415fa76c78a0579f2f41bca320feba5e",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3acd31a7_97f746f5",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 30
@@ -30,6 +48,30 @@
       "writtenOn": "2018-07-18T07:32:45Z",
       "side": 1,
       "message": "This chown happens to a tmpdir just created, so it should be empty, and thus the -R not necessary, that\u0027s why I didn\u0027t include it when adding the chown a few days ago.\n\nBut it doesn\u0027t harm to leave it there anyway, so fine for me.",
+      "range": {
+        "startLine": 275,
+        "startChar": 13,
+        "endLine": 275,
+        "endChar": 15
+      },
+      "revId": "d82431c6415fa76c78a0579f2f41bca320feba5e",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_37e75242",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 30
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-18T08:07:42Z",
+      "side": 1,
+      "message": "Command chown without -R changes the ownership of the specified dir only not any children dirs so \u0027-R\u0027 is needed here.",
+      "parentUuid": "3acd31a7_97f746f5",
       "range": {
         "startLine": 275,
         "startChar": 13,
