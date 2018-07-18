@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_379f5261",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-18T10:46:45Z",
+      "side": 1,
+      "message": "The commit message probably needs to be revisited, since things changed quite a bit.",
+      "revId": "751d07049c62eda15b3585fd66e99381da5996b4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
