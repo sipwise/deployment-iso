@@ -81,6 +81,30 @@
       "revId": "d82431c6415fa76c78a0579f2f41bca320feba5e",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_57c1ae7f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 30
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-18T08:20:37Z",
+      "side": 1,
+      "message": "\u003e Command chown without -R changes the ownership of the specified dir\n \u003e only not any children dirs so \u0027-R\u0027 is needed here.\n\nAh wait, I was thinking about my original change, that was targetting a leaf directory and not ${TMPDIR}:\n\n  https://gerrit.mgm.sipwise.com/gitweb?p\u003ddeployment-iso.git;a\u003dcommitdiff;h\u003d0d863c3441b960e16a710927a229f50c5a6baf6b\n\nOnly the dir where the downloading happens is necessary to be owned by _apt, the rest of the operations happen as root anyway.\n\n_apt is a system user so there\u0027s not much difference if ${TMPDIR} is owned by it I suppose, but in theory the user operating on it is root except for that downloading.",
+      "parentUuid": "3acd31a7_37e75242",
+      "range": {
+        "startLine": 275,
+        "startChar": 13,
+        "endLine": 275,
+        "endChar": 15
+      },
+      "revId": "d82431c6415fa76c78a0579f2f41bca320feba5e",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
