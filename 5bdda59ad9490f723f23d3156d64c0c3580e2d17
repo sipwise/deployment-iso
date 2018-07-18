@@ -45,6 +45,30 @@
       "revId": "5bdda59ad9490f723f23d3156d64c0c3580e2d17",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_97e18601",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-18T09:19:11Z",
+      "side": 1,
+      "message": "You are right, I\u0027ll remove it",
+      "parentUuid": "3acd31a7_b7400209",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 288,
+        "endChar": 63
+      },
+      "revId": "5bdda59ad9490f723f23d3156d64c0c3580e2d17",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
