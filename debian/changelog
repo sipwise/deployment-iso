@@ -1,3 +1,71 @@
+ngcp-deployment-iso (6.4.1.0+0~mr6.4.1.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [d4cb7b1] TT#37257 Use composed variables (DEBIAN|SIPWISE)_URL
+  * [f2d911d] TT#37257 Use systemctl for reboot and shutdown
+  * [7a1ca21] TT#37257 Collect the list of running processes
+  * [4ac6303] TT#37257 Remove outdated code and simplify package list
+  * [2feaac8] TT#37257 Remove LVM variable
+  * [cfcb676] TT#37401 Add network configuration to config_deploy.inc for CE
+  * [de3ea61] TT#37257 Use SIPWISE_URL variable instead of hardcoded address
+  * [1dedf23] TT#37401 Remove /etc/hosts configuration
+  * [334d113] TT#37401 Remove /e/n/i configuration
+  * [58e993c] TT#37257 Remove kills of possible running processes
+  * [d94ec98] TT#37257 Add '|| true' to 'systemctl status' command
+  * [bced599] TT#39302 Add Hyper-V to the list of supported virt systems
+  * [9ee8fa8] TT#37257 Add all the network interfaces to udev rules
+  * [e23918f] TT#37257 Remove dedicated function get_network_devices
+  * [3126e42] TT#37257 Copy from upstream
+  * [a5e50f7] TT#37257 Fix some shellcheck warnings
+  * [446b7de] TT#37257 Add support for non-interactive mode
+  * [9b0cee7] TT#37257 Fix alignment of interactive parts of code
+  * [45175b7] TT#37257 Improve installing of additional packages
+
+  [ Alexander Lutay ]
+  * [55e8d71] TT#38606 Deprecate/ignore 'ngcpppainstaller', 'ngcpppa' will be used everywhere
+  * [9dfc640] TT#38454 Remove manual debootstrap 'apt-transport-https' from deployment.sh
+  * [6f8542d] TT#38454 Remove 'firmware-qlogic' installation case from deployment.sh
+  * [e2a9979] TT#38454 Remove 'ifenslave' as ngcp-nth-* supports on it already
+  * [a320598] TT#38454 Remove 'bridge-utils/vlan' as ngcp-nth-* depends on them already
+  * [feb9091] TT#38454 Move 'acpi/acpid/acpi-support-base' packages installation to ngcp metapackages
+  * [636d68a] TT#38454 Move 'ethtool' packages installation to ngcp metapackages
+  * [667596e] TT#38454 Remove outdated comments from deployment.sh: /etc/debootstrap/packages
+  * [33d5b83] TT#38454 Move 'lvm2' packages installation to ngcp metapackage
+  * [161575a] TT#38454 Install 'openssh-server' package for non-ngcp debootstrap
+  * [0475691] TT#38454 Install 'lvm2' on Debian plain
+  * [5cc9304] TT#38454 Remove 'ca-certificates' package from ngcp debootstrap
+  * [fb8fa3f] TT#38454 Add dmidecode to dependencies as we use it in deployment.sh
+  * [dc290b5] TT#38606 Fix ngcp-installer packages search if NGCP PPA is defined
+  * [9cbbd29] TT#38454 Remove 'firmware-bnx2*' from Debian debootstrap
+  * [2642818] TT#38454 Update dependencies list installed on debootstrap
+  * [d13f98c] TT#38454 Move dependency on 'linux-headers-amd64' to metapackages
+  * [0fd67b8] TT#38783 Deprecate/clean GRML boot option ngcpautobuildrelease (we use PPAs now)
+  * [2e3f01f] TT#38783 Stop passing TRUNK_VERSION to ngcp-installer
+  * [df85652] TT#38783 Remove unnecessary /var/log/deployment.log
+  * [c9b5ca6] TT#38783 Remove function logit(), use single log file
+  * [ef7cf74] TT#38783 Fix minor code style issues in deployment.sh
+  * [3ae1297] TT#37257 Clean the old file removal in deployment.sh
+  * [d96c105] TT#37257 Stop creating /tmp/ngcp-installer-cmdline.log as it gone after reboot
+  * [c95fc89] TT#37257 Move translations upload from deployment.sh into ngcp-installer
+
+  [ Manuel Montecelo ]
+  * [ad50597] TT#37257 Remove "init system" variable, using systemd only since mr6.2
+  * [94d090d] TT#37257 The additional "|| true" seems redundant if the parameter exists
+  * [8e03fe8] TT#37257 Use common function to install packages during deployment
+  * [d2afaf9] TT#37257 Combine the detection of "edition" in a single logic block
+  * [23952bb] TT#37257 Fix logic errors and move the function after die() is defined
+  * [0d863c3] TT#37257 Change dir ownership to _apt for safer network operations
+  * [81d625f] TT#37257 Carrier is a specialisation of Pro
+  * [8f17c12] TT#37257 Centralise definition of info strings for different editions
+  * [5e6e6cf] TT#37257 Minor improvements related to VirtualBox .iso
+  * [6c01f59] TT#37257 Fuse alternative blocks of if-else that should not happen concurrently
+  * [958bfef] TT#37257 Remove workaround for ancient VirtualBox 4.3.10
+  * [9a36eda] TT#37257 Improve download and installation of Sipwise's apt key
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 24 Jul 2018 13:33:32 +0200
+
 ngcp-deployment-iso (6.4.0.0+0~mr6.4.0.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
