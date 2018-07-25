@@ -684,6 +684,7 @@ while (true); do
       read -r DV <"$TMP" ; rm -f "$TMP"
     else
       DV="${NET_DEV}"
+      [[ -z "${IFACEDONE}" ]] || bailout
     fi
     [ "$DV" = "$EXITKEY" ] && bailout
   else
