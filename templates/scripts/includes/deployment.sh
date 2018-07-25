@@ -271,8 +271,31 @@ ensure_packages_installed() {
     fi
   done
 
-  DEBIAN_FRONTEND='noninteractive' apt-get update
-  DEBIAN_FRONTEND='noninteractive' apt-get -y --no-install-recommends install "${install_packages[@]}"
+  # Use separate apt database and source list because non management node has no internet access
+  # so is installed from management node so these additional packages have to be accessible from
+  # sipwise repo
+  local TMPDIR
+  TMPDIR=$(mktemp -d)
+  mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
+    "${TMPDIR}/cachedir/archives/partial"
+  chown _apt -R "${TMPDIR}"
+
+  echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
+    "${TMPDIR}/etc/sources.list"
+
+  DEBIAN_FRONTEND='noninteractive' apt-get \
+    -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" \
+    -o dir::etc="${TMPDIR}/etc" \
+    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
+    update
+
+  DEBIAN_FRONTEND='noninteractive' apt-get \
+    -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" \
+    -o dir::etc="${TMPDIR}/etc" \
+    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
+    -y --no-install-recommends install "${install_packages[@]}"
 
   for pkg in "${install_packages[@]}"; do
     if is_package_installed "${pkg}"; then
