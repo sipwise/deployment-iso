@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aca2d91_5c79d12e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 37
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-26T14:19:18Z",
+      "side": 1,
+      "message": "This is not very accurate, there are parts of the code dealing with the network in the current version of the change.",
+      "revId": "a28e1e650b005d9b7bd663ea76fdcf3caacc3786",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aca2d91_dc93a14e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 37
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-26T14:19:18Z",
+      "side": 1,
+      "message": "This doesn\u0027t happen in the current change, AFAICT.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 41
+      },
+      "revId": "a28e1e650b005d9b7bd663ea76fdcf3caacc3786",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
