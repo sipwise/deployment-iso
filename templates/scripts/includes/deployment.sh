@@ -1288,6 +1288,9 @@ save
 EOT
 fi
 
+# TT#41500: Make sure the timezone setup is coherent
+grml-chroot "$TARGET" dpkg-reconfigure --frontend=noninteractive tzdata
+
 # provide useable swap partition
 echo "Enabling swap partition $SWAP_PARTITION via /etc/fstab"
 cat >> "${TARGET}/etc/fstab" << EOF
