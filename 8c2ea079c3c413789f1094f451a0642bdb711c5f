@@ -22,6 +22,30 @@
       "revId": "8c2ea079c3c413789f1094f451a0642bdb711c5f",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aca2d91_3c4975d1",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-07-26T14:29:19Z",
+      "side": 1,
+      "message": "Ah, I just cargo-culted the chroot calls from the closer one below. Are those in need to be switched too (in another commit?), at least to avoid confusing other people. :)",
+      "parentUuid": "1aca2d91_dc084194",
+      "range": {
+        "startLine": 1292,
+        "startChar": 0,
+        "endLine": 1292,
+        "endChar": 14
+      },
+      "revId": "8c2ea079c3c413789f1094f451a0642bdb711c5f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
