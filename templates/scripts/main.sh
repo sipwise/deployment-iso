@@ -103,6 +103,13 @@ prompt_for_target()
                 echo "${i}" "${disk_info}"
               done) )
 
+  # do not show dialog message if there is only one disk
+  # DISK_LIST contains dev path and info so there are only even number of elements
+  if [[ "${#DISK_LIST[@]}" -eq 2 ]]; then
+    TARGET_DISK="${DISK_LIST[0]}"
+    return 0
+  fi
+
   TMP=$(mktemp)
   if ! dialog --title "Disk selection" --single-quoted \
     --ok-label OK --cancel-label Exit \
@@ -145,8 +152,10 @@ deploy() {
 install_sipwise_keyring
 "${scripts_dir}/network_configuration.sh"
 "${scripts_dir}/check_installing_version.sh"
-"${scripts_dir}/install_required_packages.sh"
-"${scripts_dir}/verify_iso_image.sh"
+if grep -Eq '[ ]*skipmediacheck[ ]*' /proc/cmdline ; then
+  "${scripts_dir}/install_required_packages.sh"
+  "${scripts_dir}/verify_iso_image.sh"
+fi
 prompt_for_target
 check_for_existing_pvs
 report_ssh_password
