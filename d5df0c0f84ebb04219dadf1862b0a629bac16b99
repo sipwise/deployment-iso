@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aca2d91_0782e652",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-27T07:11:23Z",
+      "side": 1,
+      "message": "It looks like debconf-set-selections beforehand is required.",
+      "range": {
+        "startLine": 1292,
+        "startChar": 22,
+        "endLine": 1292,
+        "endChar": 45
+      },
+      "revId": "d5df0c0f84ebb04219dadf1862b0a629bac16b99",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
