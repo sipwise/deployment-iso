@@ -22,6 +22,30 @@
       "revId": "1a6f78e9006fe7786dab712a45a6e6943ffaf15b",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aca2d91_479fbe5f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-07-27T13:03:25Z",
+      "side": 1,
+      "message": "\u003e pls wrap variables with {}\n\nI left $TARGET like that on purpose because that\u0027s how the most of the rest of the file treats this variable in particular.\n\nAlso the message for die(), that I copy-pasted from above.\n\nDunno, I can rework it, but TBH I feel kind of lazy if I have to fix the original, cherry-pick -x, wait for all the approvals again and so on, when most of he file doesn\u0027t use {} for variables.  Especially this one, which is targetted, for mr6.4, which will be very short-lived.\n\nMaybe we should have another fix to convert the variables to {} in this file, or repo, at a single point?",
+      "parentUuid": "1aca2d91_47c8de74",
+      "range": {
+        "startLine": 1293,
+        "startChar": 25,
+        "endLine": 1293,
+        "endChar": 31
+      },
+      "revId": "1a6f78e9006fe7786dab712a45a6e6943ffaf15b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
