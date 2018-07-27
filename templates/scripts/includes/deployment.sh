@@ -1288,8 +1288,17 @@ save
 EOT
 fi
 
-# TT#41500: Make sure the timezone setup is coherent
-grml-chroot "$TARGET" dpkg-reconfigure tzdata
+# TT#41500: Make sure the timezone setup is coherent, grml-debootstrap bug
+# https://bugs.debian.org/904607
+tz="$(readlink -f "$TARGET"/etc/localtime)"
+if [ -r "$TARGET"/usr/share/zoneinfo/"${tz}" ]; then
+  echo "Synchronising /etc/localtime and /etc/timezone"
+  echo "${tz#*/zoneinfo/}" > "$TARGET"/etc/timezone
+else
+  echo "Wrong timezone '${tz}', file does not exist in target"
+  die "Error during installation of Debian ${DEBIAN_RELEASE}. Find details via: mount $ROOT_FS $TARGET ; ls $TARGET/debootstrap/*.log"
+fi
+unset tz
 
 # provide useable swap partition
 echo "Enabling swap partition $SWAP_PARTITION via /etc/fstab"
