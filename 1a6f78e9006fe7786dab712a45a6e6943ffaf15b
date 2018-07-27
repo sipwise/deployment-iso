@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aca2d91_47c8de74",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-07-27T12:51:12Z",
+      "side": 1,
+      "message": "pls wrap variables with {}",
+      "range": {
+        "startLine": 1293,
+        "startChar": 25,
+        "endLine": 1293,
+        "endChar": 31
+      },
+      "revId": "1a6f78e9006fe7786dab712a45a6e6943ffaf15b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
