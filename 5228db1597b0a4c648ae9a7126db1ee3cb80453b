@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aca2d91_a2d560ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 38
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-07-31T10:49:50Z",
+      "side": 1,
+      "message": "I tend to avoid capitalizing names for things that are case sensitive, otherwise copy\u0026paste and similar do not work, and might end up confusing readers in general. :) You can always say \"The foo.sh script ...\"",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 1
+      },
+      "revId": "5228db1597b0a4c648ae9a7126db1ee3cb80453b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
