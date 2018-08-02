@@ -1347,7 +1347,7 @@ if "$PRO_EDITION" && [[ $(imvirt) != "Physical" ]] ; then
     [[ "${dev}" =~ ^(vlan|bond|lo) ]] && continue
 
     mac=$(udevadm info -a -p "/sys/class/net/${dev}" | sed -nr 's/^ *ATTR\{address\}=="(.+)".*$/\1/p')
-    if [[ "${mac}" =~ ^([0-9A-Fa-f]{2}:){3}[0-9A-Fa-f]{2}$ ]]; then
+    if [[ "${mac}" =~ ^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$ ]]; then
       echo "Adding device '${dev}' with MAC '${mac}'"
       cat >> "${TARGET}/etc/udev/rules.d/70-persistent-net.rules" <<EOL
 SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="${mac}", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="eth*", NAME="${dev}"
