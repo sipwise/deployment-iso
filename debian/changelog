@@ -1,3 +1,17 @@
+ngcp-deployment-iso (6.4.2.0+0~mr6.4.2.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [cc3086f] TT#37257 Change source list back to custom one
+  * [33a0503] TT#37257 Fix endless cycle
+  * [a7995fa] TT#37257 Fix mac address validation
+
+  [ Guillem Jover ]
+  * [120b118] TT#41500 Run dpkg-reconfigure tzdata to workaround a bug in grml-debootstrap
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Thu, 09 Aug 2018 12:19:26 +0200
+
 ngcp-deployment-iso (6.4.1.0+0~mr6.4.1.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
