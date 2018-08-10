@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_7872797e",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 40
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-08-10T15:39:41Z",
+      "side": 1,
+      "message": "use same $(ip ...) style (note the leading and trailing whitespace chars in the subshell) to keep it consistent?\n(I don\u0027t really care about whether there\u0027s a space char or not, but just make it consistent for at least newly added code, same below)",
+      "revId": "ff47f4d161cfebbb110c33aaa7ad010090001a0b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
