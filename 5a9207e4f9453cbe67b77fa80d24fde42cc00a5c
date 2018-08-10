@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_b857c1c9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-08-10T15:25:02Z",
+      "side": 1,
+      "message": "JFYI, bonding interfaces don\u0027t necessarily need to be named \"bond*\", e.g.:\n\n% grep \u0027Slave Interface\u0027 /proc/net/bonding/cephbond0\nSlave Interface: ceph0\nSlave Interface: ceph1\n\nJust mentioning, so we ensure to keep that consistent on our platform.",
+      "revId": "5a9207e4f9453cbe67b77fa80d24fde42cc00a5c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
