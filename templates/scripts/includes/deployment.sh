@@ -399,6 +399,10 @@ elif checkBootParam ngcppro || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 
   else
     ROLE=sp1
   fi
+elif checkBootParam "nongcp" ; then
+  # installing plain debian without NGCP
+  NGCP_INSTALLER_EDITION_STR=""
+  SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
 elif checkBootParam "puppetenv=" ; then
   # will be determined later
   :
