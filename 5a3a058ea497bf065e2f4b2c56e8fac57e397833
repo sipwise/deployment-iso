@@ -16,6 +16,24 @@
       "revId": "5a3a058ea497bf065e2f4b2c56e8fac57e397833",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_fb62e315",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-14T09:18:09Z",
+      "side": 1,
+      "message": "This variable is used by installer https://gerrit.mgm.sipwise.com/#/c/22764 and https://gerrit.mgm.sipwise.com/#/c/22765",
+      "parentUuid": "fae47921_5bad6f30",
+      "revId": "5a3a058ea497bf065e2f4b2c56e8fac57e397833",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
