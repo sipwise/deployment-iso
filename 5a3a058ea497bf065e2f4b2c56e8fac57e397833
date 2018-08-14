@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_5bad6f30",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-08-14T09:12:25Z",
+      "side": 1,
+      "message": "JFYI, where do we use it?",
+      "revId": "5a3a058ea497bf065e2f4b2c56e8fac57e397833",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
