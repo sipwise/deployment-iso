@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_c6562206",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2018-08-14T13:03:02Z",
+      "side": 1,
+      "message": "Hi Alex,\nBut installer will not choose USB stick?\nIf not looks good for me.",
+      "range": {
+        "startLine": 941,
+        "startChar": 0,
+        "endLine": 941,
+        "endChar": 30
+      },
+      "revId": "c878377e553fbfe49a5c11a8bd31c5e8ead2a273",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
