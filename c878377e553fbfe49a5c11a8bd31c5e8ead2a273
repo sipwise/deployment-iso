@@ -22,6 +22,30 @@
       "revId": "c878377e553fbfe49a5c11a8bd31c5e8ead2a273",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_86681abc",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-08-14T13:15:40Z",
+      "side": 1,
+      "message": "If USB stick is specified as TARGET_DISK, then it will be choosen.\n\nRight now every GRML based installations have the separate script before deploymnent.sh where you choose drive to install.\n\nP.S. this line should probably also be deleted.",
+      "parentUuid": "fae47921_c6562206",
+      "range": {
+        "startLine": 941,
+        "startChar": 0,
+        "endLine": 941,
+        "endChar": 30
+      },
+      "revId": "c878377e553fbfe49a5c11a8bd31c5e8ead2a273",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
