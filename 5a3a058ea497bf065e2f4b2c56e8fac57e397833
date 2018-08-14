@@ -34,6 +34,29 @@
       "revId": "5a3a058ea497bf065e2f4b2c56e8fac57e397833",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_3b818b90",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-08-14T10:23:14Z",
+      "side": 1,
+      "message": "Ah, I see now. Sorry for the noise.",
+      "range": {
+        "startLine": 1440,
+        "startChar": 0,
+        "endLine": 1440,
+        "endChar": 6
+      },
+      "revId": "5a3a058ea497bf065e2f4b2c56e8fac57e397833",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
