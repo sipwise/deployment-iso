@@ -1214,13 +1214,6 @@ cat >> "${TARGET}/etc/fstab" << EOF
 $SWAP_PARTITION                      none           swap       sw,pri=0  0  0
 EOF
 
-if "$PRO_EDITION" ; then
-  echo "Pro edition: keeping firmware* packages."
-else
-  chroot $TARGET apt-get --purge -y remove \
-  firmware-linux firmware-linux-free firmware-linux-nonfree || true
-fi
-
 # get rid of automatically installed packages
 chroot $TARGET apt-get --purge -y autoremove
 
