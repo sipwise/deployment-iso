@@ -22,6 +22,30 @@
       "revId": "af30d8802758640bb70d121e788ad6c6be2b394f",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_566544df",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-08-27T15:19:25Z",
+      "side": 1,
+      "message": "\u0027die\u0027 function or it is set manually before \u0027exit 1\u0027 across the code",
+      "parentUuid": "baee8101_363400dd",
+      "range": {
+        "startLine": 320,
+        "startChar": 2,
+        "endLine": 320,
+        "endChar": 6
+      },
+      "revId": "af30d8802758640bb70d121e788ad6c6be2b394f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
