@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baee8101_363400dd",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-08-27T14:45:31Z",
+      "side": 1,
+      "message": "BTW, who will set \u0027error\u0027 for Jenkins here for non-zero exit code?\n\n\u003e set_deploy_status \"error\"",
+      "range": {
+        "startLine": 320,
+        "startChar": 2,
+        "endLine": 320,
+        "endChar": 6
+      },
+      "revId": "af30d8802758640bb70d121e788ad6c6be2b394f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
