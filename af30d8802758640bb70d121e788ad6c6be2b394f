@@ -46,6 +46,30 @@
       "revId": "af30d8802758640bb70d121e788ad6c6be2b394f",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_56ac24ed",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-08-27T16:14:05Z",
+      "side": 1,
+      "message": "Ah, right... here\n\n  if grml-chroot \"${TARGET}\" /bin/bash /tmp/ngcp-installer-deployment.sh ; then\n    echo \"ngcp-installer finished successfully\"\n  else\n    die \"Error during installation of ngcp. Find details at: ${TARGET}/tmp/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log\"\n  fi\n\n\nTnx!",
+      "parentUuid": "baee8101_566544df",
+      "range": {
+        "startLine": 320,
+        "startChar": 2,
+        "endLine": 320,
+        "endChar": 6
+      },
+      "revId": "af30d8802758640bb70d121e788ad6c6be2b394f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
