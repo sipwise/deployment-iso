@@ -305,10 +305,28 @@ ensure_packages_installed() {
     fi
   done
 }
+
+wait_exit() {
+  local e_code="${?}"
+  trap '' 1 2 3 6 15 ERR EXIT
+  if [[ -n "${STATUS_WAIT}" ]] && [[ "${STATUS_WAIT}" != 0 ]]; then
+    # if ngcpstatus boot option is used wait for a specific so a
+    # remote host has a chance to check for deploy status "finished",
+    # defaults to 0 seconds otherwise
+    echo "Sleeping for ${STATUS_WAIT} seconds (as requested via boot option 'ngcpstatus')"
+    sleep "${STATUS_WAIT}"
+  fi
+
+  exit "${e_code}"
+}
+
 # }}}
 
 ###################################################
 # the script execution begins here
+
+### trap signals: 1 SIGHUP, 2 SIGINT, 3 SIGQUIT, 6 SIGABRT, 15 SIGTERM
+trap 'wait_exit;' 1 2 3 6 15 ERR EXIT
 
 CMD_LINE=$(cat /proc/cmdline)
 
@@ -1959,14 +1977,6 @@ echo "Successfully finished deployment process [$(date) - running ${SECONDS} sec
 
 if [ "$(get_deploy_status)" != "error" ] ; then
   set_deploy_status "finished"
-fi
-
-if [[ -n "$STATUS_WAIT" && "$STATUS_WAIT" != 0 ]]; then
-  # if ngcpstatus boot option is used wait for a specific so a
-  # remote host has a chance to check for deploy status "finished",
-  # defaults to 0 seconds otherwise
-  echo "Sleeping for $STATUS_WAIT seconds (as requested via boot option 'ngcpstatus')"
-  sleep "$STATUS_WAIT"
 fi
 
 if "$INTERACTIVE" ; then
