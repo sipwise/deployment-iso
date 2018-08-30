@@ -1860,6 +1860,8 @@ puppet_install_from_git () {
     check_puppet_rc "${PIPESTATUS[0]}" "2"
     check_puppet_rerun && repeat=true
   done
+
+  return 0
 }
 
 puppet_install_from_puppet () {
@@ -1884,6 +1886,8 @@ puppet_install_from_puppet () {
     check_puppet_rc "${PIPESTATUS[0]}" "2"
     check_puppet_rerun && repeat=true
   done
+
+  return 0
 }
 
   set_deploy_status "puppet"
