@@ -306,9 +306,7 @@ ensure_packages_installed() {
   done
 }
 
-wait_exit() {
-  local e_code="${?}"
-  trap '' 1 2 3 6 15 ERR EXIT
+status_wait() {
   if [[ -n "${STATUS_WAIT}" ]] && [[ "${STATUS_WAIT}" != 0 ]]; then
     # if ngcpstatus boot option is used wait for a specific so a
     # remote host has a chance to check for deploy status "finished",
@@ -316,7 +314,12 @@ wait_exit() {
     echo "Sleeping for ${STATUS_WAIT} seconds (as requested via boot option 'ngcpstatus')"
     sleep "${STATUS_WAIT}"
   fi
+}
 
+wait_exit() {
+  local e_code="${?}"
+  trap '' 1 2 3 6 15 ERR EXIT
+  status_wait
   exit "${e_code}"
 }
 
@@ -1982,6 +1985,8 @@ fi
 if "$INTERACTIVE" ; then
   exit 0
 fi
+
+status_wait
 
 # do not prompt when running in automated mode
 if "$REBOOT" ; then
