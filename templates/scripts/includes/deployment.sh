@@ -1700,6 +1700,15 @@ vagrant_configuration() {
   fi
 }
 
+if "${CE_EDITION}" ; then
+  echo "Modifying /etc/hosts"
+  sed -ir 's/^(::1[ ]+)localhost (.+)$/\1 \2/g' "${TARGET}/etc/hosts"
+  cat >> "${TARGET}/etc/hosts" << EOF
+# required for FQDN, please adjust if needed
+127.0.0.2 ${TARGET_HOSTNAME}. ${TARGET_HOSTNAME}
+EOF
+fi
+
 if "$VAGRANT" ; then
   echo "Bootoption vagrant present, executing vagrant_configuration."
   vagrant_configuration
