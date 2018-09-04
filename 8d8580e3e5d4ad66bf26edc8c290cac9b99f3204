@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_c3561606",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-04T11:12:36Z",
+      "side": 0,
+      "message": "IMHO, it should be fixed here as:\n\n127.0.0.1       localhost\n127.0.0.1       ${HOSTNAME}. ${HOSTNAME}\n\n::1             ip6-localhost ip6-loopback",
+      "range": {
+        "startLine": 1252,
+        "startChar": 0,
+        "endLine": 1255,
+        "endChar": 52
+      },
+      "revId": "8d8580e3e5d4ad66bf26edc8c290cac9b99f3204",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
