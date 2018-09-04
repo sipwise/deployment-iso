@@ -1250,9 +1250,9 @@ grml-chroot $TARGET hostname -F /etc/hostname
 # make sure installations of packages works, will be overridden later again
 cat > $TARGET/etc/hosts << EOF
 127.0.0.1       localhost
-127.0.0.1       $HOSTNAME
+127.0.0.1       ${HOSTNAME}. ${HOSTNAME}
 
-::1             localhost ip6-localhost ip6-loopback
+::1             ip6-localhost ip6-loopback
 fe00::0         ip6-localnet
 ff00::0         ip6-mcastprefix
 ff02::1         ip6-allnodes
