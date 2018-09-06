@@ -3,9 +3,12 @@ BASH_SCRIPTS = ./templates/scripts/main.sh ./templates/scripts/includes/* ./buil
 NGCP_VERSION ?= $(shell git log --pretty=format:"%h" -1)
 NGCP_VERSION := $(strip $(NGCP_VERSION))
 
+CC=gcc
+
 all: build
 
 build:
+	 $(CC) -shared -fPIC -ldl src/uname.c -o fake-uname.so
 
 syntaxcheck: shellcheck
 
@@ -37,5 +40,6 @@ dist-clean: clean
 	rm -rf grml_build/grml_isos
 	rm -rf grml_build/grml_logs
 	rm -rf grml_build/netboot
+	rm -f fake-uname.so
 
 .PHONY: clean dist-clean syntaxcheck shellcheck build all script_version

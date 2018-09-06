@@ -11,3 +11,4 @@ grml_build/grml_chroot/
 grml_build/grml_isos/
 grml_build/grml_logs/
 grml_build/netboot/
+*.so
