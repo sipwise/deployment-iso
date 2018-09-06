@@ -1780,61 +1780,6 @@ case "$DEBIAN_RELEASE" in
     ;;
 esac
 
-fake_uname() {
-   cat > "${TARGET}/tmp/uname.c" << EOF
-#include <stdio.h>
-#include <string.h>
-#include <dlfcn.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/syslog.h>
-#include <sys/utsname.h>
-
-#ifndef UTS_RELEASE
-#define UTS_RELEASE "0.0.0"
-#endif
-
-#ifndef RTLD_NEXT
-#define RTLD_NEXT      ((void *) -1l)
-#endif
-
-typedef int (*uname_t) (struct utsname * buf);
-
-static void *get_libc_func(const char *funcname)
-{
-  void *func;
-  char *error;
-
-  func = dlsym(RTLD_NEXT, funcname);
-  if ((error = dlerror()) != NULL) {
-    fprintf(stderr, "Can't locate libc function \`%s' error: %s", funcname, error);
-    _exit(EXIT_FAILURE);
-  }
-  return func;
-}
-
-int uname(struct utsname *buf)
-{
-  int ret;
-  char *env = NULL;
-  uname_t real_uname = (uname_t) get_libc_func("uname");
-
-  ret = real_uname((struct utsname *) buf);
-  strncpy(buf->release, ((env = getenv("UTS_RELEASE")) == NULL) ? UTS_RELEASE : env, 65);
-  return ret;
-}
-EOF
-
-  grml-chroot "$TARGET" gcc -shared -fPIC -ldl /tmp/uname.c -o /tmp/fake-uname.so || die 'Failed to build fake-uname.so'
-
-  # avoid "ERROR: ld.so: object '/tmp/fake-uname.so' from LD_PRELOAD cannot be preloaded: ignored."
-  # messages caused by the host system when running grml-chroot process
-  cp "$TARGET"/tmp/fake-uname.so /tmp/fake-uname.so
-}
-
 vagrant_configuration() {
   # bzip2, linux-headers-amd64 and make are required for VirtualBox Guest Additions installer
   # less + sudo are required for Vagrant itself
@@ -1885,10 +1830,6 @@ vagrant_configuration() {
 
   install_vbox_iso
 
-  # required for fake_uname and VBoxLinuxAdditions.run
-  grml-chroot $TARGET apt-get -y install libc6-dev gcc
-  fake_uname
-
   # shellcheck disable=SC2010
   KERNELHEADERS=$(basename "$(ls -d ${TARGET}/usr/src/linux-headers*amd64 | grep -v -- -rt-amd64 | sort -u -r -V | head -1)")
   if [ -z "$KERNELHEADERS" ] ; then
@@ -1906,7 +1847,8 @@ vagrant_configuration() {
   mkdir -p "${TARGET}/media/cdrom"
   mountpoint "${TARGET}/media/cdrom" >/dev/null && umount "${TARGET}/media/cdrom"
   mount -t iso9660 "${vbox_isofile}" "${TARGET}/media/cdrom/"
-  UTS_RELEASE=$KERNELVERSION LD_PRELOAD=/tmp/fake-uname.so grml-chroot "$TARGET" /media/cdrom/VBoxLinuxAdditions.run --nox11
+  UTS_RELEASE="${KERNELVERSION}" LD_PRELOAD="${TARGET}/usr/lib/ngcp-deployment-scripts/fake-uname.so" \
+    grml-chroot "${TARGET}" /media/cdrom/VBoxLinuxAdditions.run --nox11
   tail -10 "${TARGET}/var/log/VBoxGuestAdditions.log"
   umount "${TARGET}/media/cdrom/"
 
