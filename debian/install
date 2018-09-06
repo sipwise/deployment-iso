@@ -1,1 +1,2 @@
+src/fake-uname.so usr/share/ngcp-deployment-scripts/
 templates/scripts/* usr/share/ngcp-deployment-scripts/
