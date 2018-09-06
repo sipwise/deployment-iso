@@ -6,6 +6,7 @@ NGCP_VERSION := $(strip $(NGCP_VERSION))
 all: build
 
 build:
+	 $(MAKE) -C src
 
 syntaxcheck: shellcheck
 
@@ -27,6 +28,7 @@ clean:
 	rm -f templates/boot/isolinux/syslinux.cfg
 	rm -f templates/boot/grub/grub.cfg
 	rm -f templates/boot/isolinux/isolinux.cfg
+	$(MAKE) -C src $@
 
 dist-clean: clean
 	rm -rf artifacts
@@ -37,5 +39,6 @@ dist-clean: clean
 	rm -rf grml_build/grml_isos
 	rm -rf grml_build/grml_logs
 	rm -rf grml_build/netboot
+	rm -f fake-uname.so
 
 .PHONY: clean dist-clean syntaxcheck shellcheck build all script_version
