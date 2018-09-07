@@ -1499,13 +1499,34 @@ if "$NGCP_INSTALLER" ; then
 
   set_deploy_status "ngcp-installer"
 
-  # install ngcp-installer
+  # prepare ngcp-installer downloading
   echo "ngcp-installer: $INSTALLER"
-  cat << EOT | grml-chroot $TARGET /bin/bash
-wget ${INSTALLER_PATH}/${INSTALLER}
-dpkg -i ${INSTALLER}
-rm -f "${INSTALLER}"
+  cat > "${TARGET}/tmp/ngcp-wget-installer.sh" << EOT
+#!/bin/bash
+
+echo "Downloading ngcp-installer via grml-chroot." | tee -a /tmp/ngcp-installer-debug.log
+
+wget ${INSTALLER_PATH}/${INSTALLER} | tee -a /tmp/ngcp-installer-debug.log
+
+dpkg -i ${INSTALLER} | tee -a /tmp/ngcp-installer-debug.log
+RC=\${PIPESTATUS[0]}
+
+if [ "\${RC}" = "0" ] ; then
+  echo "OK, package ngcp-installer installation exits with code '\${RC}', continue deployment." | tee -a /tmp/ngcp-installer-debug.log
+  rm -f "${INSTALLER}" | tee -a /tmp/ngcp-installer-debug.log
+else
+  echo "ERROR: Fatal error while installing package ngcp-installer (exit code '\${RC}')!" | tee -a /tmp/ngcp-installer-debug.log >&2
+  exit \${RC}
+fi
 EOT
+
+  # downloading ngcp-installer
+  if grml-chroot "${TARGET}" /bin/bash /tmp/ngcp-wget-installer.sh ; then
+    echo "ngcp-installer has been downloaded successfully"
+    rm "${TARGET}/tmp/ngcp-wget-installer.sh"
+  else
+    die "Error during installation of ngcp. Find details at: ${TARGET}/tmp/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log"
+  fi
 
   # generate installer configs
   gen_installer_config
@@ -1513,9 +1534,12 @@ EOT
   # generate ngcp-installer run script
   cat > "${TARGET}/tmp/ngcp-installer-deployment.sh" << "EOT"
 #!/bin/bash
+
 echo "Running ngcp-installer via grml-chroot." | tee -a /tmp/ngcp-installer-debug.log
 ngcp-installer 2>&1 | tee -a /tmp/ngcp-installer-debug.log
+
 RC=${PIPESTATUS[0]}
+
 if [ "${RC}" = "0" ] ; then
   echo "OK, ngcp-installer finished with exit code '${RC}', continue netscript deployment." | tee -a /tmp/ngcp-installer-debug.log
 else
@@ -1527,6 +1551,7 @@ EOT
   # execute ngcp-installer
   if grml-chroot "${TARGET}" /bin/bash /tmp/ngcp-installer-deployment.sh ; then
     echo "ngcp-installer finished successfully"
+    rm "${TARGET}/tmp/ngcp-installer-deployment.sh"
   else
     die "Error during installation of ngcp. Find details at: ${TARGET}/tmp/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log"
   fi
