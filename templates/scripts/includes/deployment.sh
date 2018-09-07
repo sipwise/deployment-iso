@@ -62,10 +62,12 @@ HALT=false
 REBOOT=false
 STATUS_DIRECTORY=/srv/deployment/
 STATUS_WAIT=0
+LVM=true
 VAGRANT=false
 ADJUST_FOR_LOW_PERFORMANCE=false
 ENABLE_VM_SERVICES=false
 FILESYSTEM="ext4"
+ROOTFS_SIZE="5G"
 GPG_KEY_SERVER="pool.sks-keyservers.net"
 DEBIAN_REPO_HOST="debian.sipwise.com"
 DEBIAN_REPO_TRANSPORT="https"
@@ -320,6 +322,20 @@ wait_exit() {
   exit "${e_code}"
 }
 
+# check for EFI support or try to enable it
+efi_support() {
+  if lsmod | grep -q efivars ; then
+    einfo "EFI support detected." ; eend 0
+    return 0
+  fi
+
+  if modprobe efivars &>/dev/null ; then
+    einfo "EFI support enabled now." ; eend 0
+    return 0
+  fi
+
+  return 1
+}
 # }}}
 
 ###################################################
@@ -514,6 +530,35 @@ fi
 
 if checkBootParam 'ngcpmcast=' ; then
   MCASTADDR=$(getBootParam ngcpmcast)
+fi
+
+if checkBootParam ngcpnolvm ; then
+  logit "Disabling LVM due to ngcpnolvm boot option"
+  LVM=false
+fi
+
+case "$SP_VERSION" in
+  2.*)
+    logit "Disabling LVM due to SP_VERSION [$SP_VERSION] matching 2.*"
+    LVM=false
+    ;;
+esac
+
+case "$SP_VERSION" in
+  2.*|3.0|3.1|mr3.2*)
+    FILESYSTEM="ext3"
+    logit "Using filesystem $FILESYSTEM for sip:provider release ${SP_VERSION}"
+    ;;
+esac
+
+# allow forcing LVM mode
+if checkBootParam ngcplvm ; then
+  logit "Enabling LVM due to ngcplvm boot option"
+  LVM=true
+fi
+
+if checkBootParam "rootfssize=" ; then
+  ROOTFS_SIZE=$(getBootParam rootfssize)
 fi
 
 if checkBootParam ngcphalt ; then
@@ -923,17 +968,12 @@ echo "root:sipwise" | chpasswd
 ## partition disk
 set_deploy_status "disksetup"
 
-# 2000GB = 2097152000 blocks in /proc/partitions - so make a rough estimation
-if [ "$(awk "/ ${DISK}$/ {print \$3}" /proc/partitions)" -gt 2000000000 ] ; then
-  TABLE=gpt
-else
-  TABLE=msdos
-fi
-
-if "$NGCP_INSTALLER" ; then
-  VG_NAME="ngcp"
-else
-  VG_NAME="vg0"
+if "$LVM" ; then
+  if "$NGCP_INSTALLER" ; then
+    VG_NAME="ngcp"
+  else
+    VG_NAME="vg0"
+  fi
 fi
 
 clear_partition_table() {
@@ -969,14 +1009,26 @@ set_up_partition_table() {
   blockdevice="/dev/${DISK}"
 
   echo "Creating partition table"
-  parted -a optimal -s "${blockdevice}" mklabel "$TABLE"
+  parted -a optimal -s "${blockdevice}" mklabel gpt
 
-  parted -a optimal -s "${blockdevice}" mkpart primary 2048s 100%
-  parted -a optimal -s "${blockdevice}" set 1 lvm on
+  # BIOS boot with GPT
+  parted -a optimal -s "${blockdevice}" mkpart primary 2048s 2M
+  parted -a optimal -s "${blockdevice}" set 1 bios_grub on
+  parted -a optimal -s "${blockdevice}" "name 1 'BIOS Boot'"
+
+  # EFI boot with GPT
+  parted -a optimal -s "${blockdevice}" mkpart primary 2M 512M
+  parted -a optimal -s "${blockdevice}" "name 2 'EFI System'"
+  parted -a optimal -s "${blockdevice}" set 2 boot on
+  EFI_PARTITION="${blockdevice}"1
+
+  parted -a optimal -s "${blockdevice}" mkpart primary 512M 100%
+  parted -a optimal -s "${blockdevice}" "name 3 'Linux LVM'"
+  parted -a optimal -s "${blockdevice}" set 3 lvm on
 
   echo "Creating PV + VG"
-  pvcreate -ff -y "${blockdevice}"1
-  vgcreate "${VG_NAME}" "${blockdevice}"1
+  pvcreate -ff -y "${blockdevice}"3
+  vgcreate "${VG_NAME}" "${blockdevice}"3
   vgchange -a y "${VG_NAME}"
 }
 
@@ -986,33 +1038,46 @@ create_ngcp_partitions() {
   memory=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
   swap_size=$(( memory / 2 / 1024)) # 50% of RAM in MB
 
-  # rootfs
-  local vg_free rootfs_size
-  vg_free=$(vgs "${VG_NAME}" -o vg_free --noheadings --nosuffix --units B)
-  rootfs_size=$(( (vg_free - ( swap_size * 1024 * 1024 )) * 19 / 20 / 1024 / 1024 )) # 95% of free space, excl. swap (in MB)
-  echo "Creating LV root with ${rootfs_size}M"
-  lvcreate --yes -n root -L "${rootfs_size}M" "${VG_NAME}"
+  # root1
+  echo "Creating LV 'root1' with ${ROOTFS_SIZE}"
+  lvcreate --yes -n root1 -L "${ROOTFS_SIZE}" "${VG_NAME}"
 
-  echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/root"
-  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
+  echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/root1"
+  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root1
+
+  # root2
+  echo "Creating LV 'root2' with ${ROOTFS_SIZE}"
+  lvcreate --yes -n root2 -L "${ROOTFS_SIZE}" "${VG_NAME}"
+
+  echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/root2"
+  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root2
 
   # swap
   echo "Creating LV swap with ${swap_size}"
-  lvcreate --yes -n swap -L "${swap_size}M" "${VG_NAME}"
+  lvcreate --yes -n swap -L ${swap_size} "${VG_NAME}"
 
   echo "Creating swap space on /dev/${VG_NAME}/swap"
   mkswap /dev/"${VG_NAME}"/swap
 
+  # data
+  local vg_free data_size
+  vg_free=$(vgs "${VG_NAME}" -o vg_free --noheadings --nosuffix --units B)
+  data_size=$(( vg_free * 18 / 20 / 1024 / 1024 )) # 90% of free space (in MB), remaining 10% is kept free
+  echo "Creating LV data with ${data_size}M"
+  lvcreate --yes -n data -L "${data_size}M" "${VG_NAME}"
+
+  echo "Creating ${FILESYSTEM} on /dev/${VG_NAME}/data"
+  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/data
+
   # used later by installer
-  ROOT_FS="/dev/mapper/${VG_NAME}-root"
+  ROOT_FS="/dev/mapper/${VG_NAME}-root1"
   SWAP_PARTITION="/dev/mapper/${VG_NAME}-swap"
+  DATA_PARTITION="/dev/mapper/${VG_NAME}-data"
 }
 
 create_debian_partitions() {
-  local memory swap_size
-
+  local memory
   memory=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
-  swap_size=$(( memory / 2 / 1024)) # 50% of RAM in MB
 
   # rootfs
   local root_size=8G
@@ -1023,8 +1088,9 @@ create_debian_partitions() {
   mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
 
   # swap
+  local swap_size=$(( memory / 2 / 1024)) # 50% of RAM in MB
   echo "Creating LV swap with ${swap_size}"
-  lvcreate --yes -n swap -L "${swap_size}M" "${VG_NAME}"
+  lvcreate --yes -n swap -L ${swap_size} "${VG_NAME}"
 
   echo "Creating swap on /dev/${VG_NAME}/swap"
   mkswap /dev/"${VG_NAME}"/swap
@@ -1062,14 +1128,37 @@ lvm_setup() {
   fi
 
   # used later by installer
-  ROOT_FS="/dev/mapper/${VG_NAME}-root"
+  ROOT_FS="/dev/mapper/${VG_NAME}-root1"
   SWAP_PARTITION="/dev/mapper/${VG_NAME}-swap"
 
   # restore original options/behavior
   eval "$saved_options"
 }
 
-lvm_setup
+plain_disk_setup() {
+  parted -s -a optimal "/dev/${DISK}" mktable gpt || die "Failed to set up partition table"
+  # hw-raid with rootfs + swap partition
+  parted -s -a optimal "/dev/${DISK}" 'mkpart primary ext4 2048s 95%' || die "Failed to set up primary partition"
+  parted -s -a optimal "/dev/${DISK}" 'mkpart primary linux-swap 95% -1' || die "Failed to set up swap partition"
+  sync
+
+  # used later by installer
+  ROOT_FS="/dev/${DISK}1"
+  SWAP_PARTITION="/dev/${DISK}2"
+
+  echo "Initialising swap partition $SWAP_PARTITION"
+  mkswap -L ngcp-swap "$SWAP_PARTITION" || die "Failed to initialise swap partition"
+
+  # for later usage in /etc/fstab use /dev/disk/by-label/ngcp-swap instead of /dev/${DISK}2
+  SWAP_PARTITION="/dev/disk/by-label/ngcp-swap"
+}
+
+if "$LVM" ; then
+  lvm_setup
+else # no LVM
+  plain_disk_setup
+fi
+
 
 # otherwise e2fsck fails with "need terminal for interactive repairs"
 echo FSCK=no >>/etc/debootstrap/config
@@ -1136,6 +1225,21 @@ if [ "$DEBIAN_RELEASE" = "stretch" ] && [ ! -r /usr/share/debootstrap/scripts/st
   ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/stretch
 fi
 
+mount "${ROOT_FS}" "${TARGET}"
+if [ -n "${DATA_PARTITION}" ] ; then
+  mkdir -p "${TARGET}/data"
+  mount "${DATA_PARTITION}" "${TARGET}"/data
+fi
+
+if [ -n "${EFI_PARTITION}" ] ; then
+  if efi_support ; then
+    logit "EFI support present, enabling EFI support within grml-debootstrap"
+    EFI_OPTION="--efi $EFI_PARTITION"
+  else
+    logit "EFI support NOT present, not enabling EFI support within grml-debootstrap"
+  fi
+fi
+
 # install Debian
 # shellcheck disable=SC2086
 echo y | grml-debootstrap \
@@ -1148,7 +1252,8 @@ echo y | grml-debootstrap \
   --keep_src_list \
   --defaultinterfaces \
   -r "$DEBIAN_RELEASE" \
-  -t "$ROOT_FS" \
+  -t "$TARGET" \
+  $EFI_OPTION \
   --password 'sipwise' 2>&1 | tee -a /tmp/grml-debootstrap.log
 
 if [ "${PIPESTATUS[1]}" != "0" ]; then
@@ -1175,6 +1280,14 @@ echo "Enabling swap partition $SWAP_PARTITION via /etc/fstab"
 cat >> "${TARGET}/etc/fstab" << EOF
 $SWAP_PARTITION                      none           swap       sw,pri=0  0  0
 EOF
+
+# provide useable /data partition
+if [ -n "$DATA_PARTITION" ] ; then
+  echo "Enabling data partition $DATA_PARTITION via /etc/fstab"
+  cat >> "${TARGET}/etc/fstab" << EOF
+$DATA_PARTITION /data               auto           noatime               0  0
+EOF
+fi
 
 # get rid of automatically installed packages
 chroot $TARGET apt-get --purge -y autoremove
@@ -1854,6 +1967,9 @@ fi
 
 # don't leave any mountpoints
 sync
+if mountpoint "${TARGET}/data" >/dev/null 2>&1 ; then
+  umount "${TARGET}/data" 2>/dev/null || true
+fi
 umount ${TARGET}/proc    || true
 umount ${TARGET}/sys     || true
 umount ${TARGET}/dev/pts || true
@@ -1863,9 +1979,11 @@ sync
 # unmount chroot - what else?
 umount $TARGET || umount -l $TARGET # fall back if a process is still being active
 
-# make sure no device mapper handles are open, otherwise
-# rereading partition table won't work
-dmsetup remove_all || true
+if "$LVM" ; then
+  # make sure no device mapper handles are open, otherwise
+  # rereading partition table won't work
+  dmsetup remove_all || true
+fi
 
 if ! blockdev --rereadpt "/dev/${DISK}" ; then
   echo "Something on disk /dev/${DISK} (mountpoint $TARGET) seems to be still active, debugging output follows:"
