@@ -63,6 +63,30 @@
       "revId": "a3fd9b3836c235cae5e3202bd07a15f5ce439478",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_848934cd",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 42
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-07T13:31:31Z",
+      "side": 1,
+      "message": "Vova, ping here. :-D",
+      "parentUuid": "9af37de9_44c46c3f",
+      "range": {
+        "startLine": 897,
+        "startChar": 0,
+        "endLine": 900,
+        "endChar": 4
+      },
+      "revId": "a3fd9b3836c235cae5e3202bd07a15f5ce439478",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
