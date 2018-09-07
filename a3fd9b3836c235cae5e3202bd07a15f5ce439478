@@ -39,6 +39,30 @@
       "revId": "a3fd9b3836c235cae5e3202bd07a15f5ce439478",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_44c46c3f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 42
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-07T12:05:35Z",
+      "side": 1,
+      "message": "*I* don\u0027t care at all (totally fine for me to just drop it), it\u0027s relevant for operations. :)\n\nI\u0027d clarify this with Volodymyr if that\u0027s (still) relevant for them.",
+      "parentUuid": "9af37de9_847c9421",
+      "range": {
+        "startLine": 897,
+        "startChar": 0,
+        "endLine": 900,
+        "endChar": 4
+      },
+      "revId": "a3fd9b3836c235cae5e3202bd07a15f5ce439478",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
