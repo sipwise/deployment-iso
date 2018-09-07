@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_a4867811",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 42
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-07T12:00:55Z",
+      "side": 1,
+      "message": "in some wired cases you can have multiply default gateways.\nI suggest to exit after the first match: ... awk ... \u0027{print $5; exit}\u0027)\n\nP.S. can be one new commit on top of all reviews.",
+      "revId": "a3fd9b3836c235cae5e3202bd07a15f5ce439478",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_847c9421",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 42
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-07T12:00:55Z",
+      "side": 1,
+      "message": "I am not sure us is still topica, please make a note to discuss it with Mika.\n  \n^d8d5174 (Michael Prokop  2011-05-12 01:22:27 +0000 1054)   if ifconfig usb0 \u0026\u003e/dev/null ; then\n^d8d5174 (Michael Prokop  2011-05-12 01:22:27 +0000 1055)     ifconfig usb0 169.254.1.102 netmask 255.255.0.0\n^d8d5174 (Michael Prokop  2011-05-12 01:22:27 +0000 1056)   fi\n\n\nIMHO it can/should be deleted.",
+      "range": {
+        "startLine": 897,
+        "startChar": 0,
+        "endLine": 900,
+        "endChar": 4
+      },
+      "revId": "a3fd9b3836c235cae5e3202bd07a15f5ce439478",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
