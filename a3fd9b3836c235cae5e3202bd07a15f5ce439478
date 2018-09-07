@@ -87,6 +87,30 @@
       "revId": "a3fd9b3836c235cae5e3202bd07a15f5ce439478",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_f809c0de",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 42
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2018-09-07T18:57:35Z",
+      "side": 1,
+      "message": "Hi this interface is used to update/flash IMM2 in modern lenovo (x240 sn550) nodes or send commands to IPMI  module.\nFrom my point of view, we should not do this.",
+      "parentUuid": "9af37de9_44c46c3f",
+      "range": {
+        "startLine": 897,
+        "startChar": 0,
+        "endLine": 900,
+        "endChar": 4
+      },
+      "revId": "a3fd9b3836c235cae5e3202bd07a15f5ce439478",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
