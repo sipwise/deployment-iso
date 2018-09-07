@@ -66,6 +66,7 @@ VAGRANT=false
 ADJUST_FOR_LOW_PERFORMANCE=false
 ENABLE_VM_SERVICES=false
 FILESYSTEM="ext4"
+ROOTFS_SIZE="5G"
 GPG_KEY_SERVER="pool.sks-keyservers.net"
 DEBIAN_REPO_HOST="debian.sipwise.com"
 DEBIAN_REPO_TRANSPORT="https"
@@ -323,6 +324,20 @@ wait_exit() {
   exit "${e_code}"
 }
 
+# check for EFI support, if not present try to enable it
+efi_support() {
+  if lsmod | grep -q efivars ; then
+    einfo "EFI support detected." ; eend 0
+    return 0
+  fi
+
+  if modprobe efivars &>/dev/null ; then
+    einfo "EFI support enabled now." ; eend 0
+    return 0
+  fi
+
+  return 1
+}
 # }}}
 
 ###################################################
@@ -517,6 +532,10 @@ fi
 
 if checkBootParam 'ngcpmcast=' ; then
   MCASTADDR=$(getBootParam ngcpmcast)
+fi
+
+if checkBootParam "rootfssize=" ; then
+  ROOTFS_SIZE=$(getBootParam rootfssize)
 fi
 
 if checkBootParam ngcphalt ; then
@@ -926,13 +945,6 @@ echo "root:sipwise" | chpasswd
 ## partition disk
 set_deploy_status "disksetup"
 
-# 2000GB = 2097152000 blocks in /proc/partitions - so make a rough estimation
-if [ "$(awk "/ ${DISK}$/ {print \$3}" /proc/partitions)" -gt 2000000000 ] ; then
-  TABLE=gpt
-else
-  TABLE=msdos
-fi
-
 if "$NGCP_INSTALLER" ; then
   VG_NAME="ngcp"
 else
@@ -972,14 +984,26 @@ set_up_partition_table() {
   blockdevice="/dev/${DISK}"
 
   echo "Creating partition table"
-  parted -a optimal -s "${blockdevice}" mklabel "$TABLE"
+  parted -a optimal -s "${blockdevice}" mklabel gpt
 
-  parted -a optimal -s "${blockdevice}" mkpart primary 2048s 100%
-  parted -a optimal -s "${blockdevice}" set 1 lvm on
+  # BIOS boot with GPT
+  parted -a optimal -s "${blockdevice}" mkpart primary 2048s 2M
+  parted -a optimal -s "${blockdevice}" set 1 bios_grub on
+  parted -a optimal -s "${blockdevice}" "name 1 'BIOS Boot'"
+
+  # EFI boot with GPT
+  parted -a optimal -s "${blockdevice}" mkpart primary 2M 512M
+  parted -a optimal -s "${blockdevice}" "name 2 'EFI System'"
+  parted -a optimal -s "${blockdevice}" set 2 boot on
+  EFI_PARTITION="${blockdevice}"2
+
+  parted -a optimal -s "${blockdevice}" mkpart primary 512M 100%
+  parted -a optimal -s "${blockdevice}" "name 3 'Linux LVM'"
+  parted -a optimal -s "${blockdevice}" set 3 lvm on
 
   echo "Creating PV + VG"
-  pvcreate -ff -y "${blockdevice}"1
-  vgcreate "${VG_NAME}" "${blockdevice}"1
+  pvcreate -ff -y "${blockdevice}"3
+  vgcreate "${VG_NAME}" "${blockdevice}"3
   vgchange -a y "${VG_NAME}"
 }
 
@@ -989,33 +1013,54 @@ create_ngcp_partitions() {
   memory=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
   swap_size=$(( memory / 2 / 1024)) # 50% of RAM in MB
 
-  # rootfs
-  local vg_free rootfs_size
-  vg_free=$(vgs "${VG_NAME}" -o vg_free --noheadings --nosuffix --units B)
-  rootfs_size=$(( (vg_free - ( swap_size * 1024 * 1024 )) * 19 / 20 / 1024 / 1024 )) # 95% of free space, excl. swap (in MB)
-  echo "Creating LV root with ${rootfs_size}M"
-  lvcreate --yes -n root -L "${rootfs_size}M" "${VG_NAME}"
+  # root
+  echo "Creating LV 'root' with ${ROOTFS_SIZE}"
+  lvcreate --yes -n root -L "${ROOTFS_SIZE}" "${VG_NAME}"
 
   echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/root"
   mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
 
+  # fallback
+  echo "Creating LV 'fallback' with ${ROOTFS_SIZE}"
+  lvcreate --yes -n fallback -L "${ROOTFS_SIZE}" "${VG_NAME}"
+
+  echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/fallback"
+  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/fallback
+
   # swap
   echo "Creating LV swap with ${swap_size}"
-  lvcreate --yes -n swap -L "${swap_size}M" "${VG_NAME}"
+  lvcreate --yes -n swap -L ${swap_size} "${VG_NAME}"
 
   echo "Creating swap space on /dev/${VG_NAME}/swap"
   mkswap /dev/"${VG_NAME}"/swap
 
+  # data
+  local vg_free data_size unassigned
+  vg_free=$(vgs "${VG_NAME}" -o vg_free --noheadings --nosuffix --units B)
+  data_size=$(( vg_free * 18 / 20 )) # 90% of free space (in MB)
+  unassigned=$(( vg_free - data_size ))
+  # make sure we have 10% or at least 500MB unassigned space
+  if [[ "$unassigned" -lt 524288000 ]] ; then # 500MB
+    data_size=$(( vg_free - 524288000 ))
+  fi
+
+  local data_size_mb
+  data_size_mb=$(( data_size / 1024 / 1024 ))
+  echo "Creating LV data with ${data_size_mb}M"
+  lvcreate --yes -n data -L "${data_size_mb}M" "${VG_NAME}"
+
+  echo "Creating ${FILESYSTEM} on /dev/${VG_NAME}/data"
+  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/data
+
   # used later by installer
   ROOT_FS="/dev/mapper/${VG_NAME}-root"
   SWAP_PARTITION="/dev/mapper/${VG_NAME}-swap"
+  DATA_PARTITION="/dev/mapper/${VG_NAME}-data"
 }
 
 create_debian_partitions() {
-  local memory swap_size
-
+  local memory
   memory=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
-  swap_size=$(( memory / 2 / 1024)) # 50% of RAM in MB
 
   # rootfs
   local root_size=8G
@@ -1026,8 +1071,9 @@ create_debian_partitions() {
   mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
 
   # swap
+  local swap_size=$(( memory / 2 / 1024)) # 50% of RAM in MB
   echo "Creating LV swap with ${swap_size}"
-  lvcreate --yes -n swap -L "${swap_size}M" "${VG_NAME}"
+  lvcreate --yes -n swap -L ${swap_size} "${VG_NAME}"
 
   echo "Creating swap on /dev/${VG_NAME}/swap"
   mkswap /dev/"${VG_NAME}"/swap
@@ -1149,6 +1195,15 @@ case "$DEBIAN_RELEASE" in
     ;;
 esac
 
+if [ -n "${EFI_PARTITION}" ] ; then
+  if efi_support ; then
+    echo "EFI support present, enabling EFI support within grml-debootstrap"
+    EFI_OPTION="--efi $EFI_PARTITION"
+  else
+    echo "EFI support NOT present, not enabling EFI support within grml-debootstrap"
+  fi
+fi
+
 # install Debian
 # shellcheck disable=SC2086
 echo y | grml-debootstrap \
@@ -1162,6 +1217,7 @@ echo y | grml-debootstrap \
   --defaultinterfaces \
   -r "$DEBIAN_RELEASE" \
   -t "$ROOT_FS" \
+  $EFI_OPTION \
   --password 'sipwise' 2>&1 | tee -a /tmp/grml-debootstrap.log
 
 if [ "${PIPESTATUS[1]}" != "0" ]; then
@@ -1170,6 +1226,10 @@ fi
 
 sync
 mount "$ROOT_FS" "$TARGET"
+
+if [ -n "${DATA_PARTITION}" ] ; then
+  mkdir -p "${TARGET}/ngcpdata"
+fi
 
 # MT#7805
 if "$NGCP_INSTALLER" ; then
@@ -1188,6 +1248,14 @@ echo "Enabling swap partition $SWAP_PARTITION via /etc/fstab"
 cat >> "${TARGET}/etc/fstab" << EOF
 $SWAP_PARTITION                      none           swap       sw,pri=0  0  0
 EOF
+
+# provide useable /ngcpdata partition
+if [ -n "$DATA_PARTITION" ] ; then
+  echo "Enabling ngcpdata partition $DATA_PARTITION via /etc/fstab"
+  cat >> "${TARGET}/etc/fstab" << EOF
+$DATA_PARTITION /ngcpdata               auto           noatime               0  0
+EOF
+fi
 
 # get rid of automatically installed packages
 chroot $TARGET apt-get --purge -y autoremove
