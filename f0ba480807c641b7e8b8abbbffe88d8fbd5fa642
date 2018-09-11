@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_1188df21",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-11T15:22:12Z",
+      "side": 1,
+      "message": "it will be the hidden list I would say. why not\n  \nif ! \"$NGCP_INSTALLER\" ; then\n  echo \"Install some packages to be able to login on the Debian plain system\"\n  # WARNING: consider to add NGCP packages to NGCP metapackage!\n  cat \u003e\u003e /etc/debootstrap/packages \u003c\u003c EOF\n# to be able to login on the Debian plain system via SSH\nopenssh-server\n\n# deployment supports LVM only\nlvm2\nEOF\nelse\n  echo \"Install some packages to be able to login on the Debian plain system\"\n  # WARNING: consider to add NGCP packages to NGCP metapackage!\n  cat \u003e\u003e /etc/debootstrap/packages \u003c\u003c EOF\n# to be able to retrieve files, starting with Debian/buster no longer present by default\nwget\nEOF\nfi",
+      "range": {
+        "startLine": 1147,
+        "startChar": 43,
+        "endLine": 1147,
+        "endChar": 47
+      },
+      "revId": "f0ba480807c641b7e8b8abbbffe88d8fbd5fa642",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
