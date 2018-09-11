@@ -232,14 +232,14 @@ die() {
 enable_trace() {
   if "${DEBUG_MODE}" ; then
     set -x
-    PS4='+\t '
+    export PS4='+\t (${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): } '
   fi
 }
 
 disable_trace() {
   if "${DEBUG_MODE}" ; then
     set +x
-    PS4=''
+    export PS4=''
   fi
 }
 
