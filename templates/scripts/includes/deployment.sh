@@ -1084,6 +1084,9 @@ if ! "$NGCP_INSTALLER" ; then
 # to be able to login on the Debian plain system via SSH
 openssh-server
 
+# to be able to retrieve files, starting with Debian/stretch no longer present by default
+wget
+
 # deployment supports LVM only
 lvm2
 EOF
