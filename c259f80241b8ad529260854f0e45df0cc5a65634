@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_b1e11301",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-11T14:53:48Z",
+      "side": 1,
+      "message": "BOOM ?!?",
+      "range": {
+        "startLine": 1080,
+        "startChar": 0,
+        "endLine": 1080,
+        "endChar": 29
+      },
+      "revId": "c259f80241b8ad529260854f0e45df0cc5a65634",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
