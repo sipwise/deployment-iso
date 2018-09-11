@@ -254,7 +254,7 @@ is_package_installed() {
 }
 
 ensure_packages_installed() {
-  [[ -z "${ADDITINAL_PACKAGES[@]}" ]] && return 0
+  [[ -z "${ADDITINAL_PACKAGES[*]}" ]] && return 0
 
   local install_packages
   install_packages=()
