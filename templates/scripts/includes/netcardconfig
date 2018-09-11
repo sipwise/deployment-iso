@@ -697,6 +697,8 @@ while (true); do
   IFACEDONE=""
   while [ -n "$DV" ] && [ -z "$IFACEDONE" ]; do
     configiface "${METHOD}" "${IPADDR}" "${NETMASK}" "${GATEWAY}" "${DNS}"
+    echo "DEBUG"
+    cat /etc/network/interfaces
     if ! ifup $DV; then
       if "${INTERACTIVE}" ; then
         $DIALOG --yesno "$MESSAGE14" 15 50 || IFACEDONE="DONE"
