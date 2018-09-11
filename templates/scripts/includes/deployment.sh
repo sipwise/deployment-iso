@@ -1703,7 +1703,8 @@ puppet_install_from_git () {
   echo "Copying data from device '${PUPPET_RESCUE_DRIVE}' (mounted into '${PUPPET_RESCUE_PATH}', type '${DEVICE_TYPE}')"
   mkdir -p "${PUPPET_RESCUE_PATH}"
   mount -t "${DEVICE_TYPE}" -o ro "${PUPPET_RESCUE_DRIVE}" "${PUPPET_RESCUE_PATH}"
-  mkdir -m 0700 -p "${TARGET}/etc/puppetlabs/code/hieradata/"
+  mkdir -p "${TARGET}/etc/puppetlabs/code/hieradata/"
+  chmod 0700 "${TARGET}/etc/puppetlabs/code/hieradata/"
   cp -a "${PUPPET_RESCUE_PATH}"/hieradata/* "${TARGET}/etc/puppetlabs/code/hieradata/"
   mkdir -p ~/.ssh
   cp "${PUPPET_RESCUE_PATH}"/hieradata/defaults.d/id_rsa_r10k ~/.ssh/
@@ -1723,7 +1724,8 @@ puppet_install_from_git () {
   PUPPET_CODE_PATH="/etc/puppetlabs/code/environments/${PUPPET}"
 
   echo "Creating empty Puppet environment ${TARGET}/${PUPPET_CODE_PATH}"
-  mkdir -m 0755 -p "${TARGET}/${PUPPET_CODE_PATH}"
+  mkdir -p "${TARGET}/${PUPPET_CODE_PATH}"
+  chmod 0755 "${TARGET}/${PUPPET_CODE_PATH}"
 
   echo "Deploying Puppet code from Git repository to ${TARGET}/${PUPPET_CODE_PATH}"
   cp -a "${PUPPET_LOCAL_GIT}"/* "${TARGET}/${PUPPET_CODE_PATH}"
