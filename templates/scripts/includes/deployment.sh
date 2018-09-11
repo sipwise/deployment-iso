@@ -1144,7 +1144,7 @@ echo y | grml-debootstrap \
   --filesystem "${FILESYSTEM}" \
   --hostname "${TARGET_HOSTNAME}" \
   --mirror "$MIRROR" \
-  --debopt "--keyring=${KEYRING}" $EXTRA_DEBOOTSTRAP_OPTS \
+  --debopt "--keyring=${KEYRING} --include=wget" \
   --keep_src_list \
   --defaultinterfaces \
   -r "$DEBIAN_RELEASE" \
