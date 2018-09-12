@@ -57,6 +57,30 @@
       "revId": "09baba4537f0043e119cbc352348a2dd3dcd4158",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_4c000eab",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-12T11:40:45Z",
+      "side": 1,
+      "message": "ACK, thx",
+      "parentUuid": "9af37de9_cc5bde2d",
+      "range": {
+        "startLine": 1465,
+        "startChar": 0,
+        "endLine": 1467,
+        "endChar": 6
+      },
+      "revId": "09baba4537f0043e119cbc352348a2dd3dcd4158",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
