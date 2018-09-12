@@ -16,6 +16,47 @@
       "revId": "09baba4537f0043e119cbc352348a2dd3dcd4158",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_ac41ba3b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-12T10:13:37Z",
+      "side": 1,
+      "message": "actually here is bigger problem -\u003e bash reads from STDIN: https://gerrit.mgm.sipwise.com/#/c/23304/  -\u003e https://sipwise.my.workfront.com/task/view?ID\u003d59256f7f0039226a6e7440e438ba3391 -\u003e http://mika.soup.io/post/617103994/Debugging-a-mystery-ssh-causing-strange-exit",
+      "parentUuid": "9af37de9_4c312eec",
+      "revId": "09baba4537f0043e119cbc352348a2dd3dcd4158",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_cc5bde2d",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-12T10:13:37Z",
+      "side": 1,
+      "message": "Something unrelated here.\nBTW, Mika, such code check should be also adopted for buster I believe, isn\u0027t it.",
+      "range": {
+        "startLine": 1465,
+        "startChar": 0,
+        "endLine": 1467,
+        "endChar": 6
+      },
+      "revId": "09baba4537f0043e119cbc352348a2dd3dcd4158",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
