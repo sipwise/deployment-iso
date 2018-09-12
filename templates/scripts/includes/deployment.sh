@@ -1379,24 +1379,23 @@ EOF
 }
 
 if "$NGCP_INSTALLER" ; then
-  # set INSTALLER_PATH and INSTALLER depending on release/version
-  get_installer_path
-
-  # generate debian/sipwise repos
-  set_repos
-
   set_deploy_status "ngcp-installer"
 
-  # install ngcp-installer
-  echo "Using package ngcp-installer: ${INSTALLER}"
+  echo "Searching for proper ngcp-installer package ..."
+  get_installer_path
+
+  echo "Generating debian/sipwise APT repos ..."
+  set_repos
+
+  echo "Installing package ngcp-installer: ${INSTALLER}"
   grml-chroot "${TARGET}" "wget \"${INSTALLER_PATH}/${INSTALLER}\""
   grml-chroot "${TARGET}" "dpkg -i \"${INSTALLER}\""
   grml-chroot "${TARGET}" "rm -f \"${INSTALLER}\""
 
-  # generate installer configs
+  echo "Generating ngcp-installer configs ..."
   gen_installer_config
 
-  # generate ngcp-installer run script
+  echo "Generating ngcp-installer run script ..."
   cat > "${TARGET}/tmp/ngcp-installer-deployment.sh" << "EOT"
 #!/bin/bash
 echo "Running ngcp-installer via grml-chroot." | tee -a /tmp/ngcp-installer-debug.log
@@ -1410,7 +1409,7 @@ else
 fi
 EOT
 
-  # execute ngcp-installer
+  echo "Execute ngcp-installer inside deployment chroot environment ..."
   if grml-chroot "${TARGET}" /bin/bash /tmp/ngcp-installer-deployment.sh ; then
     echo "ngcp-installer finished successfully"
 
@@ -1433,12 +1432,12 @@ EOT
     die "Error during installation of ngcp. Find details at: ${TARGET}/tmp/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log"
   fi
 
-  # nuke files
+  echo "Temporary files cleanup ..."
   find "${TARGET}/var/log" -type f -size +0 -not -name \*.ini -exec sh -c ":> \${1}" sh {} \;
   :>$TARGET/var/run/utmp
   :>$TARGET/var/run/wtmp
 
-  # make a backup of the installer logfiles for later investigation
+  echo "Backup of the installer logfiles for later investigation ..."
   if [ -r "${TARGET}"/tmp/ngcp-installer.log ] ; then
     cp "${TARGET}"/tmp/ngcp-installer.log "${TARGET}"/var/log/
   fi
