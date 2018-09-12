@@ -1452,6 +1452,15 @@ EOT
   fi
 fi
 
+if [[ -n "${MANAGEMENT_IP}" ]] && "${RETRIEVE_MGMT_CONFIG}" ; then
+  echo "Retrieving public key from management node"
+  cat << EOT | grml-chroot "${TARGET}" /bin/bash
+  mkdir -p /root/.ssh
+  wget --timeout=30 -O /root/.ssh/authorized_keys "http://${MANAGEMENT_IP}:3000/ssh/id_rsa_pub"
+  chmod 600 /root/.ssh/authorized_keys
+EOT
+fi
+
 case "$DEBIAN_RELEASE" in
   stretch)
     set_custom_grub_boot_options
