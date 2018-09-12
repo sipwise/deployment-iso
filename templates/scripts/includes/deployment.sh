@@ -315,6 +315,9 @@ status_wait() {
 
 wait_exit() {
   local e_code="${?}"
+  if [[ "${e_code}" -ne 0 ]]; then
+    set_deploy_status "error"
+  fi
   trap '' 1 2 3 6 15 ERR EXIT
   status_wait
   exit "${e_code}"
