@@ -774,10 +774,10 @@ cdr2mask () {
 
 # Get current IP
 ## try ipv4
-INSTALL_DEV=$(ip -4 r | awk '/default/ {print $5}')
+INSTALL_DEV=$(ip -4 r | awk '/default/ {print $5; exit}')
 if [[ -z "${INSTALL_DEV}" ]]; then
   ## try ipv6
-  INSTALL_DEV=$(ip -6 r | awk '/default/ {print $3}')
+  INSTALL_DEV=$(ip -6 r | awk '/default/ {print $3; exit}')
   INSTALL_IP=$(ip -6 addr show "${INSTALL_DEV}" | sed -rn 's/^[ ]+inet6 ([a-fA-F0-9:]+)\/.*$/\1/p')
 else
   external_ip_data=( $( ip -4 addr show "${INSTALL_DEV}" | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3})\/([0-9]+).*$/\1 \3/p' ) )
@@ -785,7 +785,7 @@ else
   current_netmask="$( cdr2mask "${external_ip_data[1]}" )"
   EXTERNAL_NETMASK="${EXTERNAL_NETMASK:-${current_netmask}}"
   unset external_ip_data current_netmask
-  GW="$(ip route show dev "${INSTALL_DEV}" | awk '/^default via/ {print $3}')"
+  GW="$(ip route show dev "${INSTALL_DEV}" | awk '/^default via/ {print $3; exit}')"
 fi
 
 echo "INSTALL_IP is ${INSTALL_IP}"
@@ -894,13 +894,6 @@ if "$LOGO" ; then
   # reset color
   echo -ne "\e[9B\e[1;m"
   enable_trace
-fi
-
-if "$PRO_EDITION" ; then
-  # ipmi on IBM hardware
-  if ifconfig usb0 &>/dev/null ; then
-    ifconfig usb0 169.254.1.102 netmask 255.255.0.0
-  fi
 fi
 
 # relevant only while deployment, will be overridden later
