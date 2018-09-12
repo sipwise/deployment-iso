@@ -1388,9 +1388,9 @@ if "$NGCP_INSTALLER" ; then
   set_repos
 
   echo "Installing package ngcp-installer: ${INSTALLER}"
-  grml-chroot "${TARGET}" "wget \"${INSTALLER_PATH}/${INSTALLER}\""
-  grml-chroot "${TARGET}" "dpkg -i \"${INSTALLER}\""
-  grml-chroot "${TARGET}" "rm -f \"${INSTALLER}\""
+  grml-chroot "${TARGET}" wget "${INSTALLER_PATH}/${INSTALLER}"
+  grml-chroot "${TARGET}" dpkg -i "${INSTALLER}"
+  grml-chroot "${TARGET}" rm -f "${INSTALLER}"
 
   echo "Generating ngcp-installer configs ..."
   gen_installer_config
