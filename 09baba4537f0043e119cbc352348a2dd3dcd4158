@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_4c312eec",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-12T09:41:18Z",
+      "side": 1,
+      "message": "JFTR, it *might* be that those command lines with trailing white-space don\u0027t end up in bash_history (not sure what\u0027s default bash behavior here, not a bash user myself).",
+      "revId": "09baba4537f0043e119cbc352348a2dd3dcd4158",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
