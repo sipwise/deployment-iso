@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_ec6d82cd",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-12T10:25:31Z",
+      "side": 1,
+      "message": "Iit rings some bells for me... we have a code somewhere which relies on the folder availability... we might will have to tune it there... LGTM so far.",
+      "range": {
+        "startLine": 1460,
+        "startChar": 9,
+        "endLine": 1460,
+        "endChar": 19
+      },
+      "revId": "02e812c07415a89dcce1dab4b5f9ac49cea6b2d8",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
