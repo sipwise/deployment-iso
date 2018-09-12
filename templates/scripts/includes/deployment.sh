@@ -1137,10 +1137,14 @@ deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
 deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
 EOF
 
-if [ "$DEBIAN_RELEASE" = "stretch" ] && [ ! -r /usr/share/debootstrap/scripts/stretch ] ; then
-  echo  "Enabling stretch support for debootstrap via symlink to sid"
-  ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/stretch
-fi
+case "$DEBIAN_RELEASE" in
+  stretch|buster)
+    if ! [ -r "/usr/share/debootstrap/scripts/${DEBIAN_RELEASE}" ] ; then
+      echo "Enabling ${DEBIAN_RELEASE} support for debootstrap via symlink to sid"
+      ln -s /usr/share/debootstrap/scripts/sid "/usr/share/debootstrap/scripts/${DEBIAN_RELEASE}"
+    fi
+    ;;
+esac
 
 # install Debian
 # shellcheck disable=SC2086
@@ -1453,7 +1457,7 @@ EOT
 fi
 
 case "$DEBIAN_RELEASE" in
-  stretch)
+  stretch|buster)
     set_custom_grub_boot_options
     ;;
 esac
@@ -1804,10 +1808,14 @@ puppet_install_from_puppet () {
 
   chroot $TARGET apt-get -y install resolvconf libnss-myhostname
 
-  if [ "$DEBIAN_RELEASE" = "stretch" ] && [ ! -x "${TARGET}/usr/bin/dirmngr" ] ; then
-    echo  "Installing dirmngr on Debian Stretch otherwise 'apt-key adv --recv-keys' is failing to fetch GPG key"
-    chroot $TARGET apt-get -y install dirmngr
-  fi
+  case "$DEBIAN_RELEASE" in
+    stretch|buster)
+      if [ ! -x "${TARGET}/usr/bin/dirmngr" ] ; then
+        echo  "Installing dirmngr on Debian ${DEBIAN_RELEASE}, otherwise 'apt-key adv --recv-keys' is failing to fetch GPG key"
+        chroot $TARGET apt-get -y install dirmngr
+      fi
+      ;;
+  esac
 
   echo "Installing 'puppet-agent' with dependencies"
   cat >> ${TARGET}/etc/apt/sources.list.d/puppetlabs.list << EOF
@@ -1830,9 +1838,12 @@ EOF
   chroot ${TARGET} apt-get update
   chroot ${TARGET} apt-get -y install puppet-agent openssh-server lsb-release ntpdate
 
-  if [ "$DEBIAN_RELEASE" = "stretch" ]; then
-    chroot ${TARGET} ln -s /proc/self/mounts /etc/mtab || true
-  fi
+  # Fix Facter error while running in chroot, facter fails if /etc/mtab is absent:
+  case "$DEBIAN_RELEASE" in
+    stretch|buster)
+      chroot ${TARGET} ln -s /proc/self/mounts /etc/mtab || true
+      ;;
+  esac
 
   cat > ${TARGET}/etc/puppetlabs/puppet/puppet.conf<< EOF
 # This file has been created by deployment.sh
