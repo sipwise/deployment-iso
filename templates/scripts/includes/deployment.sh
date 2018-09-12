@@ -1388,12 +1388,10 @@ if "$NGCP_INSTALLER" ; then
   set_deploy_status "ngcp-installer"
 
   # install ngcp-installer
-  echo "ngcp-installer: $INSTALLER"
-  cat << EOT | grml-chroot $TARGET /bin/bash
-wget ${INSTALLER_PATH}/${INSTALLER}
-dpkg -i ${INSTALLER}
-rm -f "${INSTALLER}"
-EOT
+  echo "Using package ngcp-installer: ${INSTALLER}"
+  grml-chroot "${TARGET}" "wget \"${INSTALLER_PATH}/${INSTALLER}\""
+  grml-chroot "${TARGET}" "dpkg -i \"${INSTALLER}\""
+  grml-chroot "${TARGET}" "rm -f \"${INSTALLER}\""
 
   # generate installer configs
   gen_installer_config
