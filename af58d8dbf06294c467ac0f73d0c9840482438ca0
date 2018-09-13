@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_3daa9271",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-13T15:47:22Z",
+      "side": 0,
+      "message": "Vova, is it really unnecessary? I think so.",
+      "range": {
+        "startLine": 899,
+        "startChar": 0,
+        "endLine": 904,
+        "endChar": 2
+      },
+      "revId": "af58d8dbf06294c467ac0f73d0c9840482438ca0",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
