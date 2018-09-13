@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_1d88ee21",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-13T15:41:03Z",
+      "side": 1,
+      "message": "pls use \u0027echo\u0027, there is no grml/lsb-functions here",
+      "range": {
+        "startLine": 330,
+        "startChar": 4,
+        "endLine": 330,
+        "endChar": 9
+      },
+      "revId": "c5cba5c4d3f0a67df6b1e7b5dd7283438020c01a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_7d793a2f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-13T15:41:03Z",
+      "side": 1,
+      "message": "pls use the single style for all variables ${}",
+      "range": {
+        "startLine": 1043,
+        "startChar": 10,
+        "endLine": 1043,
+        "endChar": 20
+      },
+      "revId": "c5cba5c4d3f0a67df6b1e7b5dd7283438020c01a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_1d8fce24",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-13T15:41:03Z",
+      "side": 1,
+      "message": "It\u0027s better to use [[",
+      "range": {
+        "startLine": 1198,
+        "startChar": 3,
+        "endLine": 1198,
+        "endChar": 4
+      },
+      "revId": "c5cba5c4d3f0a67df6b1e7b5dd7283438020c01a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
