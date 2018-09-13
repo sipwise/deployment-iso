@@ -268,6 +268,11 @@ ensure_packages_installed() {
     fi
   done
 
+  if [ -z "${install_packages[*]}" ] ; then
+    echo "No packages to install, skipping further ensure_packages_installed execution"
+    return 0
+  fi
+
   # Use separate apt database and source list because non management node has no internet access
   # so is installed from management node so these additional packages have to be accessible from
   # sipwise repo
