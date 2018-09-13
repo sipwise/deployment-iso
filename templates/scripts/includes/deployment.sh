@@ -372,6 +372,14 @@ if checkBootParam 'targetdisk=' ; then
   TARGET_DISK=$(getBootParam targetdisk)
 fi
 
+if checkBootParam "swraiddisk1=" ; then
+  SWRAID_DISK1=$(getBootParam swraiddisk1)
+fi
+
+if checkBootParam "swraiddisk2=" ; then
+  SWRAID_DISK2=$(getBootParam swraiddisk2)
+fi
+
 # if TARGET_DISK environment variable is set accept it
 if [ -n "$TARGET_DISK" ] ; then
   export DISK="${TARGET_DISK}"
@@ -391,7 +399,19 @@ else # otherwise try to find sane default
   fi
 fi
 
-[ -z "${DISK}" ] && die "Error: No non-removable disk suitable for installation found"
+SWRAID=false
+if [[ -n "${SWRAID_DISK1}" ]] && [[ -z "${SWRAID_DISK2}" ]] ; then
+  echo "Error: swraiddisk1 is set, but swraiddisk2 is unset." >&2
+  exit 1
+elif [[ -z "${SWRAID_DISK1}" ]] && [[ -n "${SWRAID_DISK2}" ]] ; then
+  echo "Error: swraiddisk2 is set, but swraiddisk1 is unset." >&2
+  exit 1
+elif [[ -n "${SWRAID_DISK1}" ]] && [[ -n "${SWRAID_DISK2}" ]] ; then
+  echo "Identified valid boot options for Software RAID setup."
+  SWRAID=true
+else
+  [ -z "${DISK}" ] && die "Error: No non-removable disk suitable for installation found"
+fi
 
 if checkBootParam 'ngcpstatus=' ; then
   STATUS_WAIT=$(getBootParam ngcpstatus)
@@ -828,6 +848,11 @@ INTERNAL_DEV="${INTERNAL_DEV:-${DEFAULT_INTERNAL_DEV}}"
 if [[ -n "${EXT_GW}" ]]; then
   GW="${EXT_GW}"
 fi
+if [[ "${SWRAID}" = "true" ]] ; then
+  DISK_INFO="Software-RAID with $SWRAID_DISK1 $SWRAID_DISK2"
+else
+  DISK_INFO="/dev/$DISK"
+fi
 
 set_deploy_status "settings"
 
@@ -840,7 +865,7 @@ echo "Deployment Settings:
   $NGCP_INSTALLER_EDITION_STR"
 
 echo "
-  Target disk:       /dev/$DISK
+  Target disk:       $DISK_INFO
   Target Hostname:   $TARGET_HOSTNAME
   Installer version: $SP_VERSION_STR
   Install NW iface:  $INSTALL_DEV
@@ -905,6 +930,9 @@ if "$LOGO" ; then
   else
     EFI_INFO="| no EFI support"
   fi
+  if [[ "${SWRAID}" = "true" ]] ; then
+    SWRAID_INFO="| SW-RAID support [${SWRAID_DISK1} + ${SWRAID_DISK2}]"
+  fi
   # color
   echo -ne "\ec\e[1;32m"
   clear
@@ -916,7 +944,7 @@ if "$LOGO" ; then
   echo "$CPU_INFO CPU(s) | ${RAM_INFO}kB RAM | $CHASSIS"
   echo ""
   echo "Install ngcp: $NGCP_INSTALLER | $INSTALLER_TYPE"
-  echo "Installing $SP_VERSION_STR platform | Debian: $DEBIAN_RELEASE $EFI_INFO $PPA_INFO"
+  echo "Installing $SP_VERSION_STR platform | Debian: $DEBIAN_RELEASE $EFI_INFO $SWRAID_INFO $PPA_INFO"
   echo "Install IP: $INSTALL_IP | Started deployment at $DATE_INFO"
   # number of lines
   echo -ne "\e[10;0r"
@@ -962,8 +990,12 @@ else
 fi
 
 clear_partition_table() {
-  local blockdevice
-  blockdevice="/dev/${DISK}"
+  local blockdevice="$1"
+
+  if ! [ -b "${blockdevice}" ] ; then
+    echo "Error: ${blockdevice} doesn't look like a valid block device." >&2
+    exit 1
+  fi
 
   echo "Wiping disk signatures from ${blockdevice}"
   wipefs -a "${blockdevice}"
@@ -983,15 +1015,12 @@ clear_partition_table() {
     pvremove "$disk" --force --force --yes || true
   done
 
-  dd if=/dev/zero of="/dev/${DISK}" bs=1M count=1
-  blockdev --rereadpt "/dev/${DISK}"
+  dd if=/dev/zero of="${blockdevice}" bs=1M count=1
+  blockdev --rereadpt "${blockdevice}"
 }
 
-set_up_partition_table() {
-  clear_partition_table
-
-  local blockdevice
-  blockdevice="/dev/${DISK}"
+parted_execution() {
+  local blockdevice=$1
 
   echo "Creating partition table"
   parted -a optimal -s "${blockdevice}" mklabel gpt
@@ -1006,7 +1035,15 @@ set_up_partition_table() {
   parted -a optimal -s "${blockdevice}" "name 2 'EFI System'"
   parted -a optimal -s "${blockdevice}" set 2 boot on
   EFI_PARTITION="${blockdevice}"2
+}
 
+set_up_partition_table_noswraid() {
+  local blockdevice
+  blockdevice="/dev/${DISK}"
+
+  clear_partition_table "$blockdevice"
+
+  parted_execution "$blockdevice"
   parted -a optimal -s "${blockdevice}" mkpart primary 512M 100%
   parted -a optimal -s "${blockdevice}" "name 3 'Linux LVM'"
   parted -a optimal -s "${blockdevice}" set 3 lvm on
@@ -1015,6 +1052,54 @@ set_up_partition_table() {
   pvcreate -ff -y "${blockdevice}"3
   vgcreate "${VG_NAME}" "${blockdevice}"3
   vgchange -a y "${VG_NAME}"
+}
+
+set_up_partition_table_swraid() {
+  local swraid_device=/dev/md0
+
+  # make sure we don't overlook unassembled SW-RAIDs
+  mdadm --assemble --scan || true # fails if there's nothing to assemble
+
+  if [ -b ${swraid_device} ] ; then
+    echo "Error: SW-RAID device ${swraid_device} exists already." >&2
+    echo "NOTE: if you are sure you don't need it any longer, execute:"
+    echo "      mdadm --remove ${swraid_device} ; mdadm --stop ${swraid_device}; mdadm --zero-superblock /dev/sd..."
+    exit 1
+  fi
+
+  for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
+    if grep -q "$disk" /proc/mdstat ; then
+      echo "Error: disk $disk seems to be part of an existing SW-RAID setup." >&2
+      exit 1
+    fi
+    clear_partition_table "/dev/${disk}"
+  done
+
+  parted_execution "/dev/${SWRAID_DISK1}"
+
+  parted -a optimal -s "/dev/${SWRAID_DISK1}" mkpart primary 512M 100%
+  parted -a optimal -s "/dev/${SWRAID_DISK1}" "name 3 'Linux RAID'"
+  parted -a optimal -s "/dev/${SWRAID_DISK1}" set 3 raid on
+
+  # clone partitioning from SWRAID_DISK1 to SWRAID_DISK2
+  sgdisk "/dev/${SWRAID_DISK1}" -R "/dev/${SWRAID_DISK2}"
+  # randomize the disk's GUID and all partitions' unique GUIDs after cloning
+  sgdisk -G "/dev/${SWRAID_DISK2}"
+
+  echo y | mdadm --create --verbose "${swraid_device}" --level=1 --raid-devices=2 "/dev/${SWRAID_DISK1}"3 "/dev/${SWRAID_DISK2}"3
+
+  echo "Creating PV + VG on ${swraid_device}"
+  pvcreate -ff -y "${swraid_device}"
+  vgcreate "${VG_NAME}" "${swraid_device}"
+  vgchange -a y "${VG_NAME}"
+}
+
+set_up_partition_table() {
+  if [[ "${SWRAID}" = "true" ]] ; then
+    set_up_partition_table_swraid
+  else
+    set_up_partition_table_noswraid
+  fi
 }
 
 create_ngcp_partitions() {
@@ -1095,11 +1180,17 @@ create_debian_partitions() {
 
 display_partition_table() {
   local blockdevice
-  blockdevice="/dev/${DISK}"
-
-  echo "Displaying partition table for reference:"
-  parted -s "${blockdevice}" unit GiB print
-  lsblk "${blockdevice}"
+  if [[ "$SWRAID" = "true" ]] ; then
+    for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
+      echo "Displaying partition table (of SW-RAID disk /dev/$disk) for reference:"
+      parted -s "/dev/${disk}" unit GiB print
+      lsblk "/dev/${disk}"
+    done
+  else
+    echo "Displaying partition table (of /dev/$disk) for reference:"
+    parted -s "/dev/${DISK}" unit GiB print
+    lsblk "/dev/${DISK}"
+  fi
 }
 
 lvm_setup() {
@@ -1151,6 +1242,13 @@ else
   cat >> /etc/debootstrap/packages << EOF
 # to be able to retrieve files, starting with Debian/buster no longer present by default
 wget
+EOF
+fi
+
+if [[ "$SWRAID" = "true" ]] ; then
+  cat >> /etc/debootstrap/packages << EOF
+# required for Software-RAID support
+mdadm
 EOF
 fi
 
@@ -1961,8 +2059,34 @@ if [ -r "${INSTALL_LOG}" ] && [ -d "${TARGET}"/var/log/ ] ; then
   cp "${INSTALL_LOG}" "${TARGET}"/var/log/
 fi
 
+if [[ "$SWRAID" = "true" ]] ; then
+  if efi_support ; then
+    chroot "${TARGET}" mount /boot/efi
+
+    echo "Cloning EFI partition from /dev/${SWRAID_DISK1}2 to /dev/${SWRAID_DISK2}2"
+    dd if="/dev/${SWRAID_DISK1}2" of="/dev/${SWRAID_DISK1}2" bs=10M
+    if efi_support ; then
+      if efibootmgr | grep -q 'NGCP Fallback' ; then
+	echo "Deleting existing NGCP Fallback entry from EFI boot manager"
+	efi_entry=$(efibootmgr | awk '/NGCP Fallback/ {print $1}' | sed 's/^Boot//; s/\*$//')
+	efibootmgr -b "$efi_entry" -B
+      fi
+      echo "Adding NGCP Fallback entry to EFI boot manager"
+      efibootmgr --create --disk "/dev/${SWRAID_DISK2}" -p 2 -w --label 'NGCP Fallback' --load '\EFI\debian\grubx64.efi'
+    fi
+  fi
+
+  for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
+    grml-chroot "$TARGET" grub-install "/dev/$disk"
+  done
+
+  grml-chroot "$TARGET" update-grub
+fi
+
 # don't leave any mountpoints
 sync
+
+umount ${TARGET}/boot/efi || true
 umount ${TARGET}/proc    || true
 umount ${TARGET}/sys     || true
 umount ${TARGET}/dev/pts || true
