@@ -22,6 +22,30 @@
       "revId": "af58d8dbf06294c467ac0f73d0c9840482438ca0",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_1dc7ce13",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2018-09-13T18:40:49Z",
+      "side": 0,
+      "message": "For sure we do not need this.\nFor installation.",
+      "parentUuid": "9af37de9_3daa9271",
+      "range": {
+        "startLine": 899,
+        "startChar": 0,
+        "endLine": 904,
+        "endChar": 2
+      },
+      "revId": "af58d8dbf06294c467ac0f73d0c9840482438ca0",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
