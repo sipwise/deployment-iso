@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_c495f240",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T12:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9af37de9_641766ee",
+      "range": {
+        "startLine": 1053,
+        "startChar": 58,
+        "endLine": 1053,
+        "endChar": 63
+      },
+      "revId": "557023f1079f2fb9ecf9498ed3f93081a0be8091",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_44d34239",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2018-09-14T12:16:54Z",
       "side": 1,
       "message": "maybe we should install it always, to have identical behavious during upgrade of systems with software raid and without. Also should we add to metapackages?",
+      "range": {
+        "startLine": 1212,
+        "startChar": 0,
+        "endLine": 1212,
+        "endChar": 5
+      },
+      "revId": "557023f1079f2fb9ecf9498ed3f93081a0be8091",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_849fea5e",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T12:46:46Z",
+      "side": 1,
+      "message": "Fine for me, done",
+      "parentUuid": "9af37de9_44d34239",
       "range": {
         "startLine": 1212,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_649c066a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T12:46:46Z",
+      "side": 1,
+      "message": "I find my version way easier to read, YMMV",
+      "parentUuid": "9af37de9_04dd3a42",
+      "range": {
+        "startLine": 2017,
+        "startChar": 0,
+        "endLine": 2017,
+        "endChar": 34
+      },
+      "revId": "557023f1079f2fb9ecf9498ed3f93081a0be8091",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_e4e11600",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 7
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_4488e222",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T12:46:46Z",
+      "side": 1,
+      "message": "Shouldn\u0027t be an issue, as entries need to be unique, but good point in case someone names it \"NGCP Fallback Foo\". We need a different approach for that though, done",
+      "parentUuid": "9af37de9_e4e11600",
+      "revId": "557023f1079f2fb9ecf9498ed3f93081a0be8091",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_24d83e53",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 7
@@ -99,6 +189,24 @@
       "writtenOn": "2018-09-14T12:16:54Z",
       "side": 1,
       "message": "tabs VS spaces",
+      "revId": "557023f1079f2fb9ecf9498ed3f93081a0be8091",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_248dde31",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T12:46:46Z",
+      "side": 1,
+      "message": "ouch, thx (that\u0027s what you get for editing the file outside of vim :p)",
+      "parentUuid": "9af37de9_24d83e53",
       "revId": "557023f1079f2fb9ecf9498ed3f93081a0be8091",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
