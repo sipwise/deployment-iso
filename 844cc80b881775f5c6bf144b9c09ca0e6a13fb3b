@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_640086ab",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-14T12:08:38Z",
+      "side": 1,
+      "message": "JFYI, Vova has to increase this till 10Gb to be able to install Carrier on real hardware.\n\nIt was necessary because we do not use /ngcpdata right now and huge approx cache and glustrefs storate is located on /root\n\nI will check with Kirill the best way to move glustrefs on /ngcpdata/glusterfs\nBTW, is it fine to store data as /ngcpdata/\u003cservice_name\u003e ?",
+      "revId": "844cc80b881775f5c6bf144b9c09ca0e6a13fb3b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_442c624a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-14T12:08:38Z",
+      "side": 1,
+      "message": "I like it! (c)",
+      "range": {
+        "startLine": 903,
+        "startChar": 0,
+        "endLine": 907,
+        "endChar": 4
+      },
+      "revId": "844cc80b881775f5c6bf144b9c09ca0e6a13fb3b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_e42a362c",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-14T12:08:38Z",
+      "side": 1,
+      "message": "style only ${DATA_PARTITION} due to line 1207",
+      "range": {
+        "startLine": 1224,
+        "startChar": 10,
+        "endLine": 1224,
+        "endChar": 24
+      },
+      "revId": "844cc80b881775f5c6bf144b9c09ca0e6a13fb3b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_04265a68",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-14T12:08:38Z",
+      "side": 1,
+      "message": "LGTM here, I am just wondering, who creates record:\n\n\u003e root@sp1:~# cat /etc/fstab \n\u003e /dev/disk/by-uuid/4599d085-ceb5-487a-b9a0-e821bc7d4692 /  auto    defaults,errors\u003dremount-ro,noatime 0   1\n\nWhy do we use there by-uuid and not mapper?\n\n\u003e  # used later by installer\n\u003e  ROOT_FS\u003d\"/dev/mapper/${VG_NAME}-root\"\n\nIsn\u0027t it more readable to have /etc/fstab as:\n\n\u003e /dev/mapper/ngcp-root\n\u003e /dev/mapper/ngcp-fallback\n\u003e /dev/mapper/ngcp-ngcpdata",
+      "range": {
+        "startLine": 1225,
+        "startChar": 56,
+        "endLine": 1225,
+        "endChar": 66
+      },
+      "revId": "844cc80b881775f5c6bf144b9c09ca0e6a13fb3b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
