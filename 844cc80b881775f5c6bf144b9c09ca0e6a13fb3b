@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_84adaa8a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T12:59:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9af37de9_e42a362c",
+      "range": {
+        "startLine": 1224,
+        "startChar": 10,
+        "endLine": 1224,
+        "endChar": 24
+      },
+      "revId": "844cc80b881775f5c6bf144b9c09ca0e6a13fb3b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_04265a68",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 9
@@ -76,6 +100,30 @@
       "writtenOn": "2018-09-14T12:08:38Z",
       "side": 1,
       "message": "LGTM here, I am just wondering, who creates record:\n\n\u003e root@sp1:~# cat /etc/fstab \n\u003e /dev/disk/by-uuid/4599d085-ceb5-487a-b9a0-e821bc7d4692 /  auto    defaults,errors\u003dremount-ro,noatime 0   1\n\nWhy do we use there by-uuid and not mapper?\n\n\u003e  # used later by installer\n\u003e  ROOT_FS\u003d\"/dev/mapper/${VG_NAME}-root\"\n\nIsn\u0027t it more readable to have /etc/fstab as:\n\n\u003e /dev/mapper/ngcp-root\n\u003e /dev/mapper/ngcp-fallback\n\u003e /dev/mapper/ngcp-ngcpdata",
+      "range": {
+        "startLine": 1225,
+        "startChar": 56,
+        "endLine": 1225,
+        "endChar": 66
+      },
+      "revId": "844cc80b881775f5c6bf144b9c09ca0e6a13fb3b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_44b6a2dd",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T12:59:07Z",
+      "side": 1,
+      "message": "\u003e LGTM here, I am just wondering, who creates record:\n \u003e \n \u003e \u003e root@sp1:~# cat /etc/fstab\n \u003e \u003e /dev/disk/by-uuid/4599d085-ceb5-487a-b9a0-e821bc7d4692 /  auto   \n \u003e defaults,errors\u003dremount-ro,noatime 0   1\n \u003e \n \u003e Why do we use there by-uuid and not mapper?\n\nIt\u0027s coming from grml-debootstrap.\n\n \u003e \u003e  # used later by installer\n \u003e \u003e  ROOT_FS\u003d\"/dev/mapper/${VG_NAME}-root\"\n \u003e \n \u003e Isn\u0027t it more readable to have /etc/fstab as:\n \u003e \n \u003e \u003e /dev/mapper/ngcp-root\n \u003e \u003e /dev/mapper/ngcp-fallback\n \u003e \u003e /dev/mapper/ngcp-ngcpdata\n\nYes, though a) on the resulting/running system it shouldn\u0027t be not visible in df/mount/... though (except for older Debian releases where there was a bug) and b) /dev/mapper/ngcp-root might not be unique, whereas UUID *is* unique",
+      "parentUuid": "9af37de9_04265a68",
       "range": {
         "startLine": 1225,
         "startChar": 56,
