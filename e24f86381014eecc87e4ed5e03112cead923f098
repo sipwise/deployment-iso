@@ -46,6 +46,30 @@
       "revId": "e24f86381014eecc87e4ed5e03112cead923f098",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_84492ad3",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-14T14:01:53Z",
+      "side": 1,
+      "message": "it\u0027s a valid call of mdadm binary here. shellcheck can\u0027t catch this.",
+      "parentUuid": "9af37de9_e4391643",
+      "range": {
+        "startLine": 1206,
+        "startChar": 0,
+        "endLine": 1206,
+        "endChar": 3
+      },
+      "revId": "e24f86381014eecc87e4ed5e03112cead923f098",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
