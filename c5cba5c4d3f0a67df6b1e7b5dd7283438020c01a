@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_a41d4e11",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-14T12:09:09Z",
+      "side": 1,
+      "message": "Old comment, submitted now only. Ignore it.",
+      "parentUuid": "9af37de9_7dcb7a73",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 62
+      },
+      "revId": "c5cba5c4d3f0a67df6b1e7b5dd7283438020c01a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_0441ba0b",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 3
