@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_c4d172fd",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 2052,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T13:37:29Z",
+      "side": 1,
+      "message": "Should be to disk #2, right?  Sorry that I didn\u0027t notice in previous commits.",
+      "range": {
+        "startLine": 2052,
+        "startChar": 54,
+        "endLine": 2052,
+        "endChar": 55
+      },
+      "revId": "5046628119b69d1fe637baa507fbf1a8d1ac56f5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
