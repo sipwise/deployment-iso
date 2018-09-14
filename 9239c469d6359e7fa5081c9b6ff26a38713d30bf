@@ -434,6 +434,30 @@
       "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_e4eb56af",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T13:37:29Z",
+      "side": 1,
+      "message": "\u003e \u003e Cannot it be moved to just after the line with dd (2067) without\n \u003e \u003e any ill effect?  dd shouldn\u0027t need it mounted.\n \u003e \n \u003e good idea, done\n\nGreat, thanks!",
+      "parentUuid": "9af37de9_448fc223",
+      "range": {
+        "startLine": 2064,
+        "startChar": 0,
+        "endLine": 2064,
+        "endChar": 38
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
