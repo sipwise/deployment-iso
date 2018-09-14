@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_24527e14",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T10:39:45Z",
+      "side": 1,
+      "message": "I\u0027m now going to vote down on this :) , but the lines of this paragraph looks oddly short, like 50~60 chars wide?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 39
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_4474629b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T10:39:45Z",
+      "side": 1,
+      "message": "[] vs [[]] in the ones above, not sure if you want to keep them consistent, because they\u0027re not very consistent across the file really.",
+      "range": {
+        "startLine": 413,
+        "startChar": 2,
+        "endLine": 413,
+        "endChar": 18
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_046e5ac9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T10:39:45Z",
+      "side": 1,
+      "message": "die() ?",
+      "range": {
+        "startLine": 996,
+        "startChar": 0,
+        "endLine": 997,
+        "endChar": 10
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_e47236ad",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T10:39:45Z",
+      "side": 1,
+      "message": "if you\u0027re going to hardcode /dev/md0, as you mentioned in the commit message or above, perhaps it\u0027s better to make swraid_device a global constant, to avoid future changes where it\u0027s changed in some place but not others?",
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_c46852bd",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T10:39:45Z",
+      "side": 1,
+      "message": "quoted?",
+      "range": {
+        "startLine": 1063,
+        "startChar": 10,
+        "endLine": 1063,
+        "endChar": 26
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_a4654ee2",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T10:39:45Z",
+      "side": 1,
+      "message": "die(), but maybe not very handy with multiple lines",
+      "range": {
+        "startLine": 1064,
+        "startChar": 0,
+        "endLine": 1067,
+        "endChar": 10
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_84624ad7",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T10:39:45Z",
+      "side": 1,
+      "message": "die()",
+      "range": {
+        "startLine": 1072,
+        "startChar": 0,
+        "endLine": 1073,
+        "endChar": 12
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_645f660f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T10:39:45Z",
+      "side": 1,
+      "message": "isn\u0027t there a possibility to --force-something or --assume-yes instead?  I think that \"echo y |\" is a very bad practive, but not sure if it\u0027s possible to have something else here.",
+      "range": {
+        "startLine": 1089,
+        "startChar": 2,
+        "endLine": 1089,
+        "endChar": 10
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_449b42ca",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T10:39:45Z",
+      "side": 1,
+      "message": "is it necessary, or even safe to mount at this point, if a few lines below you\u0027re dd-ing sd?2 from a disk to another?  or am I reading it wrongly?",
+      "range": {
+        "startLine": 2064,
+        "startChar": 0,
+        "endLine": 2064,
+        "endChar": 38
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
