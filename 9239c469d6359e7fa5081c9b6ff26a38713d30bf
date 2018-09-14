@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_84900a97",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T11:30:49Z",
+      "side": 1,
+      "message": "Wanted to avoid any independent changes to make it easier to review with e.g. --ignore-all-space, but OK",
+      "parentUuid": "9af37de9_4474629b",
+      "range": {
+        "startLine": 413,
+        "startChar": 2,
+        "endLine": 413,
+        "endChar": 18
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_046e5ac9",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 5
@@ -59,6 +83,30 @@
       "writtenOn": "2018-09-14T10:39:45Z",
       "side": 1,
       "message": "die() ?",
+      "range": {
+        "startLine": 996,
+        "startChar": 0,
+        "endLine": 997,
+        "endChar": 10
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_648d267b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T11:30:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9af37de9_046e5ac9",
       "range": {
         "startLine": 996,
         "startChar": 0,
@@ -88,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_44e9021a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T11:30:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9af37de9_e47236ad",
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_c46852bd",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 5
@@ -111,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_24eefe22",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T11:30:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9af37de9_c46852bd",
+      "range": {
+        "startLine": 1063,
+        "startChar": 10,
+        "endLine": 1063,
+        "endChar": 26
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_a4654ee2",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 5
@@ -122,6 +212,30 @@
       "writtenOn": "2018-09-14T10:39:45Z",
       "side": 1,
       "message": "die(), but maybe not very handy with multiple lines",
+      "range": {
+        "startLine": 1064,
+        "startChar": 0,
+        "endLine": 1067,
+        "endChar": 10
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_04f3fa0b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T11:30:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9af37de9_a4654ee2",
       "range": {
         "startLine": 1064,
         "startChar": 0,
@@ -180,6 +294,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_a4daee76",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T11:30:49Z",
+      "side": 1,
+      "message": "I don\u0027t know how/under what curcumstances --force works and does what we expect, this is what I\u0027ve in production usage.",
+      "parentUuid": "9af37de9_645f660f",
+      "range": {
+        "startLine": 1089,
+        "startChar": 2,
+        "endLine": 1089,
+        "endChar": 10
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_449b42ca",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 5
@@ -191,6 +329,30 @@
       "writtenOn": "2018-09-14T10:39:45Z",
       "side": 1,
       "message": "is it necessary, or even safe to mount at this point, if a few lines below you\u0027re dd-ing sd?2 from a disk to another?  or am I reading it wrongly?",
+      "range": {
+        "startLine": 2064,
+        "startChar": 0,
+        "endLine": 2064,
+        "endChar": 38
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_44d0e253",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T11:30:49Z",
+      "side": 1,
+      "message": "it\u0027s for sure relevant for the grub-install in line 2079, I\u0027m not sure 100% about usage for efibootmgr though.\nShouldn\u0027t cause any harm, though I get your point and we should check whether we could move it *after* the efibootmgr stuff, though when changing this *now* we\u0027ve to re-test all of this, so whoever makes that call needs to verify that.",
+      "parentUuid": "9af37de9_449b42ca",
       "range": {
         "startLine": 2064,
         "startChar": 0,
