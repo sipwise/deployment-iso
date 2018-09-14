@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_c472927c",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T11:51:42Z",
+      "side": 1,
+      "message": "-\u003e Alex",
+      "parentUuid": "9af37de9_0441ba0b",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 15
+      },
+      "revId": "c5cba5c4d3f0a67df6b1e7b5dd7283438020c01a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_1d88ee21",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 3
