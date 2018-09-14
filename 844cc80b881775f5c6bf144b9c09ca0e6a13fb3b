@@ -133,6 +133,30 @@
       "revId": "844cc80b881775f5c6bf144b9c09ca0e6a13fb3b",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_c4f8527f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-14T13:54:19Z",
+      "side": 1,
+      "message": "I see, tnx!",
+      "parentUuid": "9af37de9_44b6a2dd",
+      "range": {
+        "startLine": 1225,
+        "startChar": 56,
+        "endLine": 1225,
+        "endChar": 66
+      },
+      "revId": "844cc80b881775f5c6bf144b9c09ca0e6a13fb3b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
