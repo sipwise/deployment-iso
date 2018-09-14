@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_04e77ae5",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T13:37:29Z",
+      "side": 1,
+      "message": "I also find [[ \"$SWRAID\" \u003d \"true\" ]] easier, FWIW.",
+      "parentUuid": "9af37de9_649c066a",
+      "range": {
+        "startLine": 2017,
+        "startChar": 0,
+        "endLine": 2017,
+        "endChar": 34
+      },
+      "revId": "557023f1079f2fb9ecf9498ed3f93081a0be8091",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_e4e11600",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 7
