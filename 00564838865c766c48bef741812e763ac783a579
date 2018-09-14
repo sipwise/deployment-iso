@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_24d5de42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T11:27:24Z",
+      "side": 1,
+      "message": "Old data can\u0027t be easily thrown away on overlayfs/aufs AFAIK, at least that\u0027s what I saw.",
+      "parentUuid": "9af37de9_84e7ea3f",
+      "revId": "00564838865c766c48bef741812e763ac783a579",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_e110e8aa",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
