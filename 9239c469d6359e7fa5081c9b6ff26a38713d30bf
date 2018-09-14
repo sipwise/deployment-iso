@@ -410,6 +410,30 @@
       "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_448fc223",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-14T12:55:18Z",
+      "side": 1,
+      "message": "\u003e What I think that it will happen is that sda2 will be dd\u0027ed as\n \u003e mounted from sda2 to sdb2, and there are structures internally in\n \u003e the file system like marked as mounted, not-clean (marked as such\n \u003e in the case of sudden crash) and other stuff, that it\u0027s incorrect\n \u003e in the destination.\n\nI know what you mean, shouldn\u0027t be an issue with FAT in our situation though.\n\n \u003e Maybe this is not a problem because the fsck clears that and\n \u003e doesn\u0027t cause any loss of data or anything because nothing got\n \u003e copied and journal was not modified at that point, but I still\n \u003e think that it\u0027s conceptually wrong.\n \nack\n\n \u003e Cannot it be moved to just after the line with dd (2067) without\n \u003e any ill effect?  dd shouldn\u0027t need it mounted.\n\ngood idea, done",
+      "parentUuid": "9af37de9_04abfa8a",
+      "range": {
+        "startLine": 2064,
+        "startChar": 0,
+        "endLine": 2064,
+        "endChar": 38
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
