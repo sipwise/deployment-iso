@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_64c5265a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T12:37:49Z",
+      "side": 1,
+      "message": "Yeah I thought that, but since the surrounding/context changes anyway, and now it\u0027s part of a block with a different style, looked odd.\n\nThanks.",
+      "parentUuid": "9af37de9_84900a97",
+      "range": {
+        "startLine": 413,
+        "startChar": 2,
+        "endLine": 413,
+        "endChar": 18
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_046e5ac9",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 5
@@ -353,6 +377,30 @@
       "side": 1,
       "message": "it\u0027s for sure relevant for the grub-install in line 2079, I\u0027m not sure 100% about usage for efibootmgr though.\nShouldn\u0027t cause any harm, though I get your point and we should check whether we could move it *after* the efibootmgr stuff, though when changing this *now* we\u0027ve to re-test all of this, so whoever makes that call needs to verify that.",
       "parentUuid": "9af37de9_449b42ca",
+      "range": {
+        "startLine": 2064,
+        "startChar": 0,
+        "endLine": 2064,
+        "endChar": 38
+      },
+      "revId": "9239c469d6359e7fa5081c9b6ff26a38713d30bf",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_04abfa8a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T12:37:49Z",
+      "side": 1,
+      "message": "\u003e it\u0027s for sure relevant for the grub-install in line 2079, I\u0027m not\n \u003e sure 100% about usage for efibootmgr though.\n \u003e Shouldn\u0027t cause any harm, though I get your point and we should\n \u003e check whether we could move it *after* the efibootmgr stuff, though\n \u003e when changing this *now* we\u0027ve to re-test all of this, so whoever\n \u003e makes that call needs to verify that.\n\nWhat I think that it will happen is that sda2 will be dd\u0027ed as mounted from sda2 to sdb2, and there are structures internally in the file system like marked as mounted, not-clean (marked as such in the case of sudden crash) and other stuff, that it\u0027s incorrect in the destination.\n\nMaybe this is not a problem because the fsck clears that and doesn\u0027t cause any loss of data or anything because nothing got copied and journal was not modified at that point, but I still think that it\u0027s conceptually wrong.\n\nCannot it be moved to just after the line with dd (2067) without any ill effect?  dd shouldn\u0027t need it mounted.",
+      "parentUuid": "9af37de9_44d0e253",
       "range": {
         "startLine": 2064,
         "startChar": 0,
