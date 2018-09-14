@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_c13f2424",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T09:21:20Z",
+      "side": 1,
+      "message": "I am not sure if I understand correctly, but as I understand from your paragraph with \"consecutive\" is as if with more updates, more and more space is used cumulatively, which I don\u0027t think it\u0027s true.\n\nThe operation can fill the disk and cause ENOSPACE because it downloads new lists and then combines them, so temp space is needed.  Not sure how much extra space, tens of MBs and probably top 100MB, but yeah, it can happen.  After the update the space shrinks again.",
+      "revId": "00564838865c766c48bef741812e763ac783a579",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_e110e8aa",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T09:21:20Z",
+      "side": 1,
+      "message": "Since it\u0027s an array I wonder if it\u0027s more idiomatic to count elements / check if zero. I cannot recall the syntax right now but it\u0027s something like ${#installed_packages[@]}.",
+      "revId": "00564838865c766c48bef741812e763ac783a579",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
