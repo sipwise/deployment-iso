@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_84e7ea3f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T11:23:06Z",
+      "side": 1,
+      "message": "\u003e It eats disk space on overlayfs, the space doesn\u0027t shrink there.\n\nDon\u0027t the old copies get discarded, if nothing references them?  If not, the disk space gets filled pretty quick with obsolete data?\n\nBut yeah OK, it\u0027s a new perspective that I hadn\u0027t considered, fine for me.",
+      "parentUuid": "9af37de9_4131f40a",
+      "revId": "00564838865c766c48bef741812e763ac783a579",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_e110e8aa",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "See https://gerrit.mgm.sipwise.com/#/c/23146/ and the included discussion why we use it like that",
       "parentUuid": "9af37de9_e110e8aa",
+      "revId": "00564838865c766c48bef741812e763ac783a579",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_c4ddf271",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-14T11:23:06Z",
+      "side": 1,
+      "message": "Ah right.",
+      "parentUuid": "9af37de9_e13fc8d4",
       "revId": "00564838865c766c48bef741812e763ac783a579",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
