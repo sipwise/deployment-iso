@@ -39,6 +39,7 @@ DEFAULT_IP1=192.168.255.251
 DEFAULT_IP2=192.168.255.252
 DEFAULT_IP_HA_SHARED=192.168.255.250
 DEFAULT_INTERNAL_NETMASK=255.255.255.248
+DEFAULT_NETWORK_HA_INT=172.30.52.0
 DEFAULT_MCASTADDR=226.94.1.1
 TARGET=/mnt
 PRO_EDITION=false
@@ -504,6 +505,10 @@ if checkBootParam 'ngcpipshared=' ; then
   IP_HA_SHARED=$(getBootParam ngcpipshared)
 fi
 
+if checkBootParam 'ngcpnethaint=' ; then
+  DEFAULT_NETWORK_HA_INT=$(getBootParam ngcpnethaint)
+fi
+
 if checkBootParam 'ngcpnetmask=' ; then
   INTERNAL_NETMASK=$(getBootParam ngcpnetmask)
 fi
@@ -647,6 +652,7 @@ Control target system:
   ngcpip1=...      - IP address of first node
   ngcpip2=...      - IP address of second node
   ngcpipshared=... - HA shared IP address
+  ngcpnethaint=... - network of ha_int interface
   ngcpnetmask=...  - netmask of ha_int interface
   ngcpeaddr=...    - Cluster IP address
 
@@ -682,6 +688,7 @@ for param in "$@" ; do
     *ngcpip1=*) IP1="${param//ngcpip1=/}";;
     *ngcpip2=*) IP2="${param//ngcpip2=/}";;
     *ngcpipshared=*) IP_HA_SHARED="${param//ngcpipshared=/}";;
+    *ngcpnethaint=*) NETWORK_HA_INT="${param//ngcpnethaint=/}";;
     *ngcpnetmask=*) INTERNAL_NETMASK="${param//ngcpnetmask=/}";;
     *ngcpextnetmask=*) EXTERNAL_NETMASK="${param//ngcpextnetmask=/}";;
     *ngcpmcast=*) MCASTADDR="${param//ngcpmcast=/}";;
@@ -803,6 +810,7 @@ EXTERNAL_DEV="${EXTERNAL_DEV:-${INSTALL_DEV}}"
 EXTERNAL_IP="${EXTERNAL_IP:-${INSTALL_IP}}"
 EIFACE="${EIFACE:-${INSTALL_DEV}}"
 EADDR="${EXTERNAL_IP:-${EADDR}}"
+NETWORK_HA_INT="${NETWORK_HA_INT:-${DEFAULT_NETWORK_HA_INT}}"
 INTERNAL_NETMASK="${INTERNAL_NETMASK:-${DEFAULT_INTERNAL_NETMASK}}"
 MANAGEMENT_IP="${MANAGEMENT_IP:-${IP_HA_SHARED}}"
 INTERNAL_DEV="${INTERNAL_DEV:-${DEFAULT_INTERNAL_DEV}}"
@@ -846,6 +854,7 @@ if "$PRO_EDITION" ; then
   Int sp1 host IP:   $IP1
   Int sp2 host IP:   $IP2
   Int sp shared IP:  $IP_HA_SHARED
+  Net HA int:        $NETWORK_HA_INT
   Int netmask:       $INTERNAL_NETMASK
   MGMT address:      $MANAGEMENT_IP
 " | tee -a /tmp/installer-settings.txt
@@ -1329,6 +1338,7 @@ gen_installer_config () {
     cat > ${TARGET}/etc/ngcp-installer/config_deploy.inc << EOF
 CROLE="${CROLE}"
 FILL_APPROX_CACHE="${FILL_APPROX_CACHE}"
+NETWORK_HA_INT="${NETWORK_HA_INT}"
 VLAN_BOOT_INT="${VLAN_BOOT_INT}"
 VLAN_SSH_EXT="${VLAN_SSH_EXT}"
 VLAN_WEB_EXT="${VLAN_WEB_EXT}"
