@@ -1434,18 +1434,15 @@ EOT
     cp /etc/network/interfaces "${TARGET}/etc/network/"
     unset method netcardconf
   else
-    die "Error during installation of ngcp. Find details at: ${TARGET}/tmp/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log"
+    die "Error during installation of ngcp. Find details at: ${TARGET}/var/log/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log"
   fi
 
   echo "Temporary files cleanup ..."
-  find "${TARGET}/var/log" -type f -size +0 -not -name \*.ini -exec sh -c ":> \${1}" sh {} \;
+  find "${TARGET}/var/log" -type f -size +0 -not -name \*.ini -not -name ngcp-installer.log -exec sh -c ":> \${1}" sh {} \;
   :>$TARGET/var/run/utmp
   :>$TARGET/var/run/wtmp
 
   echo "Backup of the installer logfiles for later investigation ..."
-  if [ -r "${TARGET}"/tmp/ngcp-installer.log ] ; then
-    cp "${TARGET}"/tmp/ngcp-installer.log "${TARGET}"/var/log/
-  fi
   if [ -r "${TARGET}"/tmp/ngcp-installer-debug.log ] ; then
     cp "${TARGET}"/tmp/ngcp-installer-debug.log "${TARGET}"/var/log/
   fi
