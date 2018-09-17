@@ -1403,13 +1403,13 @@ if "$NGCP_INSTALLER" ; then
   echo "Generating ngcp-installer run script ..."
   cat > "${TARGET}/tmp/ngcp-installer-deployment.sh" << "EOT"
 #!/bin/bash
-echo "Running ngcp-installer via grml-chroot." | tee -a /tmp/ngcp-installer-debug.log
-ngcp-installer 2>&1 | tee -a /tmp/ngcp-installer-debug.log
-RC=${PIPESTATUS[0]}
-if [ "${RC}" = "0" ] ; then
-  echo "OK, ngcp-installer finished with exit code '${RC}', continue netscript deployment." | tee -a /tmp/ngcp-installer-debug.log
+echo "Running ngcp-installer via grml-chroot."
+ngcp-installer 2>&1
+RC=$?
+if [ "${RC}" = "0" ]; then
+  echo "OK, ngcp-installer finished successfully, continue netscript deployment."
 else
-  echo "ERROR: Fatal error while running ngcp-installer (exit code '${RC}')!" | tee -a /tmp/ngcp-installer-debug.log >&2
+  echo "ERROR: Fatal error while running ngcp-installer (exit code '${RC}')!"
   exit ${RC}
 fi
 EOT
@@ -1434,7 +1434,7 @@ EOT
     cp /etc/network/interfaces "${TARGET}/etc/network/"
     unset method netcardconf
   else
-    die "Error during installation of ngcp. Find details at: ${TARGET}/var/log/ngcp-installer.log ${TARGET}/tmp/ngcp-installer-debug.log"
+    die "Error during installation of ngcp. Find details at: ${TARGET}/var/log/ngcp-installer.log"
   fi
 
   echo "Temporary files cleanup ..."
@@ -1442,10 +1442,7 @@ EOT
   :>$TARGET/var/run/utmp
   :>$TARGET/var/run/wtmp
 
-  echo "Backup of the installer logfiles for later investigation ..."
-  if [ -r "${TARGET}"/tmp/ngcp-installer-debug.log ] ; then
-    cp "${TARGET}"/tmp/ngcp-installer-debug.log "${TARGET}"/var/log/
-  fi
+  echo "Backup grml-debootstrap.log for later investigation ..."
   if [ -r /tmp/grml-debootstrap.log ] ; then
     cp /tmp/grml-debootstrap.log "${TARGET}"/var/log/
   fi
