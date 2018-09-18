@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_4a822954",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-18T08:22:11Z",
+      "side": 1,
+      "message": "this is not valid for PRO, HA_INT on pro is $DEFAULT_IP_HA_SHARED/$DEFAULT_INTERNAL_NETMASK\n\nhaving 192.168.255.252 above, DEFAULT_NETWORK_HA_INT should be 192.168.255.0/24",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 22
+      },
+      "revId": "b4ad68044e85a5ef52cae1d3b346e86c2081feeb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
