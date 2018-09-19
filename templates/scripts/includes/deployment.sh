@@ -1951,7 +1951,7 @@ puppet_install_from_puppet () {
 
   echo "Installing 'puppet-agent' with dependencies"
   cat >> ${TARGET}/etc/apt/sources.list.d/puppetlabs.list << EOF
-deb ${DEBIAN_URL}/puppetlabs/ ${DEBIAN_RELEASE} main puppet dependencies
+deb ${DEBIAN_URL}/puppetlabs/ ${DEBIAN_RELEASE} main puppet5 dependencies
 EOF
 
   PUPPET_GPG_KEY="6F6B15509CF8E59E6E469F327F438280EF8D349F"
