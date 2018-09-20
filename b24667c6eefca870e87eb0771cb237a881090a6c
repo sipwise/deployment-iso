@@ -22,6 +22,30 @@
       "revId": "b24667c6eefca870e87eb0771cb237a881090a6c",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_f608a42a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-20T12:15:38Z",
+      "side": 1,
+      "message": "Ignore it, read commit message",
+      "parentUuid": "9af37de9_36ff4c03",
+      "range": {
+        "startLine": 568,
+        "startChar": 19,
+        "endLine": 568,
+        "endChar": 33
+      },
+      "revId": "b24667c6eefca870e87eb0771cb237a881090a6c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
