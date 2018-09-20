@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_f6b30409",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-20T13:56:44Z",
+      "side": 1,
+      "message": "This is never true unless getbootparam assigns this size of 0, because by default is ROOTFS_SIZE -- is this the intended logic/behaviour?",
+      "range": {
+        "startLine": 1111,
+        "startChar": 8,
+        "endLine": 1111,
+        "endChar": 35
+      },
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
