@@ -22,6 +22,30 @@
       "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_d6afe092",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2018-09-20T14:00:24Z",
+      "side": 1,
+      "message": "I\u0027d expect so from the commit log. For VM images the creator would set it to 0 to avoid adding such fallback partition.",
+      "parentUuid": "9af37de9_f6b30409",
+      "range": {
+        "startLine": 1111,
+        "startChar": 8,
+        "endLine": 1111,
+        "endChar": 35
+      },
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
