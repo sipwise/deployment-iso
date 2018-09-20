@@ -46,6 +46,30 @@
       "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_56ef70b0",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-20T14:23:35Z",
+      "side": 1,
+      "message": "Yeah, Jenkins can set FALLBACKFS_SIZE\u003d0 to disable it completely , or FALLBACKFS_SIZE\u003d10M to keep it very small.\nBy default FALLBACKFS_SIZE\u003d\u003d\u003dROOFS_SIZE\u003d\u003d10Gb\n\nP.S. Jenkins can tune ROOFS_SIZE and FALLBACKFS_SIZE independently now.",
+      "parentUuid": "9af37de9_d6afe092",
+      "range": {
+        "startLine": 1111,
+        "startChar": 8,
+        "endLine": 1111,
+        "endChar": 35
+      },
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
