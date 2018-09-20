@@ -67,6 +67,7 @@ ADJUST_FOR_LOW_PERFORMANCE=false
 ENABLE_VM_SERVICES=false
 FILESYSTEM="ext4"
 ROOTFS_SIZE="10G"
+FALLBACKFS_SIZE="${ROOTFS_SIZE}"
 SWRAID_DEVICE="/dev/md0"
 GPG_KEY_SERVER="pool.sks-keyservers.net"
 DEBIAN_REPO_HOST="debian.sipwise.com"
@@ -562,6 +563,10 @@ fi
 
 if checkBootParam "rootfssize=" ; then
   ROOTFS_SIZE=$(getBootParam rootfssize)
+fi
+
+if checkBootParam "fallbackfssize=" ; then
+  FALLBACKFS_SIZE=$(getBootParam fallbackfssize)
 fi
 
 if checkBootParam ngcphalt ; then
@@ -1099,12 +1104,20 @@ create_ngcp_partitions() {
   echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/root"
   mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
 
-  # fallback
-  echo "Creating LV 'fallback' with ${ROOTFS_SIZE}"
-  lvcreate --yes -n fallback -L "${ROOTFS_SIZE}" "${VG_NAME}"
+  # used later by installer
+  ROOT_FS="/dev/mapper/${VG_NAME}-root"
 
-  echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/fallback"
-  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/fallback
+  # fallback
+  if [[ "${FALLBACKFS_SIZE}" != "0" ]]; then
+    echo "Creating LV 'fallback' with ${FALLBACKFS_SIZE}"
+    lvcreate --yes -n fallback -L "${FALLBACKFS_SIZE}" "${VG_NAME}"
+
+    echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/fallback"
+    mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/fallback
+
+    # used later by installer
+    FALLBACK_FS="/dev/mapper/${VG_NAME}-fallback"
+  fi
 
   # data
   local vg_free data_size unassigned
@@ -1125,7 +1138,6 @@ create_ngcp_partitions() {
   mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/data
 
   # used later by installer
-  ROOT_FS="/dev/mapper/${VG_NAME}-root"
   DATA_PARTITION="/dev/mapper/${VG_NAME}-data"
 }
 
@@ -1294,7 +1306,11 @@ sync
 mount "$ROOT_FS" "$TARGET"
 
 if [ -n "${DATA_PARTITION}" ] ; then
-  mkdir -p "${TARGET}/ngcpdata"
+  mkdir -p "${TARGET}/ngcp-data"
+fi
+
+if [ -n "${FALLBACK_FS}" ] ; then
+  mkdir -p "${TARGET}/ngcp-fallback"
 fi
 
 # MT#7805
@@ -1309,11 +1325,19 @@ fi
 # TT#41500: Make sure the timezone setup is coherent
 grml-chroot "$TARGET" dpkg-reconfigure --frontend=noninteractive tzdata
 
-# provide useable /ngcpdata partition
+# provide useable /ngcp-data partition
 if [ -n "${DATA_PARTITION}" ] ; then
-  echo "Enabling ngcpdata partition ${DATA_PARTITION} via /etc/fstab"
+  echo "Enabling ngcp-data partition ${DATA_PARTITION} via /etc/fstab"
   cat >> "${TARGET}/etc/fstab" << EOF
-${DATA_PARTITION} /ngcpdata               auto           noatime               0  0
+${DATA_PARTITION} /ngcp-data               auto           noatime               0  0
+EOF
+fi
+
+# provide useable /fallback read-only partition
+if [ -n "${FALLBACK_FS}" ] ; then
+  echo "Enabling ngcp-fallback partition ${FALLBACK_FS} via /etc/fstab"
+  cat >> "${TARGET}/etc/fstab" << EOF
+${FALLBACK_FS} /ngcp-fallback               auto           ro,noatime               0  0
 EOF
 fi
 
