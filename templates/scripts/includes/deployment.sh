@@ -375,10 +375,12 @@ fi
 
 if checkBootParam "swraiddisk1=" ; then
   SWRAID_DISK1=$(getBootParam swraiddisk1)
+  SWRAID_DISK1=${SWRAID_DISK1#/dev/}
 fi
 
 if checkBootParam "swraiddisk2=" ; then
   SWRAID_DISK2=$(getBootParam swraiddisk2)
+  SWRAID_DISK2=${SWRAID_DISK2#/dev/}
 fi
 
 # if TARGET_DISK environment variable is set accept it
