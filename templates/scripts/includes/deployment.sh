@@ -69,6 +69,7 @@ FILESYSTEM="ext4"
 ROOTFS_SIZE="10G"
 FALLBACKFS_SIZE="${ROOTFS_SIZE}"
 SWRAID_DEVICE="/dev/md0"
+SWRAID_DESTROY=false
 GPG_KEY_SERVER="pool.sks-keyservers.net"
 DEBIAN_REPO_HOST="debian.sipwise.com"
 DEBIAN_REPO_TRANSPORT="https"
@@ -382,6 +383,10 @@ fi
 if checkBootParam "swraiddisk2=" ; then
   SWRAID_DISK2=$(getBootParam swraiddisk2)
   SWRAID_DISK2=${SWRAID_DISK2#/dev/}
+fi
+
+if checkBootParam swraiddestroy ; then
+  SWRAID_DESTROY=true
 fi
 
 # if TARGET_DISK environment variable is set accept it
@@ -1057,9 +1062,17 @@ set_up_partition_table_swraid() {
   mdadm --assemble --scan || true # fails if there's nothing to assemble
 
   if [[ -b "${SWRAID_DEVICE}" ]] ; then
-    echo "NOTE: if you are sure you don't need it SW-RAID device any longer, execute:"
-    echo "      mdadm --remove ${SWRAID_DEVICE} ; mdadm --stop ${SWRAID_DEVICE}; mdadm --zero-superblock /dev/sd..."
-    die "Error: SW-RAID device ${SWRAID_DEVICE} exists already."
+    if [[ "${SWRAID_DESTROY}" = "true" ]] ; then
+      mdadm --remove "${SWRAID_DEVICE}"
+      mdadm --stop "${SWRAID_DEVICE}"
+      mdadm --zero-superblock "/dev/${SWRAID_DISK1}"
+      mdadm --zero-superblock "/dev/${SWRAID_DISK2}"
+    else
+      echo "NOTE: if you are sure you don't need it SW-RAID device any longer, execute:"
+      echo "      mdadm --remove ${SWRAID_DEVICE} ; mdadm --stop ${SWRAID_DEVICE}; mdadm --zero-superblock /dev/sd..."
+      echo "      (also you can use boot option 'swraiddestroy' to destroy SW-RAID automatically)"
+      die "Error: SW-RAID device ${SWRAID_DEVICE} exists already."
+    fi
   fi
 
   for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
