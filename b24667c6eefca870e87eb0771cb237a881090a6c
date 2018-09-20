@@ -117,6 +117,30 @@
       "revId": "b24667c6eefca870e87eb0771cb237a881090a6c",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_f6f2e405",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-20T13:02:17Z",
+      "side": 1,
+      "message": "ACK, good point.",
+      "parentUuid": "9af37de9_d62480b0",
+      "range": {
+        "startLine": 1309,
+        "startChar": 22,
+        "endLine": 1309,
+        "endChar": 26
+      },
+      "revId": "b24667c6eefca870e87eb0771cb237a881090a6c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
