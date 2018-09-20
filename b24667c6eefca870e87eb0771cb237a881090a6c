@@ -69,6 +69,30 @@
       "revId": "b24667c6eefca870e87eb0771cb237a881090a6c",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_561ad06f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-20T12:18:44Z",
+      "side": 1,
+      "message": "Good point here...\n\nI am also not sure...\nMaybe \u0027/ngcp-data\u0027 and \u0027/ngcp-fallback\u0027 be mounted under \"/mnt/\" instead of \u0027/\u0027",
+      "parentUuid": "9af37de9_b6133c5c",
+      "range": {
+        "startLine": 1309,
+        "startChar": 22,
+        "endLine": 1309,
+        "endChar": 26
+      },
+      "revId": "b24667c6eefca870e87eb0771cb237a881090a6c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
