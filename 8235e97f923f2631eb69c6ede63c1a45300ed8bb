@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_8a000cac",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-21T06:51:12Z",
+      "side": 1,
+      "message": "FTR, this might not always work reliable as such, so \"|| true\" might be needed. And it might not be enough in all situations, but it\u0027s for sure a starting point.",
+      "revId": "8235e97f923f2631eb69c6ede63c1a45300ed8bb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_caf614d7",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-21T06:51:12Z",
+      "side": 1,
+      "message": "I\u0027d ad a hint regarding the swraiddestroy boot option here as well",
+      "revId": "8235e97f923f2631eb69c6ede63c1a45300ed8bb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
