@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_aa2070f8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-21T08:44:19Z",
+      "side": 1,
+      "message": "You can keep it as-is, I don\u0027t mind, just wondering why you didn\u0027t split them logically in the first place :)",
+      "parentUuid": "9af37de9_2ab000dd",
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_f6b30409",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
@@ -156,6 +174,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_6a7968fc",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-21T08:44:19Z",
+      "side": 1,
+      "message": "Ah good point!",
+      "parentUuid": "9af37de9_eacaf84e",
+      "range": {
+        "startLine": 1111,
+        "startChar": 8,
+        "endLine": 1111,
+        "endChar": 35
+      },
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_0ae2dc03",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
@@ -185,6 +227,24 @@
       "side": 1,
       "message": "No ideas here, I can add it if you believe it is necessary.\nWhat about ngcp-data?",
       "parentUuid": "9af37de9_0ae2dc03",
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_2a8360ce",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-21T08:44:19Z",
+      "side": 1,
+      "message": "\u003e No ideas here, I can add it if you believe it is necessary.\n\nI think it would make sense here, unless you expect the fallback mount point to be present all the time?\n\n \u003e What about ngcp-data?\n\nI don\u0027t think we\u0027ll get a working system without /ngcp-data?",
+      "parentUuid": "9af37de9_0ab53ccc",
       "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
