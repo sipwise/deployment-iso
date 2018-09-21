@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_4079e592",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:10:21Z",
+      "side": 1,
+      "message": "I suppose that clearing only the superblocks is fast, but if this operation takes significant time maybe you can parallelise it.",
+      "range": {
+        "startLine": 1068,
+        "startChar": 0,
+        "endLine": 1069,
+        "endChar": 52
+      },
+      "revId": "741cb1594d7576f9fcae8e6c4d01afea34659f44",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
