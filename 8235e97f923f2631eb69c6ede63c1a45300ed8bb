@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_6de9821a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T11:21:42Z",
+      "side": 1,
+      "message": "For all 4 commands or the last one only?\nI would say lets tune it when we see it is not really reliable. Otherwise it will fail anyway later on if old raid is not destroyed.",
+      "parentUuid": "9af37de9_8a000cac",
+      "revId": "8235e97f923f2631eb69c6ede63c1a45300ed8bb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_caf614d7",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-09-21T06:51:12Z",
       "side": 1,
       "message": "I\u0027d ad a hint regarding the swraiddestroy boot option here as well",
+      "revId": "8235e97f923f2631eb69c6ede63c1a45300ed8bb",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_8ac12c31",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T11:21:42Z",
+      "side": 1,
+      "message": "Improved",
+      "parentUuid": "9af37de9_caf614d7",
       "revId": "8235e97f923f2631eb69c6ede63c1a45300ed8bb",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
