@@ -1354,6 +1354,32 @@ ${FALLBACK_FS} /ngcp-fallback               auto          ro,noatime,nofail     
 EOF
 fi
 
+# TT#11444 Create swapfile
+if [ -n "${DATA_PARTITION}" ] ; then
+  swapfile="/ngcp-data/swapfile"
+  swapfile_target="${TARGET}/${swapfile}"
+  swapfile_target_dir="$(dirname ${swapfile_target})"
+  ramsize_mb="$(( $(awk '/^MemTotal:/ {print $2}' /proc/meminfo) / 1024))"
+  swapsize_mb="$(( ramsize_mb / 2))"
+  if [[ "${swapsize_mb}" -gt 8192 ]]; then
+    swapsize_mb=8192
+  fi
+
+  if [[ ! -d "${swapfile_target_dir}" ]]; then
+    echo "Directory for swapfile does not exist, or not a dir: ${swapfile_target_dir}"
+  elif [[ -f "${swapfile_target}" ]]; then
+    echo "Swapfile already exists, not creating swapfile: ${swapfile_target}"
+  else
+    echo "Creating swapfile at ${swapfile} in ${TARGET} with size ${swapsize_mb}MB ..."
+    dd if=/dev/zero of="${swapfile}" bs=1M count="${swapsize_mb}" status=none
+    chmod 600 "${swapfile_target}"
+    mkswap "${swapfile_target}"
+    echo "${swapfile} none swap nofail 0 0" >> /etc/fstab
+  fi
+
+  unset swapfile swapfile_target swapfile_target_dir ramsize_mb swapsize_mb
+fi
+
 # get rid of automatically installed packages
 chroot $TARGET apt-get --purge -y autoremove
 
