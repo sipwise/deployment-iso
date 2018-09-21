@@ -68,6 +68,9 @@ ENABLE_VM_SERVICES=false
 FILESYSTEM="ext4"
 ROOTFS_SIZE="10G"
 FALLBACKFS_SIZE="${ROOTFS_SIZE}"
+SWAPFILE_SIZE_MB_MIN="4096"
+SWAPFILE_SIZE_MB_MAX="16384"
+SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB_MIN}"
 SWRAID_DEVICE="/dev/md0"
 SWRAID_DESTROY=false
 GPG_KEY_SERVER="pool.sks-keyservers.net"
@@ -1354,6 +1357,16 @@ ${FALLBACK_FS} /ngcp-fallback               auto          ro,noatime,nofail     
 EOF
 fi
 
+# TT#11444 Calculate size of swapfile
+ramsize_mb="$(( $(awk '/^MemTotal:/ {print $2}' /proc/meminfo) / 1024))"
+SWAPFILE_SIZE_MB="$(( ramsize_mb / 2))"
+if [[ "${swapsize_mb}" -lt "${SWAPFILE_SIZE_MB_MIN}" ]]; then
+  SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB_MIN}"
+elif [[ "${swapsize_mb}" -gt "${SWAPFILE_SIZE_MB_MAX}" ]]; then
+  SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB_MAX}"
+fi
+unset ramsize_mb
+
 # get rid of automatically installed packages
 chroot $TARGET apt-get --purge -y autoremove
 
@@ -1545,6 +1558,7 @@ EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
 ORIGIN_INSTALL_DEV="${INSTALL_DEV}"
 FALLBACKFS_SIZE="${FALLBACKFS_SIZE}"
 ROOTFS_SIZE="${ROOTFS_SIZE}"
+SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB}"
 EOF
 
   if "${TRUNK_VERSION}" && checkBootParam ngcpupload ; then
