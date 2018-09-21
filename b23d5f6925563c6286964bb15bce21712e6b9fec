@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_2ab000dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T08:25:58Z",
+      "side": 1,
+      "message": "It is a commit for introducing \u0027ngcp-fallback\u0027 which should be mounted IMHO, and \u0027ngcpdata\u0027 will not match \u0027ngcp-fallback\u0027. Should I split them?\n\nP.S. also to simplify testing probably... :-(",
+      "parentUuid": "9af37de9_eae79810",
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_f6b30409",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
@@ -114,6 +132,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_eacaf84e",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T08:25:58Z",
+      "side": 1,
+      "message": "Nope, as it can be string \u002710G\u0027 which will produce warning on comparison.",
+      "parentUuid": "9af37de9_cae4d40e",
+      "range": {
+        "startLine": 1111,
+        "startChar": 8,
+        "endLine": 1111,
+        "endChar": 35
+      },
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_0ae2dc03",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
@@ -125,6 +167,24 @@
       "writtenOn": "2018-09-21T07:19:41Z",
       "side": 1,
       "message": "Also \"nofail\"?",
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_0ab53ccc",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T08:25:58Z",
+      "side": 1,
+      "message": "No ideas here, I can add it if you believe it is necessary.\nWhat about ngcp-data?",
+      "parentUuid": "9af37de9_0ae2dc03",
       "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
