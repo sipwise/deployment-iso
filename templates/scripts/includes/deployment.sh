@@ -1350,7 +1350,7 @@ fi
 if [ -n "${FALLBACK_FS}" ] ; then
   echo "Enabling ngcp-fallback partition ${FALLBACK_FS} via /etc/fstab"
   cat >> "${TARGET}/etc/fstab" << EOF
-${FALLBACK_FS} /ngcp-fallback               auto           ro,noatime               0  0
+${FALLBACK_FS} /ngcp-fallback               auto          ro,noatime,nofail     0  0
 EOF
 fi
 
