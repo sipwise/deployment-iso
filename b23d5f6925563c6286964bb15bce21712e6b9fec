@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9af37de9_eae79810",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-21T07:19:41Z",
+      "side": 1,
+      "message": "Why did you place those 3 independent changes in one single commit? o_O",
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_f6b30409",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
@@ -67,6 +84,47 @@
         "endLine": 1111,
         "endChar": 35
       },
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_cae4d40e",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-21T07:19:41Z",
+      "side": 1,
+      "message": "-gt 0?",
+      "parentUuid": "9af37de9_56ef70b0",
+      "range": {
+        "startLine": 1111,
+        "startChar": 8,
+        "endLine": 1111,
+        "endChar": 35
+      },
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_0ae2dc03",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-21T07:19:41Z",
+      "side": 1,
+      "message": "Also \"nofail\"?",
       "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
