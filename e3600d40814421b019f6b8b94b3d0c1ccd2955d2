@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_4da6bec2",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T11:52:17Z",
+      "side": 1,
+      "message": "please move all the code after functions() section.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 22
+      },
+      "revId": "e3600d40814421b019f6b8b94b3d0c1ccd2955d2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_8d9ca66a",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T11:52:17Z",
+      "side": 1,
+      "message": "it sounds identical to lines 49-53, should it be separte function here?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 20
+      },
+      "revId": "e3600d40814421b019f6b8b94b3d0c1ccd2955d2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_ad9f6a5e",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T11:52:17Z",
+      "side": 1,
+      "message": "which logic is hidden behind those combination?",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 43
+      },
+      "revId": "e3600d40814421b019f6b8b94b3d0c1ccd2955d2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_8dc5c65c",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T11:52:17Z",
+      "side": 1,
+      "message": "maybe you should also check it is not empty? -s",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 39
+      },
+      "revId": "e3600d40814421b019f6b8b94b3d0c1ccd2955d2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_adc88a75",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T11:52:17Z",
+      "side": 1,
+      "message": "\u003e\u00262 ?\n\nIs it warning or error?",
+      "range": {
+        "startLine": 117,
+        "startChar": 86,
+        "endLine": 117,
+        "endChar": 88
+      },
+      "revId": "e3600d40814421b019f6b8b94b3d0c1ccd2955d2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
