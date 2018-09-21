@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_a06c119d",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-21T13:38:48Z",
+      "side": 1,
+      "message": "This part is just a copy from main.sh so I don\u0027t know how it worked.",
+      "parentUuid": "9af37de9_00cf5db1",
+      "range": {
+        "startLine": 57,
+        "startChar": 7,
+        "endLine": 57,
+        "endChar": 8
+      },
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_e0c45993",
         "filename": "templates/scripts/includes/disk_selection.sh",
         "patchSetId": 2
