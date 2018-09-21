@@ -1,0 +1,262 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_403c4593",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "should be \u003e\u00262, otherwise you\u0027re redirecting to a file named \"2\"",
+      "range": {
+        "startLine": 19,
+        "startChar": 66,
+        "endLine": 19,
+        "endChar": 68
+      },
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_e0dd7971",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "You don\u0027t remove it here like you do in line #47 for example.  Not a big deal, but...",
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_2041410c",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "\u003e\u00262",
+      "range": {
+        "startLine": 24,
+        "startChar": 50,
+        "endLine": 24,
+        "endChar": 52
+      },
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_c0483530",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "\"You need to select exactly 2 disks, cannot continue\"\nor\n\"Exactly 2 disks need to be selected, cannot continue\"",
+      "range": {
+        "startLine": 24,
+        "startChar": 10,
+        "endLine": 24,
+        "endChar": 48
+      },
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_a05531c7",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "If it\u0027s not too difficult, it\u0027s more user-friendly to loop here instead of aborting.",
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_00463d23",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "\u003e\u00262",
+      "range": {
+        "startLine": 44,
+        "startChar": 66,
+        "endLine": 44,
+        "endChar": 68
+      },
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_80bb4d0e",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "I think that you can set it in a single line.\n\nSometimes there\u0027s a problem with shellcheck complaining if the assignment is due to the output of a $(command), like the $(mktemp) above, because it can get uninitialised or something... that\u0027s why we have it in separate lines in other cases.  But in these cases it should be fine and better to have 1 line only, IMO.",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 13
+      },
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_c0c15582",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "The indentation here (and in all his \"case\" block) is 3 spaces instead of 2 that it\u0027s used elsewhere in the file.",
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_00cf5db1",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "I think that the syntax is not correct, it\u0027s:\n\n  case $var in\n    a) ... ;;\n    b) ... ;;\n  esac\n\nNOT:\n    (a) ... ;;",
+      "range": {
+        "startLine": 57,
+        "startChar": 7,
+        "endLine": 57,
+        "endChar": 8
+      },
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_e0c45993",
+        "filename": "templates/scripts/includes/disk_selection.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 61,
+        "startChar": 7,
+        "endLine": 61,
+        "endChar": 8
+      },
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_80522ddc",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "extra space",
+      "range": {
+        "startLine": 121,
+        "startChar": 50,
+        "endLine": 121,
+        "endChar": 51
+      },
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_605e29eb",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-21T13:30:11Z",
+      "side": 1,
+      "message": "There are no disk options configured",
+      "range": {
+        "startLine": 121,
+        "startChar": 9,
+        "endLine": 121,
+        "endChar": 48
+      },
+      "revId": "dc58e6cf17f2ee16e2c480c9d78aa3a88f979f80",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
