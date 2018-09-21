@@ -248,6 +248,24 @@
       "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_0dcf96b1",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-21T11:26:21Z",
+      "side": 1,
+      "message": "\u003e I think it would make sense here, unless you expect the fallback mount point to be present all the time?\n\nI have improved it in a separate commit: https://gerrit.mgm.sipwise.com/#/c/23702/",
+      "parentUuid": "9af37de9_2a8360ce",
+      "revId": "b23d5f6925563c6286964bb15bce21712e6b9fec",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
