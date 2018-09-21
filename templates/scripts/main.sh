@@ -82,41 +82,6 @@ check_for_existing_pvs()
   fi
 }
 
-prompt_for_target()
-{
-  AVAILABLE_DISKS=$(awk '/[a-z]$/ {print $4}' /proc/partitions | grep -v '^name$' | sort -u)
-
-  if [ -z "$AVAILABLE_DISKS" ] ; then
-    dialog --title "Disk selection" \
-      --msgbox "Sorry, no disks found. Please make sure to have a hard disk attached to your system/VM." 0 0
-    return 1
-  fi
-
-  # display disk ID next to the disk name
-  DISK_LIST=( $(for i in $AVAILABLE_DISKS ; do
-                for file in /dev/disk/by-id/* ; do
-                   case "$(realpath "$file")" in
-                     (/dev/"$i") disk_info="${file#/dev/disk/by-id/}" ; break ;;
-                             (*) disk_info="$file" ;;
-                   esac
-                done
-                echo "${i}" "${disk_info}"
-              done) )
-
-  TMP=$(mktemp)
-  if ! dialog --title "Disk selection" --single-quoted \
-    --ok-label OK --cancel-label Exit \
-    --menu "Please select the target disk for installing Debian/ngcp:" 0 0 0 \
-    "${DISK_LIST[@]}" 2>"${TMP}" ; then
-    rm -f "${TMP}"
-    ewarn "Cancelling as requested by user during disk selection." ; eend 0
-    return 1
-  fi
-  TARGET_DISK="$(cat "${TMP}")"; rm -f "${TMP}"
-}
-# }}}
-
-
 deploy() {
   # choose appropriate deployment.sh script:
   local version=$(grep -Eo '\<ngcpvers=[^ ]+' /proc/cmdline || true)
@@ -128,7 +93,7 @@ deploy() {
 
   einfo "Running ${YELLOW}${version}${NORMAL} of deployment.sh..."; eend 0
   RC=0
-  TARGET_DISK="$TARGET_DISK" "${scripts_dir}/deployment.sh" || RC=$?
+  "${scripts_dir}/deployment.sh" || RC=$?
   if [ $RC -eq 0 ] ; then
     if dialog --yes-label Reboot --no-label Exit --yesno "Successfully finished deployment, enjoy your sip:provider system. Reboot system now?" 0 0 ; then
       reboot
@@ -147,7 +112,12 @@ install_sipwise_keyring
 "${scripts_dir}/check_installing_version.sh"
 "${scripts_dir}/install_required_packages.sh"
 "${scripts_dir}/verify_iso_image.sh"
-prompt_for_target
+"${scripts_dir}/disk_selection.sh"
+if [[ ! -r '/tmp/disk_options' ]]; then
+  echo "There is no /tmp/disk_options which should be availible after disk selection" >2
+fi
+DISK_OPTIONS="$(cat '/tmp/disk_options')"
+export ${DISK_OPTIONS}
 check_for_existing_pvs
 report_ssh_password
 deploy
