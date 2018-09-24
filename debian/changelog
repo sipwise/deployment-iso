@@ -1,3 +1,59 @@
+ngcp-deployment-iso (7.0.0.0+0~mr7.0.0.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [51f0ab7] TT#37257 Change source list back to custom one
+  * [f2440a8] TT#37257 Fix endless cycle
+  * [b781386] TT#37257 Fix mac address validation
+  * [af30d88] TT#43251 Catch all the exit signals
+  * [e431387] TT#43251 Move wait for ngcpstatus seconds to separate function
+  * [8d8580e] TT#43251 Add explicit 0 exit code of puppet_* functions
+  * [1fcd921] TT#42867 Modify /etc/hosts file
+  * [a3fd9b3] TT#37257 Remove network and configuration code
+  * [f29c8e6] TT#37257 Do not add virtual interfaces to the list
+  * [bb6f59a] TT#37257 Save origin name of the installation interface
+  * [65338bd] TT#37257 Get ssh pub key from mgmt node
+  * [ee8938a] TT#16553 Set 'error' status if non-zero returned
+  * [b500f29] TT#37257 Small improvements
+  * [d2c0a9d] TT#11444 Add RAID configuration menu
+
+  [ Guillem Jover ]
+  * [d5df0c0] TT#41500 Run dpkg-reconfigure tzdata to workaround a bug in grml-debootstrap
+  * [33d5cc6] TT#41500 Run dpkg-reconfigure in noninteractive mode
+
+  [ Alexander Lutay ]
+  * [83197ef] TT#37257 Fix d2afaf9: allow installing plain Debian systems (without NGCP)
+  * [9dbe3ad] TT#38758 Do not purge firmware-linux* packages on CE
+  * [07196ea] TT#37257 Change default debug output style to be more informative
+  * [366e031] TT#37257 Fix shellcheck 0.4.6 warning SC2199: Arrays implicitly concatenate in [[ ]]
+  * [80b4ebc] TT#37257 Fix shellcheck 0.4.6 warning SC2174: -m only applies to the deepest directory
+  * [88e7308] TT#37257 Remove full path from shell trace debug mode
+  * [bcad82f] TT#16553 Stop reading shell scripts from STDIN (this is very unsafe way)
+  * [5780b93] TT#16553 Improve the debug output for ngcp-installer section of deployment.sh
+  * [44d59fe] TT#16553 Fix bcad82f: call grml-chroot with non-quoted command
+  * [d759835] TT#37257 Do not cleanup /var/log/ngcp-installer.log
+  * [8d86272] TT#37257 Stop writing ngcp-installer-debug.log (it duplicates deployment-installer-debug.log)
+  * [73edfa7] TT#44197 Remove initial '/dev/' from swraiddisk1/swraiddisk2 boot options
+  * [b8e18d7] TT#11444 Increase ROOTFS_SIZE till 10Gb
+  * [b23d5f6] TT#11444 Add boot option 'fallbackfssize', mount RO 'ngcp-fallback' and rename 'ngcp-data'
+  * [c216c89] TT#11444 Pass ROOTFS_SIZE/FALLBACKFS_SIZE into ngcp-installer to store in config.yml
+  * [741cb15] TT#11444 Add possibility to destroy software RAID via 'swraiddestroy'
+  * [686ac0f] TT#11444 Add 'nofail' mount option for '/ngcp-fallback'
+
+  [ Michael Prokop ]
+  * [3392a1c] TT#42457 No longer explicitly check for supported disks
+  * [5fcd5f2] TT#28953 Ensure we have wget available by default
+  * [af58d8d] TT#28953 Add buster support to deployment.sh
+  * [63858ae] TT#44274 Avoid unnecessary apt-get invocations
+  * [6a92f15] TT#11444 New partition schema, switching to GPT + supporting EFI (optional)
+  * [b65000a] TT#44197 Support Software RAID for installation
+
+  [ Sergii Kipot ]
+  * [ee2398b] TT#35952 Freeze puppet version to v5.5
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 24 Sep 2018 18:52:36 +0200
+
 ngcp-deployment-iso (6.5.0.0+0~mr6.5.0.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
