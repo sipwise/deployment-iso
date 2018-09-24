@@ -1490,10 +1490,11 @@ EOF
 }
 
 gen_installer_config () {
-  mkdir -p "${TARGET}/etc/ngcp-installer/"
-
-  if "$CARRIER_EDITION" ; then
-    cat > ${TARGET}/etc/ngcp-installer/config_deploy.inc << EOF
+  local conf_file
+  conf_file="${TARGET}/etc/ngcp-installer/config_deploy.inc"
+  cat /dev/null > "${conf_file}"
+  if "${CARRIER_EDITION}" ; then
+    cat >> "${conf_file}" << EOF
 CROLE="${CROLE}"
 FILL_APPROX_CACHE="${FILL_APPROX_CACHE}"
 VLAN_BOOT_INT="${VLAN_BOOT_INT}"
@@ -1505,9 +1506,8 @@ VLAN_HA_INT="${VLAN_HA_INT}"
 VLAN_RTP_EXT="${VLAN_RTP_EXT}"
 EOF
   fi
-
-  if "$PRO_EDITION" ; then
-    cat >> ${TARGET}/etc/ngcp-installer/config_deploy.inc << EOF
+  if "${PRO_EDITION}" ; then
+    cat >> "${conf_file}" << EOF
 HNAME="${ROLE}"
 IP1="${IP1}"
 IP2="${IP2}"
@@ -1529,7 +1529,7 @@ MANAGEMENT_IP="${MANAGEMENT_IP}"
 EOF
   fi
 
-  cat >> ${TARGET}/etc/ngcp-installer/config_deploy.inc << EOF
+  cat >> "${conf_file}" << EOF
 FORCE=yes
 ADJUST_FOR_LOW_PERFORMANCE="${ADJUST_FOR_LOW_PERFORMANCE}"
 ENABLE_VM_SERVICES="${ENABLE_VM_SERVICES}"
