@@ -22,6 +22,30 @@
       "revId": "b16c511a5eef8db5fa7ebcf3391cac691cb46903",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_5e74229b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-25T08:37:57Z",
+      "side": 1,
+      "message": "https://paste.mgm.sipwise.com/show/4446/",
+      "parentUuid": "9af37de9_fe0d1638",
+      "range": {
+        "startLine": 1510,
+        "startChar": 11,
+        "endLine": 1510,
+        "endChar": 25
+      },
+      "revId": "b16c511a5eef8db5fa7ebcf3391cac691cb46903",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
