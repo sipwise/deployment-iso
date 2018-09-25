@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_fe0d1638",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-25T08:26:22Z",
+      "side": 1,
+      "message": "quotes here mean variables will NOT be expanded.",
+      "range": {
+        "startLine": 1510,
+        "startChar": 11,
+        "endLine": 1510,
+        "endChar": 25
+      },
+      "revId": "b16c511a5eef8db5fa7ebcf3391cac691cb46903",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
