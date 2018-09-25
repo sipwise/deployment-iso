@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_9e1dea68",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-25T08:27:04Z",
+      "side": 0,
+      "message": "The goal of the commit is to remove this line I believe.\nIsn\u0027t it?",
+      "range": {
+        "startLine": 1506,
+        "startChar": 0,
+        "endLine": 1506,
+        "endChar": 42
+      },
+      "revId": "a807de1145de9fafe1139854899dfe3f5112eead",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
