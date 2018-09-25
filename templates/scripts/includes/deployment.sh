@@ -1360,9 +1360,9 @@ fi
 # TT#11444 Calculate size of swapfile
 ramsize_mb="$(( $(awk '/^MemTotal:/ {print $2}' /proc/meminfo) / 1024))"
 SWAPFILE_SIZE_MB="$(( ramsize_mb / 2))"
-if [[ "${swapsize_mb}" -lt "${SWAPFILE_SIZE_MB_MIN}" ]]; then
+if [[ "${SWAPFILE_SIZE_MB}" -lt "${SWAPFILE_SIZE_MB_MIN}" ]]; then
   SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB_MIN}"
-elif [[ "${swapsize_mb}" -gt "${SWAPFILE_SIZE_MB_MAX}" ]]; then
+elif [[ "${SWAPFILE_SIZE_MB}" -gt "${SWAPFILE_SIZE_MB_MAX}" ]]; then
   SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB_MAX}"
 fi
 unset ramsize_mb
