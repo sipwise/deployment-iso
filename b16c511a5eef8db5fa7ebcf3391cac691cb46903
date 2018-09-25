@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9af37de9_de96d293",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1508,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-25T09:02:12Z",
+      "side": 1,
+      "message": "why not:\n  \ntouch \"${conf_file}\"",
+      "range": {
+        "startLine": 1508,
+        "startChar": 2,
+        "endLine": 1508,
+        "endChar": 32
+      },
+      "revId": "b16c511a5eef8db5fa7ebcf3391cac691cb46903",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_fe0d1638",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 3
@@ -37,6 +60,30 @@
       "side": 1,
       "message": "https://paste.mgm.sipwise.com/show/4446/",
       "parentUuid": "9af37de9_fe0d1638",
+      "range": {
+        "startLine": 1510,
+        "startChar": 11,
+        "endLine": 1510,
+        "endChar": 25
+      },
+      "revId": "b16c511a5eef8db5fa7ebcf3391cac691cb46903",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_1e7c5a71",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-25T09:02:12Z",
+      "side": 1,
+      "message": "Ah, you are right... quoted/unquoted \"EOF\" here does the trick when necessary. Sorry for noise.",
+      "parentUuid": "9af37de9_5e74229b",
       "range": {
         "startLine": 1510,
         "startChar": 11,
