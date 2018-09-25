@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_9e55eac7",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1508,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-25T09:17:35Z",
+      "side": 1,
+      "message": "The file already exists so \u0027touch\u0027 will do nothing.",
+      "parentUuid": "9af37de9_de96d293",
+      "range": {
+        "startLine": 1508,
+        "startChar": 2,
+        "endLine": 1508,
+        "endChar": 32
+      },
+      "revId": "b16c511a5eef8db5fa7ebcf3391cac691cb46903",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_fe0d1638",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 3
