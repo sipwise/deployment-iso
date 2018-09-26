@@ -6,3 +6,8 @@ grml64*.iso.sha1
 templates/boot/grub/grub.cfg
 templates/boot/isolinux/isolinux.cfg
 templates/boot/isolinux/syslinux.cfg
+grml_build/grml_cd/
+grml_build/grml_chroot/
+grml_build/grml_isos/
+grml_build/grml_logs/
+grml_build/netboot/
