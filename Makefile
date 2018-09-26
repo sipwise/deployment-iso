@@ -32,5 +32,10 @@ dist-clean: clean
 	rm -rf artifacts
 	rm -f *.iso
 	rm -f *.iso.sha1
+	rm -rf grml_build/grml_cd
+	rm -rf grml_build/grml_chroot
+	rm -rf grml_build/grml_isos
+	rm -rf grml_build/grml_logs
+	rm -rf grml_build/netboot
 
 .PHONY: clean dist-clean syntaxcheck shellcheck build all script_version
