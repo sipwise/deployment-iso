@@ -117,6 +117,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_6b0a85d4",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-27T14:39:24Z",
+      "side": 1,
+      "message": "it doesn\u0027t work under simple chroot, while works well under grml-chroot, see commit message.",
+      "parentUuid": "9af37de9_0bc5398d",
+      "range": {
+        "startLine": 1353,
+        "startChar": 2,
+        "endLine": 1353,
+        "endChar": 8
+      },
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_8b824951",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 3
@@ -134,6 +158,24 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_4b0fc1e1",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 2086,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-27T14:39:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9af37de9_8b824951",
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_ebc1d581",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 3
@@ -145,6 +187,24 @@
       "writtenOn": "2018-09-27T14:26:03Z",
       "side": 1,
       "message": "s/unmount/umount/ (as Manuel) noted",
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_2b147df3",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-09-27T14:39:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9af37de9_ebc1d581",
       "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
