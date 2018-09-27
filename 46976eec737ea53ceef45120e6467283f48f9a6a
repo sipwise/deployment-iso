@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "9af37de9_abbbcd0d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-27T14:26:03Z",
+      "side": 1,
+      "message": "s/wants/want/",
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_8b37e9af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-27T14:26:03Z",
+      "side": 1,
+      "message": "s/package files \u0027.postinst\u0027/maintainer files (like postinst)/\ns/far //",
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_6b3cc593",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-27T14:26:03Z",
+      "side": 1,
+      "message": "s/have/has/\ns/properly/properly,/",
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_2b46bd23",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-27T14:26:03Z",
+      "side": 1,
+      "message": "s/will gone/will be gone/",
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_6bd5e541",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 3
@@ -25,6 +93,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_0bc5398d",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-27T14:26:03Z",
+      "side": 1,
+      "message": "grml-chroot should not be needed here, but I don\u0027t object to using it, ftr :)\n\nMounting it from inside makes sure the configuration looks like it should, we already do the same with /boot/efi.\n\nSo it\u0027s fine for me.",
+      "parentUuid": "9af37de9_6bd5e541",
+      "range": {
+        "startLine": 1353,
+        "startChar": 2,
+        "endLine": 1353,
+        "endChar": 8
+      },
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_8b824951",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 3
@@ -36,6 +128,23 @@
       "writtenOn": "2018-09-27T14:04:09Z",
       "side": 1,
       "message": "BTW, I noticed a typo that will make this fail: uNmount vs umount.\n\nAlso alternatively, you can do like line #2094 and so on, if it better fits the style.\n\nLike:\n\n  if [ -n \"${DATA_PARTITION}\" ] ; then\n    umount \"${TARGET}\"/ngcp-data\n  fi\n\n(but for me it\u0027s fine as it is)",
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_ebc1d581",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-27T14:26:03Z",
+      "side": 1,
+      "message": "s/unmount/umount/ (as Manuel) noted",
       "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
