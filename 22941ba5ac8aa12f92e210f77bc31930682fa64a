@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_34317fa3",
+        "filename": "grml_build/Dockerfile",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-27T06:20:45Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make sense to provide the SIPWISE already at /code/grml-live/.... without the manual step (like I did in my https://paste.mgm.sipwise.com/raw/4395/)?",
+      "revId": "22941ba5ac8aa12f92e210f77bc31930682fa64a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
