@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_8b824951",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 2086,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-09-27T14:04:09Z",
+      "side": 1,
+      "message": "BTW, I noticed a typo that will make this fail: uNmount vs umount.\n\nAlso alternatively, you can do like line #2094 and so on, if it better fits the style.\n\nLike:\n\n  if [ -n \"${DATA_PARTITION}\" ] ; then\n    umount \"${TARGET}\"/ngcp-data\n  fi\n\n(but for me it\u0027s fine as it is)",
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
