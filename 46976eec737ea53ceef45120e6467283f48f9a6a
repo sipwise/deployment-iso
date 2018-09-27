@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9af37de9_6bd5e541",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-27T14:20:36Z",
+      "side": 1,
+      "message": "It\u0027s better to use grml-chroot and I\u0027m not sure about this approach. May be it\u0027s better to mount it outside the chroot?",
+      "range": {
+        "startLine": 1353,
+        "startChar": 2,
+        "endLine": 1353,
+        "endChar": 8
+      },
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_8b824951",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 3
