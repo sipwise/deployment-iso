@@ -1347,6 +1347,10 @@ if [ -n "${DATA_PARTITION}" ] ; then
   cat >> "${TARGET}/etc/fstab" << EOF
 ${DATA_PARTITION} /ngcp-data               auto           noatime               0  0
 EOF
+
+# Make sure /ngcp-data is mounted inside chroot
+# (some package might need to create folders structure on .postinst)
+chroot "${TARGET}" mount /ngcp-data
 fi
 
 # provide useable /ngcp-fallback read-only partition
@@ -2077,6 +2081,11 @@ if [[ "${SWRAID}" = "true" ]] ; then
   done
 
   grml-chroot "$TARGET" update-grub
+fi
+
+# unmount /ngcp-data partition inside chroot (if available)
+if [ -n "${DATA_PARTITION}" ] ; then
+  chroot "${TARGET}" unmount /ngcp-data
 fi
 
 # don't leave any mountpoints
