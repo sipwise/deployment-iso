@@ -213,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_eb1d5510",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-09-27T14:58:40Z",
+      "side": 1,
+      "message": "Thanks for trying and reporting back, TIL :)",
+      "parentUuid": "9af37de9_6b0a85d4",
+      "range": {
+        "startLine": 1353,
+        "startChar": 2,
+        "endLine": 1353,
+        "endChar": 8
+      },
+      "revId": "46976eec737ea53ceef45120e6467283f48f9a6a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_8b824951",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 3
