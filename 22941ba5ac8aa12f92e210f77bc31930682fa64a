@@ -33,6 +33,24 @@
       "revId": "22941ba5ac8aa12f92e210f77bc31930682fa64a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_0ff3060c",
+        "filename": "grml_build/Dockerfile",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-27T10:18:21Z",
+      "side": 1,
+      "message": "I guess no because in this case we will need to rebuild docker image each time when we add/remove a package.",
+      "parentUuid": "9af37de9_34317fa3",
+      "revId": "22941ba5ac8aa12f92e210f77bc31930682fa64a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
