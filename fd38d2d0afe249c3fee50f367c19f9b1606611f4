@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_5a266569",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-02T13:01:48Z",
+      "side": 1,
+      "message": "please share the oupput here, I think you can do it via one awk here, something like:\n\nroot@web01a:~# lsblk -P -p -o PARTLABEL,KNAME | awk \u0027/EFI System/ {match($0,/.*KNAME\u003d\"(.*)\"$/,arr); print arr[1]}\u0027",
+      "range": {
+        "startLine": 1043,
+        "startChar": 0,
+        "endLine": 1043,
+        "endChar": 103
+      },
+      "revId": "fd38d2d0afe249c3fee50f367c19f9b1606611f4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
