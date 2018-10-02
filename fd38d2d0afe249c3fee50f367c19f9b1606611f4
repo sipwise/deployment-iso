@@ -22,6 +22,53 @@
       "revId": "fd38d2d0afe249c3fee50f367c19f9b1606611f4",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_1a21fd4d",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2018-10-02T13:04:17Z",
+      "side": 1,
+      "message": "Alex, maybe we should do function?",
+      "parentUuid": "9af37de9_5a266569",
+      "range": {
+        "startLine": 1043,
+        "startChar": 0,
+        "endLine": 1043,
+        "endChar": 103
+      },
+      "revId": "fd38d2d0afe249c3fee50f367c19f9b1606611f4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_7ad80954",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 2079,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2018-10-02T13:04:17Z",
+      "side": 1,
+      "message": "I`m more concerned here, should we do something here?\nThanks!",
+      "range": {
+        "startLine": 2079,
+        "startChar": 4,
+        "endLine": 2079,
+        "endChar": 118
+      },
+      "revId": "fd38d2d0afe249c3fee50f367c19f9b1606611f4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
