@@ -1040,11 +1040,12 @@ parted_execution() {
   parted -a optimal -s "${blockdevice}" mkpart primary 2M 512M
   parted -a optimal -s "${blockdevice}" "name 2 'EFI System'"
   parted -a optimal -s "${blockdevice}" set 2 boot on
-  EFI_PARTITION="${blockdevice}"2
+  EFI_PARTITION=$(blkid -t PARTLABEL="EFI System" -o device)
 }
 
 set_up_partition_table_noswraid() {
   local blockdevice
+  local pvdevice
   blockdevice="/dev/${DISK}"
 
   clear_partition_table "$blockdevice"
@@ -1054,14 +1055,17 @@ set_up_partition_table_noswraid() {
   parted -a optimal -s "${blockdevice}" "name 3 'Linux LVM'"
   parted -a optimal -s "${blockdevice}" set 3 lvm on
 
+  pvdevice=$(blkid -t PARTLABEL="Linux LVM" -o device)
   echo "Creating PV + VG"
-  pvcreate -ff -y "${blockdevice}"3
-  vgcreate "${VG_NAME}" "${blockdevice}"3
+  pvcreate -ff -y "${pvdevice}"
+  vgcreate "${VG_NAME}" "${pvdevice}"
   vgchange -a y "${VG_NAME}"
 }
 
 set_up_partition_table_swraid() {
   # make sure we don't overlook unassembled SW-RAIDs
+  local raidev1
+  local raidev2
   mdadm --assemble --scan || true # fails if there's nothing to assemble
 
   if [[ -b "${SWRAID_DEVICE}" ]] ; then
@@ -1095,8 +1099,10 @@ set_up_partition_table_swraid() {
   sgdisk "/dev/${SWRAID_DISK1}" -R "/dev/${SWRAID_DISK2}"
   # randomize the disk's GUID and all partitions' unique GUIDs after cloning
   sgdisk -G "/dev/${SWRAID_DISK2}"
+  raidev1=$(blkid -t PARTLABEL="Linux RAID" -o device |grep "${SWRAID_DISK1}")
+  raidev2=$(blkid -t PARTLABEL="Linux RAID" -o device |grep "${SWRAID_DISK2}")
 
-  echo y | mdadm --create --verbose "${SWRAID_DEVICE}" --level=1 --raid-devices=2 "/dev/${SWRAID_DISK1}"3 "/dev/${SWRAID_DISK2}"3
+  echo y | mdadm --create --verbose "${SWRAID_DEVICE}" --level=1 --raid-devices=2 "/dev/${raidev1}" "/dev/${raidev2}"
 
   echo "Creating PV + VG on ${SWRAID_DEVICE}"
   pvcreate -ff -y "${SWRAID_DEVICE}"
