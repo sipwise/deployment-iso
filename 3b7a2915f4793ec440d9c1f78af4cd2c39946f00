@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_3a1161ad",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1056,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-02T14:59:51Z",
+      "side": 1,
+      "message": "please add:\n  \nlocal pvdevice",
+      "revId": "3b7a2915f4793ec440d9c1f78af4cd2c39946f00",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_1a27bd13",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-02T14:59:51Z",
+      "side": 1,
+      "message": "make raided1/2 local as weel",
+      "range": {
+        "startLine": 1099,
+        "startChar": 0,
+        "endLine": 1100,
+        "endChar": 78
+      },
+      "revId": "3b7a2915f4793ec440d9c1f78af4cd2c39946f00",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
