@@ -1040,7 +1040,7 @@ parted_execution() {
   parted -a optimal -s "${blockdevice}" mkpart primary 2M 512M
   parted -a optimal -s "${blockdevice}" "name 2 'EFI System'"
   parted -a optimal -s "${blockdevice}" set 2 boot on
-  EFI_PARTITION="${blockdevice}"2
+  EFI_PARTITION=$(lsblk -P -p -o PARTLABEL,KNAME |grep "EFI System"|grep -oP '(?<=NAME=\")(.*?)(?=\")')
 }
 
 set_up_partition_table_noswraid() {
@@ -1054,9 +1054,10 @@ set_up_partition_table_noswraid() {
   parted -a optimal -s "${blockdevice}" "name 3 'Linux LVM'"
   parted -a optimal -s "${blockdevice}" set 3 lvm on
 
+  pvdevice=$(lsblk -P -p -o PARTLABEL,KNAME |grep "Linux LVM"|grep -oP '(?<=NAME=\")(.*?)(?=\")')
   echo "Creating PV + VG"
-  pvcreate -ff -y "${blockdevice}"3
-  vgcreate "${VG_NAME}" "${blockdevice}"3
+  pvcreate -ff -y "${pvdevice}"
+  vgcreate "${VG_NAME}" "${pvdevice}"
   vgchange -a y "${VG_NAME}"
 }
 
@@ -1095,8 +1096,10 @@ set_up_partition_table_swraid() {
   sgdisk "/dev/${SWRAID_DISK1}" -R "/dev/${SWRAID_DISK2}"
   # randomize the disk's GUID and all partitions' unique GUIDs after cloning
   sgdisk -G "/dev/${SWRAID_DISK2}"
+  raidev1=$(lsblk -P -p -o PARTLABEL,KNAME |grep "${SWRAID_DISK1}"|grep "Linux LVM"|grep -oP '(?<=NAME=\")(.*?)(?=\")')
+  raidev2=$(lsblk -P -p -o PARTLABEL,KNAME |grep "${SWRAID_DISK2}"|grep "Linux LVM"|grep -oP '(?<=NAME=\")(.*?)(?=\")')
 
-  echo y | mdadm --create --verbose "${SWRAID_DEVICE}" --level=1 --raid-devices=2 "/dev/${SWRAID_DISK1}"3 "/dev/${SWRAID_DISK2}"3
+  echo y | mdadm --create --verbose "${SWRAID_DEVICE}" --level=1 --raid-devices=2 "/dev/${raidev1}" "/dev/${raidev2}"
 
   echo "Creating PV + VG on ${SWRAID_DEVICE}"
   pvcreate -ff -y "${SWRAID_DEVICE}"
