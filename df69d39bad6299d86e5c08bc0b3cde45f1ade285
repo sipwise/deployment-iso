@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_a0ff6400",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-10-03T16:06:47Z",
+      "side": 1,
+      "message": "Does a \"sync\" call change anything?",
+      "parentUuid": "9af37de9_659f4e04",
+      "range": {
+        "startLine": 1044,
+        "startChar": 2,
+        "endLine": 1044,
+        "endChar": 9
+      },
+      "revId": "df69d39bad6299d86e5c08bc0b3cde45f1ade285",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_254026a5",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 8
