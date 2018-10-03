@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_25cf0681",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2018-10-03T09:10:00Z",
+      "side": 1,
+      "message": "Double /dev/dev/sda3 and /dev/dev/sdb3",
+      "range": {
+        "startLine": 1105,
+        "startChar": 83,
+        "endLine": 1105,
+        "endChar": 117
+      },
+      "revId": "53d475457dcc09bfc6f557023f327a041ce5eff2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
