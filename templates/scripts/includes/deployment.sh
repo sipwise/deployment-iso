@@ -98,6 +98,7 @@ SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise.gpg"
 # overriden later, although since the checksum is the same we could use this URL
 # also for Pro/Carrier installations
 SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
+NGCP_PXE_INSTALL=false
 ADDITINAL_PACKAGES=(git augeas-tools gdisk)
 
 
@@ -655,6 +656,10 @@ fi
 
 if checkBootParam 'debootstrapkey=' ; then
   GPG_KEY=$(getBootParam debootstrapkey)
+fi
+
+if checkBootParam 'ngcppxeinstall' ; then
+  NGCP_PXE_INSTALL=true
 fi
 
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
@@ -1543,6 +1548,7 @@ DEFAULT_INTERNAL_NETMASK="${DEFAULT_INTERNAL_NETMASK}"
 INTERNAL_NETMASK="${INTERNAL_NETMASK}"
 RETRIEVE_MGMT_CONFIG="${RETRIEVE_MGMT_CONFIG}"
 MANAGEMENT_IP="${MANAGEMENT_IP}"
+NGCP_PXE_INSTALL="${NGCP_PXE_INSTALL}"
 EOF
   fi
 
@@ -1613,8 +1619,13 @@ EOT
       if "${DHCP}" ; then
         NET_DEV="${INSTALL_DEV}" METHOD='dhcp' "${netcardconf}"
       else
-        NET_DEV="${INSTALL_DEV}" METHOD='static' IPADDR="${INSTALL_IP}" NETMASK="${EXTERNAL_NETMASK}" \
+        if "${PRO_EDITION}" && "${NGCP_PXE_INSTALL}" ; then
+          NET_DEV="${INSTALL_DEV}" METHOD='static' IPADDR="${INSTALL_IP}" NETMASK="${EXTERNAL_NETMASK}" \
+          "${netcardconf}"
+        else
+          NET_DEV="${INSTALL_DEV}" METHOD='static' IPADDR="${INSTALL_IP}" NETMASK="${EXTERNAL_NETMASK}" \
           GATEWAY="${GW}" "${netcardconf}"
+        fi
       fi
     fi
     echo "Copying /etc/network/interfaces ..."
