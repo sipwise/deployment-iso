@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_7795bfe2",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2018-10-05T16:44:36Z",
+      "side": 1,
+      "message": "I tried with: \n- sleep 1 (works)\n- drop caches (works)\n- sync (does not)\n- partprobe (does not)\n\noffer something else, thanks!",
+      "range": {
+        "startLine": 1045,
+        "startChar": 2,
+        "endLine": 1045,
+        "endChar": 15
+      },
+      "revId": "c93e11b03262b557277fc68fbfbe751a8b701db3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
