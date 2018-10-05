@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9af37de9_b7fc473f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-10-05T16:36:30Z",
+      "side": 1,
+      "message": "\u003e Hi Manuel,\n \u003e Please offer something else.\n \u003e Without dropping cache variable will be empty.\n\nErm, I don\u0027t understand.  Which variable will be empty by not dropping the OS caches?",
+      "parentUuid": "9af37de9_57f3db73",
+      "revId": "d4e07f77f8c650f0a3b48d7201dc7d0453b4f599",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af37de9_f7dbefeb",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 9
