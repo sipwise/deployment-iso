@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_d4922957",
+        "filename": "templates/scripts/includes/netcardconfig",
+        "patchSetId": 1
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-05T07:18:34Z",
+      "side": 1,
+      "message": "https://stackoverflow.com/questions/15028567/get-the-index-of-a-value-in-a-bash-array  it sounds simplier:\n  \n\n      for DV in \"${!NETDEVICES[@]}\"; do\n        if [[ \"${NETDEVICES[$DV]}\" \u003d~ ^\"${NET_DEV} \" ]]; then\n          found\u003dtrue\n          break\n        fi\n      done",
+      "range": {
+        "startLine": 687,
+        "startChar": 0,
+        "endLine": 695,
+        "endChar": 10
+      },
+      "revId": "923cf0c1016592200ba60b9509dd720027c6e0fc",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
