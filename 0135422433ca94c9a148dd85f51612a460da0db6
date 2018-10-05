@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_77ddbf13",
+        "filename": "templates/scripts/includes/netcardconfig",
+        "patchSetId": 2
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-05T14:26:44Z",
+      "side": 1,
+      "message": "It looks like I am lost here and maybe I confused you as well.\n\nDV is now available globally , see line 702 \nand also inside for loop, which is not good and will create a lot of confusion in the future...\n\nMaybe you need to revert PS or improve it.",
+      "range": {
+        "startLine": 687,
+        "startChar": 0,
+        "endLine": 687,
+        "endChar": 10
+      },
+      "revId": "0135422433ca94c9a148dd85f51612a460da0db6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
