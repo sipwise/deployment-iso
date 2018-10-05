@@ -46,6 +46,30 @@
       "revId": "c93e11b03262b557277fc68fbfbe751a8b701db3",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_eefe9f04",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-10-05T21:17:17Z",
+      "side": 1,
+      "message": "I\u0027d guess the `echo 3 \u003e /proc/sys/vm/drop_caches` just hides the problem since it might take long enough until it finishes.\n\nIf no recommendation from Manuel works either, I\u0027d prefer a \"sleep 1\" over the drop_caches, tbh :) (Then the according work around should include a short comment in the code though!)\n\nAlso my comment from https://gerrit.mgm.sipwise.com/#/c/23965/1/templates/scripts/includes/deployment.sh@1043 applies here (and below with the other blkid invocations) as well AFAICS. If a device has a label \"EFI System\" we\u0027d operate on it, even though it might be a completely unrelated disk?",
+      "parentUuid": "9af37de9_979023ee",
+      "range": {
+        "startLine": 1045,
+        "startChar": 2,
+        "endLine": 1045,
+        "endChar": 15
+      },
+      "revId": "c93e11b03262b557277fc68fbfbe751a8b701db3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
