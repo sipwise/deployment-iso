@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_17d673c5",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-10-05T16:05:26Z",
+      "side": 1,
+      "message": "The system already knows when to drop cache if they are invalid, AFAIK there\u0027s no benefit to manage this by hand unless one wants to benchmark with an empty cache.",
+      "revId": "d4e07f77f8c650f0a3b48d7201dc7d0453b4f599",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_f7dbefeb",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-10-05T16:05:26Z",
+      "side": 1,
+      "message": "Same as for line #1044",
+      "revId": "d4e07f77f8c650f0a3b48d7201dc7d0453b4f599",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_d7d8ebf1",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 2121,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-10-05T16:05:26Z",
+      "side": 1,
+      "message": "this should be ${efidev1}, voting -2 because even if the operation is correct, the message is misleading and can be alarming...",
+      "range": {
+        "startLine": 2121,
+        "startChar": 36,
+        "endLine": 2121,
+        "endChar": 47
+      },
+      "revId": "d4e07f77f8c650f0a3b48d7201dc7d0453b4f599",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
