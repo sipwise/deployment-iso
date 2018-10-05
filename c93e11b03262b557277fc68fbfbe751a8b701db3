@@ -22,6 +22,30 @@
       "revId": "c93e11b03262b557277fc68fbfbe751a8b701db3",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_979023ee",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-10-05T17:11:59Z",
+      "side": 1,
+      "message": "\u003e I tried with:\n \u003e - sleep 1 (works)\n \u003e - drop caches (works)\n \u003e - sync (does not)\n \u003e - partprobe (does not)\n \u003e \n \u003e offer something else, thanks!\n\nHmm, I was unaware of this problem.\n\nMaybe try with:\n\n  blkid -t PARTLABEL\u003d\"EFI System\" -c /dev/null -g -o device\n\nor with this command before \"blkid\":\n\n  # substitute device if necessary\n  blockdev --flushbufs /dev/sda\n\nor this one if the disk is not in use:\n\n  # again, check device\n  blockdev --flushbufs --rereadpt /dev/sda\n\n\nIf all this fails, maybe keep the drop_caches, but better to document this need either in a comment or the commit message.",
+      "parentUuid": "9af37de9_7795bfe2",
+      "range": {
+        "startLine": 1045,
+        "startChar": 2,
+        "endLine": 1045,
+        "endChar": 15
+      },
+      "revId": "c93e11b03262b557277fc68fbfbe751a8b701db3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
