@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_ae5777c9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-08T07:09:26Z",
+      "side": 1,
+      "message": "\"${blockdevice}\" ?",
+      "range": {
+        "startLine": 1044,
+        "startChar": 23,
+        "endLine": 1044,
+        "endChar": 31
+      },
+      "revId": "5618bb3a89b9bb0d0645692d423e5c605a59179a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_ce62c3ad",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-08T07:09:26Z",
+      "side": 1,
+      "message": "It will not work (it will work in different for you way):\n  \n- \"${blockdevice}*\"\n+ \"${blockdevice}\"*",
+      "range": {
+        "startLine": 1045,
+        "startChar": 60,
+        "endLine": 1045,
+        "endChar": 77
+      },
+      "revId": "5618bb3a89b9bb0d0645692d423e5c605a59179a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
