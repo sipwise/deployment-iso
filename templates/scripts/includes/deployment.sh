@@ -1788,6 +1788,26 @@ vagrant_configuration() {
   tail -10 "${TARGET}/var/log/VBoxGuestAdditions.log"
   umount "${TARGET}/media/cdrom/"
 
+  if [[ "$DEBIAN_RELEASE" == "buster" ]] && grep -q 'error: passing argument' "${TARGET}/var/log/vboxadd-setup.log"* ; then
+    echo "Applying Virtualbox workaround for buster and kernel >=4.18"
+    cat > "${TARGET}/tmp/vbox-kernel-fix.sh" << EOT
+#!/bin/bash
+set -e -o pipefail
+cd /opt/VBoxGuestAdditions-5.2.18/src/vboxguest-5.2.18/vboxsf
+wget --retry-connrefused --no-verbose -c "${SIPWISE_URL}/files/VirtualBox-kernel-4.18.patch"
+if ! echo "c585cd24e078df9f458e493d412ce7e4cc9a581bf79ed50da4b2a570b366fff6  VirtualBox-kernel-4.18.patch" | sha256sum --check ; then
+ echo "Error: failed to compute checksum for Virtualbox patch. Exiting."
+ exit 1
+fi
+patch -p1 < VirtualBox-kernel-4.18.patch
+make
+make install
+depmod -a
+EOT
+
+    UTS_RELEASE=$KERNELVERSION LD_PRELOAD=/tmp/fake-uname.so grml-chroot "${TARGET}" /bin/bash /tmp/vbox-kernel-fix.sh
+  fi
+
   # VBoxLinuxAdditions.run chooses /usr/lib64 as soon as this directory exists, which
   # is the case for our PRO systems shipping the heartbeat-2 package; then the
   # symlink /sbin/mount.vboxsf points to the non-existing /usr/lib64/VBoxGuestAdditions/mount.vboxsf
