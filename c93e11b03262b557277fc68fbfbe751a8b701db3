@@ -94,6 +94,30 @@
       "revId": "c93e11b03262b557277fc68fbfbe751a8b701db3",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_8e9ddb5b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-08T08:45:29Z",
+      "side": 1,
+      "message": "PS13 contains \"${blockdevice}\"* already.\nDo we need to improve something else here?",
+      "parentUuid": "7ad8896b_0e732b4f",
+      "range": {
+        "startLine": 1045,
+        "startChar": 2,
+        "endLine": 1045,
+        "endChar": 15
+      },
+      "revId": "c93e11b03262b557277fc68fbfbe751a8b701db3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
