@@ -22,6 +22,30 @@
       "revId": "0135422433ca94c9a148dd85f51612a460da0db6",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_8ee15b01",
+        "filename": "templates/scripts/includes/netcardconfig",
+        "patchSetId": 2
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T07:48:32Z",
+      "side": 1,
+      "message": "The code here is a little bit tricky so it was easy to make a mistake.\n\n1. DV is global variable in any case. It is declared in main part of code without \u0027local\u0027.\n\n2. In line 684 user inputs the number into DV and then configiface is called.\n\n3. In configiface (line 190) the name of interface is written to DV and it is used in line 713 \u0027ifup $DV\u0027\n\nSuch a \"global\" behavior is here from the very beginning.",
+      "parentUuid": "9af37de9_77ddbf13",
+      "range": {
+        "startLine": 687,
+        "startChar": 0,
+        "endLine": 687,
+        "endChar": 10
+      },
+      "revId": "0135422433ca94c9a148dd85f51612a460da0db6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
