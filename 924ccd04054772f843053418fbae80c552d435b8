@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_d4513410",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-09T07:43:16Z",
+      "side": 1,
+      "message": "Please also correct documentation.git where we say VirtualBox 5.1 is minimum required. We should ask for mr5.2 now.",
+      "revId": "924ccd04054772f843053418fbae80c552d435b8",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
