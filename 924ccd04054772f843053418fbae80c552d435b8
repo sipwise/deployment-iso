@@ -16,6 +16,24 @@
       "revId": "924ccd04054772f843053418fbae80c552d435b8",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_543e64b9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-10-09T07:46:05Z",
+      "side": 1,
+      "message": "ACK will do",
+      "parentUuid": "7ad8896b_d4513410",
+      "revId": "924ccd04054772f843053418fbae80c552d435b8",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
