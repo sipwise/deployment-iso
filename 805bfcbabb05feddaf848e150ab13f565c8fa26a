@@ -16,6 +16,24 @@
       "revId": "805bfcbabb05feddaf848e150ab13f565c8fa26a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_3462b8d9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-10-09T07:55:48Z",
+      "side": 1,
+      "message": "Since it mentions \"workaround\" here already and explicitly checks for failing compilation I\u0027ll keep this as is here.\n\nReported TT#45552",
+      "parentUuid": "7ad8896b_945bac2e",
+      "revId": "805bfcbabb05feddaf848e150ab13f565c8fa26a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
