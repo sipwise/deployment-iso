@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_945bac2e",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-09T07:45:28Z",
+      "side": 1,
+      "message": "Maybe add comment here / create a ticket to delete this before migration to buster in trunk. with high probability it will be unnecessary.",
+      "revId": "805bfcbabb05feddaf848e150ab13f565c8fa26a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
