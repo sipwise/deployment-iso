@@ -1,3 +1,24 @@
+ngcp-deployment-iso (6.5.2.0+0~mr6.5.2.0) unstable; urgency=medium
+
+  [ Manuel Montecelo ]
+  * [a4736f3] TT#11444 Enable and calculate size of swapfile
+  * [0598feb] TT#11444 Fix calculation of the size of swapfile
+
+  [ Mykola Malkov ]
+  * [5fa6514] TT#37257 Overwrite config_deploy.inc with new values
+  * [9059506] TT#44969 Fix non-interactive interface choosing
+  * [6897113] TT#44969 Pass ngcppxeinstall parameter to config file
+
+  [ Alexander Lutay ]
+  * [1ed9fb1] TT#11444 Mount 'data' partition inside chroot
+
+  [ Volodymyr Fedorov ]
+  * [0a9ebf1] TT#44972 Enable to install to NVMe drives
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 15 Oct 2018 21:15:03 +0200
+
 ngcp-deployment-iso (6.5.1.0+0~mr6.5.1.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
