@@ -1576,6 +1576,8 @@ EOF
 
   if "${TRUNK_VERSION}" && checkBootParam ngcpupload ; then
     echo "NGCPUPLOAD=true" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
+  else
+    echo "NGCPUPLOAD=false" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
   fi
 }
 
