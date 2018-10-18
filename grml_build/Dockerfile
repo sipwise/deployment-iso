@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install --assume-yes \
   syslinux \
   xorriso
 
-RUN echo "./grml-live -s buster -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t /code/grml-live/templates/ -o /grml/ -r grml-sipwise -v 0.42" >/root/.bash_history
+RUN echo "SECURE_BOOT=disable ./grml-live -s buster -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t /code/grml-live/templates/ -o /grml/ -r grml-sipwise -v 0.42" >/root/.bash_history
 RUN echo "export LIVE_CONF=/code/grml-live/etc/grml/grml-live.conf" >>/root/.bash_history
 RUN echo "export SCRIPTS_DIRECTORY=/code/grml-live/scripts"         >>/root/.bash_history
 RUN echo "export GRML_FAI_CONFIG=/code/grml-live/etc/grml/fai"      >>/root/.bash_history
