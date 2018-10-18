@@ -99,7 +99,7 @@ SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise.gpg"
 # also for Pro/Carrier installations
 SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
 NGCP_PXE_INSTALL=false
-ADDITINAL_PACKAGES=(git augeas-tools gdisk)
+ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
 
 
 ### helper functions {{{
@@ -262,12 +262,30 @@ is_package_installed() {
 }
 
 ensure_packages_installed() {
-  [[ -z "${ADDITINAL_PACKAGES[*]}" ]] && return 0
+  [[ -z "${ADDITIONAL_PACKAGES[*]}" ]] && return 0
 
-  local install_packages
+  local debian_release install_packages
+
+  # while we might want to install Debian/stretch, our live system
+  # might be running based on Debian/buster; to ensure we can
+  # install packages from $ADDITIONAL_PACKAGES without dependency
+  # conflicts get the packages from the repository corresponding
+  # to our live system
+  case "$(cat /etc/debian_version)" in
+    9.*|stretch*)
+      debian_release="stretch"
+      ;;
+    buster*)
+      debian_release="buster"
+      ;;
+    *) # fallback
+      debian_release="$DEBIAN_RELEASE"
+      ;;
+  esac
+
   install_packages=()
-  echo "Ensuring packages installed: ${ADDITINAL_PACKAGES[*]}"
-  for pkg in "${ADDITINAL_PACKAGES[@]}"; do
+  echo "Ensuring packages installed: ${ADDITIONAL_PACKAGES[*]}"
+  for pkg in "${ADDITIONAL_PACKAGES[@]}"; do
     if is_package_installed "${pkg}"; then
       echo "Package '${pkg}' is already installed, nothing to do."
     else
@@ -290,7 +308,7 @@ ensure_packages_installed() {
     "${TMPDIR}/cachedir/archives/partial"
   chown _apt -R "${TMPDIR}"
 
-  echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
+  echo "deb ${DEBIAN_URL}/debian/ ${debian_release} main contrib non-free" > \
     "${TMPDIR}/etc/sources.list"
 
   DEBIAN_FRONTEND='noninteractive' apt-get \
