@@ -81,7 +81,7 @@ SIPWISE_REPO_TRANSPORT="https"
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
 DPL_MYSQL_REPLICATION=true
-FILL_APPROX_CACHE=false
+FILL_APPROX_CACHE=true
 VLAN_BOOT_INT=2
 VLAN_SSH_EXT=300
 VLAN_WEB_EXT=1718
@@ -610,10 +610,6 @@ if checkBootParam ngcpnomysqlrepl ; then
   DPL_MYSQL_REPLICATION=false
 fi
 
-if checkBootParam ngcpfillcache ; then
-  FILL_APPROX_CACHE=true
-fi
-
 if checkBootParam 'ngcpvlanbootint=' ; then
   VLAN_BOOT_INT=$(getBootParam ngcpvlanbootint)
 fi
@@ -750,7 +746,6 @@ for param in "$@" ; do
     *vagrant*) VAGRANT=true;;
     *lowperformance*) ADJUST_FOR_LOW_PERFORMANCE=true;;
     *enablevmservices*) ENABLE_VM_SERVICES=true;;
-    *ngcpfillcache*) FILL_APPROX_CACHE=true;;
     *ngcpvlanbootint*) VLAN_BOOT_INT="${param//ngcpvlanbootint=/}";;
     *ngcpvlansshext*) VLAN_SSH_EXT="${param//ngcpvlansshext=/}";;
     *ngcpvlanwebext*) VLAN_WEB_EXT="${param//ngcpvlanwebext=/}";;
@@ -1527,7 +1522,6 @@ gen_installer_config () {
   if "${CARRIER_EDITION}" ; then
     cat >> "${conf_file}" << EOF
 CROLE="${CROLE}"
-FILL_APPROX_CACHE="${FILL_APPROX_CACHE}"
 VLAN_BOOT_INT="${VLAN_BOOT_INT}"
 VLAN_SSH_EXT="${VLAN_SSH_EXT}"
 VLAN_WEB_EXT="${VLAN_WEB_EXT}"
@@ -1558,6 +1552,7 @@ INTERNAL_NETMASK="${INTERNAL_NETMASK}"
 RETRIEVE_MGMT_CONFIG="${RETRIEVE_MGMT_CONFIG}"
 MANAGEMENT_IP="${MANAGEMENT_IP}"
 NGCP_PXE_INSTALL="${NGCP_PXE_INSTALL}"
+FILL_APPROX_CACHE="${FILL_APPROX_CACHE}"
 EOF
   fi
 
