@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad58531_96b852e7",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-10-18T12:10:40Z",
+      "side": 1,
+      "message": "It requires polishing for PXE case. there is no buster on approx out of the box. ngcp-approx-cache-helper should fetch it for GRML... from deb.sipwise.com, do we have mirror there BTW?",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 29
+      },
+      "revId": "86dcab9592104b7c6cc8a4c9b4a6b60e8fe885d4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
