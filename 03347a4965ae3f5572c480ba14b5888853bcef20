@@ -16,6 +16,24 @@
       "revId": "03347a4965ae3f5572c480ba14b5888853bcef20",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad58531_1637bdb1",
+        "filename": "grub.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-23T11:58:30Z",
+      "side": 1,
+      "message": "I\u0027ve copied it from our handbook https://www.sipwise.org/doc/mr6.4.1/carrier/\nso I guess we need to keep the same style everywhere.",
+      "parentUuid": "5ad58531_16e9fd1a",
+      "revId": "03347a4965ae3f5572c480ba14b5888853bcef20",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
