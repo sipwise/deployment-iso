@@ -1,3 +1,12 @@
+ngcp-deployment-iso (6.4.2.1+0~mr6.4.2.1) unstable; urgency=medium
+
+  [ Alexander Lutay ]
+  * [ab00941] TT#37257 Fix d2afaf9: allow installing plain Debian systems (without NGCP)
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 23 Oct 2018 14:13:47 +0200
+
 ngcp-deployment-iso (6.4.2.0+0~mr6.4.2.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
