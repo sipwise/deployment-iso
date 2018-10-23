@@ -95,7 +95,7 @@ deploy() {
   RC=0
   "${scripts_dir}/deployment.sh" || RC=$?
   if [ $RC -eq 0 ] ; then
-    if dialog --yes-label Reboot --no-label Exit --yesno "Successfully finished deployment, enjoy your sip:provider system. Reboot system now?" 0 0 ; then
+    if dialog --yes-label Reboot --no-label Exit --yesno "Successfully finished deployment, enjoy your Sipwise C5 system. Reboot system now?" 0 0 ; then
       reboot
     else
       ewarn "Not rebooting as requested, please don't forget to reboot your system." ; eend 0
