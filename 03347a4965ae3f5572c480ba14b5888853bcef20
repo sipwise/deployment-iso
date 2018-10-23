@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad58531_16e9fd1a",
+        "filename": "grub.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-10-23T11:42:50Z",
+      "side": 1,
+      "message": "Not sure about PRO, but CARRIER looks a bit like SHOUTING this way :)\n\nAnyway, +2 from my side, in the case that you want to submit if noone else has objections about the casing.",
+      "revId": "03347a4965ae3f5572c480ba14b5888853bcef20",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
