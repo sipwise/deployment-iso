@@ -99,7 +99,7 @@ SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise.gpg"
 # also for Pro/Carrier installations
 SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
 NGCP_PXE_INSTALL=false
-ADDITINAL_PACKAGES=(git augeas-tools gdisk)
+ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
 
 
 ### helper functions {{{
@@ -262,12 +262,12 @@ is_package_installed() {
 }
 
 ensure_packages_installed() {
-  [[ -z "${ADDITINAL_PACKAGES[*]}" ]] && return 0
+  [[ -z "${ADDITIONAL_PACKAGES[*]}" ]] && return 0
 
   local install_packages
   install_packages=()
-  echo "Ensuring packages installed: ${ADDITINAL_PACKAGES[*]}"
-  for pkg in "${ADDITINAL_PACKAGES[@]}"; do
+  echo "Ensuring packages installed: ${ADDITIONAL_PACKAGES[*]}"
+  for pkg in "${ADDITIONAL_PACKAGES[@]}"; do
     if is_package_installed "${pkg}"; then
       echo "Package '${pkg}' is already installed, nothing to do."
     else
