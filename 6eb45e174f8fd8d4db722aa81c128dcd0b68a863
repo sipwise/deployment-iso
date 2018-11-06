@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae2911b_4077be02",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-11-06T09:51:42Z",
+      "side": 1,
+      "message": "please make this a list like:\n\n1)\n2)\n3) ...\n\n\nI had to read that twice to parse the \"1.1.1.1 3)\" correctly :p\n\nPlease also add credits to the person who submitted https://github.com/sipwise/deployment-iso/pull/1/ (it\u0027s a nice gesture, even if it\u0027s your/our work that\u0027s submitted, but that\u0027s just because of our commercial needs and nothing the contributor can be aware of :))",
+      "revId": "6eb45e174f8fd8d4db722aa81c128dcd0b68a863",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae2911b_806da634",
+        "filename": "templates/scripts/includes/check-for-network",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-11-06T09:51:42Z",
+      "side": 1,
+      "message": "I would switch the order here, the default $DNS_SERVER might be a local listening dnsmasq/systemd-resolvd or so.",
+      "revId": "6eb45e174f8fd8d4db722aa81c128dcd0b68a863",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
