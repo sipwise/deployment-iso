@@ -15,8 +15,12 @@ EXIT_CODE=1
 
 GW="$(route -n | awk '/^0\.0\.0\.0/{print $2}')"
 GWDEV="$(route -n | awk '/^0\.0\.0\.0/{print $NF}')"
+SIPWISE_DEB='deb.sipwise.com'
+DNS_SERVER="$( awk '/^nameserver/ {print $2; exit}' /etc/resolv.conf || true )"
 
-if ping -c 3 "${GW}" >/dev/null ; then
+if ping -c 3 "${GW}" >/dev/null \
+  || ping -c 3 "${SIPWISE_DEB}" >/dev/null \
+  || ping -c 3 "${DNS_SERVER:-1.1.1.1}" >/dev/null ; then
   STATUS="Online (${GWDEV})"
   EXIT_CODE=0
 fi
