@@ -1,3 +1,39 @@
+ngcp-deployment-iso (7.0.1.0+0~mr7.0.1.0) unstable; urgency=medium
+
+  [ Manuel Montecelo ]
+  * [a807de1] TT#11444 Enable and calculate size of swapfile
+  * [9de6138] TT#11444 Fix calculation of the size of swapfile
+
+  [ Mykola Malkov ]
+  * [953bed6] TT#37257 Overwrite config_deploy.inc with new values
+  * [a7658c8] TT#44058 Add docker files to build GRML image
+  * [04774ae] TT#44969 Fix non-interactive interface choosing
+  * [69b58f4] TT#44969 Pass ngcppxeinstall parameter to config file
+  * [305ae64] TT#44969 Pass SIPWISE_REPO_HOST to installer
+  * [9e50cef] TT#44969 Pass NGCPUPLOAD option to configuration tool
+  * [03347a4] TT#46252 Change product names in boot menus
+  * [d534dd4] TT#46252 Change product names in deployment scripts
+  * [b18bf5e] TT#44969 Move FILL_APPROX_CACHE option to Pro section
+  * [2084d1d] TT#44969 Do not pass RETRIEVE_MGMT_CONFIG to installer
+  * [f7db085] TT#46784 Check several servers to get network status.
+    Thanks to Isaac McDonald for the PR.
+
+  [ Alexander Lutay ]
+  * [b1d78cb] TT#11444 Mount 'data' partition inside chroot
+  * [494e62d] TT#45709 Fix typo in variable name: s/ADDITINAL_PACKAGES/ADDITIONAL_PACKAGES/
+
+  [ Volodymyr Fedorov ]
+  * [cc95e9b] TT#44972 Enable to install to NVMe drives
+
+  [ Michael Prokop ]
+  * [924ccd0] TT#45502 Update Virtualbox VBoxGuestAdditions ISO to v5.2.18
+  * [805bfcb] TT#45502 Patch vboxsf when building against Debian/buster fails
+  * [a6dda75] TT#45709 Disable Secure Boot support when building Grml ISO
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 12 Nov 2018 22:33:37 +0100
+
 ngcp-deployment-iso (7.0.0.0+0~mr7.0.0.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
