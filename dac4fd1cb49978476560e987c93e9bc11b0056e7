@@ -1,0 +1,7 @@
+Code-Review+2: Mykola Malkov <mmalkov@sipwise.com>
+Verified+1: Sergii Kipot <skipot@sipwise.com>
+Submitted-by: Sergii Kipot <skipot@sipwise.com>
+Submitted-at: Wed, 21 Nov 2018 18:13:40 +0100
+Reviewed-on: http://gerrit.mgm.sipwise.com/24960
+Project: deployment-iso
+Branch: refs/heads/legacy_releases_before_mr6.2
