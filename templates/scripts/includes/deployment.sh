@@ -1058,6 +1058,7 @@ set_up_partition_table_noswraid() {
   parted -a optimal -s "${blockdevice}" set 3 lvm on
 
   blockdev --flushbufs "${blockdevice}"
+  sleep 3s
   pvdevice=$(blkid -t PARTLABEL="Linux LVM" -o device "${blockdevice}"*)
   echo "Creating PV + VG"
   pvcreate -ff -y "${pvdevice}"
