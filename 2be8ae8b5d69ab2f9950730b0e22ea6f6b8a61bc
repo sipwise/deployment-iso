@@ -94,6 +94,30 @@
       "revId": "2be8ae8b5d69ab2f9950730b0e22ea6f6b8a61bc",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_9d1d0112",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-11-30T16:41:37Z",
+      "side": 1,
+      "message": "\u003e Sure one line is always better, but...\n \u003e where is the guaranties 3 seconds is enough? Why not 42?\n \u003e In case of some slow RAID controller card or CPU. Virtualisation?\n \u003e With wait, we can wait up to minutes...\n\nWith the code that you posted there\u0027s a wait of 5s max, so I don\u0027t think that it makes much a difference.\n\nI chose 3 and not 42 because in practice it worked for a while without any wait at all, so I assume that small delays are OK.\n\nBut OK, if we have to wait for longer, polling makes more sense, so I\u0027ll something for that.",
+      "parentUuid": "1adf8d57_3d05edc1",
+      "range": {
+        "startLine": 1062,
+        "startChar": 0,
+        "endLine": 1062,
+        "endChar": 72
+      },
+      "revId": "2be8ae8b5d69ab2f9950730b0e22ea6f6b8a61bc",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
