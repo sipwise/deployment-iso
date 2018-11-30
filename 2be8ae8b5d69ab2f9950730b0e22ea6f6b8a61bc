@@ -46,6 +46,30 @@
       "revId": "2be8ae8b5d69ab2f9950730b0e22ea6f6b8a61bc",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_fdc9a5ad",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-11-30T15:03:56Z",
+      "side": 1,
+      "message": "\u003e I would vote for something like\n\nTBH I prefer a single line and waiting just 3 seconds than adding 20 lines of code.",
+      "parentUuid": "1adf8d57_7d901596",
+      "range": {
+        "startLine": 1062,
+        "startChar": 0,
+        "endLine": 1062,
+        "endChar": 72
+      },
+      "revId": "2be8ae8b5d69ab2f9950730b0e22ea6f6b8a61bc",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
