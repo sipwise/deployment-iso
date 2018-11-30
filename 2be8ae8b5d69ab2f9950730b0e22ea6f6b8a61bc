@@ -118,6 +118,30 @@
       "revId": "2be8ae8b5d69ab2f9950730b0e22ea6f6b8a61bc",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_7dc81575",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-11-30T17:01:22Z",
+      "side": 1,
+      "message": "I honestly do not know how long we should wait... normally even 1s is enough... we have too much assumptions already.",
+      "parentUuid": "1adf8d57_9d1d0112",
+      "range": {
+        "startLine": 1062,
+        "startChar": 0,
+        "endLine": 1062,
+        "endChar": 72
+      },
+      "revId": "2be8ae8b5d69ab2f9950730b0e22ea6f6b8a61bc",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
