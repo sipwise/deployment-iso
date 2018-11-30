@@ -1045,6 +1045,27 @@ parted_execution() {
   EFI_PARTITION=$(blkid -t PARTLABEL="EFI System" -o device "${blockdevice}"*)
 }
 
+wait_for_pvdevice() {
+  local blockdevice="$1"
+  if [[ -z "${blockdevice}" ]]; then
+    die "Error: need a blockdevice to probe, nothing provided."
+  fi
+
+  local pvdevice=""
+  for try in {1..60}; do
+    pvdevice=$(blkid -t PARTLABEL="Linux LVM" -o device "${blockdevice}"* || true)
+    if [[ -n "${pvdevice}" ]]; then
+      echo "pvdevice is now available: ${pvdevice}"
+      return
+    else
+      echo "pvdevice not yet available, try #${try}, sleeping..."
+      sleep 1s
+    fi
+  done
+
+  die "Error: could not get pvdevice after #${try} tries"
+}
+
 set_up_partition_table_noswraid() {
   local blockdevice
   local pvdevice
@@ -1058,6 +1079,7 @@ set_up_partition_table_noswraid() {
   parted -a optimal -s "${blockdevice}" set 3 lvm on
 
   blockdev --flushbufs "${blockdevice}"
+  wait_for_pvdevice "${blockdevice}"
   pvdevice=$(blkid -t PARTLABEL="Linux LVM" -o device "${blockdevice}"*)
   echo "Creating PV + VG"
   pvcreate -ff -y "${pvdevice}"
