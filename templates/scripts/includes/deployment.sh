@@ -1025,6 +1025,21 @@ clear_partition_table() {
   blockdev --rereadpt "${blockdevice}"
 }
 
+get_pvdevice_by_label() {
+  local blockdevice="$1"
+  if [[ -z "${blockdevice}" ]]; then
+    die "Error: need a blockdevice to probe, nothing provided."
+  fi
+  local partlabel="$2"
+  if [[ -z "${partlabel}" ]]; then
+    die "Error: need a partlabel to search for, nothing provided."
+  fi
+
+  local pvdevice=""
+  pvdevice=$(blkid -t PARTLABEL="${partlabel}" -o device "${blockdevice}"* || true)
+  echo "${pvdevice}"
+}
+
 parted_execution() {
   local blockdevice=$1
 
@@ -1047,7 +1062,6 @@ parted_execution() {
 
 set_up_partition_table_noswraid() {
   local blockdevice
-  local pvdevice
   blockdevice="/dev/${DISK}"
 
   clear_partition_table "$blockdevice"
@@ -1056,9 +1070,25 @@ set_up_partition_table_noswraid() {
   parted -a optimal -s "${blockdevice}" mkpart primary 512M 100%
   parted -a optimal -s "${blockdevice}" "name 3 'Linux LVM'"
   parted -a optimal -s "${blockdevice}" set 3 lvm on
-
   blockdev --flushbufs "${blockdevice}"
-  pvdevice=$(blkid -t PARTLABEL="Linux LVM" -o device "${blockdevice}"*)
+
+  local max_tries=60
+  local pvdevice
+  for try in $(seq 1 ${max_tries}); do
+    pvdevice=$(get_pvdevice_by_label "${blockdevice}" "Linux LVM")
+    if [[ -n "${pvdevice}" ]]; then
+      echo "pvdevice is now available: ${pvdevice}"
+      break
+    else
+      if [[ "${try}" -lt "${max_tries}" ]]; then
+        echo "pvdevice not yet available (blockdevice=${blockdevice}, partlabel=${partlabel}), try #${try} of ${max_tries}, retrying in 1 second..."
+        sleep 1s
+      else
+        die "Error: could not get pvdevice after #${try} tries"
+      fi
+    fi
+  done
+
   echo "Creating PV + VG"
   pvcreate -ff -y "${pvdevice}"
   vgcreate "${VG_NAME}" "${pvdevice}"
