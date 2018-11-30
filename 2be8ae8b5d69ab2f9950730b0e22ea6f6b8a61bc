@@ -22,6 +22,30 @@
       "revId": "2be8ae8b5d69ab2f9950730b0e22ea6f6b8a61bc",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_3de96d1b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-11-30T14:50:06Z",
+      "side": 1,
+      "message": "Oups, there is a mess with STDOUT, better...\n\nwait_for_pvdevice() {\n  local blockdevice\u003d$1\n\n  if [ -z \"${blockdevice}\" ]; then\n    echo \"error die....\" \u003e\u00262\n    exit 1\n  fi\n\n  local loop\u003d5\n  local pvdevice\u003d\"\"\n\n  while [ ${loop} -ne 0 ]; do\n    pvdevice\u003d$(blkid -t PARTLABEL\u003d\"Linux LVM\" -o device \"${blockdevice}\"* || true)\n    if [ -n \"${pvdevice}\" ]; then\n      echo \"pvdevice is available: ${pvdevice}\"\n      break\n    else\n      echo \"pvdevice not yet available, retrying further $loop times\"\n      sleep 1\n    fi\n  done\n\n  if [ -z \"${pvdevice}\" ]; then\n    echo \"error die....\" \u003e\u00262\n    exit 1\n  fi\n}\n\n...\n\nblockdev --flushbufs \"${blockdevice}\"\nwait_for_pvdevice \"${blockdevice}\"\npvdevice\u003d$(blkid -t PARTLABEL\u003d\"Linux LVM\" -o device \"${blockdevice}\"*)",
+      "parentUuid": "1adf8d57_7d901596",
+      "range": {
+        "startLine": 1062,
+        "startChar": 0,
+        "endLine": 1062,
+        "endChar": 72
+      },
+      "revId": "2be8ae8b5d69ab2f9950730b0e22ea6f6b8a61bc",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
