@@ -70,6 +70,30 @@
       "revId": "2be8ae8b5d69ab2f9950730b0e22ea6f6b8a61bc",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_3d05edc1",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-11-30T15:41:49Z",
+      "side": 1,
+      "message": "Sure one line is always better, but...\nwhere is the guaranties 3 seconds is enough? Why not 42?\nIn case of some slow RAID controller card or CPU. Virtualisation? With wait, we can wait up to minutes...",
+      "parentUuid": "1adf8d57_fdc9a5ad",
+      "range": {
+        "startLine": 1062,
+        "startChar": 0,
+        "endLine": 1062,
+        "endChar": 72
+      },
+      "revId": "2be8ae8b5d69ab2f9950730b0e22ea6f6b8a61bc",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
