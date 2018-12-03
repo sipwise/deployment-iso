@@ -22,6 +22,30 @@
       "revId": "20ef088ad57b6fdba3529c9d94be6c82acda0100",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_40e9f219",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-12-03T10:57:45Z",
+      "side": 1,
+      "message": "it is ugly problem in shell to return string values from functions, see my first and second comment here https://gerrit.mgm.sipwise.com/#/c/25211/1/templates/scripts/includes/deployment.sh@1062\n\nIt is possible via\n1) global variable\n2) passing variable as a reference to the function\n3) using separate non-STDOUT descriptors to return values from the function\n4) use STDOUT descriptors to return value from function and do not print messages to STDOUT inside the functions\n\nI normally use 2)",
+      "parentUuid": "1adf8d57_dd3f09d5",
+      "range": {
+        "startLine": 1083,
+        "startChar": 13,
+        "endLine": 1083,
+        "endChar": 43
+      },
+      "revId": "20ef088ad57b6fdba3529c9d94be6c82acda0100",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
