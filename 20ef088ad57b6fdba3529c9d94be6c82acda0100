@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1adf8d57_dd3f09d5",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-03T08:40:44Z",
+      "side": 1,
+      "message": "This is a copy of the code above. May be function should return this value?",
+      "range": {
+        "startLine": 1083,
+        "startChar": 13,
+        "endLine": 1083,
+        "endChar": 43
+      },
+      "revId": "20ef088ad57b6fdba3529c9d94be6c82acda0100",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
