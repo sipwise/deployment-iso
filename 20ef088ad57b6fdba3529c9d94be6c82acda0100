@@ -70,6 +70,30 @@
       "revId": "20ef088ad57b6fdba3529c9d94be6c82acda0100",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_26e27ed6",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-12-04T14:54:05Z",
+      "side": 1,
+      "message": "\u003e ... I don\u0027t understand very well the solution 2) from Alex...\n\nIt was a hack in my mind, see https://gerrit.mgm.sipwise.com/gitweb?p\u003drelease-tools.git;a\u003dblob;f\u003drepo_brancher.sh;hb\u003dHEAD\n  \nget_repo_list () {\n  local _repos\u003d$1\n  ...\n  local _repositories\u003d\"\"\n\n  echo \"whatever... \"\n  ...\n  _repositories\u003d\"some value to be returned\"\n\n  eval \"$_repos\"\u003d\"\u0027$_repositories\u0027\"\n\n}\n...\nget_repo_list   repositories   \"$local_git_repos\"   \"$git_repos_folder\"   \"$git_url\"\n# $repositories contains the value from function\n\n\nIt is 5 years old code, and checking it now I understand it is completely stupid and just uses global variables over eval... so forget about it :-D",
+      "parentUuid": "1adf8d57_86c49240",
+      "range": {
+        "startLine": 1083,
+        "startChar": 13,
+        "endLine": 1083,
+        "endChar": 43
+      },
+      "revId": "20ef088ad57b6fdba3529c9d94be6c82acda0100",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
