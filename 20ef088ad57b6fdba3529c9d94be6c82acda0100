@@ -46,6 +46,30 @@
       "revId": "20ef088ad57b6fdba3529c9d94be6c82acda0100",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_86c49240",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-12-04T14:31:21Z",
+      "side": 1,
+      "message": "Actually I though about this and maybe a solution is to create a function only with that check and returning either the device or the empty string, but then we\u0027re adding another few lines of code.\n\nThis is a general problem of shell code, as Alex says.\n\nI don\u0027t understand very well the solution 2) from Alex, passing variables to functions maybe it\u0027s a convention but it\u0027s not enforced by shell code and they\u0027re global variables all the same, AIUI.\n\nIs any of the above more agreeable to you?",
+      "parentUuid": "1adf8d57_40e9f219",
+      "range": {
+        "startLine": 1083,
+        "startChar": 13,
+        "endLine": 1083,
+        "endChar": 43
+      },
+      "revId": "20ef088ad57b6fdba3529c9d94be6c82acda0100",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
