@@ -35,23 +35,36 @@ elif [ -z "${DIST}" ]; then
   usage
 fi
 
-if [ "${GRML_ISO}" != "" ]; then
-  if [[ "${GRML_ISO}" =~ ^devel/.*\.iso$ ]]; then
-    GRML_URL+="devel/"
-    GRML_HASH_URL+="devel/"
-  fi
+if [[ -n "${GRML_ISO}" ]]; then
   GRML_ISO=$(basename "${GRML_ISO}")
 else
   usage
 fi
 
-echo "*** Building ${MR} ISO ***"
+
+SCRIPT="$(readlink -f "$0")"
+SCRIPTPATH="$(dirname "${SCRIPT}")"
+pushd "${SCRIPTPATH}" &>/dev/null
 
 echo "*** Retrieving Grml ISO [${GRML_ISO}] ***"
-# shellcheck disable=SC2086
-wget ${WGET_OPT} -O "${GRML_ISO}" "${GRML_URL}${GRML_ISO}"
-# shellcheck disable=SC2086
-wget ${WGET_OPT} -O "${GRML_ISO}.sha1" "${GRML_HASH_URL}${GRML_ISO}.sha1"
+if [[ -f "${SCRIPTPATH}/${GRML_ISO}" ]]; then
+  echo "*** Grml ISO [${GRML_ISO}] is already here, checking sha1 file ***"
+  if [[ -f "${SCRIPTPATH}/${GRML_ISO}.sha1" ]]; then
+    echo "*** Grml ISO sha1 [${GRML_ISO}.sha1] is already here ***"
+  else
+    echo "*** Downloading Grml ISO sha1 [${GRML_ISO}.sha1] ***"
+    # shellcheck disable=SC2086
+    wget ${WGET_OPT} -O "${GRML_ISO}.sha1" "${GRML_HASH_URL}${GRML_ISO}.sha1"
+  fi
+else
+  echo "*** Downloading Grml ISO and sha1 files [${GRML_ISO}] ***"
+  # shellcheck disable=SC2086
+  wget ${WGET_OPT} -O "${GRML_ISO}" "${GRML_URL}${GRML_ISO}"
+  # shellcheck disable=SC2086
+  wget ${WGET_OPT} -O "${GRML_ISO}.sha1" "${GRML_HASH_URL}${GRML_ISO}.sha1"
+fi
+
+echo "*** Building ${MR} ISO ***"
 
 if grep -q "${GRML_ISO}" "${GRML_ISO}.sha1" ; then
   check_sha1 "${GRML_ISO}"
@@ -89,3 +102,5 @@ md5sum  "${SIPWISE_ISO}" > "${SIPWISE_ISO}.md5"
 mkdir -p artifacts
 echo "*** Moving ${SIPWISE_ISO} ${SIPWISE_ISO}.sha1 ${SIPWISE_ISO}.md5 to artifacts/ ***"
 mv "${SIPWISE_ISO}" "${SIPWISE_ISO}.sha1" "${SIPWISE_ISO}.md5" artifacts/
+
+popd &>/dev/null
