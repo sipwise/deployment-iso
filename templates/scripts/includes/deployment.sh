@@ -99,7 +99,6 @@ SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise.gpg"
 # also for Pro/Carrier installations
 SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
 NGCP_PXE_INSTALL=false
-ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
 
 
 ### helper functions {{{
@@ -259,61 +258,6 @@ is_package_installed() {
   else
     return 1
   fi
-}
-
-ensure_packages_installed() {
-  [[ -z "${ADDITIONAL_PACKAGES[*]}" ]] && return 0
-
-  local install_packages
-  install_packages=()
-  echo "Ensuring packages installed: ${ADDITIONAL_PACKAGES[*]}"
-  for pkg in "${ADDITIONAL_PACKAGES[@]}"; do
-    if is_package_installed "${pkg}"; then
-      echo "Package '${pkg}' is already installed, nothing to do."
-    else
-      echo "Package '${pkg}' is not installed, scheduling..."
-      install_packages+=("${pkg}")
-    fi
-  done
-
-  if [ -z "${install_packages[*]}" ] ; then
-    echo "No packages to install, skipping further ensure_packages_installed execution"
-    return 0
-  fi
-
-  # Use separate apt database and source list because non management node has no internet access
-  # so is installed from management node so these additional packages have to be accessible from
-  # sipwise repo
-  local TMPDIR
-  TMPDIR=$(mktemp -d)
-  mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
-    "${TMPDIR}/cachedir/archives/partial"
-  chown _apt -R "${TMPDIR}"
-
-  echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
-    "${TMPDIR}/etc/sources.list"
-
-  DEBIAN_FRONTEND='noninteractive' apt-get \
-    -o dir::cache="${TMPDIR}/cachedir" \
-    -o dir::state="${TMPDIR}/statedir" \
-    -o dir::etc="${TMPDIR}/etc" \
-    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
-    update
-
-  DEBIAN_FRONTEND='noninteractive' apt-get \
-    -o dir::cache="${TMPDIR}/cachedir" \
-    -o dir::state="${TMPDIR}/statedir" \
-    -o dir::etc="${TMPDIR}/etc" \
-    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
-    -y --no-install-recommends install "${install_packages[@]}"
-
-  for pkg in "${install_packages[@]}"; do
-    if is_package_installed "${pkg}"; then
-      echo "Package '${pkg}' was installed correctly."
-    else
-      die "Error: Package '${pkg}' was not installed correctly, aborting."
-    fi
-  done
 }
 
 status_wait() {
@@ -760,7 +704,6 @@ done
 
 set_deploy_status "installing_sipwise_keys"
 install_sipwise_key
-ensure_packages_installed
 
 if ! "$NGCP_INSTALLER" ; then
   CARRIER_EDITION=false

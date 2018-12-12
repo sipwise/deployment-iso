@@ -110,7 +110,6 @@ deploy() {
 install_sipwise_keyring
 "${scripts_dir}/network_configuration.sh"
 "${scripts_dir}/check_installing_version.sh"
-"${scripts_dir}/install_required_packages.sh"
 "${scripts_dir}/verify_iso_image.sh"
 "${scripts_dir}/disk_selection.sh"
 if [[ ! -r '/tmp/disk_options' ]]; then
