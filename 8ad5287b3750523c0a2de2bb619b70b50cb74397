@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1adf8d57_b010d74f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-12-13T07:25:20Z",
+      "side": 1,
+      "message": "Please expand commit message, it is not clear what we are doing here and why.",
+      "revId": "8ad5287b3750523c0a2de2bb619b70b50cb74397",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
