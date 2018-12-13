@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1adf8d57_1009eb2c",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-12-13T07:23:44Z",
+      "side": 0,
+      "message": "One of the next steps should be install ngcp-keyring package inside our iso/grml and stops downloading it.",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 19
+      },
+      "revId": "5ab1f5418a04fa144bec23887f2f3f0335ba092c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
