@@ -3,7 +3,10 @@
 set -e
 
 DATE="$(date +%Y%m%d_%H%M%S)"
-WGET_OPT="--timeout=30 -q -c"
+declare -a WGET_OPTS=()
+WGET_OPTS+=('--timeout=30')
+WGET_OPTS+=('-q')
+WGET_OPTS+=('-c')
 # First (former RELEASE) parameter isn't used but kept for backward compatibility
 _="$1"
 GRML_ISO="$2"
@@ -53,15 +56,12 @@ if [[ -f "${SCRIPTPATH}/${GRML_ISO}" ]]; then
     echo "*** Grml ISO sha1 [${GRML_ISO}.sha1] is already here ***"
   else
     echo "*** Downloading Grml ISO sha1 [${GRML_ISO}.sha1] ***"
-    # shellcheck disable=SC2086
-    wget ${WGET_OPT} -O "${GRML_ISO}.sha1" "${GRML_HASH_URL}${GRML_ISO}.sha1"
+    wget "${WGET_OPTS[@]}" -O "${GRML_ISO}.sha1" "${GRML_HASH_URL}${GRML_ISO}.sha1"
   fi
 else
   echo "*** Downloading Grml ISO and sha1 files [${GRML_ISO}] ***"
-  # shellcheck disable=SC2086
-  wget ${WGET_OPT} -O "${GRML_ISO}" "${GRML_URL}${GRML_ISO}"
-  # shellcheck disable=SC2086
-  wget ${WGET_OPT} -O "${GRML_ISO}.sha1" "${GRML_HASH_URL}${GRML_ISO}.sha1"
+  wget "${WGET_OPTS[@]}" -O "${GRML_ISO}" "${GRML_URL}${GRML_ISO}"
+  wget "${WGET_OPTS[@]}" -O "${GRML_ISO}.sha1" "${GRML_HASH_URL}${GRML_ISO}.sha1"
 fi
 
 echo "*** Building ${MR} ISO ***"
