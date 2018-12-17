@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1adf8d57_92603e37",
+        "filename": "templates/scripts/main.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2018-12-17T11:02:13Z",
+      "side": 1,
+      "message": "as one of the next step. please move this to the very beginning.",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 36
+      },
+      "revId": "707bdec82ad68c0729ce795dafe584a0074ec030",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
