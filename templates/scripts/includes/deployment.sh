@@ -1771,7 +1771,7 @@ vagrant_configuration() {
   fi
 
   if "$NGCP_INSTALLER" ; then
-    SIPWISE_HOME="/var/sipwise"
+    SIPWISE_HOME="/ngcp-data/sipwise-user"
 
     # TODO: move PATH adjustment to ngcp-installer (ngcpcfg should have a template here)
     if ! grep -q '^# Added for Vagrant' "${TARGET}/${SIPWISE_HOME}/.profile" 2>/dev/null ; then
