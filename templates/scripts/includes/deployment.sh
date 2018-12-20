@@ -1771,7 +1771,11 @@ vagrant_configuration() {
   fi
 
   if "$NGCP_INSTALLER" ; then
-    SIPWISE_HOME="/var/sipwise"
+    local sipwise_home="/does/not/exist"
+    sipwise_home=$(chroot "${TARGET}" getent passwd 'sipwise' | cut -d':' -f6)
+    if [[ ! -d "${TARGET}/${sipwise_home}" ]] ; then
+      die "Error: cannot determine home of 'sipwise' user, it does not exist or not a directory: ${TARGET}/${sipwise_home}"
+    fi
 
     # TODO: move PATH adjustment to ngcp-installer (ngcpcfg should have a template here)
     if ! grep -q '^# Added for Vagrant' "${TARGET}/${SIPWISE_HOME}/.profile" 2>/dev/null ; then
