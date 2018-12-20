@@ -22,6 +22,30 @@
       "revId": "bab4f19876e31f848d8b6301e91d5e1996383f5a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_a4609436",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2018-12-20T11:30:52Z",
+      "side": 1,
+      "message": "\u003e did miss something?\n\nPossibly.  In https://gerrit.mgm.sipwise.com/#/c/25725/ one of the things that I was asking is:\n\n\"BTW, one of the first things that I wanted to get confirmation about is if \"/ngcp-data/sipwise-user\" is OK, or if we prefer something else, like \"/ngcp-data/users/sipwise\", \"/ngcp-data/home-sipwise\", etc.\"\n\nAnd nobody replied to that part... :)\n\n\n \u003e IMHO it is not future proved, we will have to store all home foldes\n \u003e in /ngcp-data one day for all users... should we use \"-user\" there\n \u003e for all of them?\n \u003e \n \u003e Maybe /ngcp-data/home/sipwise/ ?\n\nThat path sounds good to me.\n\nBTW, in that case maybe we can just create /ngcp-data/home and make /home a symlink to it, it will be easier than changing it everywhere, and /home is the default path and what any user of Unix systems would expect.",
+      "parentUuid": "1adf8d57_4411f0ab",
+      "range": {
+        "startLine": 1774,
+        "startChar": 36,
+        "endLine": 1774,
+        "endChar": 41
+      },
+      "revId": "bab4f19876e31f848d8b6301e91d5e1996383f5a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
