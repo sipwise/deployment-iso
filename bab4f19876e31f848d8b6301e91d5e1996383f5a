@@ -46,6 +46,30 @@
       "revId": "bab4f19876e31f848d8b6301e91d5e1996383f5a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_2455c44f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-20T11:34:36Z",
+      "side": 1,
+      "message": "+1 for /ngcp-data/home/sipwise\n\n\u003e BTW, in that case maybe we can just create /ngcp-data/home and make /home a symlink to it\n\nFor now /home is already link to /mnt/glusterfs/home",
+      "parentUuid": "1adf8d57_a4609436",
+      "range": {
+        "startLine": 1774,
+        "startChar": 36,
+        "endLine": 1774,
+        "endChar": 41
+      },
+      "revId": "bab4f19876e31f848d8b6301e91d5e1996383f5a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
