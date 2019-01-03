@@ -22,6 +22,30 @@
       "revId": "e7349e38e3b5fa8ccc9e95dacfee22a1977e2e3b",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_0cde6a6d",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-01-03T10:27:17Z",
+      "side": 1,
+      "message": "\u003e not initialized\n\nThanks.  I don\u0027t know what I was thinking, I didn\u0027t noticed all the uses of the variable in capital letters.",
+      "parentUuid": "1adf8d57_4ca59202",
+      "range": {
+        "startLine": 1781,
+        "startChar": 53,
+        "endLine": 1781,
+        "endChar": 65
+      },
+      "revId": "e7349e38e3b5fa8ccc9e95dacfee22a1977e2e3b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
