@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1adf8d57_3df38e0c",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-01-08T15:42:19Z",
+      "side": 1,
+      "message": "IMHO unnecessary here...",
+      "range": {
+        "startLine": 1851,
+        "startChar": 0,
+        "endLine": 1851,
+        "endChar": 38
+      },
+      "revId": "d4273164f68885be1e4601f4c9c02432c89871ac",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
