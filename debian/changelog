@@ -1,3 +1,21 @@
+ngcp-deployment-iso (7.2.0.0+0~mr7.2.0.0) unstable; urgency=medium
+
+  [ Manuel Montecelo ]
+  * [5ab1f54] TT#48105 Wait until new partition / LVM pvdevice is ready
+
+  [ Michael Prokop ]
+  * [1540d62] TT#48460 Force disabling usrmerge feature when bootstrapping Debian
+  * [9d4aa82] TT#45552  Revert "TT#45502 Patch vboxsf when building against Debian/buster fails"
+
+  [ Mykola Malkov ]
+  * [c462f91] TT#48647 Add ability to use the specified file from current dir
+  * [6720087] TT#48647 Move wget options to array
+  * [d427316] TT#44969 Remove vbox services from autostart
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Wed, 09 Jan 2019 21:55:43 +0100
+
 ngcp-deployment-iso (7.1.0.0+0~mr7.1.0.0) unstable; urgency=medium
 
   [ Manuel Montecelo ]
