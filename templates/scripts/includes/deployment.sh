@@ -39,7 +39,6 @@ DEFAULT_IP1=192.168.255.251
 DEFAULT_IP2=192.168.255.252
 DEFAULT_IP_HA_SHARED=192.168.255.250
 DEFAULT_INTERNAL_NETMASK=255.255.255.248
-DEFAULT_MCASTADDR=226.94.1.1
 TARGET=/mnt
 PRO_EDITION=false
 CE_EDITION=false
@@ -562,10 +561,6 @@ if checkBootParam 'ngcpeaddr=' ; then
   EADDR=$(getBootParam ngcpeaddr)
 fi
 
-if checkBootParam 'ngcpmcast=' ; then
-  MCASTADDR=$(getBootParam ngcpmcast)
-fi
-
 if checkBootParam "rootfssize=" ; then
   ROOTFS_SIZE=$(getBootParam rootfssize)
 fi
@@ -733,7 +728,6 @@ for param in "$@" ; do
     *ngcpipshared=*) IP_HA_SHARED="${param//ngcpipshared=/}";;
     *ngcpnetmask=*) INTERNAL_NETMASK="${param//ngcpnetmask=/}";;
     *ngcpextnetmask=*) EXTERNAL_NETMASK="${param//ngcpextnetmask=/}";;
-    *ngcpmcast=*) MCASTADDR="${param//ngcpmcast=/}";;
     *ngcpcrole=*) CARRIER_EDITION=true; CROLE="${param//ngcpcrole=/}";;
     *ngcpnw.dhcp*) DHCP=true;;
     *ngcphalt*) HALT=true;;
@@ -842,7 +836,6 @@ echo "INSTALL_IP is ${INSTALL_IP}"
 IP1="${IP1:-${DEFAULT_IP1}}"
 IP2="${IP2:-${DEFAULT_IP2}}"
 IP_HA_SHARED="${IP_HA_SHARED:-${DEFAULT_IP_HA_SHARED}}"
-MCASTADDR="${MCASTADDR:-${DEFAULT_MCASTADDR}}"
 EXTERNAL_DEV="${EXTERNAL_DEV:-${INSTALL_DEV}}"
 EXTERNAL_IP="${EXTERNAL_IP:-${INSTALL_IP}}"
 EADDR="${EXTERNAL_IP:-${EADDR}}"
@@ -888,7 +881,6 @@ if "$PRO_EDITION" ; then
   External NW iface: $EXTERNAL_DEV
   Ext host IP:       $EXTERNAL_IP
   Ext cluster IP:    $EADDR
-  Multicast addr:    $MCASTADDR
   Internal NW iface: $INTERNAL_DEV
   Int sp1 host IP:   $IP1
   Int sp2 host IP:   $IP2
@@ -1557,7 +1549,6 @@ HNAME="${ROLE}"
 IP1="${IP1}"
 IP2="${IP2}"
 IP_HA_SHARED="${IP_HA_SHARED}"
-MCASTADDR="${MCASTADDR}"
 DPL_MYSQL_REPLICATION="${DPL_MYSQL_REPLICATION}"
 TARGET_HOSTNAME="${TARGET_HOSTNAME}"
 DEFAULT_INSTALL_DEV="${INSTALL_DEV}"
