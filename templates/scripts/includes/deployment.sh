@@ -33,7 +33,6 @@ unset SHELL
 
 # defaults
 DEBUG_MODE=false
-DEFAULT_INSTALL_DEV=eth0
 DEFAULT_INTERNAL_DEV=eth1
 DEFAULT_IP1=192.168.255.251
 DEFAULT_IP2=192.168.255.252
@@ -798,11 +797,6 @@ if checkBootParam 'ip=' ; then
   fi
 fi
 
-# set reasonable install device from other source
-if [ -z "$INSTALL_DEV" ] ; then
-  INSTALL_DEV="${DEFAULT_INSTALL_DEV}"
-fi
-
 cdr2mask () {
   # From https://stackoverflow.com/questions/20762575/explanation-of-convertor-of-cidr-to-netmask-in-linux-shell-netmask2cdir-and-cdir
   # Number of args to shift, 255..255, first non-255 byte, zeroes
@@ -1551,7 +1545,6 @@ IP2="${IP2}"
 IP_HA_SHARED="${IP_HA_SHARED}"
 DPL_MYSQL_REPLICATION="${DPL_MYSQL_REPLICATION}"
 TARGET_HOSTNAME="${TARGET_HOSTNAME}"
-DEFAULT_INSTALL_DEV="${INSTALL_DEV}"
 INTERNAL_DEV="${INTERNAL_DEV}"
 NETWORK_DEVICES="${NETWORK_DEVICES}"
 INTERNAL_NETMASK="${INTERNAL_NETMASK}"
