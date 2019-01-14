@@ -7,7 +7,7 @@ FROM docker.mgm.sipwise.com/sipwise-stretch:latest
 # old cached versions when the Dockerfile is built.
 ENV REFRESHED_AT 2018-03-20
 
-RUN apt-get update && apt-get install --assume-yes git make
+RUN apt-get update && apt-get install --assume-yes git make gcc dpkg-dev
 
 RUN echo './t/testrunner' >>/root/.bash_history
 
