@@ -562,10 +562,6 @@ if checkBootParam 'ngcpeaddr=' ; then
   EADDR=$(getBootParam ngcpeaddr)
 fi
 
-if checkBootParam 'ngcpeiface=' ; then
-  EIFACE=$(getBootParam ngcpeiface)
-fi
-
 if checkBootParam 'ngcpmcast=' ; then
   MCASTADDR=$(getBootParam ngcpmcast)
 fi
@@ -731,7 +727,6 @@ for param in "$@" ; do
     *noinstall*) NGCP_INSTALLER=false;;
     *ngcpinst*) NGCP_INSTALLER=true;;
     *ngcphostname=*) TARGET_HOSTNAME="${param//ngcphostname=/}";;
-    *ngcpeiface=*) EIFACE="${param//ngcpeiface=/}";;
     *ngcpeaddr=*) EADDR="${param//ngcpeaddr=/}";;
     *ngcpip1=*) IP1="${param//ngcpip1=/}";;
     *ngcpip2=*) IP2="${param//ngcpip2=/}";;
@@ -811,11 +806,7 @@ fi
 
 # set reasonable install device from other source
 if [ -z "$INSTALL_DEV" ] ; then
-  if [ -n "$EIFACE" ] ; then
-    INSTALL_DEV=$EIFACE
-  else
-    INSTALL_DEV=$DEFAULT_INSTALL_DEV
-  fi
+  INSTALL_DEV="${DEFAULT_INSTALL_DEV}"
 fi
 
 cdr2mask () {
@@ -854,7 +845,6 @@ IP_HA_SHARED="${IP_HA_SHARED:-${DEFAULT_IP_HA_SHARED}}"
 MCASTADDR="${MCASTADDR:-${DEFAULT_MCASTADDR}}"
 EXTERNAL_DEV="${EXTERNAL_DEV:-${INSTALL_DEV}}"
 EXTERNAL_IP="${EXTERNAL_IP:-${INSTALL_IP}}"
-EIFACE="${EIFACE:-${INSTALL_DEV}}"
 EADDR="${EXTERNAL_IP:-${EADDR}}"
 INTERNAL_NETMASK="${INTERNAL_NETMASK:-${DEFAULT_INTERNAL_NETMASK}}"
 MANAGEMENT_IP="${MANAGEMENT_IP:-${IP_HA_SHARED}}"
@@ -897,7 +887,6 @@ if "$PRO_EDITION" ; then
 
   External NW iface: $EXTERNAL_DEV
   Ext host IP:       $EXTERNAL_IP
-  Ext cluster iface: $EIFACE
   Ext cluster IP:    $EADDR
   Multicast addr:    $MCASTADDR
   Internal NW iface: $INTERNAL_DEV
@@ -1568,7 +1557,6 @@ HNAME="${ROLE}"
 IP1="${IP1}"
 IP2="${IP2}"
 IP_HA_SHARED="${IP_HA_SHARED}"
-EIFACE="${EIFACE}"
 MCASTADDR="${MCASTADDR}"
 DPL_MYSQL_REPLICATION="${DPL_MYSQL_REPLICATION}"
 TARGET_HOSTNAME="${TARGET_HOSTNAME}"
