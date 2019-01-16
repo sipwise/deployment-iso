@@ -22,6 +22,30 @@
       "revId": "46bba684136379e59741bc1248d124924502a04c",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0d59b9_6a961796",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-16T10:10:29Z",
+      "side": 0,
+      "message": "Agree. This code requires some refactoring",
+      "parentUuid": "fa0d59b9_ca862365",
+      "range": {
+        "startLine": 801,
+        "startChar": 0,
+        "endLine": 804,
+        "endChar": 2
+      },
+      "revId": "46bba684136379e59741bc1248d124924502a04c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
