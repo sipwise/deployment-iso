@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0d59b9_eae8c718",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-01-16T10:11:35Z",
+      "side": 0,
+      "message": "I recall the time I wrote it :-) The day come true!",
+      "range": {
+        "startLine": 1579,
+        "startChar": 0,
+        "endLine": 1581,
+        "endChar": 43
+      },
+      "revId": "4039faabcadd3f3bda605811d216d487c01bf308",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
