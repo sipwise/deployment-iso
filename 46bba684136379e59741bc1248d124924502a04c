@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0d59b9_ca862365",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-01-16T10:07:11Z",
+      "side": 0,
+      "message": "it was nice, we set INSTALL_DEV here and then in line 820 set new value.",
+      "range": {
+        "startLine": 801,
+        "startChar": 0,
+        "endLine": 804,
+        "endChar": 2
+      },
+      "revId": "46bba684136379e59741bc1248d124924502a04c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
