@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0d59b9_0ae43b39",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-01-16T10:14:52Z",
+      "side": 0,
+      "message": "debian/changelog\n244:  * [299637a] grml-live templates: drop ngcpmcast\u003d226.94.1.1 (unused in HA v2 setup for now), default to ngcpeiface\u003deth0 (no bonding).\n\n11:14:01 ✔ taurus:(master)~/sipwise/git/deployment-iso$ git show 299637a\ncommit 299637ae5528ac4bf31fe622074956f374240c7f\nAuthor: Michael Prokop \u003cmprokop@sipwise.com\u003e\nDate:   Mon Jul 4 13:47:15 2011 +0000\n\n    grml-live templates: drop ngcpmcast\u003d226.94.1.1 (unused in HA v2 setup for now), default to ngcpeiface\u003deth0 (no bonding).\n\n\n\n2011!!! :-D",
+      "range": {
+        "startLine": 566,
+        "startChar": 27,
+        "endLine": 566,
+        "endChar": 36
+      },
+      "revId": "e88e42460bff5e74924b0ac01ee0f07529c2bab9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
