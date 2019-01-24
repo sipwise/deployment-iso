@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "da1255d7_fd49af8f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-01-24T12:48:59Z",
+      "side": 1,
+      "message": "AFAICS this piece of code until the end of the if, is identical to the one in the other function, except for the package to install.  Maybe it could be abstracted away in its own function, and use the package as a parameter?\n\nBetter yet if the packages to install are determined first, and passed only a single time -- the apt-get update usually takes a good few seconds.\n\nIf there are reasons like this is too much work for something that will be removed soon, or you want to test it ASAP, it\u0027s fine for me if you submit as is.",
+      "revId": "48767a626f1ecab47a0e52a6671a4e3da65b7958",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da1255d7_3d818790",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
