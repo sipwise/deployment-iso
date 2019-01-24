@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "da1255d7_f84c1d78",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-01-24T14:38:21Z",
+      "side": 1,
+      "message": "\u003e Was more work than I expected, but DONE\n\nVery nice!",
+      "parentUuid": "da1255d7_b81fc55a",
+      "revId": "48767a626f1ecab47a0e52a6671a4e3da65b7958",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da1255d7_3d818790",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
