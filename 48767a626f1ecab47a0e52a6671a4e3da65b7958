@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da1255d7_f8fe5d04",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-01-24T14:27:26Z",
+      "side": 1,
+      "message": "Done (FTR, it was just c/p from what was previously there)",
+      "parentUuid": "da1255d7_dd4eeb95",
+      "range": {
+        "startLine": 216,
+        "startChar": 88,
+        "endLine": 216,
+        "endChar": 104
+      },
+      "revId": "48767a626f1ecab47a0e52a6671a4e3da65b7958",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da1255d7_fd49af8f",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "da1255d7_b81fc55a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-01-24T14:27:26Z",
+      "side": 1,
+      "message": "Was more work than I expected, but DONE",
+      "parentUuid": "da1255d7_fd49af8f",
+      "revId": "48767a626f1ecab47a0e52a6671a4e3da65b7958",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da1255d7_3d818790",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
@@ -53,6 +95,24 @@
       "writtenOn": "2019-01-24T12:48:36Z",
       "side": 1,
       "message": "I guess this code can be deleted when they are updated in upstream, right?",
+      "revId": "48767a626f1ecab47a0e52a6671a4e3da65b7958",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_7d0c9f42",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-01-24T14:27:26Z",
+      "side": 1,
+      "message": "Iff LVM get\u0027s accordingly fixed, yes. (While I\u0027m still a fan of ensuring that we always use the same versions for bootstrapping, it\u0027s just annoying and unnecessary fiddling when working on stuff to have to manually fix the ISO before being able to actually work with it. All our ISOs are so oddly outdated :-/)",
+      "parentUuid": "da1255d7_3d818790",
       "revId": "48767a626f1ecab47a0e52a6671a4e3da65b7958",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
