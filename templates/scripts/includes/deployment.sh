@@ -206,6 +206,61 @@ install_sipwise_key() {
   die "Error validating sipwise keyring for apt usage, aborting installation."
 }
 
+grml_scripts_upgrade() {
+  local required_version=2.8.4
+  local present_version
+
+  present_version=$(dpkg-query --show --showformat="\${Version}" grml-scripts)
+
+  if dpkg --compare-versions "${present_version}" lt "${required_version}" ; then
+    echo "grml-scripts version $present_version is older than minimum required version $required_version - upgrading."
+
+    # use temporary apt database for speed reasons
+    local TMPDIR
+    TMPDIR=$(mktemp -d)
+    mkdir -p "${TMPDIR}/statedir/lists/partial" "${TMPDIR}/cachedir/archives/partial"
+    local debsrcfile
+    debsrcfile=$(mktemp)
+    echo "deb ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/grml.org grml-testing main" >> "$debsrcfile"
+
+    DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+      -o dir::state="${TMPDIR}/statedir" -o dir::etc::sourcelist="$debsrcfile" \
+      -o Dir::Etc::sourceparts=/dev/null update
+
+    DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+      -o dir::state="${TMPDIR}/statedir" -o dir::etc::sourcelist="$debsrcfile" \
+      -o Dir::Etc::sourceparts=/dev/null -y install grml-scripts
+  fi
+}
+
+grml_debootstrap_upgrade() {
+  local required_version=0.86
+  local present_version
+
+  present_version=$(dpkg-query --show --showformat="\${Version}" grml-debootstrap)
+
+  if dpkg --compare-versions "${present_version}" lt "${required_version}" ; then
+    echo "grml-debootstrap version $present_version is older than minimum required version $required_version - upgrading."
+
+    # use temporary apt database for speed reasons
+    local TMPDIR
+    TMPDIR=$(mktemp -d)
+    mkdir -p "${TMPDIR}/statedir/lists/partial" "${TMPDIR}/cachedir/archives/partial"
+    local debsrcfile
+    debsrcfile=$(mktemp)
+    echo "deb ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/grml.org grml-testing main" >> "$debsrcfile"
+
+    DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+      -o dir::state="${TMPDIR}/statedir" -o dir::etc::sourcelist="$debsrcfile" \
+      -o Dir::Etc::sourceparts=/dev/null update
+
+    DEBIAN_FRONTEND='noninteractive' apt-get -o dir::cache="${TMPDIR}/cachedir" \
+      -o dir::state="${TMPDIR}/statedir" -o dir::etc::sourcelist="$debsrcfile" \
+      -o Dir::Etc::sourceparts=/dev/null -y install grml-debootstrap
+  fi
+}
+
+
 install_vbox_iso() {
   echo "Downloading virtualbox-guest-additions ISO"
 
@@ -749,6 +804,14 @@ done
 set_deploy_status "installing_sipwise_keys"
 install_sipwise_key
 ensure_packages_installed
+
+case "$DEBIAN_RELEASE" in
+  buster)
+    echo "Upgrading grml-scripts + grml-debootstrap for usage with LVM on Debian/buster"
+    grml_scripts_upgrade
+    grml_debootstrap_upgrade
+    ;;
+esac
 
 if ! "$NGCP_INSTALLER" ; then
   CARRIER_EDITION=false
