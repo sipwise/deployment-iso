@@ -206,6 +206,63 @@ install_sipwise_key() {
   die "Error validating sipwise keyring for apt usage, aborting installation."
 }
 
+check_package_version() {
+  if [ $# -lt 2 ] ; then
+    die "Usage: package_upgrade <package> <version>" >&2
+  fi
+
+  local package_name="$1"
+  local required_version="$2"
+  local present_version
+
+  present_version=$(dpkg-query --show --showformat="\${Version}" "${package_name}")
+
+  if dpkg --compare-versions "${present_version}" lt "${required_version}" ; then
+    echo "${package_name} version ${present_version} is older than minimum required version ${required_version}."
+    return 1
+  fi
+
+  return 0
+}
+
+ensure_recent_package_versions() {
+  [[ -z "${UPGRADE_PACKAGES[*]}" ]] && return 0
+
+  echo "Ensuring packages are installed in a recent enough version: ${UPGRADE_PACKAGES[*]}"
+
+  # use temporary apt database for speed reasons
+  local TMPDIR
+  TMPDIR=$(mktemp -d)
+  mkdir -p "${TMPDIR}/statedir/lists/partial" "${TMPDIR}/cachedir/archives/partial"
+  local debsrcfile
+  debsrcfile=$(mktemp)
+  echo "deb ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/grml.org grml-testing main" >> "${debsrcfile}"
+
+  DEBIAN_FRONTEND='noninteractive' apt-get \
+    -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" \
+    -o dir::etc::sourcelist="${debsrcfile}" \
+    -o dir::etc::sourceparts=/dev/null \
+    -o dir::etc::trusted="${SIPWISE_APT_KEY_PATH}" \
+    update
+
+  DEBIAN_FRONTEND='noninteractive' apt-get \
+    -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" \
+    -o dir::etc::sourcelist="${debsrcfile}" \
+    -o dir::etc::sourceparts=/dev/null \
+    -o dir::etc::trusted="${SIPWISE_APT_KEY_PATH}" \
+    -y --no-install-recommends install "${UPGRADE_PACKAGES[@]}"
+
+  for pkg in "${UPGRADE_PACKAGES[@]}"; do
+    if is_package_installed "${pkg}"; then
+      echo "Package '${pkg}' was installed correctly."
+    else
+      die "Error: Package '${pkg}' was not installed correctly, aborting."
+    fi
+  done
+}
+
 install_vbox_iso() {
   echo "Downloading virtualbox-guest-additions ISO"
 
@@ -749,6 +806,24 @@ done
 set_deploy_status "installing_sipwise_keys"
 install_sipwise_key
 ensure_packages_installed
+
+case "${DEBIAN_RELEASE}" in
+  buster)
+    UPGRADE_PACKAGES=()
+    echo "Upgrading grml-scripts + grml-debootstrap for usage with LVM on Debian/buster"
+
+    if ! check_package_version grml-scripts 2.8.4 ; then
+      UPGRADE_PACKAGES+=( grml-scripts )
+    fi
+
+    if ! check_package_version grml-debootstrap 0.86 ; then
+      UPGRADE_PACKAGES+=( grml-debootstrap )
+    fi
+
+    ensure_recent_package_versions
+    ;;
+esac
+
 
 if ! "$NGCP_INSTALLER" ; then
   CARRIER_EDITION=false
