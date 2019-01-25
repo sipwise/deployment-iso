@@ -22,6 +22,30 @@
       "revId": "5dc444bdc956186e53441fd1f3095d5bba85aa73",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_58920959",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-01-25T08:15:09Z",
+      "side": 1,
+      "message": "\u003e Why this initialization, it gets stomped over just on the next\n \u003e line?\n\nI like to initialise things in general.  In this case, I\u0027d initialise it directly with the chroot command, but shellcheck complains about this kind of thing.",
+      "parentUuid": "da1255d7_185251de",
+      "range": {
+        "startLine": 1774,
+        "startChar": 23,
+        "endLine": 1774,
+        "endChar": 40
+      },
+      "revId": "5dc444bdc956186e53441fd1f3095d5bba85aa73",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
