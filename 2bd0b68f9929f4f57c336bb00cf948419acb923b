@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_3573db4f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-01-29T15:03:57Z",
+      "side": 1,
+      "message": "Maybe use here ${GRML_RELEASE} and fill it above using as example:  https://gerrit.mgm.sipwise.com/gitweb?p\u003dngcpcfg.git;a\u003dblob;f\u003dlib/get_debian_release;h\u003d639ff8c2a5c73a59c315b8f6dbb6c53c62666b26;hb\u003dHEAD\n\nSo we will be compatible with the upcoming upgrades.",
+      "range": {
+        "startLine": 348,
+        "startChar": 34,
+        "endLine": 348,
+        "endChar": 40
+      },
+      "revId": "2bd0b68f9929f4f57c336bb00cf948419acb923b",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
