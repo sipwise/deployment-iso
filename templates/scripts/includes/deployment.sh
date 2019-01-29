@@ -345,7 +345,7 @@ ensure_packages_installed() {
     "${TMPDIR}/cachedir/archives/partial"
   chown _apt -R "${TMPDIR}"
 
-  echo "deb ${DEBIAN_URL}/debian/ ${DEBIAN_RELEASE} main contrib non-free" > \
+  echo "deb ${DEBIAN_URL}/debian/ buster main contrib non-free" > \
     "${TMPDIR}/etc/sources.list"
 
   DEBIAN_FRONTEND='noninteractive' apt-get \
