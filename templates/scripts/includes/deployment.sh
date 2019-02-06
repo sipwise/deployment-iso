@@ -1710,6 +1710,7 @@ EOT
     fi
     echo "Copying /etc/network/interfaces ..."
     cp /etc/network/interfaces "${TARGET}/etc/network/"
+    sed -i '/iface lo inet dhcp/d' "${TARGET}/etc/network/interfaces"
     unset method netcardconf
   else
     die "Error during installation of ngcp. Find details at: ${TARGET}/var/log/ngcp-installer.log"
