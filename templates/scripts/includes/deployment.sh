@@ -2091,9 +2091,9 @@ puppet_install_from_puppet () {
 
   set_deploy_status "puppet"
 
-  echo "Setting hostname to $TARGET_HOSTNAME"
-  echo "$TARGET_HOSTNAME" > ${TARGET}/etc/hostname
-  grml-chroot $TARGET hostname -F /etc/hostname
+  echo "Setting hostname to ${IP_ARR[hostname]}"
+  echo "${IP_ARR[hostname]}" > "${TARGET}/etc/hostname"
+  grml-chroot "$TARGET" hostname -F /etc/hostname
 
   chroot $TARGET apt-get -y install resolvconf libnss-myhostname
 
