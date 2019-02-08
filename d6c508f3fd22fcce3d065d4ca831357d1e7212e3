@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_b1dd9272",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 2095,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-02-08T16:43:24Z",
+      "side": 1,
+      "message": "JIC pls quote path",
+      "range": {
+        "startLine": 2095,
+        "startChar": 31,
+        "endLine": 2095,
+        "endChar": 53
+      },
+      "revId": "d6c508f3fd22fcce3d065d4ca831357d1e7212e3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
