@@ -1090,8 +1090,46 @@ get_pvdevice_by_label() {
   echo "${pvdevice}"
 }
 
+get_pvdevice_by_label_with_retries() {
+  if [[ $# -ne 4 ]]; then
+    die "Error: needs 4 arguments: a BLOCKDEVICE to probe, a PARTLABEL to search for, MAX_TRIES and name of variable to return PVDEVICE."
+  fi
+
+  local blockdevice="$1"
+  if [[ -z "${blockdevice}" ]]; then
+    die "Error: need a blockdevice to probe, nothing provided."
+  fi
+  local partlabel="$2"
+  if [[ -z "${partlabel}" ]]; then
+    die "Error: need a partlabel to search for, nothing provided."
+  fi
+  local max_tries="$3"
+  if [[ -z "${max_tries}" ]]; then
+    die "Error: need max_tries, nothing provided."
+  fi
+  # return result in this variable
+  declare -n ret="$4"
+
+  local pvdevice_local
+  for try in $(seq 1 ${max_tries}); do
+    pvdevice_local=$(get_pvdevice_by_label "${blockdevice}" "${partlabel}")
+    if [[ -n "${pvdevice_local}" ]]; then
+      echo "pvdevice is now available: ${pvdevice_local}"
+      ret="${pvdevice_local}"
+      break
+    else
+      if [[ "${try}" -lt "${max_tries}" ]]; then
+        echo "pvdevice not yet available (blockdevice=${blockdevice}, partlabel='${partlabel}'), try #${try} of ${max_tries}, retrying in 1 second..."
+        sleep 1s
+      else
+        die "Error: could not get pvdevice after #${try} tries"
+      fi
+    fi
+  done
+}
+
 parted_execution() {
-  local blockdevice=$1
+  local blockdevice="$1"
 
   echo "Creating partition table"
   parted -a optimal -s "${blockdevice}" mklabel gpt
@@ -1105,9 +1143,13 @@ parted_execution() {
   parted -a optimal -s "${blockdevice}" mkpart primary 2M 512M
   parted -a optimal -s "${blockdevice}" "name 2 'EFI System'"
   parted -a optimal -s "${blockdevice}" set 2 boot on
+
+  blockdev --flushbufs
+
   echo "Get path of EFI partition"
-  blockdev --flushbufs "${blockdevice}"
-  EFI_PARTITION=$(blkid -t PARTLABEL="EFI System" -o device "${blockdevice}"*)
+  local max_tries=60
+  EFI_PARTITION=""
+  get_pvdevice_by_label_with_retries "${blockdevice}" "EFI System" "${max_tries}" EFI_PARTITION
 }
 
 set_up_partition_table_noswraid() {
@@ -1125,20 +1167,7 @@ set_up_partition_table_noswraid() {
   local max_tries=60
   local pvdevice
   local partlabel="Linux LVM"
-  for try in $(seq 1 ${max_tries}); do
-    pvdevice=$(get_pvdevice_by_label "${blockdevice}" "${partlabel}")
-    if [[ -n "${pvdevice}" ]]; then
-      echo "pvdevice is now available: ${pvdevice}"
-      break
-    else
-      if [[ "${try}" -lt "${max_tries}" ]]; then
-        echo "pvdevice not yet available (blockdevice=${blockdevice}, partlabel='${partlabel}'), try #${try} of ${max_tries}, retrying in 1 second..."
-        sleep 1s
-      else
-        die "Error: could not get pvdevice after #${try} tries"
-      fi
-    fi
-  done
+  get_pvdevice_by_label_with_retries "${blockdevice}" "${partlabel}" "${max_tries}" pvdevice
 
   echo "Creating PV + VG"
   pvcreate -ff -y "${pvdevice}"
@@ -1183,8 +1212,11 @@ set_up_partition_table_swraid() {
   sgdisk "/dev/${SWRAID_DISK1}" -R "/dev/${SWRAID_DISK2}"
   # randomize the disk's GUID and all partitions' unique GUIDs after cloning
   sgdisk -G "/dev/${SWRAID_DISK2}"
-  raidev1=$(blkid -t PARTLABEL="Linux RAID" -o device "/dev/${SWRAID_DISK1}"*)
-  raidev2=$(blkid -t PARTLABEL="Linux RAID" -o device "/dev/${SWRAID_DISK2}"*)
+
+  local partlabel="Linux RAID"
+  local max_tries=60
+  get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK1}" "${partlabel}" "${max_tries}" raidev1
+  get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK2}" "${partlabel}" "${max_tries}" raidev2
 
   echo y | mdadm --create --verbose "${SWRAID_DEVICE}" --level=1 --raid-devices=2 "${raidev1}" "${raidev2}"
 
@@ -2209,8 +2241,11 @@ dmsetup remove_all || true
 
 if [[ "${SWRAID}" = "true" ]] ; then
   if efi_support ; then
-    efidev1=$(blkid -t PARTLABEL="EFI System" -o device "/dev/${SWRAID_DISK1}"*)
-    efidev2=$(blkid -t PARTLABEL="EFI System" -o device "/dev/${SWRAID_DISK2}"*)
+    partlabel="EFI System"
+    max_tries=60
+    get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK1}" "${partlabel}" "${max_tries}" efidev1
+    get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK2}" "${partlabel}" "${max_tries}" efidev2
+
     echo "Cloning EFI partition from ${efidev1} to ${efidev2}"
     dd if="${efidev1}" of="${efidev2}" bs=10M
   fi
