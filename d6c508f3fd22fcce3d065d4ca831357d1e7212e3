@@ -22,6 +22,30 @@
       "revId": "d6c508f3fd22fcce3d065d4ca831357d1e7212e3",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_b1c47292",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 2095,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2019-02-08T16:48:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da1255d7_b1dd9272",
+      "range": {
+        "startLine": 2095,
+        "startChar": 31,
+        "endLine": 2095,
+        "endChar": 53
+      },
+      "revId": "d6c508f3fd22fcce3d065d4ca831357d1e7212e3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
