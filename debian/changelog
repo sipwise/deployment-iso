@@ -1,3 +1,12 @@
+ngcp-deployment-iso (7.0.2.1+0~mr7.0.2.1) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [383644f] TT#44969 Remove vbox services from autostart
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 11 Feb 2019 12:26:44 +0100
+
 ngcp-deployment-iso (7.0.2.0+0~mr7.0.2.0) unstable; urgency=medium
 
   * New release.
