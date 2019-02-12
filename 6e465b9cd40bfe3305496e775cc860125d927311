@@ -46,6 +46,30 @@
       "revId": "6e465b9cd40bfe3305496e775cc860125d927311",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_604aa185",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-02-12T11:43:12Z",
+      "side": 1,
+      "message": "Now I see it. IMHO we should report such usecase to shellcheck github. It should not report SC2034 if variable is declared as \"declare -n\", IMHO.",
+      "parentUuid": "da1255d7_a093f9f9",
+      "range": {
+        "startLine": 1110,
+        "startChar": 0,
+        "endLine": 1110,
+        "endChar": 34
+      },
+      "revId": "6e465b9cd40bfe3305496e775cc860125d927311",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
