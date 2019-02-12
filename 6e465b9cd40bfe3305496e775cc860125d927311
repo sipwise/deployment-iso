@@ -22,6 +22,30 @@
       "revId": "6e465b9cd40bfe3305496e775cc860125d927311",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_a093f9f9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-02-12T10:47:15Z",
+      "side": 1,
+      "message": "\u003e where do you use ${ret} in code further?\n \u003e I can\u0027t find it.\n\nNot ${ret} but \"ret\", line 1121 for example.  By declaring the variable as \"-n\" it\u0027s like a pointer, so ret\u003dvar1 and then ret\u003dbanana makes the value of var1\u003dbanana, while ret keeps being a pointer/alias of var1.\n\nSo this works like passing arguments as pointers to a function in C, the function returns the value through this variable.\n\n(This is to overcome the problem of shell functions returning values through \"echo\" and thus not being able to print anything else in the function).\n\nhttps://www.gnu.org/software/bash/manual/html_node/Shell-Parameters.html -- search for \"nameref\"",
+      "parentUuid": "da1255d7_409afd15",
+      "range": {
+        "startLine": 1110,
+        "startChar": 0,
+        "endLine": 1110,
+        "endChar": 34
+      },
+      "revId": "6e465b9cd40bfe3305496e775cc860125d927311",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
