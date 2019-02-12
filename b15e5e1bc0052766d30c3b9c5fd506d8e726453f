@@ -33,6 +33,24 @@
       "revId": "b15e5e1bc0052766d30c3b9c5fd506d8e726453f",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_a3c42340",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-02-12T16:35:58Z",
+      "side": 1,
+      "message": "Ah never-mind, stumbled upon the \"(This is to overcome the problem of shell functions returning values through \"echo\" and thus not being able to print anything else in the function).\" via mail (going through backlog), sorry4noise (spotting the relevant gerrit comments is still meh :-/)",
+      "parentUuid": "da1255d7_e3ca1b4f",
+      "revId": "b15e5e1bc0052766d30c3b9c5fd506d8e726453f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
