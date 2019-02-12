@@ -51,6 +51,24 @@
       "revId": "b15e5e1bc0052766d30c3b9c5fd506d8e726453f",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_e33fbb23",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-02-12T17:30:09Z",
+      "side": 1,
+      "message": "\u003e Ah never-mind, stumbled upon the \"(This is to overcome the problem\n \u003e of shell functions returning values through \"echo\" and thus not\n \u003e being able to print anything else in the function).\" via mail\n \u003e (going through backlog), sorry4noise (spotting the relevant gerrit\n \u003e comments is still meh :-/)\n\nYep, no problem.  I found that solution looking at something else, and I thought that it could apply here, not only for this case (in which we could use something else) but maybe also for cases where we really need it.  Kind of, to advertise this feature :)\n\nWe use things like returning and eval\u0027ing in some cases, which is uglier and more brittle IMO.",
+      "parentUuid": "da1255d7_a3c42340",
+      "revId": "b15e5e1bc0052766d30c3b9c5fd506d8e726453f",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
