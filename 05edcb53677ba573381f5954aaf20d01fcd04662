@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_b9921456",
+        "filename": "t/Dockerfile",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-02-14T10:06:15Z",
+      "side": 1,
+      "message": "JFYI, you need to update this to ensure apt-get update will update metadata , otherwise docker will take it from local cache. So old packages will be there.\n\nIn this case it is not important, as you changed the first command here, so cache is invalidated, but date there is now outdated now. :-D",
+      "range": {
+        "startLine": 8,
+        "startChar": 17,
+        "endLine": 8,
+        "endChar": 27
+      },
+      "revId": "05edcb53677ba573381f5954aaf20d01fcd04662",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
