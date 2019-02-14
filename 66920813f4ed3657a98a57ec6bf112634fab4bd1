@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_19ca40a2",
+        "filename": "src/Makefile",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-02-14T08:44:41Z",
+      "side": 1,
+      "message": "$(CC) is undefined here?\n\nI think you want a:\n\nCC ?\u003d gcc\n\nor so?",
+      "revId": "66920813f4ed3657a98a57ec6bf112634fab4bd1",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_d9c4a893",
+        "filename": "src/Makefile",
+        "patchSetId": 13
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-02-14T08:44:41Z",
+      "side": 1,
+      "message": "$(RM) is undefined as well, AFAICT.\nWhy use \"$(RM)\" at all, and not \"rm -f\"?",
+      "revId": "66920813f4ed3657a98a57ec6bf112634fab4bd1",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
