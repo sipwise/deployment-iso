@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_391744a5",
+        "filename": "src/Makefile",
+        "patchSetId": 18
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2019-02-14T13:04:37Z",
+      "side": 1,
+      "message": "This are required flags so they should go into the assignment that does not get overridden by the user (from the environment) in CFLAGS +\u003d. And the first one should be CFLAGS ?\u003d",
+      "range": {
+        "startLine": 6,
+        "startChar": 55,
+        "endLine": 6,
+        "endChar": 65
+      },
+      "revId": "d155ccee2f3bebe36be88381fff204b9fd2bc2a5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_794b7cb1",
+        "filename": "src/fake-uname.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2019-02-14T13:04:37Z",
+      "side": 1,
+      "message": "Ok, I\u0027ve seen on the next page this was already implemented, so if this needs to change, that\u0027s for another commit anyway.",
+      "revId": "d155ccee2f3bebe36be88381fff204b9fd2bc2a5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_992070f9",
+        "filename": "src/fake-uname.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2019-02-14T13:04:37Z",
+      "side": 1,
+      "message": "I\u0027d probably name this something like uname_func or func_uname or similar to avoid confusing it with an actual type, or possibly clashing with future libc types (*_t is reserved by the C standard AFAIR). If you want to make it clear it\u0027s a type, perhaps uname_func_type or similar.",
+      "range": {
+        "startLine": 20,
+        "startChar": 14,
+        "endLine": 20,
+        "endChar": 19
+      },
+      "revId": "d155ccee2f3bebe36be88381fff204b9fd2bc2a5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_791dbcbc",
+        "filename": "src/fake-uname.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2019-02-14T13:04:37Z",
+      "side": 1,
+      "message": "probably make this one static, so that we call the get_libc_func once.",
+      "revId": "d155ccee2f3bebe36be88381fff204b9fd2bc2a5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_d954a855",
+        "filename": "src/fake-uname.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2019-02-14T13:04:37Z",
+      "side": 1,
+      "message": "Hmmm, I see some problems here. First the 65 is an assumption that might bite us in the future, this system-specific size has even changed in the past on Linux. The other problem is with strncpy itself, which has very bad semantics. For example it will not always NUL-terminate the destination, and if the destination buffer changed size then it would buffer overflow it.\n\nSo I\u0027d probably use strlen on the src, and then memcpy to copy and an explicit NUL-termination.\n\nTo avoid repeating all this work, I\u0027d probably wrap the actual code into a fake_uname() and call that to assign into a static var (then the real_uname does not need to be into static).",
+      "revId": "d155ccee2f3bebe36be88381fff204b9fd2bc2a5",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
