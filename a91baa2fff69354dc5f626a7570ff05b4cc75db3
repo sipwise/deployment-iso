@@ -56,6 +56,30 @@
       "revId": "a91baa2fff69354dc5f626a7570ff05b4cc75db3",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_afff6233",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 1853,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-02-15T16:00:04Z",
+      "side": 1,
+      "message": "Ah, you are copying it from mnt into grml. ACK. LGTM!",
+      "parentUuid": "da1255d7_efec3a91",
+      "range": {
+        "startLine": 1853,
+        "startChar": 2,
+        "endLine": 1853,
+        "endChar": 89
+      },
+      "revId": "a91baa2fff69354dc5f626a7570ff05b4cc75db3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
