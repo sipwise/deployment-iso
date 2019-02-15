@@ -36,7 +36,7 @@ private)
   PUBLIC="no"
   SIPWISE_ISO="grml64-sipwise-release_${DATE}.iso"
   GRML_URL="https://deb.sipwise.com/files/grml/"
-  GRML_HASH_URL="http://download.grml.org/"
+  GRML_HASH_URL="https://deb.sipwise.com/files/grml/"
   ;;
 public)
   TEMPLATES="templates-ce"
@@ -44,7 +44,7 @@ public)
   PUBLIC="yes"
   SIPWISE_ISO="sip_provider_CE_installcd.iso"
   GRML_URL="https://deb.sipwise.com/files/grml/"
-  GRML_HASH_URL="http://download.grml.org/"
+  GRML_HASH_URL="https://deb.sipwise.com/files/grml/"
   ;;
 *)
   usage
