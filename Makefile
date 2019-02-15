@@ -8,6 +8,9 @@ all: build
 build:
 	 $(MAKE) -C src
 
+check:
+	$(MAKE) -C src check
+
 syntaxcheck: shellcheck
 
 shellcheck:
