@@ -17,5 +17,6 @@ else
 fi
 
 make
+make check
 make syntaxcheck
 make script_version
