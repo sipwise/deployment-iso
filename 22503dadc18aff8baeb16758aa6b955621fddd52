@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_6a48385c",
+        "filename": "src/fake-uname.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2019-02-15T21:43:10Z",
+      "side": 1,
+      "message": "According to the man page, for this to work reliably, dlerror() first needs to be called to clear an old error, and only then can it be used to check for dlsym() error.",
+      "revId": "22503dadc18aff8baeb16758aa6b955621fddd52",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
