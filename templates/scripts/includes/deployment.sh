@@ -1414,6 +1414,29 @@ case "$DEBIAN_RELEASE" in
     ;;
 esac
 
+# defaults
+DEBOPT_OPTIONS=("--keyring=${KEYRING} --no-merged-usr")
+if checkBootParam mmdebstrap ; then
+  echo "Boot option mmdebstrap found, enabling usage of mmdebstrap for installing Debian"
+
+  # mmdebstrap is available only since buster, so ensure we're running on
+  # a buster based Grml ISO
+  case $(cat /etc/debian_version) in
+    buster*|10*)
+      echo "Using mmdebstrap for bootstrapping Debian"
+      ADDITIONAL_PACKAGES+=(mmdebstrap)
+      # TODO - we actually depend on mmdebstrap >0.3.0-10 for being able to disable merged-usr, see #920332!
+      ensure_packages_installed
+      export DEBOOTSTRAP=mmdebstrap  # for usage with grml-debootstrap
+      DEBOPT_OPTIONS=()
+      ;;
+    *)
+      echo "WARNING: not running on top of a Debian/buster based ISO, can't enable mmdebstrap usage"
+      ;;
+  esac
+fi
+
+
 if [[ -n "${EFI_PARTITION}" ]] ; then
   if efi_support ; then
     echo "EFI support present, enabling EFI support within grml-debootstrap"
@@ -1431,7 +1454,7 @@ echo y | grml-debootstrap \
   --filesystem "${FILESYSTEM}" \
   --hostname "${TARGET_HOSTNAME}" \
   --mirror "$MIRROR" \
-  --debopt "--keyring=${KEYRING} --no-merged-usr" \
+  --debopt "${DEBOPT_OPTIONS[*]}" \
   --keep_src_list \
   --defaultinterfaces \
   -r "$DEBIAN_RELEASE" \
@@ -1445,6 +1468,9 @@ fi
 
 sync
 mount "$ROOT_FS" "$TARGET"
+
+# workaround for #916769
+rm -rf "${TARGET}"/var/lib/apt/lists/auxfiles
 
 if [ -n "${DATA_PARTITION}" ] ; then
   mkdir -p "${TARGET}/ngcp-data"
