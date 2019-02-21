@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_cb816591",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-02-21T13:15:04Z",
+      "side": 1,
+      "message": "mmdebstrap doesn\u0027t?",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 7
+      },
+      "revId": "e7806bdd008711d44b1f503c6e512441bf4b2849",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_8b4a4d82",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-02-21T13:15:04Z",
+      "side": 1,
+      "message": "what does it mean for us?",
+      "revId": "e7806bdd008711d44b1f503c6e512441bf4b2849",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_2b49218c",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-02-21T13:15:04Z",
+      "side": 1,
+      "message": "What is out plan, enable mmdebstrap after migration to buster, or we will use it for stretch as well... if will be fixed enough for us.",
+      "revId": "e7806bdd008711d44b1f503c6e512441bf4b2849",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_4b445573",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-02-21T13:15:04Z",
+      "side": 1,
+      "message": "# workaround for #916769, delete after migration to Debian buster.\n?",
+      "revId": "e7806bdd008711d44b1f503c6e512441bf4b2849",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
