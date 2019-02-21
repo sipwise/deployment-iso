@@ -72,3 +72,6 @@ whois
 wipe
 zip
 zsh
+
+# Sipwise specific packages
+ngcp-keyring
