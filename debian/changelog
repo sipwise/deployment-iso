@@ -1,3 +1,36 @@
+ngcp-deployment-iso (7.2.1.0+0~mr7.2.1.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [b77067f] TT#49467 Remove DEFAULT_INTERNAL_NETMASK option
+  * [e88e424] TT#49467 Remove non-used variable EIFACE
+  * [46bba68] TT#49467 Remove non-used variable MCASTADDR
+  * [6898cfb] TT#49467 Remove non-used variable DEFAULT_INSATLL_DEV
+  * [2bd0b68] TT#49212 Use hardcoded debian name in source list
+  * [cb78469] TT#49212 Remove 'lo dhcp' line as it breaks stretch
+  * [05edcb5] TT#48647 Add packages to compile fake_uname to Docker image
+  * [c860c7f] TT#48647 Update REFRESHED_AT parameter
+  * [a91baa2] TT#48647 Ship fake_uname lib in package
+
+  [ Michael Prokop ]
+  * [f369b1b] TT#49668 Upgrade grml-scripts + grml-debootstrap when deploying Debian/buster
+
+  [ Sergii Kipot ]
+  * [9adc963] TT#51600 Use hostname from ip= if install from puppet
+
+  [ Manuel Montecelo ]
+  * [000ec11] TT#49058 Change way to detect home of user "sipwise"
+  * [9bc7d1a] TT#52450 Wait until new partitions or LVM pvdevice are ready
+
+  [ Alexander Lutay ]
+  * [4930994] TT#35952 Update VBoxGuestAdditions from 5.2.18 to 5.2.26
+
+  [ Guillem Jover ]
+  * [3f3efb1] TT#48647 Improve fake-uname preloaded shared library
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 25 Feb 2019 22:51:58 +0100
+
 ngcp-deployment-iso (7.2.0.0+0~mr7.2.0.0) unstable; urgency=medium
 
   [ Manuel Montecelo ]
