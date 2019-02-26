@@ -91,11 +91,7 @@ VIRTUALBOX_DIR="/usr/share/virtualbox"
 VIRTUALBOX_ISO="VBoxGuestAdditions_5.2.26.iso"
 VIRTUALBOX_ISO_CHECKSUM="b927c5d0d4c97a9da2522daad41fe96b616ed06bfb0c883f9c42aad2244f7c38" # sha256
 VIRTUALBOX_ISO_URL_PATH="/files/${VIRTUALBOX_ISO}"
-SIPWISE_APT_KEY_CHECKSUM="f4cdbe4994ae8ca6c4b24eb164e82a20579b335da4eca0907ecaace832e9a0a7" # sha256
-SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise.gpg"
-# overriden later, although since the checksum is the same we could use this URL
-# also for Pro/Carrier installations
-SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
+SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring.gpg"
 NGCP_PXE_INSTALL=false
 ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
 
@@ -174,36 +170,9 @@ debootstrap_sipwise_key() {
   cat > /etc/debootstrap/pre-scripts/install-sipwise-key.sh << EOF
 #!/bin/bash
 # installed via deployment.sh
-cp ${SIPWISE_APT_KEY_PATH} "\${MNTPOINT}"/etc/apt/trusted.gpg.d/
+cp ${SIPWISE_APT_KEY_PATH} "\${MNTPOINT}"/etc/apt/trusted.gpg.d/sipwise.gpg
 EOF
   chmod 775 /etc/debootstrap/pre-scripts/install-sipwise-key.sh
-}
-
-install_sipwise_key() {
-  local sipwise_key_checksum="invalid"
-  if [ -f "${SIPWISE_APT_KEY_PATH}" ]; then
-    sipwise_key_checksum=$(sha256sum "${SIPWISE_APT_KEY_PATH}" | awk '{print $1}')
-    echo "Sipwise keyring already installed (sha256sum: [${sipwise_key_checksum}]), debootstrap sipwise key"
-    debootstrap_sipwise_key
-    return
-  else
-    echo "Sipwise keyring not found, downloading."
-  fi
-
-  for try in 1 2 3; do
-    wget --retry-connrefused --no-verbose -O "${SIPWISE_APT_KEY_PATH}" "${SIPWISE_URL}${SIPWISE_APT_KEY_URL_PATH}"
-    sipwise_key_checksum=$(sha256sum "${SIPWISE_APT_KEY_PATH}" | awk '{print $1}')
-
-    if [ "${sipwise_key_checksum}" != "${SIPWISE_APT_KEY_CHECKSUM}" ] ; then
-      echo "Sipwise keyring downloaded has wrong checksum (expected: [${SIPWISE_APT_KEY_CHECKSUM}] - got: [${sipwise_key_checksum}]), retry $try" >&2
-    else
-      echo "Sipwise keyring downloaded with expected checksum (sha256sum: [${SIPWISE_APT_KEY_CHECKSUM}]), debootstrap sipwise key"
-      debootstrap_sipwise_key
-      return
-    fi
-  done
-
-  die "Error validating sipwise keyring for apt usage, aborting installation."
 }
 
 check_package_version() {
@@ -243,7 +212,7 @@ ensure_recent_package_versions() {
     -o dir::state="${TMPDIR}/statedir" \
     -o dir::etc::sourcelist="${debsrcfile}" \
     -o dir::etc::sourceparts=/dev/null \
-    -o dir::etc::trusted="${SIPWISE_APT_KEY_PATH}" \
+    -o dir::etc::trusted=/etc/apt/trusted.gpg.d/ \
     update
 
   DEBIAN_FRONTEND='noninteractive' apt-get \
@@ -251,7 +220,7 @@ ensure_recent_package_versions() {
     -o dir::state="${TMPDIR}/statedir" \
     -o dir::etc::sourcelist="${debsrcfile}" \
     -o dir::etc::sourceparts=/dev/null \
-    -o dir::etc::trusted="${SIPWISE_APT_KEY_PATH}" \
+    -o dir::etc::trusted=/etc/apt/trusted.gpg.d/ \
     -y --no-install-recommends install "${UPGRADE_PACKAGES[@]}"
 
   for pkg in "${UPGRADE_PACKAGES[@]}"; do
@@ -516,11 +485,9 @@ fi
 if checkBootParam ngcpce ; then
   CE_EDITION=true
   NGCP_INSTALLER_EDITION_STR="Sipwise C5:        CE"
-  SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
 elif checkBootParam ngcppro || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 ; then
   PRO_EDITION=true
   NGCP_INSTALLER_EDITION_STR="Sipwise C5:        PRO"
-  SIPWISE_APT_KEY_URL_PATH="/sppro/sipwise.gpg"
   if checkBootParam ngcpsp2 ; then
     ROLE=sp2
   else
@@ -529,7 +496,6 @@ elif checkBootParam ngcppro || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 
 elif checkBootParam "nongcp" ; then
   # installing plain debian without NGCP
   NGCP_INSTALLER_EDITION_STR=""
-  SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
 elif checkBootParam "puppetenv=" ; then
   # will be determined later
   :
@@ -697,10 +663,6 @@ if checkBootParam 'sipwiserepotransport=' ; then
   SIPWISE_REPO_TRANSPORT=$(getBootParam sipwiserepotransport)
 fi
 
-if checkBootParam 'debootstrapkey=' ; then
-  GPG_KEY=$(getBootParam debootstrapkey)
-fi
-
 if checkBootParam 'ngcppxeinstall' ; then
   NGCP_PXE_INSTALL=true
 fi
@@ -803,8 +765,6 @@ for param in "$@" ; do
   shift
 done
 
-set_deploy_status "installing_sipwise_keys"
-install_sipwise_key
 ensure_packages_installed
 
 case "${DEBIAN_RELEASE}" in
@@ -1381,29 +1341,6 @@ MIRROR="${DEBIAN_URL}/debian/"
 SEC_MIRROR="${DEBIAN_URL}/debian-security/"
 DBG_MIRROR="${DEBIAN_URL}/debian-debug/"
 
-if [ -z "${GPG_KEY}" ] ; then
-  KEYRING="${SIPWISE_APT_KEY_PATH}"
-else
-  KEYRING='/etc/apt/trusted.gpg'
-
-  echo "Fetching debootstrap keyring as GPG key '${GPG_KEY}'..."
-
-  TRY=60
-  while ! gpg --keyserver "${GPG_KEY_SERVER}" --recv-keys "${GPG_KEY}" ; do
-    if [ ${TRY} -gt 0 ] ; then
-      TRY=$((TRY-5))
-      echo "Waiting for gpg keyserver '${GPG_KEY_SERVER}' availability ($TRY seconds)..."
-      sleep 5
-    else
-      die "Failed to fetch GPG key '${GPG_KEY}' from '${GPG_KEY_SERVER}'"
-    fi
-  done
-
-  if ! gpg -a --export "${GPG_KEY}" | apt-key add - ; then
-    die "Failed to import GPG key '${GPG_KEY}' as apt-key"
-  fi
-fi
-
 set_deploy_status "debootstrap"
 
 mkdir -p /etc/debootstrap/etc/apt/
@@ -1426,7 +1363,7 @@ case "$DEBIAN_RELEASE" in
 esac
 
 # defaults
-DEBOPT_OPTIONS=("--keyring=${KEYRING} --no-merged-usr")
+DEBOPT_OPTIONS=("--keyring=${SIPWISE_APT_KEY_PATH} --no-merged-usr")
 if checkBootParam nommdebstrap ; then
   echo "Boot option nommdebstrap found, disabling usage of mmdebstrap for installing Debian"
 else
@@ -1457,6 +1394,9 @@ if [[ -n "${EFI_PARTITION}" ]] ; then
     echo "EFI support NOT present, not enabling EFI support within grml-debootstrap"
   fi
 fi
+
+# Add sipwise key into chroot
+debootstrap_sipwise_key
 
 # install Debian
 # shellcheck disable=SC2086
