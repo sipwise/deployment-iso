@@ -7,7 +7,6 @@ export LC_ALL=C
 
 working_dir="$(dirname "$0")"
 scripts_dir="${working_dir}/includes/"
-keys_dir="${working_dir}/keys/"
 
 RC=0
 
@@ -18,15 +17,6 @@ NORMAL="$(tput op)"
 
 einfo "Executing grml-sipwise specific checks..."
 eindent
-
-install_sipwise_keyring() {
-  if [ -f "${keys_dir}/sipwise.gpg" ]; then
-    einfo "Installing sipwise keyring to '/etc/apt/trusted.gpg.d/sipwise.gpg'..."; eend 0
-    cp "${keys_dir}/sipwise.gpg" /etc/apt/trusted.gpg.d/sipwise.gpg
-  else
-    ewarn "Sipwise keyring '${keys_dir}/sipwise.gpg' not found, continuing anyway." ; eend 0
-  fi
-}
 
 report_ssh_password() {
   local rootpwd=$(grep -Eo '\<ssh=[^ ]+' /proc/cmdline || true)
@@ -107,7 +97,6 @@ deploy() {
   fi
 }
 
-install_sipwise_keyring
 "${scripts_dir}/network_configuration.sh"
 "${scripts_dir}/check_installing_version.sh"
 "${scripts_dir}/install_required_packages.sh"
