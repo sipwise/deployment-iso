@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ba076199_bce7b9ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-02-26T13:38:33Z",
+      "side": 1,
+      "message": "hehe yeah, thanks for noticing :)",
+      "parentUuid": "da1255d7_cb816591",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 7
+      },
+      "revId": "e7806bdd008711d44b1f503c6e512441bf4b2849",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da1255d7_8b4a4d82",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2019-02-21T13:15:04Z",
       "side": 1,
       "message": "what does it mean for us?",
+      "revId": "e7806bdd008711d44b1f503c6e512441bf4b2849",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_7c026140",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-02-26T13:38:33Z",
+      "side": 1,
+      "message": "IMO doesn\u0027t matter at all for us",
+      "parentUuid": "da1255d7_8b4a4d82",
       "revId": "e7806bdd008711d44b1f503c6e512441bf4b2849",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "ba076199_3cfce93d",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-02-26T13:38:33Z",
+      "side": 1,
+      "message": "Once mmdebstrap 0.4.0-1 migrated to buster[1] then we could consider relying on it for installing stretch and buster, IMO.\n\n[1] See:\n\n% rmadison mmdebstrap \nmmdebstrap | 0.3.0-10      | testing    | source, all\nmmdebstrap | 0.4.0-1       | unstable   | source, all\n% grep-excuses mmdebstrap\nmmdebstrap (0.3.0-10 to 0.4.0-1)\n    Migration status: Waiting for test results, another package or too young (no action required now - check later)\n    Maintainer: Johannes \u0027josch\u0027 Schauer\n    Too young, only 2 of 10 days old\n    Piuparts tested OK - https://piuparts.debian.org/sid/source/m/mmdebstrap.html\n    Checking build-dependency on amd64",
+      "parentUuid": "da1255d7_2b49218c",
+      "revId": "e7806bdd008711d44b1f503c6e512441bf4b2849",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da1255d7_4b445573",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
@@ -70,6 +130,24 @@
       "writtenOn": "2019-02-21T13:15:04Z",
       "side": 1,
       "message": "# workaround for #916769, delete after migration to Debian buster.\n?",
+      "revId": "e7806bdd008711d44b1f503c6e512441bf4b2849",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_fc9411e9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-02-26T13:38:33Z",
+      "side": 1,
+      "message": "nope, I just noted it for myself (see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug\u003d916769#10), fixed once we have mmdebstrap v0.4.0-1 available, then I can just drop this code",
+      "parentUuid": "da1255d7_4b445573",
       "revId": "e7806bdd008711d44b1f503c6e512441bf4b2849",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
