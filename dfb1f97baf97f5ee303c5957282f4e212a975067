@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a0c5dc1_1c9001ec",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2019-03-05T13:01:12Z",
+      "side": 0,
+      "message": "Yes in worst case scenario we\u0027ll use public debian mirrors but I think this section is irrelevant to puppet recovery case",
+      "parentUuid": "9a0c5dc1_9c863112",
+      "range": {
+        "startLine": 700,
+        "startChar": 0,
+        "endLine": 702,
+        "endChar": 2
+      },
+      "revId": "dfb1f97baf97f5ee303c5957282f4e212a975067",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a0c5dc1_5c79d92e",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
@@ -36,6 +60,47 @@
       "writtenOn": "2019-03-05T10:20:53Z",
       "side": 0,
       "message": "AFAIK it is a disaster recovery code for Puppet case.",
+      "revId": "dfb1f97baf97f5ee303c5957282f4e212a975067",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5c7439ce",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2019-03-05T13:01:12Z",
+      "side": 0,
+      "message": "It was added here https://gerrit.mgm.sipwise.com/#/c/9413/ and ticket and comments have no info about puppet case so I think it was originally added for different purpose. The code in this section downloads keyring to root but not to chroot where puppet will be installed later. So I believe keyring can\u0027t be used by puppet installation anyway. \n\nWith puppet case keys should be downloaded by apt module which is executed before installing any packages. Puppet bootstrap itself has own key downloading section in lines 2094-...",
+      "parentUuid": "9a0c5dc1_5c79d92e",
+      "revId": "dfb1f97baf97f5ee303c5957282f4e212a975067",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_3c818590",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 2110,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2019-03-05T13:01:12Z",
+      "side": 0,
+      "message": "puppet key is handled here",
+      "range": {
+        "startLine": 2094,
+        "startChar": 0,
+        "endLine": 2110,
+        "endChar": 6
+      },
       "revId": "dfb1f97baf97f5ee303c5957282f4e212a975067",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
