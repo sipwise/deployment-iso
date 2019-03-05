@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9c863112",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-03-05T10:20:53Z",
+      "side": 0,
+      "message": "AFAIR, it was necessary to disaster recovery when we lost deb.sipwise.com and had to use public debian mirrors which signed with Debian and non-sipwise key. JFYI.",
+      "range": {
+        "startLine": 700,
+        "startChar": 0,
+        "endLine": 702,
+        "endChar": 2
+      },
+      "revId": "dfb1f97baf97f5ee303c5957282f4e212a975067",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5c79d92e",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-03-05T10:20:53Z",
+      "side": 0,
+      "message": "AFAIK it is a disaster recovery code for Puppet case.",
+      "revId": "dfb1f97baf97f5ee303c5957282f4e212a975067",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
