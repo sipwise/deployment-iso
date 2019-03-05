@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_dca5c9b5",
+        "filename": "grml_build/package_config/SIPWISE",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-03-05T10:12:03Z",
+      "side": 1,
+      "message": "Either separate it through a comment from the plain Debian/Grml packages, like:\n\n# Sipwise specific packages\nngcp-keyring\n\nor otherwise sort it alphabetically with the rest?",
+      "revId": "dfb1f97baf97f5ee303c5957282f4e212a975067",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
