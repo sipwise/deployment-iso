@@ -16,6 +16,24 @@
       "revId": "dfb1f97baf97f5ee303c5957282f4e212a975067",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1c9c8168",
+        "filename": "grml_build/package_config/SIPWISE",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-03-05T10:18:17Z",
+      "side": 1,
+      "message": "$0.05, I like \n\n# Sipwise specific packages ngcp-keyring",
+      "parentUuid": "9a0c5dc1_dca5c9b5",
+      "revId": "dfb1f97baf97f5ee303c5957282f4e212a975067",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
