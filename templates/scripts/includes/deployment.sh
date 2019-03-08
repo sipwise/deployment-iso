@@ -2099,7 +2099,7 @@ EOF
   PUPPET_GPG_KEY="6F6B15509CF8E59E6E469F327F438280EF8D349F"
 
   TRY=60
-  while ! chroot ${TARGET} apt-key adv --recv-keys --keyserver "${GPG_KEY_SERVER}" "${PUPPET_GPG_KEY}" ; do
+  while ! grml-chroot ${TARGET} apt-key adv --recv-keys --keyserver "${GPG_KEY_SERVER}" "${PUPPET_GPG_KEY}" ; do
     if [ ${TRY} -gt 0 ] ; then
       TRY=$((TRY-5))
       echo "Waiting for gpg keyserver '${GPG_KEY_SERVER}' availability ($TRY seconds)..."
