@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a0c5dc1_a26f8691",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-03-12T16:09:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a0c5dc1_df48118a",
+      "range": {
+        "startLine": 40,
+        "startChar": 14,
+        "endLine": 40,
+        "endChar": 22
+      },
+      "revId": "00796aacd2094f14be698187725ca3a0b71ddef6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a0c5dc1_5f90a1ec",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 6
