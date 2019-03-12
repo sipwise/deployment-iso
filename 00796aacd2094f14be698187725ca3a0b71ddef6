@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a0c5dc1_9fadf933",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-03-12T14:03:03Z",
+      "side": 1,
+      "message": "\u003e I think we can try mmdebstrap by default.\n\n+1",
+      "parentUuid": "9a0c5dc1_5f90a1ec",
+      "revId": "00796aacd2094f14be698187725ca3a0b71ddef6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a0c5dc1_dfba516e",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 6
@@ -36,6 +54,23 @@
         "endLine": 1427,
         "endChar": 38
       },
+      "revId": "00796aacd2094f14be698187725ca3a0b71ddef6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7faa451b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-03-12T14:03:03Z",
+      "side": 1,
+      "message": "I suppose that mmdebstrap doesn\u0027t need keyring because it already uses apt, is that the reason for its absence here?",
       "revId": "00796aacd2094f14be698187725ca3a0b71ddef6",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
