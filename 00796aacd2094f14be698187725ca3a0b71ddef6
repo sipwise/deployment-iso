@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5f90a1ec",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-12T13:56:03Z",
+      "side": 1,
+      "message": "I think we can try mmdebstrap by default.",
+      "revId": "00796aacd2094f14be698187725ca3a0b71ddef6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_dfba516e",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-12T13:56:03Z",
+      "side": 1,
+      "message": "and we need to rebuild Grml-sipwise :)",
+      "range": {
+        "startLine": 1427,
+        "startChar": 28,
+        "endLine": 1427,
+        "endChar": 38
+      },
+      "revId": "00796aacd2094f14be698187725ca3a0b71ddef6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
