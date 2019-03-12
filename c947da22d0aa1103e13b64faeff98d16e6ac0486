@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1fcc6934",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-12T13:29:59Z",
+      "side": 1,
+      "message": "while mmdebstrap doesn\u0027t ?",
+      "revId": "c947da22d0aa1103e13b64faeff98d16e6ac0486",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
