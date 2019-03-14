@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "9a0c5dc1_a820854a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-03-14T12:38:28Z",
+      "side": 0,
+      "message": "I still believe it is related to the disaster recovery case we had 3 years ago.\n\nLet\u0027s assume you need to recover Sipwise.\nYou have no \u0027deb.sipwise.com\u0027 and you need to install the first puppet server to install new deb.sipwise.com.\n\nThe code here allowed to use any key you want.\nAs we were not able to fetch sipwise.gpg as deb.sipwise.com was down, so we fetched it from public key storage AFAIR.\n\nI can be wrong and we can remove this... since we have sipwise.gpg built-int into sipwise-grml now.",
+      "parentUuid": "9a0c5dc1_5c7439ce",
+      "revId": "dfb1f97baf97f5ee303c5957282f4e212a975067",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a0c5dc1_3c818590",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
