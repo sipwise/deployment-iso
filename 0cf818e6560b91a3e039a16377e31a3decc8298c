@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_4800e9aa",
+        "filename": "grml_build/package_config/SIPWISE",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-03-14T12:29:27Z",
+      "side": 1,
+      "message": "Wow, I was planning to ask where it is... but it is by default here! I like it!",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 9
+      },
+      "revId": "0cf818e6560b91a3e039a16377e31a3decc8298c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
