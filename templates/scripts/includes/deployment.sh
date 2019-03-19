@@ -1344,6 +1344,7 @@ echo "Clean the default /etc/debootstrap/packages"
 echo > /etc/debootstrap/packages
 
 if ! "$NGCP_INSTALLER" ; then
+
   echo "Install some packages to be able to login on the Debian plain system"
   cat >> /etc/debootstrap/packages << EOF
 # to be able to login on the Debian plain system via SSH
@@ -1352,7 +1353,16 @@ openssh-server
 # deployment supports LVM only
 lvm2
 EOF
-else
+
+  if [[ "${SWRAID}" = "true" ]] ; then
+    cat >> /etc/debootstrap/packages << EOF
+# required for Software-RAID support on plain debian and Puppet recovery
+grub-pc
+EOF
+  fi
+
+else # "$NGCP_INSTALLER" = true
+
   echo "Install some essential packages for NGCP bootstrapping"
   # WARNING: consider to add NGCP packages to NGCP metapackage!
   cat >> /etc/debootstrap/packages << EOF
@@ -1361,7 +1371,8 @@ wget
 # required for Software-RAID support
 mdadm
 EOF
-fi
+
+fi # if ! "$NGCP_INSTALLER" ; then
 
 # NOTE: we use the debian.sipwise.com CNAME by intention here
 # to avoid conflicts with apt-pinning, preferring deb.sipwise.com
