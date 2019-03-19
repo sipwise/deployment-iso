@@ -2104,7 +2104,7 @@ puppet_install_from_puppet () {
   echo "${IP_ARR[hostname]}" > "${TARGET}/etc/hostname"
   grml-chroot "$TARGET" hostname -F /etc/hostname
 
-  chroot $TARGET apt-get -y install resolvconf libnss-myhostname
+  chroot $TARGET apt-get -y install resolvconf libnss-myhostname grub-pc
 
   case "$DEBIAN_RELEASE" in
     stretch|buster)
