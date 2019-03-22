@@ -40,6 +40,7 @@ locales
 lsof
 lsscsi
 mawk
+mmdebstrap
 mount
 mtools
 mtr-tiny
