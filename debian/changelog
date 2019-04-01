@@ -1,3 +1,12 @@
+ngcp-deployment-iso (6.5.4.1+0~mr6.5.4.1) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [da82fe5] TT#44969 Pass NGCPUPLOAD option to configuration tool
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 02 Apr 2019 00:36:04 +0200
+
 ngcp-deployment-iso (6.5.4.0+0~mr6.5.4.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
