@@ -1489,6 +1489,12 @@ if [ -n "${FALLBACK_FS}" ] ; then
   mkdir -p "${TARGET}/ngcp-fallback"
 fi
 
+# TT#56903: mmdebstrap 0.4.1-2 does not properly remove this dir.
+if [ -d "$ROOT_FS/var/lib/apt/lists/auxfiles" ]; then
+  echo "Removing apt's > 1.6 auxfiles directory"
+  rmdir "$ROOT_FS/var/lib/apt/lists/auxfiles"
+fi
+
 # MT#7805
 if "$NGCP_INSTALLER" ; then
   cat << EOT | augtool --root="$TARGET"
