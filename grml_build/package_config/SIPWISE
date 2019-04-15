@@ -76,3 +76,4 @@ zsh
 
 # Sipwise specific packages
 ngcp-keyring
+systemd-spawn
