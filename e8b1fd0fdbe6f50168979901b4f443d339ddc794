@@ -34,6 +34,24 @@
       "revId": "e8b1fd0fdbe6f50168979901b4f443d339ddc794",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_e8620b16",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-04-16T12:08:49Z",
+      "side": 1,
+      "message": "since we have release specific install cd now -\u003e will be removed after migration to buster, as it is in list https://pad.mgm.sipwise.com/p/postBuster_cleanup_list\n\nLGTM. tnx for the comment.",
+      "parentUuid": "5afe65bd_68029b40",
+      "revId": "e8b1fd0fdbe6f50168979901b4f443d339ddc794",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
