@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_c893cf4e",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-04-16T08:24:18Z",
+      "side": 1,
+      "message": "Maybe we should check that we install stretch... as it should stay after migration to buster, right?\n\nMy point is: we might forget to remove this code after migration to buster. Added it to the list here https://pad.mgm.sipwise.com/p/postBuster_cleanup_list",
+      "revId": "e8b1fd0fdbe6f50168979901b4f443d339ddc794",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
