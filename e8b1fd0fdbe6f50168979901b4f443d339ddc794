@@ -16,6 +16,24 @@
       "revId": "e8b1fd0fdbe6f50168979901b4f443d339ddc794",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_68029b40",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2019-04-16T11:56:49Z",
+      "side": 1,
+      "message": "This code is fine to be run unconditionally, apt will create the dir when needed. If the check for stretch is just so that we have a mark inline of code affecting stretch-specific stuff, then I could do that, but if this is already tracked in the pad then I\u0027m not sure there\u0027s any real need. This code should only be removed once this codepath stop installing anything older than buster-",
+      "parentUuid": "5afe65bd_c893cf4e",
+      "revId": "e8b1fd0fdbe6f50168979901b4f443d339ddc794",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
