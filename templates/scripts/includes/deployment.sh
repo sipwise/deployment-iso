@@ -515,11 +515,11 @@ fi
 
 if checkBootParam ngcpce ; then
   CE_EDITION=true
-  NGCP_INSTALLER_EDITION_STR="Sipwise C5:      CE"
+  NGCP_INSTALLER_EDITION_STR="Sipwise C5:        CE"
   SIPWISE_APT_KEY_URL_PATH="/spce/sipwise.gpg"
 elif checkBootParam ngcppro || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 ; then
   PRO_EDITION=true
-  NGCP_INSTALLER_EDITION_STR="Sipwise C5:      PRO"
+  NGCP_INSTALLER_EDITION_STR="Sipwise C5:        PRO"
   SIPWISE_APT_KEY_URL_PATH="/sppro/sipwise.gpg"
   if checkBootParam ngcpsp2 ; then
     ROLE=sp2
@@ -542,7 +542,7 @@ fi
 if checkBootParam 'ngcpcrole=' ; then
   CROLE=$(getBootParam ngcpcrole)
   CARRIER_EDITION=true
-  NGCP_INSTALLER_EDITION_STR="Sipwise C5:      CARRIER"
+  NGCP_INSTALLER_EDITION_STR="Sipwise C5:        CARRIER"
 fi
 
 if checkBootParam "puppetenv=" ; then
