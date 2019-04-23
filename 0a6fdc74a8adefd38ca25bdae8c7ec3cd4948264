@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_1f17dbee",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-04-23T09:56:08Z",
+      "side": 0,
+      "message": "please check this with Sergey.\nThe script is in use when we recovery sipwise infrastructure.\nand there we have no deb.sipwise.com, and need to install it from zero point and have to use official Debian repos signed by Debian keys (which is OK) + puppet repo signed by puppet key which is missing in default debian.",
+      "revId": "0a6fdc74a8adefd38ca25bdae8c7ec3cd4948264",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
