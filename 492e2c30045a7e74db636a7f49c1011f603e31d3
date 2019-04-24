@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afb71cf_67ce4c85",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2019-04-24T13:07:18Z",
+      "side": 1,
+      "message": "let\u0027s use puppet.mgm\nWe tested it and it looks working ok",
+      "range": {
+        "startLine": 47,
+        "startChar": 14,
+        "endLine": 47,
+        "endChar": 37
+      },
+      "revId": "492e2c30045a7e74db636a7f49c1011f603e31d3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
