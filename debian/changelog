@@ -1,3 +1,30 @@
+ngcp-deployment-iso (7.3.1.0+0~mr7.3.1.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [9d2640c] TT#36350 Create dirs in docker images
+  * [131d9a7] TT#48647 Use a new path with Grml* images
+  * [e31aa48] TT#48647 Remove installation of packages in Grml
+  * [159a1b9] TT#48647 Add mmdebstrap to grml-sipwise image
+  * [6e268bf] TT#36350 Add ngcp-keyring package to grml-sipwise
+  * [0a6fdc7] TT#36350 Fix align of ngcp installer edition message
+
+  [ Sergii Kipot ]
+  * [c21b396] TT#54803 Use grml-chroot instead of chroot for installing puppetlabs key
+
+  [ Michael Prokop ]
+  * [2c05bbb] TT#44914 Support bootstrapping using mmdebstrap
+
+  [ Alexander Lutay ]
+  * [8159117] TT#55156 Install grub-pc during puppet disaster recovery process
+  * [75682fe] TT#54511 Switch recovery in deployment.sh from puppet2.mgm to puppet.mgm
+
+  [ Guillem Jover ]
+  * [e8b1fd0] TT#56903 Remove apt's auxfiles directory
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Thu, 25 Apr 2019 14:26:39 +0200
+
 ngcp-deployment-iso (7.3.0.0+0~mr7.3.0.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
