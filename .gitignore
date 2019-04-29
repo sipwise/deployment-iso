@@ -1,8 +1,6 @@
 *~
 sipwise_*.cfg
 artifacts/
-grml64*.iso
-grml64*.iso.sha1
 templates/boot/grub/grub.cfg
 templates/boot/isolinux/isolinux.cfg
 templates/boot/isolinux/syslinux.cfg
@@ -12,3 +10,6 @@ grml_build/grml_isos/
 grml_build/grml_logs/
 grml_build/netboot/
 *.so
+*.iso
+*.iso.md5
+*.iso.sha1
