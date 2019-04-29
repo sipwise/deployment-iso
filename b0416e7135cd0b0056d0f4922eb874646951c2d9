@@ -16,6 +16,24 @@
       "revId": "b0416e7135cd0b0056d0f4922eb874646951c2d9",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da37b569_61ce5685",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-29T09:25:08Z",
+      "side": 1,
+      "message": "Normally this function takes less than 1s so nobody will notice it.",
+      "parentUuid": "1af86dd1_6302c240",
+      "revId": "b0416e7135cd0b0056d0f4922eb874646951c2d9",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
