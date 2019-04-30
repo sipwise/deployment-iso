@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da37b569_c45c10f0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-04-30T13:07:20Z",
+      "side": 1,
+      "message": "s/gmrl/grml/ (to find it within `git log -S grml`)",
+      "revId": "09fb4838b2ceae980d5ea3c26154065453dcf920",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da37b569_84f608d6",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-04-30T13:07:20Z",
+      "side": 1,
+      "message": "Is there any specific reason why it\u0027s called sipwise-keyring.gpg within $SIPWISE_APT_KEY_PATH but sipwise.gpg here then?",
+      "revId": "09fb4838b2ceae980d5ea3c26154065453dcf920",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
