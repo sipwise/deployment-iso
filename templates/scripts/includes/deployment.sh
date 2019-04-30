@@ -94,6 +94,7 @@ VIRTUALBOX_ISO_URL_PATH="/files/${VIRTUALBOX_ISO}"
 SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring.gpg"
 NGCP_PXE_INSTALL=false
 ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
+NGCP_RESCUE=false
 
 
 ### helper functions {{{
@@ -675,6 +676,17 @@ if checkBootParam 'ngcppxeinstall' ; then
   NGCP_PXE_INSTALL=true
 fi
 
+if checkBootParam 'ngcprescue' ; then
+  NGCP_RESCUE=true
+fi
+
+if "${NGCP_RESCUE}" ; then
+  DEBIAN_REPO_TRANSPORT='http'
+  SIPWISE_REPO_TRANSPORT='http'
+  DEBIAN_REPO_HOST='sp:9998'
+  SIPWISE_REPO_HOST='sp:9998'
+fi
+
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
 
@@ -708,6 +720,7 @@ Control installation parameters:
   sipwiserepo=...  - hostname of Sipwise APT repository mirror
   ngcpnomysqlrepl  - skip MySQL sp1<->sp2 replication configuration/check
   ngcpppa=...      - use NGCP PPA Debian repository
+  ngcprescue       - install packages from the shared address of the installation
 
 Control target system:
 
@@ -769,6 +782,7 @@ for param in "$@" ; do
     *ngcpvlanhaint*) VLAN_HA_INT="${param//ngcpvlanhaint=/}";;
     *ngcpvlanrtpext*) VLAN_RTP_EXT="${param//ngcpvlanrtpext=/}";;
     *ngcpppa*) NGCP_PPA="${param//ngcpppa=/}";;
+    *ngcprescue*) NGCP_RESCUE=true;;
   esac
   shift
 done
