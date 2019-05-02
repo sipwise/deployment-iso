@@ -68,7 +68,7 @@ ROOTFS_SIZE="10G"
 FALLBACKFS_SIZE="${ROOTFS_SIZE}"
 SWAPFILE_SIZE_MB_MIN="4096"
 SWAPFILE_SIZE_MB_MAX="16384"
-SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB_MIN}"
+SWAPFILE_SIZE_MB=""
 SWRAID_DEVICE="/dev/md0"
 SWRAID_DESTROY=false
 GPG_KEY_SERVER="pool.sks-keyservers.net"
@@ -705,6 +705,10 @@ if checkBootParam 'ngcppxeinstall' ; then
   NGCP_PXE_INSTALL=true
 fi
 
+if checkBootParam 'swapfilesize=' ; then
+  SWAPFILE_SIZE_MB=$(getBootParam swapfilesize)
+fi
+
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
 
@@ -750,6 +754,7 @@ Control target system:
   ngcpipshared=... - HA shared IP address
   ngcpnetmask=...  - netmask of ha_int interface
   ngcpeaddr=...    - Cluster IP address
+  swapfilesize=... - the size of swap file in megabytes
 
 The command line options correspond with the available bootoptions.
 Command line overrides any present bootoption.
@@ -799,6 +804,7 @@ for param in "$@" ; do
     *ngcpvlanhaint*) VLAN_HA_INT="${param//ngcpvlanhaint=/}";;
     *ngcpvlanrtpext*) VLAN_RTP_EXT="${param//ngcpvlanrtpext=/}";;
     *ngcpppa*) NGCP_PPA="${param//ngcpppa=/}";;
+    *swapfilesize*) SWAPFILE_SIZE_MB="${param//swapfilesize=/}";;
   esac
   shift
 done
@@ -1527,15 +1533,18 @@ ${FALLBACK_FS} /ngcp-fallback               auto          ro,noatime,nofail     
 EOF
 fi
 
-# TT#11444 Calculate size of swapfile
-ramsize_mb="$(( $(awk '/^MemTotal:/ {print $2}' /proc/meminfo) / 1024))"
-SWAPFILE_SIZE_MB="$(( ramsize_mb / 2))"
-if [[ "${SWAPFILE_SIZE_MB}" -lt "${SWAPFILE_SIZE_MB_MIN}" ]]; then
-  SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB_MIN}"
-elif [[ "${SWAPFILE_SIZE_MB}" -gt "${SWAPFILE_SIZE_MB_MAX}" ]]; then
-  SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB_MAX}"
+if [[ -z "${SWAPFILE_SIZE_MB}" ]]; then
+  # TT#11444 Calculate size of swapfile
+  ramsize_mb="$(( $(awk '/^MemTotal:/ {print $2}' /proc/meminfo) / 1024))"
+  SWAPFILE_SIZE_MB="$(( ramsize_mb / 2))"
+  if [[ "${SWAPFILE_SIZE_MB}" -lt "${SWAPFILE_SIZE_MB_MIN}" ]]; then
+    SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB_MIN}"
+  elif [[ "${SWAPFILE_SIZE_MB}" -gt "${SWAPFILE_SIZE_MB_MAX}" ]]; then
+    SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB_MAX}"
+  fi
+  SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB}M"
+  unset ramsize_mb
 fi
-unset ramsize_mb
 
 # get rid of automatically installed packages
 chroot $TARGET apt-get --purge -y autoremove
