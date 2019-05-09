@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "9a41bdd9_22f2909b",
+        "filename": "grub.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T10:12:38Z",
+      "side": 1,
+      "message": "\u003e But this means that a normal sp2 installation is done via the \"Rescue\" entry? Is that really obvious for everyone?\n\nThis is one of the possible ways to do it. In the perfect world second PRO node is installed/restored via iPXE but this is a way for those who don\u0027t want to enable dhcp server in existing environment.\n\n\u003e but for installation there should be no difference in sp1/sp2. isn\u0027t it? \n\u003e it is valid for ngcp-intitial-configuration where users have to specify it anyway... am I wrong?\n\nThe only thing which is managed by this parameter here is hostname.",
+      "parentUuid": "9a41bdd9_42d8f41d",
+      "revId": "60099be3da076b35945d0b63ac2c73adb0d78b90",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a41bdd9_e236e8b3",
         "filename": "isolinux.cfg",
         "patchSetId": 2
