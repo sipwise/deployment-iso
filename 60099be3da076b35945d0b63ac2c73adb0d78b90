@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_a240e008",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-05-09T08:03:51Z",
+      "side": 1,
+      "message": "s/Pro/PRO/?",
+      "revId": "60099be3da076b35945d0b63ac2c73adb0d78b90",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_42bb140f",
+        "filename": "grub.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-05-09T08:03:51Z",
+      "side": 1,
+      "message": "Any specific reason why you moved the ngcpsp2 to the end instead of keeping it as we had it?",
+      "revId": "60099be3da076b35945d0b63ac2c73adb0d78b90",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_e236e8b3",
+        "filename": "isolinux.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-05-09T08:03:51Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "60099be3da076b35945d0b63ac2c73adb0d78b90",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_023c2c92",
+        "filename": "isolinux.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-05-09T08:03:51Z",
+      "side": 1,
+      "message": "This might warrant mentioning in the commit message?",
+      "revId": "60099be3da076b35945d0b63ac2c73adb0d78b90",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
