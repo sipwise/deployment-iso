@@ -85,6 +85,24 @@
       "revId": "60099be3da076b35945d0b63ac2c73adb0d78b90",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_22f130ce",
+        "filename": "isolinux.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T09:10:58Z",
+      "side": 1,
+      "message": "This it a piece of prev version",
+      "parentUuid": "9a41bdd9_023c2c92",
+      "revId": "60099be3da076b35945d0b63ac2c73adb0d78b90",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
