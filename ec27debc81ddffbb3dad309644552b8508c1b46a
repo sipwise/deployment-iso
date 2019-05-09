@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_62c41892",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-05-09T07:58:42Z",
+      "side": 1,
+      "message": "I\u0027d drop the \"the\"",
+      "revId": "ec27debc81ddffbb3dad309644552b8508c1b46a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
