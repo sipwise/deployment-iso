@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a41bdd9_82a03c92",
+        "filename": "grub.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-05-09T09:36:26Z",
+      "side": 1,
+      "message": "Ah, makes sense then!\nBut this means that a normal sp2 installation is done via the \"Rescue\" entry? Is that really obvious for everyone?",
+      "parentUuid": "9a41bdd9_62e73813",
+      "revId": "60099be3da076b35945d0b63ac2c73adb0d78b90",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a41bdd9_e236e8b3",
         "filename": "isolinux.cfg",
         "patchSetId": 2
