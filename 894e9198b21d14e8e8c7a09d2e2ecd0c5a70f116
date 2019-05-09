@@ -16,6 +16,24 @@
       "revId": "894e9198b21d14e8e8c7a09d2e2ecd0c5a70f116",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_e22a68e7",
+        "filename": "isolinux.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T10:13:42Z",
+      "side": 1,
+      "message": "Ah, IDE is too smart...",
+      "parentUuid": "9a41bdd9_a298e06b",
+      "revId": "894e9198b21d14e8e8c7a09d2e2ecd0c5a70f116",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
