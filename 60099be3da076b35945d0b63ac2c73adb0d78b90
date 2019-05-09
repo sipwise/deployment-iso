@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "9a41bdd9_62e73813",
+        "filename": "grub.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-05-09T09:09:31Z",
+      "side": 1,
+      "message": "Yes. User need to change ngcpsp1|2 parameter when he rescues node so it\u0027s better to place it in the end",
+      "parentUuid": "9a41bdd9_42bb140f",
+      "revId": "60099be3da076b35945d0b63ac2c73adb0d78b90",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a41bdd9_e236e8b3",
         "filename": "isolinux.cfg",
         "patchSetId": 2
