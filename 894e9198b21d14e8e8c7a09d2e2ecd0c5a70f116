@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_a298e06b",
+        "filename": "isolinux.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-05-09T09:36:26Z",
+      "side": 1,
+      "message": "Are you sure the indention is still fine with dropping this?",
+      "revId": "894e9198b21d14e8e8c7a09d2e2ecd0c5a70f116",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
