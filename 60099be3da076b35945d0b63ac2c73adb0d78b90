@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "9a41bdd9_42d8f41d",
+        "filename": "grub.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-05-09T10:01:20Z",
+      "side": 1,
+      "message": "but for installation there should be no difference in sp1/sp2. isn\u0027t it? \nit is valid for ngcp-intitial-configuration where users have to specify it anyway... am I wrong?",
+      "parentUuid": "9a41bdd9_82a03c92",
+      "revId": "60099be3da076b35945d0b63ac2c73adb0d78b90",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a41bdd9_e236e8b3",
         "filename": "isolinux.cfg",
         "patchSetId": 2
