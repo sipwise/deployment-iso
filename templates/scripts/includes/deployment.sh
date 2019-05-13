@@ -1685,8 +1685,13 @@ FILL_APPROX_CACHE="${FILL_APPROX_CACHE}"
 EOF
   fi
 
+  if "${INTERACTIVE}" ; then
+    echo "FORCE=no" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
+  else
+    echo "FORCE=yes" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
+  fi
+
   cat >> "${conf_file}" << EOF
-FORCE=yes
 ADJUST_FOR_LOW_PERFORMANCE="${ADJUST_FOR_LOW_PERFORMANCE}"
 ENABLE_VM_SERVICES="${ENABLE_VM_SERVICES}"
 SIPWISE_REPO_HOST="${SIPWISE_REPO_HOST}"
