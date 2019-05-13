@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_8e22a3b8",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-05-13T11:46:07Z",
+      "side": 1,
+      "message": "I strongly believe we have to do \"FORCE\u003dno\" here.\nReason: all manual calls for ngcp-installer/ngcp-initial-configuration must by confirmed by user.\nOtherwise we might run ngcp-initial-configuration more then one time.... let\u0027s imagine user executed ngcp-initial-configuration on production Carrier node... with FORCE-yes in config_deploy.inc.... Uff...\n\n\nAlso the PS1 here doesn\u0027t fix PRO/Carrier iPXE reinstallation (where we still use deployment.sh and not main.sh).\n\n\nIMHO, we must set \"FORCE\u003dno\" and teach Jenkins set \"FORCE\u003dyes\" where it is necessary for Jenkins jobs.",
+      "revId": "f3d9484615a75dc65a3a95092a5b2c9131263fc3",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
