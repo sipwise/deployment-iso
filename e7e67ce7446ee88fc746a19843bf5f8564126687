@@ -22,6 +22,29 @@
       "revId": "e7e67ce7446ee88fc746a19843bf5f8564126687",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a46c9f1_fbcf68b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2019-05-27T16:07:09Z",
+      "side": 1,
+      "message": "LDC",
+      "range": {
+        "startLine": 9,
+        "startChar": 23,
+        "endLine": 9,
+        "endChar": 26
+      },
+      "revId": "e7e67ce7446ee88fc746a19843bf5f8564126687",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
