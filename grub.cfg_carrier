@@ -7,7 +7,7 @@ menuentry "sip:Carrier mgmt (web01a) DHCP / ##VERSION## release" {
 
 menuentry "sip:Carrier mgmt (web01a) / ##VERSION## release" {
   echo 'Loading kernel...'
-  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce net.ifnames=0 ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcpsp1 ngcpnonwrecfg ngcpfillcache ngcpvers=##VERSION## dns=92.42.136.30,92.42.136.31 nodhcp ip=192.168.52.114::192.168.52.1:255.255.255.0:sp1:eth0:off ngcpcrole=mgmt ngcphostname=web01a 
+  linux /boot/%SHORT_NAME%/vmlinuz live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce net.ifnames=0 ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcpsp1 ngcpnonwrecfg ngcpfillcache ngcpvers=##VERSION## dns=1.1.1.1,8.8.8.8 nodhcp ip=192.168.52.114::192.168.52.1:255.255.255.0:sp1:eth0:off ngcpcrole=mgmt ngcphostname=web01a 
   echo 'Loading initrd...'
   initrd /boot/%SHORT_NAME%/initrd.img
 }
