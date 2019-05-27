@@ -15,7 +15,7 @@ label carrier##VERSION##
 label carriernw##VERSION##
   menu label sip:Carrier mgmt/web01a / ##VERSION##
   kernel /boot/%SHORT_NAME%/vmlinuz
-  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce net.ifnames=0 ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcpsp1 ngcpfillcache ngcpvers=##VERSION## dns=92.42.136.30,92.42.136.31 ngcpnonwrecfg ngcpcrole=mgmt ngcphostname=web01a nodhcp ip=192.168.52.114::192.168.52.1:255.255.255.0:sp1:eth0:off 
+  append initrd=/boot/%SHORT_NAME%/initrd.img live-media-path=/live/%GRML_NAME%/ boot=live bootid=%BOOTID% apm=power-off mgag200.modeset=0 vga=791 quiet nomce net.ifnames=0 ngcppro ssh=sipwise debianrelease=##DIST## netscript=http://deb.sipwise.com/netscript/##VERSION##/deployment.sh ngcpsp1 ngcpfillcache ngcpvers=##VERSION## dns=1.1.1.1,8.8.8.8 ngcpnonwrecfg ngcpcrole=mgmt ngcphostname=web01a nodhcp ip=192.168.52.114::192.168.52.1:255.255.255.0:sp1:eth0:off 
 
   text help
                                      Install sip:Carrier version ##VERSION##.
