@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a50d1a3_65f89c7d",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-06-10T19:53:35Z",
+      "side": 1,
+      "message": "It\u0027s still PRO specific though, do we have a rational why we don\u0027t want to do this on CE installs as well?",
+      "revId": "66f73683050d3b13a59521c511796ead3afcf87e",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
