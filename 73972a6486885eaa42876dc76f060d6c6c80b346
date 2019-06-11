@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a50d1a3_d087ecd5",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-06-11T13:19:54Z",
+      "side": 1,
+      "message": "Are you sure this still guarantees us reliable behavior as it used to be with MAC addresses?\n\nFrom a (non-sipwise!) customer of mine, the following network devices would be listed within our $NETWORK_DEVICES:\n\n  *-network DISABLED\n       description: Ethernet interface\n       product: MT27500 Family [ConnectX-3]\n       vendor: Mellanox Technologies\n       physical id: 0\n       bus info: pci@0000:06:00.0\n       logical name: ens4d1\n       version: 00\n       serial: 24:8a:07:e1:d0:71\n       size: 10Gbit/s\n       width: 64 bits\n       clock: 33MHz\n       capabilities: pm vpd msix pciexpress bus_master cap_list ethernet physical fibre\n       configuration: autonegotiation\u003doff broadcast\u003dyes driver\u003dmlx4_en driverversion\u003d4.0-0 duplex\u003dfull firmware\u003d2.34.5000 latency\u003d0 link\u003dno multicast\u003dyes speed\u003d10Gbit/s\n       resources: irq:121 memory:90200000-902fffff memory:91000000-917fffff\n  [...]\n  *-network:45 DISABLED\n       description: Ethernet interface\n       physical id: 2e\n       bus info: pci@0000:06:00.0\n       logical name: ens4\n       serial: 24:8a:07:e1:d0:70\n       size: 10Gbit/s\n       capabilities: ethernet physical fibre\n       configuration: autonegotiation\u003doff broadcast\u003dyes driver\u003dmlx4_en driverversion\u003d4.0-0 duplex\u003dfull firmware\u003d2.34.5000 link\u003dno multicast\u003dyes speed\u003d10Gbit/s\n\nBoth of those devices (ens4 + ens4d1) are attached to the same pci bus though.\nSo AFAICT we\u0027d have a naming conflict with your pciid logic/rules?",
+      "revId": "73972a6486885eaa42876dc76f060d6c6c80b346",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
