@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "3a50d1a3_a59ea405",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-06-11T08:15:03Z",
+      "side": 1,
+      "message": "\u003e It\u0027s still PRO specific though, do we have a rational why we don\u0027t\n \u003e want to do this on CE installs as well?\n\nNo, I don\u0027t have one, just inertia.  So maybe we extend this to CE, yeah.",
+      "parentUuid": "3a50d1a3_65f89c7d",
+      "revId": "66f73683050d3b13a59521c511796ead3afcf87e",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a50d1a3_c5d5f0b9",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
