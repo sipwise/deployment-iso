@@ -97,6 +97,24 @@
       "revId": "66f73683050d3b13a59521c511796ead3afcf87e",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a50d1a3_508d1c7a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-06-11T10:51:37Z",
+      "side": 1,
+      "message": "\u003e PCIID I guess? Also this will not catch all IDs, these are hex\n \u003e values.\n\nYes, thanks.\n\n \u003e In addition you might get several child entries for the\n \u003e same parent, for example on my system, for my wlan I get:\n \u003e [...]\n\nHmm, thanks for the feed-back.  I will then use ethtool, it\u0027s simpler and what Vova is using already.\n\n \u003e Also this will be dependent on the hw topology, which I assume is\n \u003e the intention?\n\nAs I understand it, it\u0027s to pin down whatever was there at installation time so the rest of the config generation (e.g. /etc/network/interfaces) continues to be correct if the devices are reshuffled on reboot, or change names.",
+      "parentUuid": "3a50d1a3_706858bb",
+      "revId": "66f73683050d3b13a59521c511796ead3afcf87e",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
