@@ -16,6 +16,52 @@
       "revId": "66f73683050d3b13a59521c511796ead3afcf87e",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a50d1a3_a5d0e4ca",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-11T07:34:22Z",
+      "side": 1,
+      "message": "pls wrap it with {}",
+      "range": {
+        "startLine": 1550,
+        "startChar": 5,
+        "endLine": 1550,
+        "endChar": 16
+      },
+      "revId": "66f73683050d3b13a59521c511796ead3afcf87e",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a50d1a3_c5d5f0b9",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1553,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-11T07:34:22Z",
+      "side": 1,
+      "message": "This var is defined above so no sense to do it",
+      "range": {
+        "startLine": 1553,
+        "startChar": 39,
+        "endLine": 1553,
+        "endChar": 41
+      },
+      "revId": "66f73683050d3b13a59521c511796ead3afcf87e",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
