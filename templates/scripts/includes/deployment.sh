@@ -1348,6 +1348,12 @@ EOF
 
 fi # if ! "$NGCP_INSTALLER" ; then
 
+cat >> /etc/debootstrap/packages << EOF
+# important packages, not being pulled in via bootstrapping variants essential/minbase
+ifupdown
+netbase
+EOF
+
 # NOTE: we use the debian.sipwise.com CNAME by intention here
 # to avoid conflicts with apt-pinning, preferring deb.sipwise.com
 # over official Debian
@@ -1422,6 +1428,15 @@ else
   esac
 fi
 
+# only install "Essential:yes" packages
+case "$DEBOOTSTRAP" in
+  mmdebstrap)
+    DEBOPT_OPTIONS+=("--variant=essential")
+    ;;
+  debootstrap)
+    DEBOPT_OPTIONS+=("--variant=minbase")
+    ;;
+esac
 
 if [[ -n "${EFI_PARTITION}" ]] ; then
   if efi_support ; then
