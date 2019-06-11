@@ -1422,6 +1422,9 @@ else
   esac
 fi
 
+# install only "Essential:yes" packages plus apt (explicitly included in minbase variant),
+# systemd + network related packages
+DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,isc-dhcp-client,ifupdown")
 
 if [[ -n "${EFI_PARTITION}" ]] ; then
   if efi_support ; then
