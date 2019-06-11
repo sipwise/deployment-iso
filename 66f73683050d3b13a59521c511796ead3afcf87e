@@ -80,6 +80,23 @@
       "revId": "66f73683050d3b13a59521c511796ead3afcf87e",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a50d1a3_706858bb",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2019-06-11T09:54:20Z",
+      "side": 1,
+      "message": "PCIID I guess? Also this will not catch all IDs, these are hex values. In addition you might get several child entries for the same parent, for example on my system, for my wlan I get:\n\n    KERNEL\u003d\u003d\"wlan0\"\n    SUBSYSTEM\u003d\u003d\"net\"\n    DRIVER\u003d\u003d\"\"\n    …\n    KERNELS\u003d\u003d\"0000:02:00.0\"\n    SUBSYSTEMS\u003d\u003d\"pci\"\n    DRIVERS\u003d\u003d\"iwlwifi\"\n    …\n    KERNELS\u003d\u003d\"0000:00:1c.3\"\n    SUBSYSTEMS\u003d\u003d\"pci\"\n    DRIVERS\u003d\u003d\"pcieport\"\n    …\n    KERNELS\u003d\u003d\"pci0000:00\"\n    SUBSYSTEMS\u003d\u003d\"\"\n    DRIVERS\u003d\u003d\"\"\n\nAlso this will be dependent on the hw topology, which I assume is the intention?",
+      "revId": "66f73683050d3b13a59521c511796ead3afcf87e",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
