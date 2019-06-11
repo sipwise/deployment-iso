@@ -1422,6 +1422,15 @@ else
   esac
 fi
 
+# only install "Essential:yes" packages
+case "$DEBOOTSTRAP" in
+  mmdebstrap)
+    DEBOPT_OPTIONS=("${DEBOPT_OPTIONS[*]} --variant=essential")
+    ;;
+  debootstrap)
+    DEBOPT_OPTIONS=("${DEBOPT_OPTIONS[*]} --variant=minbase")
+    ;;
+esac
 
 if [[ -n "${EFI_PARTITION}" ]] ; then
   if efi_support ; then
