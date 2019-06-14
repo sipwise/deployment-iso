@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a50d1a3_631731ee",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-14T09:08:22Z",
+      "side": 1,
+      "message": "JTC - in prev PS there was different variants for mmdebstrap and debootstrap. Is the current value correct?",
+      "revId": "17b50f9bab3a09a1b4c2d0067e735a11e6a7b904",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
