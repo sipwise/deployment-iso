@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a50d1a3_23360904",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-06-14T14:34:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a50d1a3_236849f5",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 6
+      },
+      "revId": "354ea7ff21164f6da083c43723fdc4a12b77f416",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a50d1a3_0363cd1b",
         "filename": "/COMMIT_MSG",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2019-06-14T14:04:48Z",
       "side": 1,
       "message": "root@spce:~# dpkg -L iputils-ping\n/bin/ping4\n/bin/ping6\n\n\nMmmm....",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 14
+      },
+      "revId": "354ea7ff21164f6da083c43723fdc4a12b77f416",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a50d1a3_c33ac5e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-06-14T14:34:36Z",
+      "side": 1,
+      "message": "Moved to metapackages (http://gerrit.mgm.sipwise.com/30697) + http://gerrit.mgm.sipwise.com/30695 + http://gerrit.mgm.sipwise.com/30696",
+      "parentUuid": "3a50d1a3_0363cd1b",
       "range": {
         "startLine": 60,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3a50d1a3_c608932b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-06-14T14:34:36Z",
+      "side": 1,
+      "message": "Moved to metapackages: http://gerrit.mgm.sipwise.com/30698",
+      "parentUuid": "3a50d1a3_83b03d8d",
+      "range": {
+        "startLine": 68,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 11
+      },
+      "revId": "354ea7ff21164f6da083c43723fdc4a12b77f416",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a50d1a3_a3ad3933",
         "filename": "/COMMIT_MSG",
         "patchSetId": 6
@@ -82,6 +154,24 @@
       "writtenOn": "2019-06-14T14:04:48Z",
       "side": 1,
       "message": "Imho the list above must be purged during the upgrade IF it is not installed on new installation after submitting this review.",
+      "revId": "354ea7ff21164f6da083c43723fdc4a12b77f416",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a50d1a3_06267bba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-06-14T14:34:36Z",
+      "side": 1,
+      "message": "ACK, moved towards TT#60553",
+      "parentUuid": "3a50d1a3_a3ad3933",
       "revId": "354ea7ff21164f6da083c43723fdc4a12b77f416",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
