@@ -16,6 +16,24 @@
       "revId": "17b50f9bab3a09a1b4c2d0067e735a11e6a7b904",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a50d1a3_83e7dd11",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-06-14T09:13:59Z",
+      "side": 1,
+      "message": "Nice paying attention :)\n\nSo, yes: Previously I tried to only install `essential` variant, which is supported by mmdebstrap but not by debootstrap. In the `essential` variant there\u0027s no apt though and mmdebstrap supports the `minbase` variant as well and that\u0027s exactly what we want, and both - debootstrap as well as mmdebstrap - support this.",
+      "parentUuid": "3a50d1a3_631731ee",
+      "revId": "17b50f9bab3a09a1b4c2d0067e735a11e6a7b904",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
