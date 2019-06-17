@@ -1,3 +1,22 @@
+ngcp-deployment-iso (7.5.0.0+0~mr7.5.0.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [9c4e3c0] TT#36350 Add image files to gitignore
+  * [4bf347e] TT#36350 Remove downloading of gpg file
+  * [1dccd1a] TT#58560 Add swapfilesize parameter
+  * [20fc45f] TT#56154 Change FORCE option to 'no'
+  * [6ee1821] TT#56154 Add variable DEPLOYMENT_SH
+
+  [ Alexander Lutay ]
+  * [d53280d] TT#54511 Switch Install CD default DNS server to public one
+
+  [ Michael Prokop ]
+  * [c7d0bff] TT#60115 Install only essential packages during Debian bootstrapping
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 17 Jun 2019 14:34:51 +0200
+
 ngcp-deployment-iso (7.4.0.0+0~mr7.4.0.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
