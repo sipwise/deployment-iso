@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a4dcd0f_dbedd38f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-06-18T13:08:04Z",
+      "side": 1,
+      "message": "Fine for me if you want to submit as is, but I\u0027d leave the case-block in place (this one and maybe the rest too), perhaps only with buster instead of stretch|buster, but leave the case-block structure because then we save time in the next cycle...\n\n(and BTW, I am not too happy that this has a fallback to sid, perhaps we should fail here, because we never use sid anyway and it means that something that we expect has gone wrong...)",
+      "revId": "d453bbf1b8a931dd1c89e67ef28130203cc3ec38",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
