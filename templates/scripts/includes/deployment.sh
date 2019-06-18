@@ -1390,14 +1390,11 @@ deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
 deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
 EOF
 
-case "$DEBIAN_RELEASE" in
-  stretch|buster)
-    if ! [ -r "/usr/share/debootstrap/scripts/${DEBIAN_RELEASE}" ] ; then
-      echo "Enabling ${DEBIAN_RELEASE} support for debootstrap via symlink to sid"
-      ln -s /usr/share/debootstrap/scripts/sid "/usr/share/debootstrap/scripts/${DEBIAN_RELEASE}"
-    fi
-    ;;
-esac
+# Debian buster specific:
+if ! [ -r "/usr/share/debootstrap/scripts/${DEBIAN_RELEASE}" ] ; then
+  echo "Enabling ${DEBIAN_RELEASE} support for debootstrap via symlink to sid"
+  ln -s /usr/share/debootstrap/scripts/sid "/usr/share/debootstrap/scripts/${DEBIAN_RELEASE}"
+fi
 
 # defaults
 DEBOPT_OPTIONS=("--keyring=${KEYRING} --no-merged-usr")
@@ -1799,11 +1796,8 @@ EOT
   grml-chroot "${TARGET}" /bin/bash /tmp/retrieve_authorized_keys.sh
 fi
 
-case "$DEBIAN_RELEASE" in
-  stretch|buster)
-    set_custom_grub_boot_options
-    ;;
-esac
+# Debian buster specific:
+set_custom_grub_boot_options
 
 vagrant_configuration() {
   # bzip2, linux-headers-amd64 and make are required for VirtualBox Guest Additions installer
@@ -2107,14 +2101,11 @@ puppet_install_from_puppet () {
 
   chroot $TARGET apt-get -y install resolvconf libnss-myhostname
 
-  case "$DEBIAN_RELEASE" in
-    stretch|buster)
-      if [ ! -x "${TARGET}/usr/bin/dirmngr" ] ; then
-        echo  "Installing dirmngr on Debian ${DEBIAN_RELEASE}, otherwise 'apt-key adv --recv-keys' is failing to fetch GPG key"
-        chroot $TARGET apt-get -y install dirmngr
-      fi
-      ;;
-  esac
+  # Debian buster specific:
+  if [ ! -x "${TARGET}/usr/bin/dirmngr" ] ; then
+    echo  "Installing dirmngr on Debian ${DEBIAN_RELEASE}, otherwise 'apt-key adv --recv-keys' is failing to fetch GPG key"
+    chroot $TARGET apt-get -y install dirmngr
+  fi
 
   echo "Installing 'puppet-agent' with dependencies"
   cat >> ${TARGET}/etc/apt/sources.list.d/puppetlabs.list << EOF
@@ -2137,12 +2128,8 @@ EOF
   chroot ${TARGET} apt-get update
   chroot ${TARGET} apt-get -y install puppet-agent openssh-server lsb-release ntpdate
 
-  # Fix Facter error while running in chroot, facter fails if /etc/mtab is absent:
-  case "$DEBIAN_RELEASE" in
-    stretch|buster)
-      chroot ${TARGET} ln -s /proc/self/mounts /etc/mtab || true
-      ;;
-  esac
+  # buster specific: Fix Facter error while running in chroot, facter fails if /etc/mtab is absent:
+  chroot ${TARGET} ln -s /proc/self/mounts /etc/mtab || true
 
   cat > ${TARGET}/etc/puppetlabs/puppet/puppet.conf<< EOF
 # This file has been created by deployment.sh
