@@ -16,6 +16,24 @@
       "revId": "d453bbf1b8a931dd1c89e67ef28130203cc3ec38",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_fb99af20",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-18T13:10:32Z",
+      "side": 1,
+      "message": "+1 about sid fallback - it looks weird",
+      "parentUuid": "1a4dcd0f_dbedd38f",
+      "revId": "d453bbf1b8a931dd1c89e67ef28130203cc3ec38",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
