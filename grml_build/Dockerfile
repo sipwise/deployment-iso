@@ -1,11 +1,11 @@
-# DOCKER_NAME=grml-build-stretch
-FROM docker.mgm.sipwise.com/sipwise-stretch:latest
+# DOCKER_NAME=grml-build-buster
+FROM docker.mgm.sipwise.com/sipwise-buster:latest
 
 # Important! Update this no-op ENV variable when this Dockerfile
 # is updated with the current date. It will force refresh of all
 # of the base images and things like `apt-get update` won't be using
 # old cached versions when the Dockerfile is built.
-ENV REFRESHED_AT 2019-02-28
+ENV REFRESHED_AT 2019-06-18
 
 RUN apt-get update && apt-get install --assume-yes \
   bc \
