@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a4dcd0f_1b81fb8f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-06-18T13:57:33Z",
+      "side": 1,
+      "message": "both words together sounds a bit redundant",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 61
+      },
+      "revId": "fc64a447af891467b5c329109d5bc33bf49e30d0",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_3b7e37af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-06-18T13:57:33Z",
+      "side": 1,
+      "message": "I am not sure what \"ngcpstatus\" means in this context, not sure if worth to explain it.",
+      "range": {
+        "startLine": 9,
+        "startChar": 14,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "fc64a447af891467b5c329109d5bc33bf49e30d0",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a4dcd0f_db495390",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1710,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-06-18T13:57:33Z",
+      "side": 1,
+      "message": "I\u0027d prefer to use something like SWAPFILE_SIZE_MB, so STATUS_WAIT_SECONDS or something which is very clear, and so there\u0027s no need to wonder and look at documentation to see if it\u0027s seconds, minutes, milliseconds, or what.",
+      "revId": "fc64a447af891467b5c329109d5bc33bf49e30d0",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
