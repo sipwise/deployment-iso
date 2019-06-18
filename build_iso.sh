@@ -19,7 +19,7 @@ SIPWISE_ISO="sip_provider_${MR}_${DATE}.iso"
 
 usage () {
   echo "Usage: $0 compat <grml.iso> <mr version> <Debian dist>"
-  echo "Sample: $0 compat 'grml64-full_2014.11.iso' mr6.2.1 stretch"
+  echo "Sample: $0 compat 'grml64-full_2014.11.iso' mr6.2.1 buster"
   exit 1
 }
 
