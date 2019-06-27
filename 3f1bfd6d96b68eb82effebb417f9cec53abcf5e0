@@ -46,6 +46,30 @@
       "revId": "3f1bfd6d96b68eb82effebb417f9cec53abcf5e0",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_f4cf78b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-06-27T16:50:58Z",
+      "side": 1,
+      "message": "\u003e Yes, you are right? Should I update commit message here?\n\nWith I am in favour I meant: The change looks good, I\u0027m in favour of what you\u0027re doing (leaving the case for future releases), better than cycling with changes of adding and removing the structure as new releases come and go.\n\nAbout the \"unnecessary\", I\u0027d fix it in the commit message, yes, but LGTM if you prefer not to, so giving +2 now if you want to keep it.",
+      "parentUuid": "fa1b9901_a9b5297f",
+      "range": {
+        "startLine": 9,
+        "startChar": 59,
+        "endLine": 9,
+        "endChar": 70
+      },
+      "revId": "3f1bfd6d96b68eb82effebb417f9cec53abcf5e0",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
