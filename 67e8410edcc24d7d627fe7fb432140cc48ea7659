@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa1b9901_644653c1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-07-02T12:18:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa1b9901_e402636f",
+      "range": {
+        "startLine": 17,
+        "startChar": 8,
+        "endLine": 17,
+        "endChar": 10
+      },
+      "revId": "67e8410edcc24d7d627fe7fb432140cc48ea7659",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa1b9901_c4e63fe8",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-07-02T11:22:05Z",
       "side": 1,
       "message": "Pls add it in a separate line DEBOPT_OPTIONS+\u003d\n\nWhy do we need it here at all? I thought the file /etc/debootstrap/etc/apt/apt.conf.d/73_acquire_retries is enough.",
+      "range": {
+        "startLine": 1440,
+        "startChar": 19,
+        "endLine": 1440,
+        "endChar": 53
+      },
+      "revId": "67e8410edcc24d7d627fe7fb432140cc48ea7659",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_84260715",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-07-02T12:18:53Z",
+      "side": 1,
+      "message": "\u003e Pls add it in a separate line DEBOPT_OPTIONS+\u003d\n \u003e \n \u003e Why do we need it here at all? I thought the file /etc/debootstrap/etc/apt/apt.conf.d/73_acquire_retries\n \u003e is enough.\n\nI just don\u0027t know if mmdebstrap honours that config file.  I also don\u0027t know if it has any effect on debootstrap either, or if it\u0027s ignored at least on the first phase, because debootstrap doesn\u0027t actually use apt -- so I think that the command line option is more important than that file.\n\nIn other words, I am trying to cover all possible cases, and having it duplicated if the values are the same, it shouldn\u0027t hurt or cause unexpected behaviour.  I suppose that at some point we will require mmdebstrap and remove all the unnecessary legacy stuff for debootstrap.",
+      "parentUuid": "fa1b9901_c4e63fe8",
       "range": {
         "startLine": 1440,
         "startChar": 19,
