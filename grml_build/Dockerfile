@@ -42,7 +42,7 @@ WORKDIR /code/grml-live
 
 RUN mkdir -p /code/grml-live/etc/grml/fai/config/files/etc/apt/sources.list.d/sipwise.list/ \
   /code/grml-live/etc/grml/fai/config/files/etc/apt/trusted.gpg.d/sipwise-keyring.gpg/ \
-  /code/grml-live/etc/grml/fai/config/files/root/puppet.gpg/
+  /code/grml-live/etc/grml/fai/config/files/etc/apt/puppet.gpg/
 
 ### Usage instructions #############################################################################
 ## Build docker image:
