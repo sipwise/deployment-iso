@@ -93,6 +93,30 @@
       "revId": "67e8410edcc24d7d627fe7fb432140cc48ea7659",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_7713675d",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-02T13:59:38Z",
+      "side": 1,
+      "message": "BTW mr7.5 is a good point to remove debootstrap completely.",
+      "parentUuid": "fa1b9901_84260715",
+      "range": {
+        "startLine": 1440,
+        "startChar": 19,
+        "endLine": 1440,
+        "endChar": 53
+      },
+      "revId": "67e8410edcc24d7d627fe7fb432140cc48ea7659",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
