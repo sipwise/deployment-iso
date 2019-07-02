@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa1b9901_e402636f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2019-07-02T11:48:29Z",
+      "side": 1,
+      "message": "I guess you meant \u0027are\u0027",
+      "range": {
+        "startLine": 17,
+        "startChar": 8,
+        "endLine": 17,
+        "endChar": 10
+      },
+      "revId": "67e8410edcc24d7d627fe7fb432140cc48ea7659",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa1b9901_c4e63fe8",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
