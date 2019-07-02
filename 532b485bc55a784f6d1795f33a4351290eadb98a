@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa1b9901_5a9c4a69",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-07-02T23:20:58Z",
+      "side": 1,
+      "message": "Who consumes that file in your opinion?",
+      "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_fa875e10",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-07-02T23:20:58Z",
+      "side": 1,
+      "message": "Are you sure mmdebstrap takes this as is (I didn\u0027t verify this but https://manpages.debian.org/testing/mmdebstrap/mmdebstrap.1.en.html is talking about --aptopt\u003d... (instead of --aptopt ....), so just checking how strict mmdebstrap actually is :))",
+      "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
