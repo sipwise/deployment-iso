@@ -321,6 +321,12 @@ ensure_packages_installed() {
   echo "deb ${DEBIAN_URL}/debian/ buster main contrib non-free" > \
     "${TMPDIR}/etc/sources.list"
 
+  mkdir -p "${TMPDIR}"/etc/apt/apt.conf.d/
+  cat > "${TMPDIR}"/etc/apt/apt.conf.d/73_acquire_retries << EOF
+# NGCP_MANAGED_FILE -- deployment.sh
+Acquire::Retries "3";
+EOF
+
   DEBIAN_FRONTEND='noninteractive' apt-get \
     -o dir::cache="${TMPDIR}/cachedir" \
     -o dir::state="${TMPDIR}/statedir" \
@@ -1425,6 +1431,8 @@ fi
 # install only "Essential:yes" packages plus apt (explicitly included in minbase variant),
 # systemd + network related packages
 DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,isc-dhcp-client,ifupdown")
+# TT#61152 Add configuration Acquire::Retries=3, for apt to retry downloads
+DEBOPT_OPTIONS+=("--aptopt='Acquire::Retries \"3\"' ")
 
 if [[ -n "${EFI_PARTITION}" ]] ; then
   if efi_support ; then
@@ -1652,6 +1660,12 @@ deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
 deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
 deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
 deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
+EOF
+
+  mkdir -p "${TARGET}"/etc/apt/apt.conf.d/
+  cat > "${TARGET}"/etc/apt/apt.conf.d/73_acquire_retries << EOF
+# NGCP_MANAGED_FILE -- deployment.sh
+Acquire::Retries "3";
 EOF
 }
 
