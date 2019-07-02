@@ -71,7 +71,6 @@ SWAPFILE_SIZE_MB_MAX="16384"
 SWAPFILE_SIZE_MB=""
 SWRAID_DEVICE="/dev/md0"
 SWRAID_DESTROY=false
-GPG_KEY_SERVER="pool.sks-keyservers.net"
 DEBIAN_REPO_HOST="debian.sipwise.com"
 DEBIAN_REPO_TRANSPORT="https"
 SIPWISE_REPO_HOST="deb.sipwise.com"
@@ -2108,32 +2107,15 @@ puppet_install_from_puppet () {
 
   chroot $TARGET apt-get -y install resolvconf libnss-myhostname
 
-  case "$DEBIAN_RELEASE" in
-    stretch|buster)
-      if [ ! -x "${TARGET}/usr/bin/dirmngr" ] ; then
-        echo  "Installing dirmngr on Debian ${DEBIAN_RELEASE}, otherwise 'apt-key adv --recv-keys' is failing to fetch GPG key"
-        chroot $TARGET apt-get -y install dirmngr
-      fi
-      ;;
-  esac
-
   echo "Installing 'puppet-agent' with dependencies"
   cat >> ${TARGET}/etc/apt/sources.list.d/puppetlabs.list << EOF
 deb ${DEBIAN_URL}/puppetlabs/ ${DEBIAN_RELEASE} main puppet5 dependencies
 EOF
 
-  PUPPET_GPG_KEY="6F6B15509CF8E59E6E469F327F438280EF8D349F"
-
-  TRY=60
-  while ! grml-chroot ${TARGET} apt-key adv --recv-keys --keyserver "${GPG_KEY_SERVER}" "${PUPPET_GPG_KEY}" ; do
-    if [ ${TRY} -gt 0 ] ; then
-      TRY=$((TRY-5))
-      echo "Waiting for gpg keyserver '${GPG_KEY_SERVER}' availability ($TRY seconds)..."
-      sleep 5
-    else
-      die "Failed to fetch GPG key '${PUPPET_GPG_KEY}' from '${GPG_KEY_SERVER}'"
-    fi
-  done
+  if [[ ! -f '/etc/apt/puppet.gpg' ]]; then
+    die "Can't find /etc/apt/puppet.gpg file"
+  fi
+  cp '/etc/apt/puppet.gpg' "${TARGET}/etc/apt/trusted.gpg.d/"
 
   chroot ${TARGET} apt-get update
   chroot ${TARGET} apt-get -y install puppet-agent openssh-server lsb-release ntpdate
