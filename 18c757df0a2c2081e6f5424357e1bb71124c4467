@@ -34,6 +34,23 @@
       "revId": "18c757df0a2c2081e6f5424357e1bb71124c4467",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_b5d817f1",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-03T15:13:50Z",
+      "side": 1,
+      "message": "Well I think we can use a simple \"if [[ -x $(which ...)\" but do we really need it?",
+      "revId": "18c757df0a2c2081e6f5424357e1bb71124c4467",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
