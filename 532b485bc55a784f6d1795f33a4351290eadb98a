@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa1b9901_7a5eee46",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-07-03T10:35:19Z",
+      "side": 1,
+      "message": "\u003e Who consumes that file in your opinion?\n\nSince debootstrap doesn\u0027t use apt ininitially, I believe that it\u0027s not used in the first phase, but:\n\n- it might be used by mmdebstrap if it reads this file (config from within that debootstrap dir)\n\n- it might be used at a later phase in systems installed by debootstrap, e.g., it might copy /etc/debootstrap/etc/apt into the target and then it would be used for some period.\n\n- even if it\u0027s not used, it\u0027s just a small amount of curft which is unused but shoudln\u0027t be harmful; and that I hope that we clean soon if we are happy with mmdebstrap and remove debootstrap (I don\u0027t think that we want to keep using both in mid-long term).\n\nSo it was a \"just in case\".  To be honest, I am cargo-culting it from the block above -- if we put sources.list in that directory, maybe apt ends up using it after all?\n\nThe documentation is not very good, even in manpage of debootstrap it\u0027s not documented the use of /etc/debootstrap.",
+      "parentUuid": "fa1b9901_5a9c4a69",
+      "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa1b9901_fa875e10",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-07-02T23:20:58Z",
       "side": 1,
       "message": "Are you sure mmdebstrap takes this as is (I didn\u0027t verify this but https://manpages.debian.org/testing/mmdebstrap/mmdebstrap.1.en.html is talking about --aptopt\u003d... (instead of --aptopt ....), so just checking how strict mmdebstrap actually is :))",
+      "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_fa175e52",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-07-03T10:35:19Z",
+      "side": 1,
+      "message": "\u003e Are you sure mmdebstrap takes this as is (I didn\u0027t verify this but\n \u003e https://manpages.debian.org/testing/mmdebstrap/mmdebstrap.1.en.html\n \u003e is talking about --aptopt\u003d... (instead of --aptopt ....), so just\n \u003e checking how strict mmdebstrap actually is :))\n\nIt works in both cases:\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n$ mmdebstrap --debug --aptopt \u0027Acquire::Retries \"666\"\u0027 unstable\n\n$ tail -v /tmp/mmdebstrap.*/etc/apt/apt.conf.d/99mmdebstrap \n\u003d\u003d\u003e /tmp/mmdebstrap.gEXoGH3y3c/etc/apt/apt.conf.d/99mmdebstrap \u003c\u003d\u003d\nAcquire::Retries \"666\";\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n$ mmdebstrap --debug --aptopt\u003d\u0027Acquire::Retries \"666\"\u0027 unstable\n\n$ tail -v /tmp/mmdebstrap.*/etc/apt/apt.conf.d/99mmdebstrap \n\u003d\u003d\u003e /tmp/mmdebstrap.Z_Sggaa0y7/etc/apt/apt.conf.d/99mmdebstrap \u003c\u003d\u003d\nAcquire::Retries \"666\";\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d",
+      "parentUuid": "fa1b9901_fa875e10",
       "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
