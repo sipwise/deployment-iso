@@ -1399,28 +1399,24 @@ case "$DEBIAN_RELEASE" in
     ;;
 esac
 
-# defaults
-DEBOPT_OPTIONS=("--keyring=${KEYRING} --no-merged-usr")
-if checkBootParam nommdebstrap ; then
-  echo "Boot option nommdebstrap found, disabling usage of mmdebstrap for installing Debian"
-else
-  # mmdebstrap is available only since buster, so ensure we're running on
-  # a buster based Grml ISO
-  case $(cat /etc/debian_version) in
-    buster*|10*)
-      echo "Using mmdebstrap for bootstrapping Debian"
-      ADDITIONAL_PACKAGES+=(mmdebstrap)
-      ensure_packages_installed
-      export DEBOOTSTRAP=mmdebstrap  # for usage with grml-debootstrap
-      # it's a no-op in mmdebstrap v0.4.1, but force its usage to not be surprised
-      # if that default should ever change
-      DEBOPT_OPTIONS=("--no-merged-usr")
-      ;;
-    *)
-      echo "NOTE: not running on top of a Debian/buster based ISO, can't enable mmdebstrap usage"
-      ;;
-  esac
-fi
+# mmdebstrap is available only since buster, so ensure we're running on
+# a buster based Grml ISO
+case $(cat /etc/debian_version) in
+  buster*|10*)
+    echo "Using mmdebstrap for bootstrapping Debian"
+    ;;
+  *)
+    die "Not running on top of a Debian/buster based ISO"
+    ;;
+esac
+
+ADDITIONAL_PACKAGES+=(mmdebstrap)
+ensure_packages_installed
+export DEBOOTSTRAP=mmdebstrap  # for usage with grml-debootstrap
+
+# it's a no-op in mmdebstrap v0.4.1, but force its usage to not be surprised
+# if that default should ever change
+DEBOPT_OPTIONS=("--no-merged-usr")
 
 # install only "Essential:yes" packages plus apt (explicitly included in minbase variant),
 # systemd + network related packages
