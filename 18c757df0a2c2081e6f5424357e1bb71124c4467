@@ -16,6 +16,24 @@
       "revId": "18c757df0a2c2081e6f5424357e1bb71124c4467",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_55773b02",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-07-03T13:51:07Z",
+      "side": 1,
+      "message": "Other alternatives:\n\n  $ rel\u003d$(cat /etc/debian_version); if [[ ${rel} \u003d~ ^[1-9][0-9]\\. ]]; then echo \"yes: ${rel}\"; fi\n  yes: 10.0\n\n  $ rel\u003d$(cat /etc/debian_version); if [[ ${rel} \u003d~ ^[0-9]{2}\\. ]]; then echo \"yes: ${rel}\"; fi\n  yes: 10.0\n\nVersions that don\u0027t match:\n\n  $ rel\u003d9.9; if [[ ${rel} \u003d~ ^[0-9]{2}\\. ]]; then echo \"yes: ${rel}\"; fi\n  [no output]\n\n  $ rel\u003d19.9; if [[ ${rel} \u003d~ ^[0-9]{2}\\. ]]; then echo \"yes: ${rel}\"; fi\n  yes: 19.9\n\n  $ rel\u003d6.9; if [[ ${rel} \u003d~ ^[0-9]{2}\\. ]]; then echo \"yes: ${rel}\"; fi\n  [no output]",
+      "parentUuid": "fa1b9901_f5876fd5",
+      "revId": "18c757df0a2c2081e6f5424357e1bb71124c4467",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
