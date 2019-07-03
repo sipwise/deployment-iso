@@ -16,6 +16,24 @@
       "revId": "95f66fa8389ea0ee9550cffa0d396712dc16f493",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_152b03ed",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-07-03T12:34:03Z",
+      "side": 1,
+      "message": "\u003e FTR, AFAICT this is mmdebstrap specific, so it will fail when\n \u003e trying to bootstrap with debootstrap?\n \u003e Should we drop support for debootstrap right now?\n\nI mentioned this in comments yesterday, if to put it under the condition that \"DEBOOTSTRAP\u003dmmdebstrap\" or equivalent.\n\nAnd yeah, it seems to break debootstrap.",
+      "parentUuid": "fa1b9901_55f2db9b",
+      "revId": "95f66fa8389ea0ee9550cffa0d396712dc16f493",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
