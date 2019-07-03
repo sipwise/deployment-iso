@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa1b9901_15ba23e2",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-07-03T11:19:30Z",
+      "side": 1,
+      "message": "/etc/debootstrap is used only by grml-debootstrap, neither by debootstrap nor mmdebstrap (no I\u0027m not happy that we used /etc/debootstrap in grml-debootstrap, FTR).\nThe change doesn\u0027t make any sense for me, that\u0027s why I\u0027m asking :)",
+      "parentUuid": "fa1b9901_7a5eee46",
+      "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa1b9901_fa875e10",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "\u003e Are you sure mmdebstrap takes this as is (I didn\u0027t verify this but\n \u003e https://manpages.debian.org/testing/mmdebstrap/mmdebstrap.1.en.html\n \u003e is talking about --aptopt\u003d... (instead of --aptopt ....), so just\n \u003e checking how strict mmdebstrap actually is :))\n\nIt works in both cases:\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n$ mmdebstrap --debug --aptopt \u0027Acquire::Retries \"666\"\u0027 unstable\n\n$ tail -v /tmp/mmdebstrap.*/etc/apt/apt.conf.d/99mmdebstrap \n\u003d\u003d\u003e /tmp/mmdebstrap.gEXoGH3y3c/etc/apt/apt.conf.d/99mmdebstrap \u003c\u003d\u003d\nAcquire::Retries \"666\";\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n$ mmdebstrap --debug --aptopt\u003d\u0027Acquire::Retries \"666\"\u0027 unstable\n\n$ tail -v /tmp/mmdebstrap.*/etc/apt/apt.conf.d/99mmdebstrap \n\u003d\u003d\u003e /tmp/mmdebstrap.Z_Sggaa0y7/etc/apt/apt.conf.d/99mmdebstrap \u003c\u003d\u003d\nAcquire::Retries \"666\";\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d",
       "parentUuid": "fa1b9901_fa875e10",
+      "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_35bf27d2",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-07-03T11:19:30Z",
+      "side": 1,
+      "message": "excellent, thanks for checking",
+      "parentUuid": "fa1b9901_fa175e52",
       "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
