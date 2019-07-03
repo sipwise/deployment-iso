@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "fa1b9901_35e2c7d6",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-07-03T12:21:22Z",
+      "side": 1,
+      "message": "\u003e /etc/debootstrap is used only by grml-debootstrap, neither by\n \u003e debootstrap nor mmdebstrap (no I\u0027m not happy that we used\n \u003e /etc/debootstrap in grml-debootstrap, FTR).\n \u003e The change doesn\u0027t make any sense for me, that\u0027s why I\u0027m asking :)\n\nNice, mistery explained!  I will remove then.",
+      "parentUuid": "fa1b9901_15ba23e2",
+      "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa1b9901_fa875e10",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 2
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "excellent, thanks for checking",
       "parentUuid": "fa1b9901_fa175e52",
+      "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_d5e6ebe7",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-07-03T12:21:22Z",
+      "side": 1,
+      "message": "I will use \u003d to decrease possible confusions or risen eyebrows :)",
+      "parentUuid": "fa1b9901_35bf27d2",
       "revId": "532b485bc55a784f6d1795f33a4351290eadb98a",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
