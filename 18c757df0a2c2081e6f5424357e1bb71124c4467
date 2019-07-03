@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa1b9901_f5876fd5",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-07-03T13:46:06Z",
+      "side": 1,
+      "message": "The file should always contain numbers, and after buster it will be \"1.\\.\" (note: it\u0027s a regex-like) for many years.  So I\u0027d compare it that way:\n\n  ^1.\\.)\n     echo \"BUSTER OR LATER, OK\"\n     ;;\n  *)\n     die \"...\"\n     ;;\n\nor the same but with:\n\n   if [[ $(cat /etc/debian_version) \u003d~ ^1.\\. ]]; then\n      ...\n\nIt more or less works because 10* in a way matches anything between \"10\" and \"19\", but still I think that it\u0027s better to be more precise, if only to remind ourselves that it\u0027s a regex.",
+      "revId": "18c757df0a2c2081e6f5424357e1bb71124c4467",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
