@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa1b9901_55f2db9b",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-07-03T12:29:42Z",
+      "side": 1,
+      "message": "FTR, AFAICT this is mmdebstrap specific, so it will fail when trying to bootstrap with debootstrap?\nShould we drop support for debootstrap right now?",
+      "revId": "95f66fa8389ea0ee9550cffa0d396712dc16f493",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
