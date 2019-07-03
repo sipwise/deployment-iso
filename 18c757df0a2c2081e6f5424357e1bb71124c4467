@@ -51,6 +51,24 @@
       "revId": "18c757df0a2c2081e6f5424357e1bb71124c4467",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_f5a3ef4d",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-07-03T16:11:33Z",
+      "side": 1,
+      "message": "\u003e Well I think we can use a simple \"if [[ -x $(which ...)\" but do we\n \u003e really need it?\n\nIt would be an option, yes.\n\nWhat I meant with the comments above are two things:\n\n1) buster is unnecessary, because those are always version numbers, nor codenames (and if it changes it would break lots of stuff, so I think that it will never change).\n\n2) The match of \"10*\" will match 100 but not the next one (11), so I think that it\u0027s better to change it for something like:\n\n  case ${rel} in [1-9][0-9].[0-9]*) echo MATCHES ;; *) echo DOESNT_MATCH ;; esac\n\nOr use the \"if expression with regexes\" in previous comments.",
+      "parentUuid": "fa1b9901_b5d817f1",
+      "revId": "18c757df0a2c2081e6f5424357e1bb71124c4467",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
