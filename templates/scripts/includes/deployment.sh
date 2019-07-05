@@ -1412,7 +1412,7 @@ DEBOPT_OPTIONS=("--no-merged-usr")
 # systemd + network related packages
 DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,isc-dhcp-client,ifupdown")
 # TT#61152 Add configuration Acquire::Retries=3, for apt to retry downloads
-DEBOPT_OPTIONS+=("--aptopt='Acquire::Retries \"3\"' ")
+DEBOPT_OPTIONS+=("--aptopt='Acquire::Retries=\"3\"' ")
 
 if [[ -n "${EFI_PARTITION}" ]] ; then
   if efi_support ; then
