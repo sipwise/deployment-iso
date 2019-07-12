@@ -2106,7 +2106,7 @@ puppet_install_from_puppet () {
 deb ${DEBIAN_URL}/puppetlabs/ ${DEBIAN_RELEASE} main puppet5 dependencies
 EOF
 
-  local puppet_gpg='/root/puppet.gpg'
+  puppet_gpg='/root/puppet.gpg'
   if [[ ! -f "${puppet_gpg}" ]]; then
     die "Can't find ${puppet_gpg} file"
   fi
