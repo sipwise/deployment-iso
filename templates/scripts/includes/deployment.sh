@@ -2101,6 +2101,15 @@ puppet_install_from_puppet () {
 
   chroot $TARGET apt-get -y install resolvconf libnss-myhostname
 
+  case "$DEBIAN_RELEASE" in
+    stretch|buster)
+      if [ ! -x "${TARGET}/usr/bin/dirmngr" ] ; then
+        echo  "Installing dirmngr on Debian ${DEBIAN_RELEASE}, otherwise the first puppet run fails: 'Could not find a suitable provider for apt_key'"
+        chroot $TARGET apt-get -y install dirmngr
+      fi
+      ;;
+  esac
+
   echo "Installing 'puppet-agent' with dependencies"
   cat >> ${TARGET}/etc/apt/sources.list.d/puppetlabs.list << EOF
 deb ${DEBIAN_URL}/puppetlabs/ ${DEBIAN_RELEASE} main puppet5 dependencies
