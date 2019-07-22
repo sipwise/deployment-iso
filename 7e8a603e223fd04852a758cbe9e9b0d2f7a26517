@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa1b9901_b9afa2e2",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 1538,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2019-07-22T07:36:09Z",
+      "side": 1,
+      "message": "Maybe tun missing?",
+      "range": {
+        "startLine": 1538,
+        "startChar": 2,
+        "endLine": 1538,
+        "endChar": 95
+      },
+      "revId": "7e8a603e223fd04852a758cbe9e9b0d2f7a26517",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
