@@ -18,6 +18,7 @@ dos2unix
 dosfstools
 e2fsprogs
 ed
+efibootmgr
 ethtool
 findutils
 gdisk
