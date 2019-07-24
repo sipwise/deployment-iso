@@ -17,6 +17,7 @@ dmsetup
 dos2unix
 dosfstools
 e2fsprogs
+efibootmgr
 ed
 ethtool
 findutils
