@@ -75,4 +75,4 @@ zip
 zsh
 
 # Sipwise specific packages
-ngcp-keyring
+ngcp-archive-keyring
