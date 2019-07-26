@@ -16,6 +16,24 @@
       "revId": "f08db1f30879c4235fa4790518d31babe876ead4",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_b299ba70",
+        "filename": "templates/boot/isolinux/isolinux.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-07-26T08:23:06Z",
+      "side": 1,
+      "message": "Done in separate commit: https://gerrit.mgm.sipwise.com/#/c/14538/",
+      "parentUuid": "7adec928_12926e57",
+      "revId": "f08db1f30879c4235fa4790518d31babe876ead4",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
