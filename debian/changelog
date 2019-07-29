@@ -1,3 +1,13 @@
+ngcp-deployment-iso (7.3.3.0+0~mr7.3.3.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [45bc822] TT#56154 Change FORCE option to 'no'
+  * [25a3476] TT#56154 Add variable DEPLOYMENT_SH
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 29 Jul 2019 18:11:51 +0200
+
 ngcp-deployment-iso (7.3.2.0+0~mr7.3.2.0) unstable; urgency=medium
 
   * New release.
