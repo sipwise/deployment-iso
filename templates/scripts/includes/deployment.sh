@@ -90,7 +90,7 @@ VIRTUALBOX_DIR="/usr/share/virtualbox"
 VIRTUALBOX_ISO="VBoxGuestAdditions_5.2.26.iso"
 VIRTUALBOX_ISO_CHECKSUM="b927c5d0d4c97a9da2522daad41fe96b616ed06bfb0c883f9c42aad2244f7c38" # sha256
 VIRTUALBOX_ISO_URL_PATH="/files/${VIRTUALBOX_ISO}"
-SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring.gpg"
+SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
 NGCP_PXE_INSTALL=false
 ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
 
@@ -169,7 +169,7 @@ debootstrap_sipwise_key() {
   cat > /etc/debootstrap/pre-scripts/install-sipwise-key.sh << EOF
 #!/bin/bash
 # installed via deployment.sh
-target_file=sipwise.gpg
+target_file=sipwise-keyring-bootstrap.gpg
 if [[ "${KEYRING}" =~ trusted.gpg\$ ]]; then
   target_file=trusted.gpg
 fi
