@@ -5,7 +5,7 @@ FROM docker.mgm.sipwise.com/sipwise-buster:latest
 # is updated with the current date. It will force refresh of all
 # of the base images and things like `apt-get update` won't be using
 # old cached versions when the Dockerfile is built.
-ENV REFRESHED_AT 2019-07-03
+ENV REFRESHED_AT 2019-08-01
 
 RUN apt-get update && apt-get install --assume-yes \
   bc \
@@ -42,6 +42,7 @@ WORKDIR /code/grml-live
 
 RUN mkdir -p /code/grml-live/etc/grml/fai/config/files/etc/apt/sources.list.d/sipwise.list/ \
   /code/grml-live/etc/grml/fai/config/files/etc/apt/trusted.gpg.d/sipwise-keyring.gpg/ \
+  /code/grml-live/etc/grml/fai/config/files/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg/ \
   /code/grml-live/etc/grml/fai/config/files/root/puppet.gpg/ \
   /code/grml-live/etc/grml/fai/config/scripts/PUPPETLABS/
 
