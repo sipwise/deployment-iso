@@ -1,3 +1,41 @@
+ngcp-deployment-iso (8.0.0.0+0~mr8.0.0.0) unstable; urgency=medium
+
+  [ Alexander Lutay ]
+  * [c53fdd6] TT#60950 Switch deployment-iso.git from stretch to buster
+  * [0f1160f] TT#60950 Switch Dockerfiles from stretch to buster (deployment-iso.git)
+  * [fd5d8c1] TT#60950 Remove stretch labels from deployment.sh (trunk is buster now)
+  * [5f5a55c] Revert "TT#60950 Remove stretch labels from deployment.sh (trunk is buster now)"
+  * [ac0ae10] TT#61152 Fix c621c376: fix apt option Acquire::Retries for mmdebstrap
+
+  [ Mykola Malkov ]
+  * [f27341e] TT#56053 Pass ngcpstatus to ngcp-initial-configuration
+  * [d41a705] TT#62000 Create a directory for puppet gpg key
+  * [3ea8662] TT#61152 Drop support of debootstrap
+  * [9c5343a] TT#62000 Add script to copy puppet.gpg key
+  * [316c28b] TT#62000 Copy puppet.gpg from Grml-sipwise image
+  * [de67225] TT#63652 Add efibootmgr package to Grml-sipwise
+  * [607fe98] TT#36350 Add new sipwise-keyring-bootstrap.gpg
+  * [fa29d3b] TT#36350 Remove old sipwise.gpg
+  * [792f767] TT#36350 Use sipwise-bootstrap-keyring.gpg file
+  * [79734fc] TT#36350 Add dir for sipwise-keyring-bootstrap.gpg file
+
+  [ Guillem Jover ]
+  * [73ca4ab] TT#61954 Update copyright years
+  * [67ac58a] TT#61954 Namespace debhelper fragment files
+  * [904c654] TT#61954 Set debhelper compat level in Build-Depends instead of debian/compat
+  * [44853fe] TT#61954 Rename ngcp-keyring to ngcp-archive-keyring
+
+  [ Manuel Montecelo ]
+  * [c621c37] TT#61152 Add configuration Acquire::Retries=3, for apt to retry downloads
+
+  [ Sergii Kipot ]
+  * [6504dad] TT#62000 Fix shellcheck error
+  * [300d09c] TT#62000 Install dirmngr package before puppet run
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 05 Aug 2019 20:53:11 +0200
+
 ngcp-deployment-iso (7.5.0.0+0~mr7.5.0.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
