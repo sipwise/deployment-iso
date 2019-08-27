@@ -105,6 +105,24 @@
       "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08c6c828_f46b29ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-08-27T16:04:25Z",
+      "side": 1,
+      "message": "Well, quoting Alex Dupuy from Google: \"Google Public DNS is a Domain Name System service, not an ICMP network testing service\" :)\n\nI also just talked to an operator of one of the biggest nameservers in Europe, they also have several thresholds in place.\n\nBTW, there\u0027s also a limit of 100 QPS (queries per second) per IP address by default on Google\u0027s public DNS. We should keep this in mind, IMO the heartbeat behavior as-is is non-sense.",
+      "parentUuid": "6d3abb34_534be88c",
+      "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
