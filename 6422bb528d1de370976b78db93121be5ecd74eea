@@ -87,6 +87,24 @@
       "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d3abb34_534be88c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-08-27T15:51:26Z",
+      "side": 1,
+      "message": "This is a victory! \\o/\n\nAFAIK heartbeat need ~120 bits in reply.",
+      "parentUuid": "6438e12b_0240f084",
+      "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
