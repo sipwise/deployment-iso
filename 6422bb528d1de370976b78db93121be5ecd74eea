@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b57e92c_5dc8f5bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-08-27T15:39:58Z",
+      "side": 1,
+      "message": "s/cause/causes/",
+      "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7333859b_72b613da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-08-27T15:39:58Z",
+      "side": 1,
+      "message": "I personally would like to see more details available in the commit message (if we have any), since that seems to be a bug of heartbeat or something on the network from my PoV (I\u0027d assume that Google\u0027s NS work pretty well, given their usage in tons of environments? :))",
+      "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    }
+  ]
+}
