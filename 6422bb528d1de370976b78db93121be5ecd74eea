@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "55029f9d_f4598737",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-08-27T15:41:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b57e92c_5dc8f5bc",
+      "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7333859b_72b613da",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-08-27T15:39:58Z",
       "side": 1,
       "message": "I personally would like to see more details available in the commit message (if we have any), since that seems to be a bug of heartbeat or something on the network from my PoV (I\u0027d assume that Google\u0027s NS work pretty well, given their usage in tons of environments? :))",
+      "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75e7b95d_b6354048",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-08-27T15:41:29Z",
+      "side": 1,
+      "message": "As DNS servers - yes.\nAs HA pingnodes - no.\nSee https://support.sipwise.com/view.php?id\u003d4823",
+      "parentUuid": "7333859b_72b613da",
       "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
