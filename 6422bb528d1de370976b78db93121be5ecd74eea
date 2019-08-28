@@ -123,6 +123,24 @@
       "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf14f71f_49c9c3f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2019-08-28T12:11:10Z",
+      "side": 1,
+      "message": "\u003e Google Public DNS is a Domain Name System service, not an ICMP network testing service.\n\nFully agree, so not blaming them.",
+      "parentUuid": "08c6c828_f46b29ba",
+      "revId": "6422bb528d1de370976b78db93121be5ecd74eea",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
