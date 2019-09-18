@@ -1,3 +1,12 @@
+ngcp-deployment-iso (7.4.2.1+0~mr7.4.2.1) unstable; urgency=medium
+
+  [ Alexander Lutay ]
+  * [0a4c143] TT#63466 TT#54511 Stop using Google DNS servers for heartbeat.pingnodes
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Wed, 18 Sep 2019 22:31:03 +0200
+
 ngcp-deployment-iso (7.4.2.0+0~mr7.4.2.0) unstable; urgency=medium
 
   * New release.
