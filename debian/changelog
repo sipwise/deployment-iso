@@ -1,3 +1,12 @@
+ngcp-deployment-iso (6.5.7.0+0~mr6.5.7.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [6fc40e9] TT#65055 Do not rely on apt sources.list setup of live system
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Thu, 19 Sep 2019 17:59:03 +0200
+
 ngcp-deployment-iso (6.5.6.0+0~mr6.5.6.0) unstable; urgency=medium
 
   * New release.
