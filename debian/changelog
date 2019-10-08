@@ -1,3 +1,18 @@
+ngcp-deployment-iso (8.1.0.0+0~mr8.1.0.0) unstable; urgency=medium
+
+  [ Alexander Lutay ]
+  * [310752a] TT#63466 TT#54511 Stop using Google DNS servers for heartbeat.pingnodes
+
+  [ Manuel Montecelo ]
+  * [d3c7919] TT#53682 Assign eth* devices by PCIID
+
+  [ Sergii Kipot ]
+  * [5ab865f] Revert "TT#35952 Freeze puppet version to v5.5"
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 08 Oct 2019 09:06:29 +0200
+
 ngcp-deployment-iso (8.0.0.0+0~mr8.0.0.0) unstable; urgency=medium
 
   [ Alexander Lutay ]
