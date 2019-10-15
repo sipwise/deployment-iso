@@ -1568,12 +1568,8 @@ get_installer_path() {
   fi
 
   # use pool directory according for ngcp release
-  if "$PRO_EDITION" ; then
-    if "$CARRIER_EDITION" ; then
-      local installer_package='ngcp-installer-carrier'
-    else
-      local installer_package='ngcp-installer-pro'
-    fi
+  if "${PRO_EDITION}" || "${CARRIER_EDITION}" ; then
+    local installer_package='ngcp-installer-pro'
     local repos_base_path="${SIPWISE_URL}/sppro/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
     INSTALLER_PATH="${SIPWISE_URL}/sppro/${SP_VERSION}/pool/main/n/ngcp-installer/"
   else
@@ -1617,9 +1613,7 @@ get_installer_path() {
 
   [ -n "$version" ] || die "Error: installer version for ngcp ${SP_VERSION}, Debian release $DEBIAN_RELEASE with installer package $installer_package could not be detected."
 
-  if "$CARRIER_EDITION" ; then
-    INSTALLER="ngcp-installer-carrier_${version}_all.deb"
-  elif "$PRO_EDITION" ; then
+  if "${PRO_EDITION}" || "${CARRIER_EDITION}" ; then
     INSTALLER="ngcp-installer-pro_${version}_all.deb"
   else
     INSTALLER="ngcp-installer-ce_${version}_all.deb"
@@ -1652,6 +1646,27 @@ gen_installer_config () {
   local conf_file
   conf_file="${TARGET}/etc/ngcp-installer/config_deploy.inc"
   truncate -s 0 "${conf_file}"
+
+  if "${CARRIER_EDITION}" ; then
+    cat >> "${conf_file}" << EOF
+CARRIER=true
+PRO=false
+CE=false
+EOF
+  elif "${PRO_EDITION}" ; then
+    cat >> "${conf_file}" << EOF
+CARRIER=false
+PRO=true
+CE=false
+EOF
+  elif "${CE_EDITION}" ; then
+    cat >> "${conf_file}" << EOF
+CARRIER=false
+PRO=false
+CE=true
+EOF
+  fi
+
   if "${CARRIER_EDITION}" ; then
     cat >> "${conf_file}" << EOF
 CROLE="${CROLE}"
