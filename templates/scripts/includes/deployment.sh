@@ -1772,8 +1772,8 @@ EOT
 
   echo "Temporary files cleanup ..."
   find "${TARGET}/var/log" -type f -size +0 -not -name \*.ini -not -name ngcp-installer.log -exec sh -c ":> \${1}" sh {} \;
-  :>$TARGET/var/run/utmp
-  :>$TARGET/var/run/wtmp
+  :>$TARGET/run/utmp
+  :>$TARGET/run/wtmp
 
   echo "Backup grml-debootstrap.log for later investigation ..."
   if [ -r /tmp/grml-debootstrap.log ] ; then
