@@ -22,6 +22,30 @@
       "revId": "ed8097151c99968c7a5f8fdc1cfa0a9961c009fe",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56adbc0a_1c1a0b9a",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1777,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2019-10-23T12:58:42Z",
+      "side": 1,
+      "message": "Clearing the [wu]tmp files? If so I don\u0027t really know TBH.",
+      "parentUuid": "6531a503_4af90082",
+      "range": {
+        "startLine": 1776,
+        "startChar": 20,
+        "endLine": 1777,
+        "endChar": 0
+      },
+      "revId": "ed8097151c99968c7a5f8fdc1cfa0a9961c009fe",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
