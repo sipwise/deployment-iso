@@ -1,0 +1,101 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+usage_information() {
+  local PN
+  PN="$(basename "$0")"
+
+  echo "${PN}: tool to boot an ISO, generate a screenshot of the system,"
+  echo "and optionally compare the screenshot against a reference image"
+  echo
+  echo "Usage: ${PN} <filename.iso> <screenshot.jpg> [<screenshot_compare.jpg>]" >&2
+  echo
+  echo "Usage examples:
+
+  ${PN} ./sip_provider_mr7.5.1.iso /tmp/screenshot.jpg
+
+  ${PN} ./sip_provider_mr7.5.1.iso /tmp/memtest.jpg ./t/screenshots/01-memtest.jpg
+  "
+}
+
+if [ $# -lt 2 ] ; then
+  usage_information >&2
+  exit 1
+fi
+
+ISO="$1"
+SCREENSHOT="$2"
+
+if [ -n "${3:-}" ] ; then
+  SCREENSHOT_COMPARE="$3"
+fi
+
+QEMU_MONITOR=$(mktemp)
+SCREENDUMP=$(mktemp)
+
+send_command() {
+  echo "$*" | socat - UNIX-CONNECT:"${QEMU_MONITOR}"
+  # this is necessary to give the system some time to execute it before receiving the next command
+  sleep 0.1
+}
+
+if [[ ! -x "$(which qemu-system-x86_64)" ]] || [[ ! -x "$(which socat)" ]] || [[ ! -x "$(which convert)" ]]; then
+  # only install tools automatically inside docker environment
+  if [ -e /.dockerinit ] || [ -e /.dockerenv ] ; then
+    apt-get update
+    apt-get install --assume-yes --no-install-recommends socat qemu-system-x86 imagemagick
+  else
+    echo "Please make sure to have socat qemu-system-x86 imagemagick available, not automatically installing them." >&2
+    exit 1
+  fi
+fi
+
+qemu-system-x86_64 -display none -monitor unix:"${QEMU_MONITOR}",server,nowait -boot order=d -m 128 -cdrom "${ISO}" &
+PID=$!
+echo "qemu process running as PID $PID"
+
+# ensure the qemu process is ready for receiving commands
+sleep 1
+
+send_command "sendkey down"
+send_command "sendkey down"
+send_command "sendkey down"
+send_command "sendkey down"
+send_command "sendkey down"
+send_command "sendkey down"
+send_command "sendkey ret"
+send_command "sendkey down"
+send_command "sendkey ret"
+send_command "screendump ${SCREENDUMP}"
+send_command "quit"
+
+rm -f "${QEMU_MONITOR}"
+
+if ! [ -f "${SCREENDUMP}" ] ; then
+  echo "Failed to generated screenshot file, bailing out." >&2
+  kill "$PID" || true
+  exit 1
+fi
+
+convert "${SCREENDUMP}" "${SCREENSHOT}"
+echo "Generated screenshot file ${SCREENSHOT}"
+rm -f "${SCREENDUMP}"
+
+if ! [ -x ./screenshot-compare ] ; then
+  wget https://michael-prokop.at/sipwise/screenshot-compare # FIXME
+  chmod 755 ./screenshot-compare
+fi
+
+mkdir -p reports
+if [ -n "${SCREENSHOT_COMPARE:-}" ] ; then
+  echo "Comparing ${SCREENSHOT} against ${SCREENSHOT_COMPARE}"
+  if ./screenshot-compare "${SCREENSHOT}" "${SCREENSHOT_COMPARE}" ; then
+    echo "Looks like ${SCREENSHOT} and ${SCREENSHOT_COMPARE} are looking similar enough."
+    echo "1..0" > ./reports/screenshot.tap
+  else
+    echo "Looks like ${SCREENSHOT} and ${SCREENSHOT_COMPARE} are NOT looking similar enough."
+    echo "1..1" > ./reports/screenshot.tap
+    echo "not ok 1  ${SCREENSHOT} and ${SCREENSHOT_COMPARE} don't look similar enough" >> ./reports/screenshot.tap
+  fi
+fi
