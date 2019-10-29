@@ -88,10 +88,18 @@ echo "*** Copying isolinux.cfg to syslinux.cfg for grml2usb support ***"
 cp ${TEMPLATES}/boot/isolinux/isolinux.cfg ${TEMPLATES}/boot/isolinux/syslinux.cfg
 
 echo "*** Generating Sipwise ISO ***"
-sudo /usr/sbin/grml2iso -c ./${TEMPLATES} -o "${SIPWISE_ISO}" "${GRML_ISO}"
 
-echo "*** Generating dd-able ISO ***"
-sudo /usr/bin/isohybrid "${SIPWISE_ISO}"
+if ! [ -d grml2usb.git ] ; then
+  #GRML2USB_VERSION='v0.17.0' # FIXME
+  GRML2USB_VERSION='mika/sipwise'
+  if ! git clone -b "${GRML2USB_VERSION}" --single-branch --depth 1 https://github.com/grml/grml2usb grml2usb.git ; then
+    echo "Cloning grml2usb from github failed, falling back to git.grml.org"
+    git clone -b "${GRML2USB_VERSION}" --single-branch --depth 1 git://git.grml.org/grml2usb.git
+  fi
+fi
+GRML2USB_DIR=$(pwd)/grml2usb.git
+
+sudo GRML2USB="${GRML2USB_DIR}/grml2usb" "${GRML2USB_DIR}/grml2iso" -c ./${TEMPLATES} -o "${SIPWISE_ISO}" "${GRML_ISO}"
 
 sudo implantisomd5 "${SIPWISE_ISO}"
 
@@ -102,5 +110,8 @@ md5sum  "${SIPWISE_ISO}" > "${SIPWISE_ISO}.md5"
 mkdir -p artifacts
 echo "*** Moving ${SIPWISE_ISO} ${SIPWISE_ISO}.sha1 ${SIPWISE_ISO}.md5 to artifacts/ ***"
 mv "${SIPWISE_ISO}" "${SIPWISE_ISO}.sha1" "${SIPWISE_ISO}.md5" artifacts/
+
+# FIXME
+docker run --rm -i -t --privileged -v $(pwd):/code/ docker.mgm.sipwise.com/deployment-iso-buster:I67e3f85bbe86bd1b3ee709161504b5250ca5d7fe /code/t/iso-tester /code/artifacts/${SIPWISE_ISO} /code/artifacts/memtest.jpg /code/t/screenshots/01-memtest.jpg
 
 popd &>/dev/null
