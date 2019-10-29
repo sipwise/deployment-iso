@@ -1,0 +1,72 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+if [ $# -lt 2 ] ; then
+  echo "Usage: $0 <filename.iso> <screenshot.jpg> [<screenshot_compare.jpg>]" >&2
+  echo
+  echo "Usage example:
+
+  $0 /dev/shm/sip_provider_mr7.5.1.iso /tmp/memtest.jpg ./t/screenshots/01-memtest.jpg
+  "
+  exit 1
+fi
+
+ISO="$1"
+SCREENSHOT="$2"
+
+if [ -n "${3:-}" ] ; then
+  SCREENSHOT_COMPARE="$3"
+fi
+
+QEMU_MONITOR=$(mktemp)
+SCREENDUMP=$(mktemp)
+
+send_command() {
+  echo "$*" | socat - UNIX-CONNECT:"${QEMU_MONITOR}"
+  sleep 0.1
+}
+
+if [[ ! -x "$(which qemu-system-x86_64)" ]] || [[ ! -x "$(which socat)" ]] || [[ ! -x "$(which convert)" ]]; then
+  sudo apt-get update
+  sudo apt-get install --assume-yes --no-install-recommends socat qemu-system-x86 imagemagick
+fi
+
+qemu-system-x86_64 -display none -monitor unix:"${QEMU_MONITOR}",server,nowait -boot order=d -m 128 -cdrom "${ISO}" &
+PID=$!
+echo "Qemu process number: $PID"
+
+sleep 1
+
+send_command "sendkey down"
+send_command "sendkey down"
+send_command "sendkey down"
+send_command "sendkey down"
+send_command "sendkey down"
+send_command "sendkey down"
+send_command "sendkey ret"
+send_command "sendkey down"
+send_command "sendkey ret"
+send_command "screendump ${SCREENDUMP}"
+send_command "quit"
+
+rm -f "${QEMU_MONITOR}"
+
+if ! [ -f "${SCREENDUMP}" ] ; then
+  echo "Failed to generated screenshot file, bailing out." >&2
+  kill "$PID" || true
+  exit 1
+fi
+
+convert "${SCREENDUMP}" "${SCREENSHOT}"
+echo "Generated screenshot file ${SCREENSHOT}"
+rm -f "${SCREENDUMP}"
+
+wget https://michael-prokop.at/sipwise/screenshot-compare # FIXME
+chmod 755 ./screenshot-compare
+
+if [ -n "${SCREENSHOT_COMPARE:-}" ] ; then
+  echo "Comparing ${SCREENSHOT} against ${SCREENSHOT_COMPARE}"
+  ./screenshot-compare "${SCREENSHOT}" "${SCREENSHOT_COMPARE}"
+  echo "Looks like ${SCREENSHOT} and ${SCREENSHOT_COMPARE} are looking similar enough."
+fi
