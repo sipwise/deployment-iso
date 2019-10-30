@@ -1,3 +1,12 @@
+ngcp-deployment-iso (8.0.1.2+0~mr8.0.1.2) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [97a29f0] TT#54410 Update expiration date of F411A836
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Wed, 30 Oct 2019 08:46:54 +0100
+
 ngcp-deployment-iso (8.0.1.1+0~mr8.0.1.1) unstable; urgency=medium
 
   * New release.
