@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4973705_da2d14e6",
+        "filename": "build_iso.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-31T10:05:33Z",
+      "side": 1,
+      "message": "Just a style nitpick\n\nif [[ ! -d",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 31
+      },
+      "revId": "00e2a28d60b829e8fb85ad987ee538bd13709bc6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    }
+  ]
+}
