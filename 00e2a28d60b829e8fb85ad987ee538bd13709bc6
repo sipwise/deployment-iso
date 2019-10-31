@@ -22,6 +22,23 @@
       "revId": "00e2a28d60b829e8fb85ad987ee538bd13709bc6",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "157b0b18_4a959841",
+        "filename": "grml_build/Dockerfile",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-10-31T10:08:15Z",
+      "side": 1,
+      "message": "We need to merge RUN commands to reduce the number of layers",
+      "revId": "00e2a28d60b829e8fb85ad987ee538bd13709bc6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
