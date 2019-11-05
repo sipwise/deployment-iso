@@ -81,6 +81,24 @@
       "revId": "00e2a28d60b829e8fb85ad987ee538bd13709bc6",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f14130b_3d57657b",
+        "filename": "grml_build/Dockerfile",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-11-05T11:37:41Z",
+      "side": 1,
+      "message": "\u003e What exactly do you want to merge here?\n\nI mean merge \"apt-get install\" part, \".bash_history\" part, some commands from \"base build tools\" and \"addons\" can be merged also.\n\n\u003e Keeping the building vs testing tools logically separate makes sense, nor?\n\nNormally yes but in this very case docker creates a lot of unnecessary layers (every RUN command means + 1 layer) so docker best practice recommends to group them.",
+      "parentUuid": "aee51627_b73318cb",
+      "revId": "00e2a28d60b829e8fb85ad987ee538bd13709bc6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
