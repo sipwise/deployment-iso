@@ -99,6 +99,24 @@
       "revId": "00e2a28d60b829e8fb85ad987ee538bd13709bc6",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b447da1a_5789f65e",
+        "filename": "grml_build/Dockerfile",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-05T12:28:04Z",
+      "side": 1,
+      "message": "Agreed. We should reduce the layers if we can.",
+      "parentUuid": "9f14130b_3d57657b",
+      "revId": "00e2a28d60b829e8fb85ad987ee538bd13709bc6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
