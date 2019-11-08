@@ -117,6 +117,24 @@
       "revId": "00e2a28d60b829e8fb85ad987ee538bd13709bc6",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d6ef237_5d6c7d12",
+        "filename": "grml_build/Dockerfile",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2019-11-08T08:50:16Z",
+      "side": 1,
+      "message": "Ok, I \"merged\" as much as possible now, but be aware that we use \"--no-install-recommends\" now also for the build tools (non-testing stuff), so we *might* be missing some tools, though this should be easy to fix",
+      "parentUuid": "b447da1a_5789f65e",
+      "revId": "00e2a28d60b829e8fb85ad987ee538bd13709bc6",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
