@@ -93,7 +93,8 @@ VIRTUALBOX_DIR="/usr/share/virtualbox"
 VIRTUALBOX_ISO="VBoxGuestAdditions_5.1.26.iso"
 VIRTUALBOX_ISO_CHECKSUM="6df8c8ab6e7ac3a70a5e29116f8a5dcdb7dfbd0b226ef849a5cd9502e956b06f" # sha256
 VIRTUALBOX_ISO_URL_PATH="/files/${VIRTUALBOX_ISO}"
-SIPWISE_APT_KEY_CHECKSUM="f4cdbe4994ae8ca6c4b24eb164e82a20579b335da4eca0907ecaace832e9a0a7" # sha256
+SIPWISE_APT_KEY_CHECKSUM_OLD="f4cdbe4994ae8ca6c4b24eb164e82a20579b335da4eca0907ecaace832e9a0a7" # sha256
+SIPWISE_APT_KEY_CHECKSUM_NEW="c3b8271ec7cfd8debfd3ffcb1604a952cdf8c1033511e449684658c866eff6d8" # sha256
 SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise.gpg"
 # overriden later, although since the checksum is the same we could use this URL
 # also for Pro/Carrier installations
@@ -196,7 +197,8 @@ install_sipwise_key() {
     wget --retry-connrefused --no-verbose -O "${SIPWISE_APT_KEY_PATH}" "${SIPWISE_URL}${SIPWISE_APT_KEY_URL_PATH}"
     sipwise_key_checksum=$(sha256sum "${SIPWISE_APT_KEY_PATH}" | awk '{print $1}')
 
-    if [ "${sipwise_key_checksum}" != "${SIPWISE_APT_KEY_CHECKSUM}" ] ; then
+    if [[ "${sipwise_key_checksum}" != "${SIPWISE_APT_KEY_CHECKSUM_OLD}" || \
+          "${sipwise_key_checksum}" != "${SIPWISE_APT_KEY_CHECKSUM_NEW}" ]] ; then
       echo "Sipwise keyring downloaded has wrong checksum (expected: [${SIPWISE_APT_KEY_CHECKSUM}] - got: [${sipwise_key_checksum}]), retry $try" >&2
     else
       echo "Sipwise keyring downloaded with expected checksum (sha256sum: [${SIPWISE_APT_KEY_CHECKSUM}]), debootstrap sipwise key"
