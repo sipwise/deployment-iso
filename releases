@@ -10,7 +10,8 @@ mr6.0,stretch,yes,.
 mr6.0.2,stretch,yes,.
 mr6.0.1,stretch,yes,.
 mr5.5,stretch,yes,.
-mr5.5.10,stretch,yes,LTS
+mr5.5.11,stretch,yes,LTS
+mr5.5.10,stretch,yes,.
 mr5.5.9,stretch,yes,.
 mr5.5.8,stretch,yes,.
 mr5.5.7,stretch,yes,.
