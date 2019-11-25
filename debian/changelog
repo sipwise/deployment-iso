@@ -1,3 +1,18 @@
+ngcp-deployment-iso (8.2.0.0+0~mr8.2.0.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [ae3ba8b] TT#54410 Update expiration date of F411A836
+
+  [ Guillem Jover ]
+  * [ed80971] TT#51701 Switch from deprecated /var/run to /run
+
+  [ Michael Prokop ]
+  * [c3d7535] TT#69504 Support ISO addons, rework build environment + provide initial tests
+
+  [ Sipwise Jenkins Builder ]
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 25 Nov 2019 14:53:09 +0100
+
 ngcp-deployment-iso (8.1.0.0+0~mr8.1.0.0) unstable; urgency=medium
 
   [ Alexander Lutay ]
