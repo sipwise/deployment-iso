@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84070247_ba630750",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2019-12-02T20:32:39Z",
+      "side": 1,
+      "message": "Maybe ${ROOTFS_SIZE:-8G}, or if empty exit with error?\n\nAs it is, it can be empty and there\u0027s no \"set -u\", so it\u0027s slightly dangerous.",
+      "range": {
+        "startLine": 1266,
+        "startChar": 21,
+        "endLine": 1266,
+        "endChar": 32
+      },
+      "revId": "9b468b3ce7341c76fc7465fd934877e0c8b59547",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    }
+  ]
+}
