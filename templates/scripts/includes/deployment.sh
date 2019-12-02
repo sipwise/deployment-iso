@@ -1263,7 +1263,7 @@ create_ngcp_partitions() {
 
 create_debian_partitions() {
   # rootfs
-  local root_size=8G
+  local root_size="${ROOTFS_SIZE:-8G}"
   echo "Creating LV root with ${root_size}"
   lvcreate --yes -n root -L "${root_size}" "${VG_NAME}"
 
