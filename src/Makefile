@@ -4,12 +4,14 @@ CPPFLAGS ?=
 CPPFLAGS += -DPACKAGE_VERSION="\"$(PACKAGE_VERSION)\""
 
 CFLAGS ?= -ggdb -O2 -Wall -Wextra -Wno-unused-parameter
-CFLAGS += -fPIC -ldl -fvisibility=hidden
+CFLAGS += -fPIC -fvisibility=hidden
+LDLIBS ?=
+LDLIBS += -ldl
 
 PLUGIN = fake-uname.so
 
 $(PLUGIN): fake-uname.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ -shared $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $< $(LDLIBS) -o $@ -shared
 
 UNAME_CHECK = LD_PRELOAD="$(CURDIR)/$(PLUGIN)" uname
 
