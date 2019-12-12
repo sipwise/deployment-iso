@@ -1,0 +1,8 @@
+Verified+1: Jenkins Jenkins
+Code-Review+1: Oleksandr Lutai <alutay@sipwise.com>
+Code-Review+2: Mykola Malkov <mmalkov@sipwise.com>
+Submitted-by: Michael Prokop <mprokop@sipwise.com>
+Submitted-at: Thu, 12 Dec 2019 10:48:38 +0100
+Reviewed-on: http://gerrit.mgm.sipwise.com/c/deployment-iso/+/36030
+Project: deployment-iso
+Branch: refs/heads/mr8.0
