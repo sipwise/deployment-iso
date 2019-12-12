@@ -1,3 +1,11 @@
+ngcp-deployment-iso (6.5.7.1+0~mr6.5.7.1) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [07362bb] TT#54410 Update expiration date of F411A836
+  * [dd089aa] TT#54410 Update possible checksum of sipwise.gpg key
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Thu, 12 Dec 2019 11:59:31 +0100
+
 ngcp-deployment-iso (6.5.7.0+0~mr6.5.7.0) unstable; urgency=medium
 
   [ Michael Prokop ]
