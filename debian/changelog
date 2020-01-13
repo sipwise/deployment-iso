@@ -1,3 +1,13 @@
+ngcp-deployment-iso (8.0.2.1+0~mr8.0.2.1) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [efd520f] TT#54410 Update expiration date of F411A836
+
+  [ Michael Prokop ]
+  * [d1f1a45] TT#69504 Support ISO addons, rework build environment + provide initial tests
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 13 Jan 2020 15:16:40 +0100
+
 ngcp-deployment-iso (8.0.2.0+0~mr8.0.2.0) unstable; urgency=medium
 
   * New release.
