@@ -22,6 +22,30 @@
       "revId": "608dd0367453242404e84bf0a8fc7d6fdb36d9b7",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58ab5d64_4e715aef",
+        "filename": "build_iso.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-01-14T08:24:16Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you\u0027re trying to tell me :)\nI\u0027m just trying to solve TT#73210 where Alex couldn\u0027t build e.g. mr6.5.7 ISO.",
+      "parentUuid": "b3cae001_606f5fef",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 30
+      },
+      "revId": "608dd0367453242404e84bf0a8fc7d6fdb36d9b7",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
