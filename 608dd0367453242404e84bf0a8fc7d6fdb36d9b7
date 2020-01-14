@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3cae001_606f5fef",
+        "filename": "build_iso.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-14T08:22:10Z",
+      "side": 1,
+      "message": "I guess it\u0027s not necessary. grml64-small_2018.04.11-efi is base image for \u003cmr7.1 so we can skip fallback here.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 30
+      },
+      "revId": "608dd0367453242404e84bf0a8fc7d6fdb36d9b7",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    }
+  ]
+}
