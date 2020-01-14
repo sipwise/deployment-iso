@@ -70,6 +70,30 @@
       "revId": "608dd0367453242404e84bf0a8fc7d6fdb36d9b7",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e487ade7_db1ba29f",
+        "filename": "build_iso.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-01-14T16:19:34Z",
+      "side": 1,
+      "message": "Ah I see, thanks for the info. But I think we should add this to master and then cherry-pick to the according branches, nor?",
+      "parentUuid": "8c658fd2_c1b2806e",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 30
+      },
+      "revId": "608dd0367453242404e84bf0a8fc7d6fdb36d9b7",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
