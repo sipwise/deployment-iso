@@ -38,6 +38,10 @@ if checkBootParam ngcppro ; then
     SIPWISE_REPO_HOST=$(getBootParam sipwiserepo)
   fi
 
+  if checkBootParam 'ngcprescue' ; then
+    exit 0
+  fi
+
   URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/"
   err_message="You are installing Pro/Carrier version but ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/ repository not accessible. Please contact support@sipwise.com"
   while ! wget -q -T 10 -O /dev/null "${URL}" ; do
