@@ -93,6 +93,7 @@ VIRTUALBOX_ISO_URL_PATH="/files/${VIRTUALBOX_ISO}"
 SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
 NGCP_PXE_INSTALL=false
 ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
+NGCP_RESCUE=false
 
 
 ### helper functions {{{
@@ -684,6 +685,21 @@ if checkBootParam 'swapfilesize=' ; then
   SWAPFILE_SIZE_MB=$(getBootParam swapfilesize)
 fi
 
+if checkBootParam 'ngcprescue' ; then
+  NGCP_RESCUE=true
+fi
+
+if "${NGCP_RESCUE}" ; then
+  DEBIAN_REPO_TRANSPORT='http'
+  SIPWISE_REPO_TRANSPORT='http'
+  DEBIAN_REPO_HOST='sp:9998'
+  SIPWISE_REPO_HOST='sp:9998'
+  if "${CARRIER_EDITION}" ; then
+    DEBIAN_REPO_HOST='web01:9998'
+    SIPWISE_REPO_HOST='web01:9998'
+  fi
+fi
+
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
 
@@ -730,6 +746,8 @@ Control target system:
   ngcpnetmask=...  - netmask of ha_int interface
   ngcpeaddr=...    - Cluster IP address
   swapfilesize=... - size of swap file in megabytes
+  ngcprescue       - use to install node from existing one
+                     The packages will be installed from the shared address of the installation
 
 The command line options correspond with the available bootoptions.
 Command line overrides any present bootoption.
@@ -780,6 +798,7 @@ for param in "$@" ; do
     *ngcpvlanrtpext*) VLAN_RTP_EXT="${param//ngcpvlanrtpext=/}";;
     *ngcpppa*) NGCP_PPA="${param//ngcpppa=/}";;
     *swapfilesize*) SWAPFILE_SIZE_MB="${param//swapfilesize=/}";;
+    *ngcprescue*) NGCP_RESCUE=true;;
   esac
   shift
 done
