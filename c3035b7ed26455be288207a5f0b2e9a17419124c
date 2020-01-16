@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e7269e7_13c5fc77",
+        "filename": "isolinux.cfg",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-01-16T07:40:20Z",
+      "side": 1,
+      "message": "The label should be unique, while this label is already present in line 89",
+      "revId": "c3035b7ed26455be288207a5f0b2e9a17419124c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    }
+  ]
+}
