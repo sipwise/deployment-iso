@@ -118,6 +118,30 @@
       "revId": "608dd0367453242404e84bf0a8fc7d6fdb36d9b7",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d4fbf14_f8fab258",
+        "filename": "build_iso.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-01-17T16:49:49Z",
+      "side": 1,
+      "message": "Honestly I am not 100% sure here.\nProbably it is really necessary in old releases.\nI am not sure, will it do harm in trunk?\n\n\nIMHO we can submit it AS IS, to have clean cherry-picking history and\nadd one more commit where we clean trunk repo from legacy part. $0.05",
+      "parentUuid": "e0f6d310_953b8917",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 30
+      },
+      "revId": "608dd0367453242404e84bf0a8fc7d6fdb36d9b7",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
