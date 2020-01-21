@@ -13,6 +13,7 @@ TEMPLATES="templates"
 GRML_URL="${GRML_URL:-https://deb.sipwise.com/files/grml/}"
 GRML_HASH_URL="${GRML_HASH_URL:-https://deb.sipwise.com/files/grml/}"
 SIPWISE_ISO="sip_provider_${MR}_${DATE}.iso"
+GRML2USB_VERSION='v0.17.0'
 
 usage () {
   echo "Usage: $0 compat <grml.iso> <mr version> <Debian dist>"
@@ -46,6 +47,12 @@ else
 fi
 
 echo "*** Building ${MR} ISO ***"
+case "${GRML_ISO}" in
+  grml64-small_2018.04.11-efi*)
+    GRML2USB_VERSION='v0.14.14'
+    echo "*** NOTE: identified Grml ISO ${GRML_ISO}, falling back to grml2usb version ${GRML2USB_VERSION} for building"
+    ;;
+esac
 
 echo "*** Retrieving Grml ISO [${GRML_ISO}] ***"
 # shellcheck disable=SC2086
@@ -77,7 +84,6 @@ cp ${TEMPLATES}/boot/isolinux/isolinux.cfg ${TEMPLATES}/boot/isolinux/syslinux.c
 echo "*** Generating Sipwise ISO ***"
 
 if [[ ! -d grml2usb.git ]] ; then
-  GRML2USB_VERSION='v0.17.0'
   if ! git clone -b "${GRML2USB_VERSION}" --single-branch --depth 1 https://github.com/grml/grml2usb grml2usb.git ; then
     echo "Cloning grml2usb from github failed, falling back to git.grml.org"
     git clone -b "${GRML2USB_VERSION}" --single-branch --depth 1 git://git.grml.org/grml2usb.git
