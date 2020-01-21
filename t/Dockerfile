@@ -19,13 +19,13 @@ WORKDIR /code/
 # When you want to build the base image from scratch
 # jump to the next section if you don't want to build yourself!:
 #
-# % docker build --tag="lua-ngcp-kamailio-stretch" -f t/Dockerfile .
-# % docker run --rm -i -t -v $(pwd):/code:rw lua-ngcp-kamailio-stretch:latest bash
+# % docker build --tag="deployment-iso-buster" -f t/Dockerfile .
+# % docker run --rm -i -t -v $(pwd):/code:rw deployment-iso-buster:latest bash
 #
 # Use the existing docker image:
-# % docker pull docker.mgm.sipwise.com/lua-ngcp-kamailio-stretch
+# % docker pull docker.mgm.sipwise.com/deployment-iso-buster
 # NOTE: run the following command from root folder of git repository:
-# % docker run --rm -i -t -v $(pwd):/code:rw docker.mgm.sipwise.com/lua-ngcp-kamailio-stretch:latest bash
+# % docker run --rm -i -t -v $(pwd):/code:rw docker.mgm.sipwise.com/deployment-iso-buster:latest bash
 #
 # Inside docker (the command is in history, just press UP button):
 #   ./t/testrunner
