@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c6d3e870_aa43b546",
+        "filename": "grub.cfg",
+        "patchSetId": 8
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-01-22T14:16:40Z",
+      "side": 1,
+      "message": "while we are here (noticed on pictures in documentation.git review),\nwhy do we have (%VERSION%) here?\n\nIMHO it is confusing and unnecessary here. Isn\u0027t it?",
+      "range": {
+        "startLine": 6,
+        "startChar": 30,
+        "endLine": 6,
+        "endChar": 41
+      },
+      "revId": "79b3d040f7e6572229ab388b9d105c2c5a01d13c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d50cf351_4c191bbd",
         "filename": "isolinux.cfg",
         "patchSetId": 8
@@ -13,6 +36,24 @@
       "writtenOn": "2020-01-21T14:57:17Z",
       "side": 1,
       "message": "Is this really the proper place here? This was kind of unepexted for me at this stage, did you mean to place it behind line 87 or so?",
+      "revId": "79b3d040f7e6572229ab388b9d105c2c5a01d13c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc83e442_3b432086",
+        "filename": "isolinux.cfg",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-01-22T14:16:40Z",
+      "side": 1,
+      "message": "I was asking him to move it here... this is a \"rescue\" option which we want to hide from the main menu to prevent using by mistake.\n\n\"Further bootoptions (local/PXE boot/rescue)\" was a good idea as for me...\nNope?",
+      "parentUuid": "d50cf351_4c191bbd",
       "revId": "79b3d040f7e6572229ab388b9d105c2c5a01d13c",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
