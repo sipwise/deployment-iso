@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5b51884b_40097eac",
+        "filename": "grub.cfg",
+        "patchSetId": 8
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-23T10:04:21Z",
+      "side": 1,
+      "message": "Agree",
+      "parentUuid": "c6d3e870_aa43b546",
+      "range": {
+        "startLine": 6,
+        "startChar": 30,
+        "endLine": 6,
+        "endChar": 41
+      },
+      "revId": "79b3d040f7e6572229ab388b9d105c2c5a01d13c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d50cf351_4c191bbd",
         "filename": "isolinux.cfg",
         "patchSetId": 8
