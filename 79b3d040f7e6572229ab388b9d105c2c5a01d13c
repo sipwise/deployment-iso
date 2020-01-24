@@ -81,6 +81,24 @@
       "revId": "79b3d040f7e6572229ab388b9d105c2c5a01d13c",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f8a8dcf_0c0ade06",
+        "filename": "isolinux.cfg",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-01-24T16:14:43Z",
+      "side": 1,
+      "message": "Ah I see, whatever you think is practical for users + ops folks, I don\u0027t really mind :)",
+      "parentUuid": "cc83e442_3b432086",
+      "revId": "79b3d040f7e6572229ab388b9d105c2c5a01d13c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": false
     }
   ]
 }
