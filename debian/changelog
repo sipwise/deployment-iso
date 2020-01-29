@@ -489,7 +489,7 @@ ngcp-deployment-iso (6.2.0.0+0~mr6.2.0.0) unstable; urgency=medium
   * [b71a7bf] MT#6253 Update hard disk typo
   * [b18faf5] MT#6253 Restore support of 'devel/something.iso' GRML images
   * [a7a9697] MT#8147 Add release mr3.3.2 and mark it as latest
-  * [9137b03] MT#8147 Add missed dot (it will be commmon mistake, need improvement here)
+  * [9137b03] MT#8147 Add missed dot (it will be common mistake, need improvement here)
   * [1ced947] MT#8871 Add mr3.4.2 to releases file
   * [a9aba19] MT#8347 Remove auto-boot timeout for grub
   * [160c3b1] MT#9191 Add initial Carrier 3.x menu for daily and release ISOs
@@ -544,7 +544,7 @@ ngcp-deployment-iso (6.2.0.0+0~mr6.2.0.0) unstable; urgency=medium
   [ Victor Seva ]
   * [da6de53] MT#6253 move jenkins scripts to repo.
   * [d2a57a6] MT#6253 generate grub and isolinux include files for releases
-  * [193bda5] MT#6253 fix build.sh excution outside the source directory
+  * [193bda5] MT#6253 fix build.sh execution outside the source directory
   * [2184a26] MT#6253 use templates too for public release
   * [d578b66] MT#6659 add mr3.3.1 to releases list with LATEST tag
   * [28b662e] MT#7945 add 3.4.1 and 3.4 versions

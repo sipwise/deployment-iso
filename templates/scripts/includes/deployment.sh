@@ -1474,7 +1474,7 @@ fi
 # TT#41500: Make sure the timezone setup is coherent
 grml-chroot "$TARGET" dpkg-reconfigure --frontend=noninteractive tzdata
 
-# provide useable /ngcp-data partition
+# provide usable /ngcp-data partition
 if [ -n "${DATA_PARTITION}" ] ; then
   echo "Enabling ngcp-data partition ${DATA_PARTITION} via /etc/fstab"
   cat >> "${TARGET}/etc/fstab" << EOF
@@ -1486,7 +1486,7 @@ EOF
   grml-chroot "${TARGET}" mount /ngcp-data
 fi
 
-# provide useable /ngcp-fallback read-only partition
+# provide usable /ngcp-fallback read-only partition
 if [ -n "${FALLBACK_FS}" ] ; then
   echo "Enabling ngcp-fallback partition ${FALLBACK_FS} via /etc/fstab"
   cat >> "${TARGET}/etc/fstab" << EOF

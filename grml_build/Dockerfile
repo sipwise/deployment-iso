@@ -85,7 +85,7 @@ WORKDIR /code/grml-live
 # cp /deployment-iso/grml_build/package_config/SIPWISE /code/grml-live/etc/grml/fai/config/package_config/SIPWISE
 # ./grml-live -s buster -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t $(pwd)/templates/ -o /grml/ -r grml-sipwise -v 0.42
 #
-## A successfull run results in ISO file in /grml/grml_isos/ (inside container),
+## A successful run results in ISO file in /grml/grml_isos/ (inside container),
 ## available via volume folder also outside of docker container ($pwd/grml/grml_isos/).
 #
 ####################################################################################################

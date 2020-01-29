@@ -102,7 +102,7 @@ deploy() {
 "${scripts_dir}/check_installing_version.sh"
 "${scripts_dir}/disk_selection.sh"
 if [[ ! -r '/tmp/disk_options' ]]; then
-  eerror "There is no /tmp/disk_options which should be availible after disk selection" ; eend 0
+  eerror "There is no /tmp/disk_options which should be available after disk selection" ; eend 0
 fi
 DISK_OPTIONS="$(cat '/tmp/disk_options')"
 if [[ -z "${DISK_OPTIONS}" ]]; then
