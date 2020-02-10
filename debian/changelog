@@ -1,3 +1,10 @@
+ngcp-deployment-iso (7.5.3.1+0~mr7.5.3.1) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [625a7fb] TT#69504 Support ISO addons, rework build environment + provide initial tests
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 10 Feb 2020 16:32:23 +0100
+
 ngcp-deployment-iso (7.5.3.0+0~mr7.5.3.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
