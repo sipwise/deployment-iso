@@ -1,3 +1,14 @@
+ngcp-deployment-iso (6.2.1.2+0~mr6.2.1.2) unstable; urgency=medium
+
+  [ Alexander Lutay ]
+  * [1d6cdd8] TT#36454 Move HOSTNAME definition after boot parameters loading section
+
+  [ Mykola Malkov ]
+  * [a29f58a] TT#54410 Get rid of hardcoded checksum of sipwise.gpg file
+  * [ffc54b4] TT#54410 Update expiration date of F411A836
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Thu, 27 Feb 2020 13:14:34 +0100
+
 ngcp-deployment-iso (6.2.1.1+0~mr6.2.1.1) unstable; urgency=medium
 
   [ Mykola Malkov ]
