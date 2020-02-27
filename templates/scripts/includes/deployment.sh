@@ -180,29 +180,36 @@ install_sipwise_key() {
     echo "Sipwise keyring not found, downloading."
   fi
 
+  local tmp_key
+  tmp_key="$(mktemp)"
+
   for x in 1 2 3; do
 
     if "$PRO_EDITION" ; then
-      wget -O /etc/apt/trusted.gpg.d/sipwise.gpg ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/sipwise.gpg
+      wget -q -T 10 --retry-connrefused --tries=3 --no-verbose -O "${tmp_key}" ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/sppro/sipwise.gpg
     else
-      wget -O /etc/apt/trusted.gpg.d/sipwise.gpg ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/spce/sipwise.gpg
+      wget -q -T 10 --retry-connrefused --tries=3 --no-verbose -O "${tmp_key}" ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/spce/sipwise.gpg
     fi
+    chmod 644 "${tmp_key}"
+    local sipwise_key_checksum
+    sipwise_key_checksum=$(sha256sum "${tmp_key}" | awk '{print $1}')
+    echo "Sipwise keyring downloaded with checksum (sha256sum: [${sipwise_key_checksum}]). Is it correct and should be imported into the system? [y/N]"
 
-    md5sum_sipwise_key_expected=bcd09c9ad563b2d380152a97d5a0ea83
-    md5sum_sipwise_key_calculated=$(md5sum /etc/apt/trusted.gpg.d/sipwise.gpg | awk '{print $1}')
-
-    if [ "$md5sum_sipwise_key_calculated" != "$md5sum_sipwise_key_expected" ] ; then
-      echo "Sipwise keyring has wrong checksum (expected: [$md5sum_sipwise_key_expected] - got: [$md5sum_sipwise_key_calculated]), retry $x"
-    else
-      break
+    if "${INTERACTIVE}"; then
+      local a
+      read -r a
+      if [[ "${a,,}" != "y" ]] ; then
+        echo "The key wasn't accepted, retrying... ${x}/3"
+        continue
+      fi
     fi
+    echo "The key has been accepted, installing it as /etc/apt/trusted.gpg.d/sipwise.gpg"
+    debootstrap_sipwise_key
+    mv "${tmp_key}" "/etc/apt/trusted.gpg.d/sipwise.gpg"
+    return
   done
 
-  if [ "$md5sum_sipwise_key_calculated" != "$md5sum_sipwise_key_expected" ] ; then
-    die "Error validating sipwise keyring for apt usage, aborting installation."
-  fi
-
-  debootstrap_sipwise_key
+  die "Error validating sipwise keyring for apt usage, aborting installation."
 }
 
 install_package_git () {
