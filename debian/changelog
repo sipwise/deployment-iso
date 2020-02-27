@@ -1,3 +1,11 @@
+ngcp-deployment-iso (7.2.2.2+0~mr7.2.2.2) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [f79118f] TT#54410 Get rid of hardcoded checksum of sipwise.gpg file
+  * [2282440] TT#54410 Update expiration date of F411A836
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Thu, 27 Feb 2020 13:12:47 +0100
+
 ngcp-deployment-iso (7.2.2.1+0~mr7.2.2.1) unstable; urgency=medium
 
   * New release.
