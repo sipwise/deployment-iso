@@ -190,17 +190,28 @@ install_sipwise_key() {
     echo "Sipwise keyring not found, downloading."
   fi
 
-  for try in 1 2 3; do
-    wget --retry-connrefused --no-verbose -O "${SIPWISE_APT_KEY_PATH}" "${SIPWISE_URL}${SIPWISE_APT_KEY_URL_PATH}"
-    sipwise_key_checksum=$(sha256sum "${SIPWISE_APT_KEY_PATH}" | awk '{print $1}')
+  local tmp_key
+  tmp_key="$(mktemp)"
 
-    if [ "${sipwise_key_checksum}" != "${SIPWISE_APT_KEY_CHECKSUM}" ] ; then
-      echo "Sipwise keyring downloaded has wrong checksum (expected: [${SIPWISE_APT_KEY_CHECKSUM}] - got: [${sipwise_key_checksum}]), retry $try" >&2
-    else
-      echo "Sipwise keyring downloaded with expected checksum (sha256sum: [${SIPWISE_APT_KEY_CHECKSUM}]), debootstrap sipwise key"
-      debootstrap_sipwise_key
-      return
+  for try in 1 2 3; do
+    wget -q -T 10 --retry-connrefused --tries=3 --no-verbose -O "${tmp_key}" "${SIPWISE_URL}${SIPWISE_APT_KEY_URL_PATH}"
+    chmod 644 "${tmp_key}"
+    local sipwise_key_checksum
+    sipwise_key_checksum=$(sha256sum "${tmp_key}" | awk '{print $1}')
+    echo "Sipwise keyring downloaded with checksum (sha256sum: [${sipwise_key_checksum}]). Is it correct and should be imported into the system? [y/N]"
+
+    if "${INTERACTIVE}"; then
+      local a
+      read -r a
+      if [[ "${a,,}" != "y" ]] ; then
+        echo "The key wasn't accepted, retrying... ${try}/3"
+        continue
+      fi
     fi
+    echo "The key has been accepted, installing it as ${SIPWISE_APT_KEY_PATH}"
+    debootstrap_sipwise_key
+    mv "${tmp_key}" "${SIPWISE_APT_KEY_PATH}"
+    return
   done
 
   die "Error validating sipwise keyring for apt usage, aborting installation."
