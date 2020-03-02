@@ -1,3 +1,10 @@
+ngcp-deployment-iso (6.5.6.4+0~mr6.5.6.4) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [c383a8d] TT#54410 Get rid of hardcoded checksum of sipwise.gpg file
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 02 Mar 2020 12:32:28 +0100
+
 ngcp-deployment-iso (6.5.6.3+0~mr6.5.6.3) unstable; urgency=medium
 
   [ Mykola Malkov ]
