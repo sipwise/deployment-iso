@@ -1,3 +1,15 @@
+ngcp-deployment-iso (6.5.9.0+0~mr6.5.9.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [f9d97a1] TT#69504 Support specific version usage of grml2usb/grml2iso
+  * [beb53ff] TT#73210 Use grml2usb v0.14.14 when handling grml64-small_2018.04.11-efi.iso
+
+  [ Mykola Malkov ]
+  * [eb34974] T#54410 Get rid of hardcoded checksum of sipwise.gpg file
+  * [93a785b] T#54410 Fix used variables
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Wed, 11 Mar 2020 09:12:42 +0100
+
 ngcp-deployment-iso (6.5.8.0+0~mr6.5.8.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
