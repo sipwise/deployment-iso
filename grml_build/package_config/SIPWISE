@@ -68,6 +68,7 @@ tzdata
 unp
 unzip
 util-linux
+virtualbox-guest-additions-iso
 vlan
 wget
 whois

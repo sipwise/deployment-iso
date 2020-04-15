@@ -86,13 +86,9 @@ VLAN_SIP_EXT=1719
 VLAN_SIP_INT=1720
 VLAN_HA_INT=1721
 VLAN_RTP_EXT=1722
-VIRTUALBOX_DIR="/usr/share/virtualbox"
-VIRTUALBOX_ISO="VBoxGuestAdditions_5.2.26.iso"
-VIRTUALBOX_ISO_CHECKSUM="b927c5d0d4c97a9da2522daad41fe96b616ed06bfb0c883f9c42aad2244f7c38" # sha256
-VIRTUALBOX_ISO_URL_PATH="/files/${VIRTUALBOX_ISO}"
 SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
 NGCP_PXE_INSTALL=false
-ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
+ADDITIONAL_PACKAGES=(git augeas-tools gdisk virtualbox-guest-additions-iso)
 
 
 ### helper functions {{{
@@ -233,16 +229,6 @@ ensure_recent_package_versions() {
       die "Error: Package '${pkg}' was not installed correctly, aborting."
     fi
   done
-}
-
-install_vbox_iso() {
-  echo "Downloading virtualbox-guest-additions ISO"
-
-  mkdir -p "${VIRTUALBOX_DIR}"
-  vbox_isofile="${VIRTUALBOX_DIR}/${VIRTUALBOX_ISO}"
-  wget --retry-connrefused --no-verbose -c -O "$vbox_isofile" "${SIPWISE_URL}${VIRTUALBOX_ISO_URL_PATH}"
-
-  echo "${VIRTUALBOX_ISO_CHECKSUM} ${vbox_isofile}" | sha256sum --check || die "Error: failed to compute checksum for Virtualbox ISO. Exiting."
 }
 
 set_custom_grub_boot_options() {
@@ -1862,8 +1848,6 @@ vagrant_configuration() {
     sed -ri -e "s/mesg\s+n/# adjusted for Vagrant\ntty -s \&\& mesg n/" "${TARGET}/root/.profile"
   fi
 
-  install_vbox_iso
-
   # shellcheck disable=SC2010
   KERNELHEADERS=$(basename "$(ls -d ${TARGET}/usr/src/linux-headers*amd64 | grep -v -- -rt-amd64 | sort -u -r -V | head -1)")
   if [ -z "$KERNELHEADERS" ] ; then
@@ -1873,6 +1857,10 @@ vagrant_configuration() {
   if [ -z "$KERNELVERSION" ] ; then
     die "Error: no kernel version could be identified."
   fi
+
+  local VIRTUALBOX_DIR="/usr/share/virtualbox"
+  local VIRTUALBOX_ISO="VBoxGuestAdditions.iso"
+  lcoal vbox_isofile="${VIRTUALBOX_DIR}/${VIRTUALBOX_ISO}"
 
   if [ ! -r "$vbox_isofile" ] ; then
     die "Error: could not find $vbox_isofile"
