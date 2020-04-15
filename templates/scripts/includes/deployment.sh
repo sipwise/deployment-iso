@@ -87,9 +87,8 @@ VLAN_SIP_INT=1720
 VLAN_HA_INT=1721
 VLAN_RTP_EXT=1722
 VIRTUALBOX_DIR="/usr/share/virtualbox"
-VIRTUALBOX_ISO="VBoxGuestAdditions_5.2.26.iso"
-VIRTUALBOX_ISO_CHECKSUM="b927c5d0d4c97a9da2522daad41fe96b616ed06bfb0c883f9c42aad2244f7c38" # sha256
-VIRTUALBOX_ISO_URL_PATH="/files/${VIRTUALBOX_ISO}"
+VIRTUALBOX_ISO="VBoxGuestAdditions.iso"
+VIRTUALBOX_ISO_PACKAGE="virtualbox-guest-additions-iso"
 SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
 NGCP_PXE_INSTALL=false
 ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
@@ -236,13 +235,17 @@ ensure_recent_package_versions() {
 }
 
 install_vbox_iso() {
-  echo "Downloading virtualbox-guest-additions ISO"
+  echo "Installing Virtualbox Guest Additions ISO"
 
-  mkdir -p "${VIRTUALBOX_DIR}"
+  ADDITIONAL_PACKAGES+=("${VIRTUALBOX_ISO_PACKAGE}")
+  ensure_packages_installed
+
   vbox_isofile="${VIRTUALBOX_DIR}/${VIRTUALBOX_ISO}"
-  wget --retry-connrefused --no-verbose -c -O "$vbox_isofile" "${SIPWISE_URL}${VIRTUALBOX_ISO_URL_PATH}"
+}
 
-  echo "${VIRTUALBOX_ISO_CHECKSUM} ${vbox_isofile}" | sha256sum --check || die "Error: failed to compute checksum for Virtualbox ISO. Exiting."
+remove_vbox_iso() {
+  echo "Removing Virtualbox Guest Additions ISO"
+  chroot "$TARGET" dpkg --purge "${VIRTUALBOX_ISO_PACKAGE}"
 }
 
 set_custom_grub_boot_options() {
@@ -1889,6 +1892,8 @@ vagrant_configuration() {
     grml-chroot "${TARGET}" /media/cdrom/VBoxLinuxAdditions.run --nox11
   tail -10 "${TARGET}/var/log/vboxadd-install.log"
   umount "${TARGET}/media/cdrom/"
+
+  remove_vbox_iso
 
   # VBoxLinuxAdditions.run chooses /usr/lib64 as soon as this directory exists, which
   # is the case for our PRO systems shipping the heartbeat-2 package; then the
