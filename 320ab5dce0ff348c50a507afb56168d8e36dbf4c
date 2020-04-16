@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "d63de464_683c3e13",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-16T12:10:41Z",
+      "side": 1,
+      "message": "This list is used if you want to run deployment.sh on top of non Grml-sipwise image. Mika insisted to save this fallback :)",
+      "parentUuid": "38300dac_b620684d",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 55
+      },
+      "revId": "320ab5dce0ff348c50a507afb56168d8e36dbf4c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4fb974f2_568fb9ce",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
