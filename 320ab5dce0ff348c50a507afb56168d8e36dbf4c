@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "330a251b_4227f76f",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-16T07:40:13Z",
+      "side": 1,
+      "message": "I guess these variables are not really global so move them to vagrant_configuration() or just delete.",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 39
+      },
+      "revId": "320ab5dce0ff348c50a507afb56168d8e36dbf4c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad797404_3af22422",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-16T07:40:13Z",
+      "side": 1,
+      "message": "Just add \"virtualbox-guest-additions-iso\" to the ADDITIONAL_PACKAGES array below.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 55
+      },
+      "revId": "320ab5dce0ff348c50a507afb56168d8e36dbf4c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fb974f2_568fb9ce",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-16T07:40:13Z",
+      "side": 1,
+      "message": "All required packages have to be built-in in Grml-sipwise image so no package is installed in runtime.",
+      "range": {
+        "startLine": 241,
+        "startChar": 2,
+        "endLine": 241,
+        "endChar": 27
+      },
+      "revId": "320ab5dce0ff348c50a507afb56168d8e36dbf4c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fffe06f8_1bf9e768",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-16T07:40:13Z",
+      "side": 1,
+      "message": "See comment above. Moreover this code installs package to Grml-sipwise system but tries to remove it from NGCP chroot system.",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 1
+      },
+      "revId": "320ab5dce0ff348c50a507afb56168d8e36dbf4c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    }
+  ]
+}
