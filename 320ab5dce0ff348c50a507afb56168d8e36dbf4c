@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "8c18252c_580b11f5",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2020-04-17T15:25:31Z",
+      "side": 1,
+      "message": "Ah makes sense, thanks. Perhaps a comment to that effect would be useful here. :)",
+      "parentUuid": "d63de464_683c3e13",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 55
+      },
+      "revId": "320ab5dce0ff348c50a507afb56168d8e36dbf4c",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4fb974f2_568fb9ce",
         "filename": "templates/scripts/includes/deployment.sh",
         "patchSetId": 1
