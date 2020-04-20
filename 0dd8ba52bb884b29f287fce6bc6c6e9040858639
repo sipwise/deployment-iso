@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb399e94_1ceaaa31",
+        "filename": "templates/scripts/includes/deployment.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-20T13:14:05Z",
+      "side": 1,
+      "message": "local :(",
+      "range": {
+        "startLine": 1863,
+        "startChar": 2,
+        "endLine": 1863,
+        "endChar": 7
+      },
+      "revId": "0dd8ba52bb884b29f287fce6bc6c6e9040858639",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
+    }
+  ]
+}
