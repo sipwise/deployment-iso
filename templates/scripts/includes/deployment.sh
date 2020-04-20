@@ -1860,7 +1860,7 @@ vagrant_configuration() {
 
   local VIRTUALBOX_DIR="/usr/share/virtualbox"
   local VIRTUALBOX_ISO="VBoxGuestAdditions.iso"
-  lcoal vbox_isofile="${VIRTUALBOX_DIR}/${VIRTUALBOX_ISO}"
+  local vbox_isofile="${VIRTUALBOX_DIR}/${VIRTUALBOX_ISO}"
 
   if [ ! -r "$vbox_isofile" ] ; then
     die "Error: could not find $vbox_isofile"
