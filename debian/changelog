@@ -1,3 +1,14 @@
+ngcp-deployment-iso (8.5.0.0+0~mr8.5.0.0) unstable; urgency=medium
+
+  [ Guillem Jover ]
+  * [0dd8ba5] TT#80000 Switch to the packaged VirtualBox Guest Additions ISO
+  * [4a3ec3e] TT#80000 Fix syntax error
+
+  [ Mykola Malkov ]
+  * [2e15d97] TT#76658 Update deployment-iso-buster image
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 19 May 2020 11:06:59 +0200
+
 ngcp-deployment-iso (8.4.0.0+0~mr8.4.0.0) unstable; urgency=medium
 
   * New release.
