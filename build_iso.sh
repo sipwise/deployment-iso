@@ -16,7 +16,7 @@ TEMPLATES="templates"
 GRML_URL="${GRML_URL:-https://deb.sipwise.com/deployment-iso/grml/}"
 GRML_HASH_URL="${GRML_HASH_URL:-https://deb.sipwise.com/deployment-iso/grml/}"
 SIPWISE_ISO="sip_provider_${MR}_${DATE}.iso"
-GRML2USB_VERSION='v0.17.0'
+GRML2USB_VERSION='v0.18.1'
 
 usage () {
   echo "Usage: $0 compat <grml.iso> <mr version> <Debian dist>"
