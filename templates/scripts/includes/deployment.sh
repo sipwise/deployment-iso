@@ -4,92 +4,55 @@
 
 set -e
 
-INSTALL_LOG='/tmp/deployment-installer-debug.log'
-exec  > >(tee -a $INSTALL_LOG    )
-exec 2> >(tee -a $INSTALL_LOG >&2)
+# Functions
 
-# set version to git commit ID
-SCRIPT_VERSION="%SCRIPT_VERSION%"
+usage() {
+  echo "$0 - automatically deploy Debian ${DEBIAN_RELEASE} and (optionally) ngcp ce/pro.
 
-# not set? then fall back to timestamp of execution
-if [ -z "$SCRIPT_VERSION" ] || [ "$SCRIPT_VERSION" = '%SCRIPT_VERSION%' ] ; then
-  SCRIPT_VERSION=$(date +%s) # seconds since 1970-01-01 00:00:00 UTC
-fi
+Control installation parameters:
 
-# Never ever execute the script outside of a
-# running Grml live system because partitioning
-# disks might destroy data. Seriously.
-if ! [ -r /etc/grml_cd ] ; then
-  echo "Not running inside Grml, better safe than sorry. Sorry." >&2
-  exit 1
-fi
+  ngcppro          - install Pro Edition
+  ngcpsp1          - install first node (Pro Edition only)
+  ngcpsp2          - install second node (Pro Edition only)
+  ngcpce           - install CE Edition
+  ngcpcrole=...    - server role (Carrier)
+  ngcpvers=...     - install specific SP/CE version
+  nongcp           - do not install NGCP but install plain Debian only
+  noinstall        - do not install neither Debian nor NGCP
+  ngcpinst         - force usage of NGCP installer
+  ngcpinstvers=... - use specific NGCP installer version
+  debianrepo=...   - hostname of Debian APT repository mirror
+  sipwiserepo=...  - hostname of Sipwise APT repository mirror
+  ngcpnomysqlrepl  - skip MySQL sp1<->sp2 replication configuration/check
+  ngcpppa=...      - use NGCP PPA Debian repository
 
-# better safe than sorry
-export LC_ALL=C
-export LANG=C
+Control target system:
 
-# avoid SHELL being set but not available, causing needrestart failure, see #788819
-unset SHELL
+  ngcpnw.dhcp      - use DHCP as network configuration in installed system
+  ngcphostname=... - hostname of installed system (defaults to ngcp/sp[1,2])
+                     NOTE: do NOT use when installing Pro Edition!
+  ngcpeiface=...   - external interface device (defaults to eth0)
+  ngcpip1=...      - IP address of first node
+  ngcpip2=...      - IP address of second node
+  ngcpipshared=... - HA shared IP address
+  ngcpnetmask=...  - netmask of ha_int interface
+  ngcpeaddr=...    - Cluster IP address
+  swapfilesize=... - size of swap file in megabytes
 
-# defaults
-DEBUG_MODE=false
-DEFAULT_INTERNAL_DEV=eth1
-DEFAULT_IP1=192.168.255.251
-DEFAULT_IP2=192.168.255.252
-DEFAULT_IP_HA_SHARED=192.168.255.250
-DEFAULT_INTERNAL_NETMASK=255.255.255.248
-TARGET=/mnt
-PRO_EDITION=false
-CE_EDITION=false
-CARRIER_EDITION=false
-NGCP_INSTALLER=false
-PUPPET=''
-PUPPET_SERVER=puppet.mgm.sipwise.com
-PUPPET_GIT_REPO=''
-PUPPET_GIT_BRANCH=master
-PUPPET_LOCAL_GIT="${TARGET}/tmp/puppet.git"
-PUPPET_RESCUE_PATH="/mnt/rescue_drive"
-PUPPET_RESCUE_LABEL="SIPWRESCUE*"
-INTERACTIVE=false
-DHCP=false
-LOGO=true
-RETRIEVE_MGMT_CONFIG=false
-TRUNK_VERSION=false
-DEBIAN_RELEASE=buster
-HALT=false
-REBOOT=false
-STATUS_DIRECTORY=/srv/deployment/
-STATUS_WAIT=0
-VAGRANT=false
-ADJUST_FOR_LOW_PERFORMANCE=false
-ENABLE_VM_SERVICES=false
-FILESYSTEM="ext4"
-ROOTFS_SIZE="10G"
-FALLBACKFS_SIZE="${ROOTFS_SIZE}"
-SWAPFILE_SIZE_MB_MIN="4096"
-SWAPFILE_SIZE_MB_MAX="16384"
-SWAPFILE_SIZE_MB=""
-SWRAID_DEVICE="/dev/md0"
-SWRAID_DESTROY=false
-DEBIAN_REPO_HOST="debian.sipwise.com"
-DEBIAN_REPO_TRANSPORT="https"
-SIPWISE_REPO_HOST="deb.sipwise.com"
-SIPWISE_REPO_TRANSPORT="https"
-DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
-SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
-DPL_MYSQL_REPLICATION=true
-FILL_APPROX_CACHE=true
-VLAN_BOOT_INT=2
-VLAN_SSH_EXT=300
-VLAN_WEB_EXT=1718
-VLAN_SIP_EXT=1719
-VLAN_SIP_INT=1720
-VLAN_HA_INT=1721
-VLAN_RTP_EXT=1722
-SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
-NGCP_PXE_INSTALL=false
-ADDITIONAL_PACKAGES=(git augeas-tools gdisk virtualbox-guest-additions-iso)
+The command line options correspond with the available bootoptions.
+Command line overrides any present bootoption.
 
+Usage examples:
+
+  # ngcp-deployment ngcpce ngcpnw.dhcp
+
+  # netcardconfig # configure eth0 with static configuration
+  # ngcp-deployment ngcppro ngcpsp1
+
+  # netcardconfig # configure eth0 with static configuration
+  # ngcp-deployment ngcppro ngcpsp2
+"
+}
 
 ### helper functions {{{
 get_deploy_status() {
@@ -236,7 +199,7 @@ set_custom_grub_boot_options() {
   sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 net.ifnames=0"/' "${TARGET}/etc/default/grub"
 
   echo "Invoking update-grub"
-  grml-chroot $TARGET update-grub
+  grml-chroot "${TARGET}" update-grub
 
   if [ -d "${TARGET}/etc/.git" ]; then
     echo "Commit /etc/default/grub changes using etckeeper"
@@ -369,12 +332,858 @@ efi_support() {
 
   return 1
 }
-# }}}
 
-###################################################
-# the script execution begins here
+cdr2mask() {
+  # From https://stackoverflow.com/questions/20762575/explanation-of-convertor-of-cidr-to-netmask-in-linux-shell-netmask2cdir-and-cdir
+  # Number of args to shift, 255..255, first non-255 byte, zeroes
+  set -- $(( 5 - ("${1}" / 8) )) 255 255 255 255 $(( (255 << (8 - ("${1}" % 8))) & 255 )) 0 0 0
+  if [[ "${1}" -gt 1 ]] ; then
+    shift "${1}"
+  else
+    shift
+  fi
+  echo "${1:-0}.${2:-0}.${3:-0}.${4:-0}"
+}
 
-### trap signals: 1 SIGHUP, 2 SIGINT, 3 SIGQUIT, 6 SIGABRT, 15 SIGTERM
+clear_partition_table() {
+  local blockdevice="$1"
+
+  if [[ ! -b "${blockdevice}" ]] ; then
+    die "Error: ${blockdevice} doesn't look like a valid block device." >&2
+  fi
+
+  echo "Wiping disk signatures from ${blockdevice}"
+  wipefs -a "${blockdevice}"
+
+  # make sure parted doesn't fail if LVM is already present
+  blockdev --rereadpt "$blockdevice"
+  for disk in "$blockdevice"* ; do
+    existing_pvs=$(pvs "$disk" -o vg_name --noheadings 2>/dev/null || true)
+    if [ -n "$existing_pvs" ] ; then
+      for pv in $existing_pvs ; do
+        echo "Getting rid of existing VG $pv"
+        vgremove -ff "$pv"
+      done
+    fi
+
+    echo "Removing possibly existing LVM/PV label from $disk"
+    pvremove "$disk" --force --force --yes || true
+  done
+
+  dd if=/dev/zero of="${blockdevice}" bs=1M count=1
+  blockdev --rereadpt "${blockdevice}"
+}
+
+get_pvdevice_by_label() {
+  local blockdevice="$1"
+  if [[ -z "${blockdevice}" ]]; then
+    die "Error: need a blockdevice to probe, nothing provided."
+  fi
+  local partlabel="$2"
+  if [[ -z "${partlabel}" ]]; then
+    die "Error: need a partlabel to search for, nothing provided."
+  fi
+
+  local pvdevice=""
+  pvdevice=$(blkid -t PARTLABEL="${partlabel}" -o device "${blockdevice}"* || true)
+  echo "${pvdevice}"
+}
+
+get_pvdevice_by_label_with_retries() {
+  if [[ $# -ne 4 ]]; then
+    die "Error: needs 4 arguments: a BLOCKDEVICE to probe, a PARTLABEL to search for, MAX_TRIES and name of variable to return PVDEVICE."
+  fi
+
+  local blockdevice="$1"
+  if [[ -z "${blockdevice}" ]]; then
+    die "Error: need a blockdevice to probe, nothing provided."
+  fi
+  local partlabel="$2"
+  if [[ -z "${partlabel}" ]]; then
+    die "Error: need a partlabel to search for, nothing provided."
+  fi
+  local max_tries="$3"
+  if [[ -z "${max_tries}" ]]; then
+    die "Error: need max_tries, nothing provided."
+  fi
+  # return result in this variable
+  # shellcheck disable=SC2034
+  declare -n ret="$4"
+
+  local pvdevice_local
+  for try in $(seq 1 "${max_tries}"); do
+    pvdevice_local=$(get_pvdevice_by_label "${blockdevice}" "${partlabel}")
+    if [[ -n "${pvdevice_local}" ]]; then
+      echo "pvdevice is now available: ${pvdevice_local}"
+      # it's a reference to an external variable that sets the return value
+      # shellcheck disable=SC2034
+      ret="${pvdevice_local}"
+      break
+    else
+      if [[ "${try}" -lt "${max_tries}" ]]; then
+        echo "pvdevice not yet available (blockdevice=${blockdevice}, partlabel='${partlabel}'), try #${try} of ${max_tries}, retrying in 1 second..."
+        sleep 1s
+      else
+        die "Error: could not get pvdevice after #${try} tries"
+      fi
+    fi
+  done
+}
+
+parted_execution() {
+  local blockdevice="$1"
+
+  echo "Creating partition table"
+  parted -a optimal -s "${blockdevice}" mklabel gpt
+
+  # BIOS boot with GPT
+  parted -a optimal -s "${blockdevice}" mkpart primary 2048s 2M
+  parted -a optimal -s "${blockdevice}" set 1 bios_grub on
+  parted -a optimal -s "${blockdevice}" "name 1 'BIOS Boot'"
+
+  # EFI boot with GPT
+  parted -a optimal -s "${blockdevice}" mkpart primary 2M 512M
+  parted -a optimal -s "${blockdevice}" "name 2 'EFI System'"
+  parted -a optimal -s "${blockdevice}" set 2 boot on
+
+  blockdev --flushbufs "${blockdevice}"
+
+  echo "Get path of EFI partition"
+  local max_tries=60
+  EFI_PARTITION=""
+  get_pvdevice_by_label_with_retries "${blockdevice}" "EFI System" "${max_tries}" EFI_PARTITION
+}
+
+set_up_partition_table_noswraid() {
+  local blockdevice
+  blockdevice="/dev/${DISK}"
+
+  clear_partition_table "$blockdevice"
+
+  parted_execution "$blockdevice"
+  parted -a optimal -s "${blockdevice}" mkpart primary 512M 100%
+  parted -a optimal -s "${blockdevice}" "name 3 'Linux LVM'"
+  parted -a optimal -s "${blockdevice}" set 3 lvm on
+  blockdev --flushbufs "${blockdevice}"
+
+  local max_tries=60
+  local pvdevice
+  local partlabel="Linux LVM"
+  get_pvdevice_by_label_with_retries "${blockdevice}" "${partlabel}" "${max_tries}" pvdevice
+
+  echo "Creating PV + VG"
+  pvcreate -ff -y "${pvdevice}"
+  vgcreate "${VG_NAME}" "${pvdevice}"
+  vgchange -a y "${VG_NAME}"
+}
+
+set_up_partition_table_swraid() {
+  # make sure we don't overlook unassembled SW-RAIDs
+  local raidev1
+  local raidev2
+  mdadm --assemble --scan || true # fails if there's nothing to assemble
+
+  if [[ -b "${SWRAID_DEVICE}" ]] ; then
+    if [[ "${SWRAID_DESTROY}" = "true" ]] ; then
+      mdadm --remove "${SWRAID_DEVICE}"
+      mdadm --stop "${SWRAID_DEVICE}"
+      mdadm --zero-superblock "/dev/${SWRAID_DISK1}"
+      mdadm --zero-superblock "/dev/${SWRAID_DISK2}"
+    else
+      echo "NOTE: if you are sure you don't need it SW-RAID device any longer, execute:"
+      echo "      mdadm --remove ${SWRAID_DEVICE} ; mdadm --stop ${SWRAID_DEVICE}; mdadm --zero-superblock /dev/sd..."
+      echo "      (also you can use boot option 'swraiddestroy' to destroy SW-RAID automatically)"
+      die "Error: SW-RAID device ${SWRAID_DEVICE} exists already."
+    fi
+  fi
+
+  for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
+    if grep -q "$disk" /proc/mdstat ; then
+      die "Error: disk $disk seems to be part of an existing SW-RAID setup."
+    fi
+    clear_partition_table "/dev/${disk}"
+  done
+
+  parted_execution "/dev/${SWRAID_DISK1}"
+
+  parted -a optimal -s "/dev/${SWRAID_DISK1}" mkpart primary 512M 100%
+  parted -a optimal -s "/dev/${SWRAID_DISK1}" "name 3 'Linux RAID'"
+  parted -a optimal -s "/dev/${SWRAID_DISK1}" set 3 raid on
+
+  # clone partitioning from SWRAID_DISK1 to SWRAID_DISK2
+  sgdisk "/dev/${SWRAID_DISK1}" -R "/dev/${SWRAID_DISK2}"
+  # randomize the disk's GUID and all partitions' unique GUIDs after cloning
+  sgdisk -G "/dev/${SWRAID_DISK2}"
+
+  local partlabel="Linux RAID"
+  local max_tries=60
+  get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK1}" "${partlabel}" "${max_tries}" raidev1
+  get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK2}" "${partlabel}" "${max_tries}" raidev2
+
+  echo y | mdadm --create --verbose "${SWRAID_DEVICE}" --level=1 --raid-devices=2 "${raidev1}" "${raidev2}"
+
+  echo "Creating PV + VG on ${SWRAID_DEVICE}"
+  pvcreate -ff -y "${SWRAID_DEVICE}"
+  vgcreate "${VG_NAME}" "${SWRAID_DEVICE}"
+  vgchange -a y "${VG_NAME}"
+}
+
+set_up_partition_table() {
+  if [[ "${SWRAID}" = "true" ]] ; then
+    set_up_partition_table_swraid
+  else
+    set_up_partition_table_noswraid
+  fi
+}
+
+create_ngcp_partitions() {
+  # root
+  echo "Creating LV 'root' with ${ROOTFS_SIZE}"
+  lvcreate --yes -n root -L "${ROOTFS_SIZE}" "${VG_NAME}"
+
+  echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/root"
+  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
+
+  # used later by installer
+  ROOT_FS="/dev/mapper/${VG_NAME}-root"
+
+  # fallback
+  if [[ "${FALLBACKFS_SIZE}" != "0" ]]; then
+    echo "Creating LV 'fallback' with ${FALLBACKFS_SIZE}"
+    lvcreate --yes -n fallback -L "${FALLBACKFS_SIZE}" "${VG_NAME}"
+
+    echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/fallback"
+    mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/fallback
+
+    # used later by installer
+    FALLBACK_FS="/dev/mapper/${VG_NAME}-fallback"
+  fi
+
+  # data
+  local vg_free data_size unassigned
+  vg_free=$(vgs "${VG_NAME}" -o vg_free --noheadings --nosuffix --units B)
+  data_size=$(( vg_free * 18 / 20 )) # 90% of free space (in MB)
+  unassigned=$(( vg_free - data_size ))
+  # make sure we have 10% or at least 500MB unassigned space
+  if [[ "${unassigned}" -lt 524288000 ]] ; then # 500MB
+    data_size=$(( vg_free - 524288000 ))
+  fi
+
+  local data_size_mb
+  data_size_mb=$(( data_size / 1024 / 1024 ))
+  echo "Creating LV data with ${data_size_mb}M"
+  lvcreate --yes -n data -L "${data_size_mb}M" "${VG_NAME}"
+
+  echo "Creating ${FILESYSTEM} on /dev/${VG_NAME}/data"
+  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/data
+
+  # used later by installer
+  DATA_PARTITION="/dev/mapper/${VG_NAME}-data"
+}
+
+create_debian_partitions() {
+  # rootfs
+  local root_size="${ROOTFS_SIZE:-8G}"
+  echo "Creating LV root with ${root_size}"
+  lvcreate --yes -n root -L "${root_size}" "${VG_NAME}"
+
+  echo "Creating ${FILESYSTEM} on /dev/${VG_NAME}/root"
+  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
+
+  # used later by installer
+  ROOT_FS="/dev/mapper/${VG_NAME}-root"
+}
+
+display_partition_table() {
+  local blockdevice
+  if [[ "${SWRAID}" = "true" ]] ; then
+    for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
+      echo "Displaying partition table (of SW-RAID disk /dev/$disk) for reference:"
+      parted -s "/dev/${disk}" unit GiB print
+      lsblk "/dev/${disk}"
+    done
+  else
+    echo "Displaying partition table (of /dev/$disk) for reference:"
+    parted -s "/dev/${DISK}" unit GiB print
+    lsblk "/dev/${DISK}"
+  fi
+}
+
+lvm_setup() {
+  local saved_options
+  saved_options="$(set +o)"
+  # be restrictive in what we execute
+  set -euo pipefail
+
+  if "$NGCP_INSTALLER" ; then
+    VG_NAME="ngcp"
+    set_up_partition_table
+    create_ngcp_partitions
+    display_partition_table
+  else
+    VG_NAME="vg0"
+    set_up_partition_table
+    create_debian_partitions
+    display_partition_table
+  fi
+
+  # used later by installer
+  ROOT_FS="/dev/mapper/${VG_NAME}-root"
+
+  # restore original options/behavior
+  eval "$saved_options"
+}
+
+get_installer_path() {
+  if [ -z "$SP_VERSION" ] && ! $TRUNK_VERSION ; then
+    INSTALLER=ngcp-installer-latest.deb
+
+    if "$PRO_EDITION" ; then
+      INSTALLER_PATH="${SIPWISE_URL}/sppro/"
+    else
+      INSTALLER_PATH="${SIPWISE_URL}/spce/"
+    fi
+
+    return # we don't want to run any further code from this function
+  fi
+
+  # use pool directory according for ngcp release
+  if "${PRO_EDITION}" || "${CARRIER_EDITION}" ; then
+    local installer_package='ngcp-installer-pro'
+    local repos_base_path="${SIPWISE_URL}/sppro/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
+    INSTALLER_PATH="${SIPWISE_URL}/sppro/${SP_VERSION}/pool/main/n/ngcp-installer/"
+  else
+    local installer_package='ngcp-installer-ce'
+    local repos_base_path="${SIPWISE_URL}/spce/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
+    INSTALLER_PATH="${SIPWISE_URL}/spce/${SP_VERSION}/pool/main/n/ngcp-installer/"
+  fi
+
+  # use a separate repos for trunk releases
+  if $TRUNK_VERSION ; then
+    local repos_base_path="${SIPWISE_URL}/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
+    INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
+  fi
+
+  if [ -n "${NGCP_PPA}" ] ; then
+    local ppa_tmp_packages
+    ppa_tmp_packages=$(mktemp)
+
+    echo "NGCP PPA requested, checking ngcp-installer package availability in PPA repo"
+    local ppa_repos_base_path="${SIPWISE_URL}/autobuild/dists/${NGCP_PPA}/main/binary-amd64/"
+    wget --timeout=30 -O "${ppa_tmp_packages}" "${ppa_repos_base_path}/Packages.gz"
+
+    local installer_ppa_version
+    installer_ppa_version=$(zcat "${ppa_tmp_packages}" | sed "/./{H;\$!d;};x;/Package: ${installer_package}/b;d" | awk '/^Version: / {print $2}' | sort -u)
+    rm -f "${ppa_tmp_packages}"
+
+    if [ -n "${installer_ppa_version}" ]; then
+      echo "NGCP PPA contains ngcp-installer, using it, version '${installer_ppa_version}'"
+      local repos_base_path="${ppa_repos_base_path}"
+      INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
+    else
+      echo "NGCP PPA does NOT contains ngcp-installer, using default ngcp-installer package"
+    fi
+  fi
+
+  wget --timeout=30 -O Packages.gz "${repos_base_path}Packages.gz"
+  # sed: display paragraphs matching the "Package: ..." string, then grab string "^Version: " and display the actual version via awk
+  # sort -u to avoid duplicates in repositories shipping the ngcp-installer-pro AND ngcp-installer-pro-ha-v3 debs
+  local version
+  version=$(zcat Packages.gz | sed "/./{H;\$!d;};x;/Package: ${installer_package}/b;d" | awk '/^Version: / {print $2}' | sort -u)
+
+  [ -n "$version" ] || die "Error: installer version for ngcp ${SP_VERSION}, Debian release $DEBIAN_RELEASE with installer package $installer_package could not be detected."
+
+  if "${PRO_EDITION}" || "${CARRIER_EDITION}" ; then
+    INSTALLER="ngcp-installer-pro_${version}_all.deb"
+  else
+    INSTALLER="ngcp-installer-ce_${version}_all.deb"
+  fi
+}
+
+set_repos() {
+  cat > "${TARGET}/etc/apt/sources.list" << EOF
+# Please visit /etc/apt/sources.list.d/ instead.
+EOF
+
+  cat > "${TARGET}/etc/apt/sources.list.d/debian.list" << EOF
+## custom sources.list, deployed via deployment.sh
+
+# Debian repositories
+deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
+deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
+deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
+deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
+EOF
+
+  mkdir -p "${TARGET}"/etc/apt/apt.conf.d/
+  cat > "${TARGET}"/etc/apt/apt.conf.d/73_acquire_retries << EOF
+# NGCP_MANAGED_FILE -- deployment.sh
+Acquire::Retries "3";
+EOF
+}
+
+gen_installer_config() {
+  local conf_file
+  conf_file="${TARGET}/etc/ngcp-installer/config_deploy.inc"
+  truncate -s 0 "${conf_file}"
+
+  if "${CARRIER_EDITION}" ; then
+    cat >> "${conf_file}" << EOF
+CARRIER=true
+PRO=false
+CE=false
+EOF
+  elif "${PRO_EDITION}" ; then
+    cat >> "${conf_file}" << EOF
+CARRIER=false
+PRO=true
+CE=false
+EOF
+  elif "${CE_EDITION}" ; then
+    cat >> "${conf_file}" << EOF
+CARRIER=false
+PRO=false
+CE=true
+EOF
+  fi
+
+  if "${CARRIER_EDITION}" ; then
+    cat >> "${conf_file}" << EOF
+CROLE="${CROLE}"
+VLAN_BOOT_INT="${VLAN_BOOT_INT}"
+VLAN_SSH_EXT="${VLAN_SSH_EXT}"
+VLAN_WEB_EXT="${VLAN_WEB_EXT}"
+VLAN_SIP_EXT="${VLAN_SIP_EXT}"
+VLAN_SIP_INT="${VLAN_SIP_INT}"
+VLAN_HA_INT="${VLAN_HA_INT}"
+VLAN_RTP_EXT="${VLAN_RTP_EXT}"
+EOF
+  fi
+  if "${PRO_EDITION}" ; then
+    cat >> "${conf_file}" << EOF
+HNAME="${ROLE}"
+IP1="${IP1}"
+IP2="${IP2}"
+IP_HA_SHARED="${IP_HA_SHARED}"
+DPL_MYSQL_REPLICATION="${DPL_MYSQL_REPLICATION}"
+TARGET_HOSTNAME="${TARGET_HOSTNAME}"
+INTERNAL_DEV="${INTERNAL_DEV}"
+NETWORK_DEVICES="${NETWORK_DEVICES}"
+INTERNAL_NETMASK="${INTERNAL_NETMASK}"
+MANAGEMENT_IP="${MANAGEMENT_IP}"
+NGCP_PXE_INSTALL="${NGCP_PXE_INSTALL}"
+FILL_APPROX_CACHE="${FILL_APPROX_CACHE}"
+EOF
+  fi
+
+  cat >> "${conf_file}" << EOF
+FORCE=no
+ADJUST_FOR_LOW_PERFORMANCE="${ADJUST_FOR_LOW_PERFORMANCE}"
+ENABLE_VM_SERVICES="${ENABLE_VM_SERVICES}"
+SIPWISE_REPO_HOST="${SIPWISE_REPO_HOST}"
+SIPWISE_URL="${SIPWISE_URL}"
+NAMESERVER="$(awk '/^nameserver/ {print $2}' /etc/resolv.conf)"
+NGCP_PPA="${NGCP_PPA}"
+DEBUG_MODE="${DEBUG_MODE}"
+EADDR="${EADDR}"
+DHCP="${DHCP}"
+EXTERNAL_DEV="${EXTERNAL_DEV}"
+GW="${GW}"
+EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
+ORIGIN_INSTALL_DEV="${INSTALL_DEV}"
+FALLBACKFS_SIZE="${FALLBACKFS_SIZE}"
+ROOTFS_SIZE="${ROOTFS_SIZE}"
+SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB}"
+DEPLOYMENT_SH=true
+STATUS_WAIT_SECONDS=${STATUS_WAIT}
+export NGCP_INSTALLER=true
+EOF
+
+  if "${TRUNK_VERSION}" && checkBootParam ngcpupload ; then
+    echo "NGCPUPLOAD=true" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
+  else
+    echo "NGCPUPLOAD=false" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
+  fi
+}
+
+vagrant_configuration() {
+  # bzip2, linux-headers-amd64 and make are required for VirtualBox Guest Additions installer
+  # less + sudo are required for Vagrant itself
+  echo "Installing software for VirtualBox Guest Additions installer"
+  if ! chroot "$TARGET" apt-get -y install bzip2 less linux-headers-amd64 make sudo ; then
+    die "Error: failed to install 'bzip2 less linux-headers-amd64 make sudo' packages."
+  fi
+
+  vagrant_ssh_pub_key='/var/tmp/id_rsa_sipwise.pub'
+  echo "Fetching Sipwise vagrant public key from builder.mgm.sipwise.com"
+  if ! wget -O "${vagrant_ssh_pub_key}" http://builder.mgm.sipwise.com/vagrant-ngcp/id_rsa_sipwise.pub ; then
+    die "Error: failed to wget public Sipwise SSH key for Vagrant boxes"
+  fi
+
+  if "$NGCP_INSTALLER" ; then
+    local SIPWISE_HOME="/nonexistent"
+    SIPWISE_HOME=$(chroot "${TARGET}" getent passwd 'sipwise' | cut -d':' -f6)
+    if [[ ! -d "${TARGET}/${SIPWISE_HOME}" ]] ; then
+      die "Error: cannot determine home of 'sipwise' user, it does not exist or not a directory: ${TARGET}/${SIPWISE_HOME}"
+    fi
+
+    # TODO: move PATH adjustment to ngcp-installer (ngcpcfg should have a template here)
+    if ! grep -q '^# Added for Vagrant' "${TARGET}/${SIPWISE_HOME}/.profile" 2>/dev/null ; then
+      echo "Adjusting PATH configuration for user Sipwise"
+      echo "# Added for Vagrant" >> "${TARGET}/${SIPWISE_HOME}/.profile"
+      echo "PATH=\$PATH:/sbin:/usr/sbin" >> "${TARGET}/${SIPWISE_HOME}/.profile"
+    fi
+
+    echo "Adjusting ssh configuration for user sipwise (add Vagrant SSH key)"
+    mkdir -p "${TARGET}/${SIPWISE_HOME}/.ssh/"
+    cat "${vagrant_ssh_pub_key}" >> "${TARGET}/${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
+    chroot "${TARGET}" chown sipwise:sipwise "${SIPWISE_HOME}/.ssh" "${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
+    chroot "${TARGET}" chmod 0600 "${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
+  fi
+
+  echo "Adjusting ssh configuration for user root"
+  mkdir -p "${TARGET}/root/.ssh/"
+  cat "${vagrant_ssh_pub_key}" >> "${TARGET}/root/.ssh/sipwise_vagrant_key"
+  chroot "${TARGET}" chmod 0600 /root/.ssh/sipwise_vagrant_key
+  sed -i 's|^[#\s]*\(AuthorizedKeysFile.*\)$|\1 %h/.ssh/sipwise_vagrant_key|g' "${TARGET}/etc/ssh/sshd_config"
+
+  # see https://github.com/mitchellh/vagrant/issues/1673
+  # and https://bugs.launchpad.net/ubuntu/+source/xen-3.1/+bug/1167281
+  if ! grep -q 'adjusted for Vagrant' "${TARGET}/root/.profile" ; then
+    echo "Adding workaround for annoying bug 'stdin: is not a tty' Vagrant message"
+    sed -ri -e "s/mesg\s+n/# adjusted for Vagrant\ntty -s \&\& mesg n/" "${TARGET}/root/.profile"
+  fi
+
+  # shellcheck disable=SC2010
+  KERNELHEADERS=$(basename "$(ls -d "${TARGET}"/usr/src/linux-headers*amd64 | grep -v -- -rt-amd64 | sort -u -r -V | head -1)")
+  if [ -z "$KERNELHEADERS" ] ; then
+    die "Error: no kernel headers found for building the VirtualBox Guest Additions kernel module."
+  fi
+  KERNELVERSION=${KERNELHEADERS##linux-headers-}
+  if [ -z "$KERNELVERSION" ] ; then
+    die "Error: no kernel version could be identified."
+  fi
+
+  local VIRTUALBOX_DIR="/usr/share/virtualbox"
+  local VIRTUALBOX_ISO="VBoxGuestAdditions.iso"
+  local vbox_isofile="${VIRTUALBOX_DIR}/${VIRTUALBOX_ISO}"
+
+  if [ ! -r "$vbox_isofile" ] ; then
+    die "Error: could not find $vbox_isofile"
+  fi
+
+  mkdir -p "${TARGET}/media/cdrom"
+  mountpoint "${TARGET}/media/cdrom" >/dev/null && umount "${TARGET}/media/cdrom"
+  mount -t iso9660 "${vbox_isofile}" "${TARGET}/media/cdrom/"
+  # avoid "ERROR: ld.so: object '/usr/lib/ngcp-deployment-scripts/fake-uname.so' from LD_PRELOAD cannot be preloaded: ignored."
+  # messages caused by the host system when running grml-chroot process
+  mkdir -p /usr/lib/ngcp-deployment-scripts/
+  cp /mnt/usr/lib/ngcp-deployment-scripts/fake-uname.so /usr/lib/ngcp-deployment-scripts/
+  UTS_RELEASE="${KERNELVERSION}" LD_PRELOAD="/usr/lib/ngcp-deployment-scripts/fake-uname.so" \
+    grml-chroot "${TARGET}" /media/cdrom/VBoxLinuxAdditions.run --nox11
+  tail -10 "${TARGET}/var/log/vboxadd-install.log"
+  umount "${TARGET}/media/cdrom/"
+
+  # VBoxLinuxAdditions.run chooses /usr/lib64 as soon as this directory exists, which
+  # is the case for our PRO systems shipping the heartbeat-2 package; then the
+  # symlink /sbin/mount.vboxsf points to the non-existing /usr/lib64/VBoxGuestAdditions/mount.vboxsf
+  # file instead of pointing to /usr/lib/x86_64-linux-gnu/VBoxGuestAdditions/mount.vboxsf
+  if ! chroot "$TARGET" readlink -f /sbin/mount.vboxsf ; then
+    echo "Installing mount.vboxsf symlink to work around /usr/lib64 issue"
+    ln -sf /usr/lib/x86_64-linux-gnu/VBoxGuestAdditions/mount.vboxsf "${TARGET}/sbin/mount.vboxsf"
+  fi
+
+  # MACs are different on buildbox and on local VirtualBox
+  # see http://ablecoder.com/b/2012/04/09/vagrant-broken-networking-when-packaging-ubuntu-boxes/
+  echo "Removing '${TARGET_UDEV_PERSISTENT_NET_RULES}'"
+  rm -f "${TARGET_UDEV_PERSISTENT_NET_RULES:?}"
+
+  if [ -d "${TARGET}/etc/.git" ]; then
+    echo "Commit /etc/* changes using etckeeper"
+    chroot "$TARGET" etckeeper commit "Vagrant/VirtualBox changes on /etc/*"
+  fi
+
+  # disable vbox services so they are not run after reboot
+  # remove manually as we are in chroot now so can not use systemctl calls
+  # can be changed with systemd-nspawn
+  rm -f "${TARGET}/etc/systemd/system/multi-user.target.wants/vboxadd-service.service"
+  rm -f "${TARGET}/etc/systemd/system/multi-user.target.wants/vboxadd.service"
+}
+
+check_puppet_rc() {
+  local _puppet_rc="$1"
+  local _expected_rc="$2"
+
+  if [ "${_puppet_rc}" != "${_expected_rc}" ] ; then
+    # an exit code of '0' happens for 'puppet agent --enable' only,
+    # an exit code of '2' means there were changes,
+    # an exit code of '4' means there were failures during the transaction,
+    # an exit code of '6' means there were both changes and failures.
+    set_deploy_status "error"
+  fi
+}
+
+check_puppet_rerun() {
+  local repeat=1
+
+  if ! checkBootParam nopuppetrepeat && [ "$(get_deploy_status)" = "error" ] ; then
+    echo "Do you want to [r]epeat puppet run or [c]ontinue?"
+    while true; do
+      read -r a
+      case "${a,,}" in
+        r)
+          echo "Repeating puppet run."
+          repeat=0
+          set_deploy_status "puppet"
+          break
+          ;;
+        c)
+          echo "Continue without repeating puppet run."
+          set_deploy_status "puppet"
+          break
+          ;;
+        * ) echo -n "Please answer 'r' to repeat or 'c' to continue: " ;;
+      esac
+      unset a
+    done
+  fi
+
+  return "${repeat}"
+}
+
+check_puppetserver_time() {
+  while true; do
+    offset=$(ntpdate -q "$PUPPET_SERVER" | sed -n '1s/.*offset \(.*\),.*/\1/p' | tr -d -)
+    seconds=${offset%.*}
+    if (( seconds < 10 )) ; then
+      echo "All OK. Time offset between $PUPPET_SERVER and current server is $seconds seconds only."
+      break
+    elif checkBootParam nopuppetrepeat ; then
+      echo "WARNING: time offset between $PUPPET_SERVER and current server is $seconds seconds."
+      echo "(ignoring due to boot option nopuppetrepeat)"
+      break
+    else
+      echo "WARNING: time difference between the current server and $PUPPET_SERVER is ${seconds} seconds (bigger than 10 seconds)."
+      echo "Please synchronize time and press any key to recheck or [c]ontinue with puppet run."
+      read -r a
+      case "${a,,}" in
+        c)
+          echo "Continue ignoring time offset check."
+          break
+          ;;
+        * ) echo -n "Rechecking the offset..." ;;
+      esac
+      unset a
+    fi
+  done
+}
+
+puppet_install_from_git() {
+  local repeat
+
+  : "${PUPPET_GIT_REPO?ERROR: variable 'PUPPET_GIT_REPO' is NOT defined, cannot continue.}"
+  : "${PUPPET_LOCAL_GIT?ERROR: variable 'PUPPET_LOCAL_GIT' is NOT defined, cannot continue.}"
+  : "${PUPPET_GIT_BRANCH?ERROR: variable 'PUPPET_GIT_BRANCH' is NOT defined, cannot continue.}"
+
+  echo "Searching for Hiera rescue device by label '${PUPPET_RESCUE_LABEL}'..."
+  local PUPPET_RESCUE_DRIVE
+  PUPPET_RESCUE_DRIVE=$(blkid | grep -E "LABEL=\"${PUPPET_RESCUE_LABEL}" | head -1 | awk -F: '{print $1}')
+
+  if [ -n "${PUPPET_RESCUE_DRIVE}" ] ; then
+    echo "Found Hiera rescue device: '${PUPPET_RESCUE_DRIVE}'"
+  else
+    die "ERROR: No USB device found matching label '${PUPPET_RESCUE_LABEL}', cannot continue!"
+  fi
+
+  echo "Searching for Hiera rescue device type..."
+  local DEVICE_TYPE
+  DEVICE_TYPE=$(blkid | grep -E "LABEL=\"${PUPPET_RESCUE_LABEL}" | head -1 | sed 's/.*TYPE="\(.*\)".*/\1/')
+
+  if [ -n "${DEVICE_TYPE}" ] ; then
+    echo "Hiera rescue device type is:'${DEVICE_TYPE}'"
+  else
+    die "ERROR: Cannot detect device type for device '${PUPPET_RESCUE_LABEL}', cannot continue!"
+  fi
+
+  echo "Copying data from device '${PUPPET_RESCUE_DRIVE}' (mounted into '${PUPPET_RESCUE_PATH}', type '${DEVICE_TYPE}')"
+  mkdir -p "${PUPPET_RESCUE_PATH}"
+  mount -t "${DEVICE_TYPE}" -o ro "${PUPPET_RESCUE_DRIVE}" "${PUPPET_RESCUE_PATH}"
+  mkdir -p "${TARGET}/etc/puppetlabs/code/hieradata/"
+  chmod 0700 "${TARGET}/etc/puppetlabs/code/hieradata/"
+  cp -a "${PUPPET_RESCUE_PATH}"/hieradata/* "${TARGET}/etc/puppetlabs/code/hieradata/"
+  mkdir -p ~/.ssh
+  cp "${PUPPET_RESCUE_PATH}"/hieradata/defaults.d/id_rsa_r10k ~/.ssh/
+  chmod 600 ~/.ssh/id_rsa_r10k
+  umount -f "${PUPPET_RESCUE_PATH}"
+  rmdir "${PUPPET_RESCUE_PATH}"
+
+  echo "Cloning Puppet git repository from '${PUPPET_GIT_REPO}' to '${PUPPET_LOCAL_GIT}' (branch '${PUPPET_GIT_BRANCH}')"
+  echo 'ssh -i ~/.ssh/id_rsa_r10k -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $*' > ssh
+  chmod +x ssh
+  if ! GIT_SSH="${PWD}/ssh" git clone --depth 1 -b "${PUPPET_GIT_BRANCH}" "${PUPPET_GIT_REPO}" "${PUPPET_LOCAL_GIT}" ; then
+    die "ERROR: Cannot clone git repository, see the error above, cannot continue!"
+  fi
+  rm "${PWD}/ssh"
+
+  local PUPPET_CODE_PATH
+  PUPPET_CODE_PATH="/etc/puppetlabs/code/environments/${PUPPET}"
+
+  echo "Creating empty Puppet environment ${TARGET}/${PUPPET_CODE_PATH}"
+  mkdir -p "${TARGET}/${PUPPET_CODE_PATH}"
+  chmod 0755 "${TARGET}/${PUPPET_CODE_PATH}"
+
+  echo "Deploying Puppet code from Git repository to ${TARGET}/${PUPPET_CODE_PATH}"
+  cp -a "${PUPPET_LOCAL_GIT}"/* "${TARGET}/${PUPPET_CODE_PATH}"
+  rm -rf "${PUPPET_LOCAL_GIT:?}"
+
+  repeat=true
+  while $repeat ; do
+    repeat=false
+    echo "Initializing Hiera config..."
+    grml-chroot "${TARGET}" puppet apply --test --modulepath="${PUPPET_CODE_PATH}/modules" \
+          -e "include puppet::hiera" 2>&1 | tee -a /tmp/puppet.log
+    check_puppet_rc "${PIPESTATUS[0]}" "2"
+    check_puppet_rerun && repeat=true
+  done
+
+  repeat=true
+  while $repeat ; do
+    repeat=false
+    echo "Running Puppet core deployment..."
+    grml-chroot "${TARGET}" puppet apply --test --modulepath="${PUPPET_CODE_PATH}/modules" --tags core,apt \
+          "${PUPPET_CODE_PATH}/manifests/site.pp" 2>&1 | tee -a /tmp/puppet.log
+    check_puppet_rc "${PIPESTATUS[0]}" "2"
+    check_puppet_rerun && repeat=true
+  done
+
+  repeat=true
+  while $repeat ; do
+    repeat=false
+    echo "Running Puppet main deployment..."
+    grml-chroot "${TARGET}" puppet apply --test --modulepath="${PUPPET_CODE_PATH}/modules" \
+          "${PUPPET_CODE_PATH}/manifests/site.pp" 2>&1 | tee -a /tmp/puppet.log
+    check_puppet_rc "${PIPESTATUS[0]}" "2"
+    check_puppet_rerun && repeat=true
+  done
+
+  return 0
+}
+
+puppet_install_from_puppet() {
+  local repeat
+
+  check_puppetserver_time
+
+  repeat=true
+  while $repeat ; do
+    repeat=false
+    echo "Running Puppet core deployment..."
+    grml-chroot "${TARGET}" puppet agent --test --tags core,apt 2>&1 | tee -a /tmp/puppet.log
+    check_puppet_rc "${PIPESTATUS[0]}" "2"
+    check_puppet_rerun && repeat=true
+  done
+
+  repeat=true
+  while $repeat ; do
+    repeat=false
+    echo "Running Puppet main deployment..."
+    grml-chroot "${TARGET}" puppet agent --test 2>&1 | tee -a /tmp/puppet.log
+    check_puppet_rc "${PIPESTATUS[0]}" "2"
+    check_puppet_rerun && repeat=true
+  done
+
+  return 0
+}
+
+# Main script
+
+INSTALL_LOG='/tmp/deployment-installer-debug.log'
+exec  > >(tee -a $INSTALL_LOG    )
+exec 2> >(tee -a $INSTALL_LOG >&2)
+
+# set version to git commit ID
+SCRIPT_VERSION="%SCRIPT_VERSION%"
+
+# not set? then fall back to timestamp of execution
+if [ -z "$SCRIPT_VERSION" ] || [ "$SCRIPT_VERSION" = '%SCRIPT_VERSION%' ] ; then
+  SCRIPT_VERSION=$(date +%s) # seconds since 1970-01-01 00:00:00 UTC
+fi
+
+# Never ever execute the script outside of a
+# running Grml live system because partitioning
+# disks might destroy data. Seriously.
+if ! [ -r /etc/grml_cd ] ; then
+  echo "Not running inside Grml, better safe than sorry. Sorry." >&2
+  exit 1
+fi
+
+# better safe than sorry
+export LC_ALL=C
+export LANG=C
+
+# avoid SHELL being set but not available, causing needrestart failure, see #788819
+unset SHELL
+
+# defaults
+DEBUG_MODE=false
+DEFAULT_INTERNAL_DEV=eth1
+DEFAULT_IP1=192.168.255.251
+DEFAULT_IP2=192.168.255.252
+DEFAULT_IP_HA_SHARED=192.168.255.250
+DEFAULT_INTERNAL_NETMASK=255.255.255.248
+TARGET=/mnt
+PRO_EDITION=false
+CE_EDITION=false
+CARRIER_EDITION=false
+NGCP_INSTALLER=false
+PUPPET=''
+PUPPET_SERVER=puppet.mgm.sipwise.com
+PUPPET_GIT_REPO=''
+PUPPET_GIT_BRANCH=master
+PUPPET_LOCAL_GIT="${TARGET}/tmp/puppet.git"
+PUPPET_RESCUE_PATH="/mnt/rescue_drive"
+PUPPET_RESCUE_LABEL="SIPWRESCUE*"
+INTERACTIVE=false
+DHCP=false
+LOGO=true
+RETRIEVE_MGMT_CONFIG=false
+TRUNK_VERSION=false
+DEBIAN_RELEASE=buster
+HALT=false
+REBOOT=false
+STATUS_DIRECTORY=/srv/deployment/
+STATUS_WAIT=0
+VAGRANT=false
+ADJUST_FOR_LOW_PERFORMANCE=false
+ENABLE_VM_SERVICES=false
+FILESYSTEM="ext4"
+ROOTFS_SIZE="10G"
+FALLBACKFS_SIZE="${ROOTFS_SIZE}"
+SWAPFILE_SIZE_MB_MIN="4096"
+SWAPFILE_SIZE_MB_MAX="16384"
+SWAPFILE_SIZE_MB=""
+SWRAID_DEVICE="/dev/md0"
+SWRAID_DESTROY=false
+DEBIAN_REPO_HOST="debian.sipwise.com"
+DEBIAN_REPO_TRANSPORT="https"
+SIPWISE_REPO_HOST="deb.sipwise.com"
+SIPWISE_REPO_TRANSPORT="https"
+DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
+SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
+DPL_MYSQL_REPLICATION=true
+FILL_APPROX_CACHE=true
+VLAN_BOOT_INT=2
+VLAN_SSH_EXT=300
+VLAN_WEB_EXT=1718
+VLAN_SIP_EXT=1719
+VLAN_SIP_INT=1720
+VLAN_HA_INT=1721
+VLAN_RTP_EXT=1722
+SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
+NGCP_PXE_INSTALL=false
+ADDITIONAL_PACKAGES=(git augeas-tools gdisk virtualbox-guest-additions-iso)
+
+# trap signals: 1 SIGHUP, 2 SIGINT, 3 SIGQUIT, 6 SIGABRT, 15 SIGTERM
 trap 'wait_exit;' 1 2 3 6 15 ERR EXIT
 
 CMD_LINE=$(cat /proc/cmdline)
@@ -684,54 +1493,6 @@ if [ -n "$NETSCRIPT" ] ; then
   INTERACTIVE=false
 fi
 
-usage() {
-  echo "$0 - automatically deploy Debian ${DEBIAN_RELEASE} and (optionally) ngcp ce/pro.
-
-Control installation parameters:
-
-  ngcppro          - install Pro Edition
-  ngcpsp1          - install first node (Pro Edition only)
-  ngcpsp2          - install second node (Pro Edition only)
-  ngcpce           - install CE Edition
-  ngcpcrole=...    - server role (Carrier)
-  ngcpvers=...     - install specific SP/CE version
-  nongcp           - do not install NGCP but install plain Debian only
-  noinstall        - do not install neither Debian nor NGCP
-  ngcpinst         - force usage of NGCP installer
-  ngcpinstvers=... - use specific NGCP installer version
-  debianrepo=...   - hostname of Debian APT repository mirror
-  sipwiserepo=...  - hostname of Sipwise APT repository mirror
-  ngcpnomysqlrepl  - skip MySQL sp1<->sp2 replication configuration/check
-  ngcpppa=...      - use NGCP PPA Debian repository
-
-Control target system:
-
-  ngcpnw.dhcp      - use DHCP as network configuration in installed system
-  ngcphostname=... - hostname of installed system (defaults to ngcp/sp[1,2])
-                     NOTE: do NOT use when installing Pro Edition!
-  ngcpeiface=...   - external interface device (defaults to eth0)
-  ngcpip1=...      - IP address of first node
-  ngcpip2=...      - IP address of second node
-  ngcpipshared=... - HA shared IP address
-  ngcpnetmask=...  - netmask of ha_int interface
-  ngcpeaddr=...    - Cluster IP address
-  swapfilesize=... - size of swap file in megabytes
-
-The command line options correspond with the available bootoptions.
-Command line overrides any present bootoption.
-
-Usage examples:
-
-  # ngcp-deployment ngcpce ngcpnw.dhcp
-
-  # netcardconfig # configure eth0 with static configuration
-  # ngcp-deployment ngcppro ngcpsp1
-
-  # netcardconfig # configure eth0 with static configuration
-  # ngcp-deployment ngcppro ngcpsp2
-"
-}
-
 for param in "$@" ; do
   case $param in
     *-h*|*--help*|*help*) usage ; exit 0;;
@@ -836,18 +1597,6 @@ if checkBootParam 'ip=' ; then
     [[ "${IP_ARR[autoconf]}" == 'dhcp' ]] && DHCP=true
   fi
 fi
-
-cdr2mask () {
-  # From https://stackoverflow.com/questions/20762575/explanation-of-convertor-of-cidr-to-netmask-in-linux-shell-netmask2cdir-and-cdir
-  # Number of args to shift, 255..255, first non-255 byte, zeroes
-  set -- $(( 5 - ("${1}" / 8) )) 255 255 255 255 $(( (255 << (8 - ("${1}" % 8))) & 255 )) 0 0 0
-  if [[ "${1}" -gt 1 ]] ; then
-    shift "${1}"
-  else
-    shift
-  fi
-  echo "${1:-0}.${2:-0}.${3:-0}.${4:-0}"
-}
 
 # Get current IP
 ## try ipv4
@@ -1010,295 +1759,6 @@ if "$NGCP_INSTALLER" ; then
 else
   VG_NAME="vg0"
 fi
-
-clear_partition_table() {
-  local blockdevice="$1"
-
-  if [[ ! -b "${blockdevice}" ]] ; then
-    die "Error: ${blockdevice} doesn't look like a valid block device." >&2
-  fi
-
-  echo "Wiping disk signatures from ${blockdevice}"
-  wipefs -a "${blockdevice}"
-
-  # make sure parted doesn't fail if LVM is already present
-  blockdev --rereadpt "$blockdevice"
-  for disk in "$blockdevice"* ; do
-    existing_pvs=$(pvs "$disk" -o vg_name --noheadings 2>/dev/null || true)
-    if [ -n "$existing_pvs" ] ; then
-      for pv in $existing_pvs ; do
-        echo "Getting rid of existing VG $pv"
-        vgremove -ff "$pv"
-      done
-    fi
-
-    echo "Removing possibly existing LVM/PV label from $disk"
-    pvremove "$disk" --force --force --yes || true
-  done
-
-  dd if=/dev/zero of="${blockdevice}" bs=1M count=1
-  blockdev --rereadpt "${blockdevice}"
-}
-
-get_pvdevice_by_label() {
-  local blockdevice="$1"
-  if [[ -z "${blockdevice}" ]]; then
-    die "Error: need a blockdevice to probe, nothing provided."
-  fi
-  local partlabel="$2"
-  if [[ -z "${partlabel}" ]]; then
-    die "Error: need a partlabel to search for, nothing provided."
-  fi
-
-  local pvdevice=""
-  pvdevice=$(blkid -t PARTLABEL="${partlabel}" -o device "${blockdevice}"* || true)
-  echo "${pvdevice}"
-}
-
-get_pvdevice_by_label_with_retries() {
-  if [[ $# -ne 4 ]]; then
-    die "Error: needs 4 arguments: a BLOCKDEVICE to probe, a PARTLABEL to search for, MAX_TRIES and name of variable to return PVDEVICE."
-  fi
-
-  local blockdevice="$1"
-  if [[ -z "${blockdevice}" ]]; then
-    die "Error: need a blockdevice to probe, nothing provided."
-  fi
-  local partlabel="$2"
-  if [[ -z "${partlabel}" ]]; then
-    die "Error: need a partlabel to search for, nothing provided."
-  fi
-  local max_tries="$3"
-  if [[ -z "${max_tries}" ]]; then
-    die "Error: need max_tries, nothing provided."
-  fi
-  # return result in this variable
-  # shellcheck disable=SC2034
-  declare -n ret="$4"
-
-  local pvdevice_local
-  for try in $(seq 1 "${max_tries}"); do
-    pvdevice_local=$(get_pvdevice_by_label "${blockdevice}" "${partlabel}")
-    if [[ -n "${pvdevice_local}" ]]; then
-      echo "pvdevice is now available: ${pvdevice_local}"
-      # it's a reference to an external variable that sets the return value
-      # shellcheck disable=SC2034
-      ret="${pvdevice_local}"
-      break
-    else
-      if [[ "${try}" -lt "${max_tries}" ]]; then
-        echo "pvdevice not yet available (blockdevice=${blockdevice}, partlabel='${partlabel}'), try #${try} of ${max_tries}, retrying in 1 second..."
-        sleep 1s
-      else
-        die "Error: could not get pvdevice after #${try} tries"
-      fi
-    fi
-  done
-}
-
-parted_execution() {
-  local blockdevice="$1"
-
-  echo "Creating partition table"
-  parted -a optimal -s "${blockdevice}" mklabel gpt
-
-  # BIOS boot with GPT
-  parted -a optimal -s "${blockdevice}" mkpart primary 2048s 2M
-  parted -a optimal -s "${blockdevice}" set 1 bios_grub on
-  parted -a optimal -s "${blockdevice}" "name 1 'BIOS Boot'"
-
-  # EFI boot with GPT
-  parted -a optimal -s "${blockdevice}" mkpart primary 2M 512M
-  parted -a optimal -s "${blockdevice}" "name 2 'EFI System'"
-  parted -a optimal -s "${blockdevice}" set 2 boot on
-
-  blockdev --flushbufs "${blockdevice}"
-
-  echo "Get path of EFI partition"
-  local max_tries=60
-  EFI_PARTITION=""
-  get_pvdevice_by_label_with_retries "${blockdevice}" "EFI System" "${max_tries}" EFI_PARTITION
-}
-
-set_up_partition_table_noswraid() {
-  local blockdevice
-  blockdevice="/dev/${DISK}"
-
-  clear_partition_table "$blockdevice"
-
-  parted_execution "$blockdevice"
-  parted -a optimal -s "${blockdevice}" mkpart primary 512M 100%
-  parted -a optimal -s "${blockdevice}" "name 3 'Linux LVM'"
-  parted -a optimal -s "${blockdevice}" set 3 lvm on
-  blockdev --flushbufs "${blockdevice}"
-
-  local max_tries=60
-  local pvdevice
-  local partlabel="Linux LVM"
-  get_pvdevice_by_label_with_retries "${blockdevice}" "${partlabel}" "${max_tries}" pvdevice
-
-  echo "Creating PV + VG"
-  pvcreate -ff -y "${pvdevice}"
-  vgcreate "${VG_NAME}" "${pvdevice}"
-  vgchange -a y "${VG_NAME}"
-}
-
-set_up_partition_table_swraid() {
-  # make sure we don't overlook unassembled SW-RAIDs
-  local raidev1
-  local raidev2
-  mdadm --assemble --scan || true # fails if there's nothing to assemble
-
-  if [[ -b "${SWRAID_DEVICE}" ]] ; then
-    if [[ "${SWRAID_DESTROY}" = "true" ]] ; then
-      mdadm --remove "${SWRAID_DEVICE}"
-      mdadm --stop "${SWRAID_DEVICE}"
-      mdadm --zero-superblock "/dev/${SWRAID_DISK1}"
-      mdadm --zero-superblock "/dev/${SWRAID_DISK2}"
-    else
-      echo "NOTE: if you are sure you don't need it SW-RAID device any longer, execute:"
-      echo "      mdadm --remove ${SWRAID_DEVICE} ; mdadm --stop ${SWRAID_DEVICE}; mdadm --zero-superblock /dev/sd..."
-      echo "      (also you can use boot option 'swraiddestroy' to destroy SW-RAID automatically)"
-      die "Error: SW-RAID device ${SWRAID_DEVICE} exists already."
-    fi
-  fi
-
-  for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
-    if grep -q "$disk" /proc/mdstat ; then
-      die "Error: disk $disk seems to be part of an existing SW-RAID setup."
-    fi
-    clear_partition_table "/dev/${disk}"
-  done
-
-  parted_execution "/dev/${SWRAID_DISK1}"
-
-  parted -a optimal -s "/dev/${SWRAID_DISK1}" mkpart primary 512M 100%
-  parted -a optimal -s "/dev/${SWRAID_DISK1}" "name 3 'Linux RAID'"
-  parted -a optimal -s "/dev/${SWRAID_DISK1}" set 3 raid on
-
-  # clone partitioning from SWRAID_DISK1 to SWRAID_DISK2
-  sgdisk "/dev/${SWRAID_DISK1}" -R "/dev/${SWRAID_DISK2}"
-  # randomize the disk's GUID and all partitions' unique GUIDs after cloning
-  sgdisk -G "/dev/${SWRAID_DISK2}"
-
-  local partlabel="Linux RAID"
-  local max_tries=60
-  get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK1}" "${partlabel}" "${max_tries}" raidev1
-  get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK2}" "${partlabel}" "${max_tries}" raidev2
-
-  echo y | mdadm --create --verbose "${SWRAID_DEVICE}" --level=1 --raid-devices=2 "${raidev1}" "${raidev2}"
-
-  echo "Creating PV + VG on ${SWRAID_DEVICE}"
-  pvcreate -ff -y "${SWRAID_DEVICE}"
-  vgcreate "${VG_NAME}" "${SWRAID_DEVICE}"
-  vgchange -a y "${VG_NAME}"
-}
-
-set_up_partition_table() {
-  if [[ "${SWRAID}" = "true" ]] ; then
-    set_up_partition_table_swraid
-  else
-    set_up_partition_table_noswraid
-  fi
-}
-
-create_ngcp_partitions() {
-  # root
-  echo "Creating LV 'root' with ${ROOTFS_SIZE}"
-  lvcreate --yes -n root -L "${ROOTFS_SIZE}" "${VG_NAME}"
-
-  echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/root"
-  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
-
-  # used later by installer
-  ROOT_FS="/dev/mapper/${VG_NAME}-root"
-
-  # fallback
-  if [[ "${FALLBACKFS_SIZE}" != "0" ]]; then
-    echo "Creating LV 'fallback' with ${FALLBACKFS_SIZE}"
-    lvcreate --yes -n fallback -L "${FALLBACKFS_SIZE}" "${VG_NAME}"
-
-    echo "Creating ${FILESYSTEM} filesystem on /dev/${VG_NAME}/fallback"
-    mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/fallback
-
-    # used later by installer
-    FALLBACK_FS="/dev/mapper/${VG_NAME}-fallback"
-  fi
-
-  # data
-  local vg_free data_size unassigned
-  vg_free=$(vgs "${VG_NAME}" -o vg_free --noheadings --nosuffix --units B)
-  data_size=$(( vg_free * 18 / 20 )) # 90% of free space (in MB)
-  unassigned=$(( vg_free - data_size ))
-  # make sure we have 10% or at least 500MB unassigned space
-  if [[ "${unassigned}" -lt 524288000 ]] ; then # 500MB
-    data_size=$(( vg_free - 524288000 ))
-  fi
-
-  local data_size_mb
-  data_size_mb=$(( data_size / 1024 / 1024 ))
-  echo "Creating LV data with ${data_size_mb}M"
-  lvcreate --yes -n data -L "${data_size_mb}M" "${VG_NAME}"
-
-  echo "Creating ${FILESYSTEM} on /dev/${VG_NAME}/data"
-  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/data
-
-  # used later by installer
-  DATA_PARTITION="/dev/mapper/${VG_NAME}-data"
-}
-
-create_debian_partitions() {
-  # rootfs
-  local root_size="${ROOTFS_SIZE:-8G}"
-  echo "Creating LV root with ${root_size}"
-  lvcreate --yes -n root -L "${root_size}" "${VG_NAME}"
-
-  echo "Creating ${FILESYSTEM} on /dev/${VG_NAME}/root"
-  mkfs."${FILESYSTEM}" -FF /dev/"${VG_NAME}"/root
-
-  # used later by installer
-  ROOT_FS="/dev/mapper/${VG_NAME}-root"
-}
-
-display_partition_table() {
-  local blockdevice
-  if [[ "${SWRAID}" = "true" ]] ; then
-    for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
-      echo "Displaying partition table (of SW-RAID disk /dev/$disk) for reference:"
-      parted -s "/dev/${disk}" unit GiB print
-      lsblk "/dev/${disk}"
-    done
-  else
-    echo "Displaying partition table (of /dev/$disk) for reference:"
-    parted -s "/dev/${DISK}" unit GiB print
-    lsblk "/dev/${DISK}"
-  fi
-}
-
-lvm_setup() {
-  local saved_options
-  saved_options="$(set +o)"
-  # be restrictive in what we execute
-  set -euo pipefail
-
-  if "$NGCP_INSTALLER" ; then
-    VG_NAME="ngcp"
-    set_up_partition_table
-    create_ngcp_partitions
-    display_partition_table
-  else
-    VG_NAME="vg0"
-    set_up_partition_table
-    create_debian_partitions
-    display_partition_table
-  fi
-
-  # used later by installer
-  ROOT_FS="/dev/mapper/${VG_NAME}-root"
-
-  # restore original options/behavior
-  eval "$saved_options"
-}
 
 lvm_setup
 
@@ -1540,178 +2000,6 @@ EOL
   unset pciid
 done
 
-get_installer_path() {
-  if [ -z "$SP_VERSION" ] && ! $TRUNK_VERSION ; then
-    INSTALLER=ngcp-installer-latest.deb
-
-    if "$PRO_EDITION" ; then
-      INSTALLER_PATH="${SIPWISE_URL}/sppro/"
-    else
-      INSTALLER_PATH="${SIPWISE_URL}/spce/"
-    fi
-
-    return # we don't want to run any further code from this function
-  fi
-
-  # use pool directory according for ngcp release
-  if "${PRO_EDITION}" || "${CARRIER_EDITION}" ; then
-    local installer_package='ngcp-installer-pro'
-    local repos_base_path="${SIPWISE_URL}/sppro/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
-    INSTALLER_PATH="${SIPWISE_URL}/sppro/${SP_VERSION}/pool/main/n/ngcp-installer/"
-  else
-    local installer_package='ngcp-installer-ce'
-    local repos_base_path="${SIPWISE_URL}/spce/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
-    INSTALLER_PATH="${SIPWISE_URL}/spce/${SP_VERSION}/pool/main/n/ngcp-installer/"
-  fi
-
-  # use a separate repos for trunk releases
-  if $TRUNK_VERSION ; then
-    local repos_base_path="${SIPWISE_URL}/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
-    INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
-  fi
-
-  if [ -n "${NGCP_PPA}" ] ; then
-    local ppa_tmp_packages
-    ppa_tmp_packages=$(mktemp)
-
-    echo "NGCP PPA requested, checking ngcp-installer package availability in PPA repo"
-    local ppa_repos_base_path="${SIPWISE_URL}/autobuild/dists/${NGCP_PPA}/main/binary-amd64/"
-    wget --timeout=30 -O "${ppa_tmp_packages}" "${ppa_repos_base_path}/Packages.gz"
-
-    local installer_ppa_version
-    installer_ppa_version=$(zcat "${ppa_tmp_packages}" | sed "/./{H;\$!d;};x;/Package: ${installer_package}/b;d" | awk '/^Version: / {print $2}' | sort -u)
-    rm -f "${ppa_tmp_packages}"
-
-    if [ -n "${installer_ppa_version}" ]; then
-      echo "NGCP PPA contains ngcp-installer, using it, version '${installer_ppa_version}'"
-      local repos_base_path="${ppa_repos_base_path}"
-      INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
-    else
-      echo "NGCP PPA does NOT contains ngcp-installer, using default ngcp-installer package"
-    fi
-  fi
-
-  wget --timeout=30 -O Packages.gz "${repos_base_path}Packages.gz"
-  # sed: display paragraphs matching the "Package: ..." string, then grab string "^Version: " and display the actual version via awk
-  # sort -u to avoid duplicates in repositories shipping the ngcp-installer-pro AND ngcp-installer-pro-ha-v3 debs
-  local version
-  version=$(zcat Packages.gz | sed "/./{H;\$!d;};x;/Package: ${installer_package}/b;d" | awk '/^Version: / {print $2}' | sort -u)
-
-  [ -n "$version" ] || die "Error: installer version for ngcp ${SP_VERSION}, Debian release $DEBIAN_RELEASE with installer package $installer_package could not be detected."
-
-  if "${PRO_EDITION}" || "${CARRIER_EDITION}" ; then
-    INSTALLER="ngcp-installer-pro_${version}_all.deb"
-  else
-    INSTALLER="ngcp-installer-ce_${version}_all.deb"
-  fi
-}
-
-set_repos() {
-  cat > $TARGET/etc/apt/sources.list << EOF
-# Please visit /etc/apt/sources.list.d/ instead.
-EOF
-
-  cat > $TARGET/etc/apt/sources.list.d/debian.list << EOF
-## custom sources.list, deployed via deployment.sh
-
-# Debian repositories
-deb ${MIRROR} ${DEBIAN_RELEASE} main contrib non-free
-deb ${SEC_MIRROR} ${DEBIAN_RELEASE}-security main contrib non-free
-deb ${MIRROR} ${DEBIAN_RELEASE}-updates main contrib non-free
-deb ${DBG_MIRROR} ${DEBIAN_RELEASE}-debug main contrib non-free
-EOF
-
-  mkdir -p "${TARGET}"/etc/apt/apt.conf.d/
-  cat > "${TARGET}"/etc/apt/apt.conf.d/73_acquire_retries << EOF
-# NGCP_MANAGED_FILE -- deployment.sh
-Acquire::Retries "3";
-EOF
-}
-
-gen_installer_config () {
-  local conf_file
-  conf_file="${TARGET}/etc/ngcp-installer/config_deploy.inc"
-  truncate -s 0 "${conf_file}"
-
-  if "${CARRIER_EDITION}" ; then
-    cat >> "${conf_file}" << EOF
-CARRIER=true
-PRO=false
-CE=false
-EOF
-  elif "${PRO_EDITION}" ; then
-    cat >> "${conf_file}" << EOF
-CARRIER=false
-PRO=true
-CE=false
-EOF
-  elif "${CE_EDITION}" ; then
-    cat >> "${conf_file}" << EOF
-CARRIER=false
-PRO=false
-CE=true
-EOF
-  fi
-
-  if "${CARRIER_EDITION}" ; then
-    cat >> "${conf_file}" << EOF
-CROLE="${CROLE}"
-VLAN_BOOT_INT="${VLAN_BOOT_INT}"
-VLAN_SSH_EXT="${VLAN_SSH_EXT}"
-VLAN_WEB_EXT="${VLAN_WEB_EXT}"
-VLAN_SIP_EXT="${VLAN_SIP_EXT}"
-VLAN_SIP_INT="${VLAN_SIP_INT}"
-VLAN_HA_INT="${VLAN_HA_INT}"
-VLAN_RTP_EXT="${VLAN_RTP_EXT}"
-EOF
-  fi
-  if "${PRO_EDITION}" ; then
-    cat >> "${conf_file}" << EOF
-HNAME="${ROLE}"
-IP1="${IP1}"
-IP2="${IP2}"
-IP_HA_SHARED="${IP_HA_SHARED}"
-DPL_MYSQL_REPLICATION="${DPL_MYSQL_REPLICATION}"
-TARGET_HOSTNAME="${TARGET_HOSTNAME}"
-INTERNAL_DEV="${INTERNAL_DEV}"
-NETWORK_DEVICES="${NETWORK_DEVICES}"
-INTERNAL_NETMASK="${INTERNAL_NETMASK}"
-MANAGEMENT_IP="${MANAGEMENT_IP}"
-NGCP_PXE_INSTALL="${NGCP_PXE_INSTALL}"
-FILL_APPROX_CACHE="${FILL_APPROX_CACHE}"
-EOF
-  fi
-
-  cat >> "${conf_file}" << EOF
-FORCE=no
-ADJUST_FOR_LOW_PERFORMANCE="${ADJUST_FOR_LOW_PERFORMANCE}"
-ENABLE_VM_SERVICES="${ENABLE_VM_SERVICES}"
-SIPWISE_REPO_HOST="${SIPWISE_REPO_HOST}"
-SIPWISE_URL="${SIPWISE_URL}"
-NAMESERVER="$(awk '/^nameserver/ {print $2}' /etc/resolv.conf)"
-NGCP_PPA="${NGCP_PPA}"
-DEBUG_MODE="${DEBUG_MODE}"
-EADDR="${EADDR}"
-DHCP="${DHCP}"
-EXTERNAL_DEV="${EXTERNAL_DEV}"
-GW="${GW}"
-EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
-ORIGIN_INSTALL_DEV="${INSTALL_DEV}"
-FALLBACKFS_SIZE="${FALLBACKFS_SIZE}"
-ROOTFS_SIZE="${ROOTFS_SIZE}"
-SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB}"
-DEPLOYMENT_SH=true
-STATUS_WAIT_SECONDS=${STATUS_WAIT}
-export NGCP_INSTALLER=true
-EOF
-
-  if "${TRUNK_VERSION}" && checkBootParam ngcpupload ; then
-    echo "NGCPUPLOAD=true" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
-  else
-    echo "NGCPUPLOAD=false" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
-  fi
-}
-
 if "$NGCP_INSTALLER" ; then
   set_deploy_status "ngcp-installer"
 
@@ -1801,302 +2089,12 @@ case "$DEBIAN_RELEASE" in
     ;;
 esac
 
-vagrant_configuration() {
-  # bzip2, linux-headers-amd64 and make are required for VirtualBox Guest Additions installer
-  # less + sudo are required for Vagrant itself
-  echo "Installing software for VirtualBox Guest Additions installer"
-  if ! chroot "$TARGET" apt-get -y install bzip2 less linux-headers-amd64 make sudo ; then
-    die "Error: failed to install 'bzip2 less linux-headers-amd64 make sudo' packages."
-  fi
-
-  vagrant_ssh_pub_key='/var/tmp/id_rsa_sipwise.pub'
-  echo "Fetching Sipwise vagrant public key from builder.mgm.sipwise.com"
-  if ! wget -O "${vagrant_ssh_pub_key}" http://builder.mgm.sipwise.com/vagrant-ngcp/id_rsa_sipwise.pub ; then
-    die "Error: failed to wget public Sipwise SSH key for Vagrant boxes"
-  fi
-
-  if "$NGCP_INSTALLER" ; then
-    local SIPWISE_HOME="/nonexistent"
-    SIPWISE_HOME=$(chroot "${TARGET}" getent passwd 'sipwise' | cut -d':' -f6)
-    if [[ ! -d "${TARGET}/${SIPWISE_HOME}" ]] ; then
-      die "Error: cannot determine home of 'sipwise' user, it does not exist or not a directory: ${TARGET}/${SIPWISE_HOME}"
-    fi
-
-    # TODO: move PATH adjustment to ngcp-installer (ngcpcfg should have a template here)
-    if ! grep -q '^# Added for Vagrant' "${TARGET}/${SIPWISE_HOME}/.profile" 2>/dev/null ; then
-      echo "Adjusting PATH configuration for user Sipwise"
-      echo "# Added for Vagrant" >> "${TARGET}/${SIPWISE_HOME}/.profile"
-      echo "PATH=\$PATH:/sbin:/usr/sbin" >> "${TARGET}/${SIPWISE_HOME}/.profile"
-    fi
-
-    echo "Adjusting ssh configuration for user sipwise (add Vagrant SSH key)"
-    mkdir -p "${TARGET}/${SIPWISE_HOME}/.ssh/"
-    cat "${vagrant_ssh_pub_key}" >> "${TARGET}/${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
-    chroot "${TARGET}" chown sipwise:sipwise "${SIPWISE_HOME}/.ssh" "${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
-    chroot "${TARGET}" chmod 0600 "${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
-  fi
-
-  echo "Adjusting ssh configuration for user root"
-  mkdir -p "${TARGET}/root/.ssh/"
-  cat "${vagrant_ssh_pub_key}" >> "${TARGET}/root/.ssh/sipwise_vagrant_key"
-  chroot "${TARGET}" chmod 0600 /root/.ssh/sipwise_vagrant_key
-  sed -i 's|^[#\s]*\(AuthorizedKeysFile.*\)$|\1 %h/.ssh/sipwise_vagrant_key|g' "${TARGET}/etc/ssh/sshd_config"
-
-  # see https://github.com/mitchellh/vagrant/issues/1673
-  # and https://bugs.launchpad.net/ubuntu/+source/xen-3.1/+bug/1167281
-  if ! grep -q 'adjusted for Vagrant' "${TARGET}/root/.profile" ; then
-    echo "Adding workaround for annoying bug 'stdin: is not a tty' Vagrant message"
-    sed -ri -e "s/mesg\s+n/# adjusted for Vagrant\ntty -s \&\& mesg n/" "${TARGET}/root/.profile"
-  fi
-
-  # shellcheck disable=SC2010
-  KERNELHEADERS=$(basename "$(ls -d ${TARGET}/usr/src/linux-headers*amd64 | grep -v -- -rt-amd64 | sort -u -r -V | head -1)")
-  if [ -z "$KERNELHEADERS" ] ; then
-    die "Error: no kernel headers found for building the VirtualBox Guest Additions kernel module."
-  fi
-  KERNELVERSION=${KERNELHEADERS##linux-headers-}
-  if [ -z "$KERNELVERSION" ] ; then
-    die "Error: no kernel version could be identified."
-  fi
-
-  local VIRTUALBOX_DIR="/usr/share/virtualbox"
-  local VIRTUALBOX_ISO="VBoxGuestAdditions.iso"
-  local vbox_isofile="${VIRTUALBOX_DIR}/${VIRTUALBOX_ISO}"
-
-  if [ ! -r "$vbox_isofile" ] ; then
-    die "Error: could not find $vbox_isofile"
-  fi
-
-  mkdir -p "${TARGET}/media/cdrom"
-  mountpoint "${TARGET}/media/cdrom" >/dev/null && umount "${TARGET}/media/cdrom"
-  mount -t iso9660 "${vbox_isofile}" "${TARGET}/media/cdrom/"
-  # avoid "ERROR: ld.so: object '/usr/lib/ngcp-deployment-scripts/fake-uname.so' from LD_PRELOAD cannot be preloaded: ignored."
-  # messages caused by the host system when running grml-chroot process
-  mkdir -p /usr/lib/ngcp-deployment-scripts/
-  cp /mnt/usr/lib/ngcp-deployment-scripts/fake-uname.so /usr/lib/ngcp-deployment-scripts/
-  UTS_RELEASE="${KERNELVERSION}" LD_PRELOAD="/usr/lib/ngcp-deployment-scripts/fake-uname.so" \
-    grml-chroot "${TARGET}" /media/cdrom/VBoxLinuxAdditions.run --nox11
-  tail -10 "${TARGET}/var/log/vboxadd-install.log"
-  umount "${TARGET}/media/cdrom/"
-
-  # VBoxLinuxAdditions.run chooses /usr/lib64 as soon as this directory exists, which
-  # is the case for our PRO systems shipping the heartbeat-2 package; then the
-  # symlink /sbin/mount.vboxsf points to the non-existing /usr/lib64/VBoxGuestAdditions/mount.vboxsf
-  # file instead of pointing to /usr/lib/x86_64-linux-gnu/VBoxGuestAdditions/mount.vboxsf
-  if ! chroot "$TARGET" readlink -f /sbin/mount.vboxsf ; then
-    echo "Installing mount.vboxsf symlink to work around /usr/lib64 issue"
-    ln -sf /usr/lib/x86_64-linux-gnu/VBoxGuestAdditions/mount.vboxsf ${TARGET}/sbin/mount.vboxsf
-  fi
-
-  # MACs are different on buildbox and on local VirtualBox
-  # see http://ablecoder.com/b/2012/04/09/vagrant-broken-networking-when-packaging-ubuntu-boxes/
-  echo "Removing '${TARGET_UDEV_PERSISTENT_NET_RULES}'"
-  rm -f "${TARGET_UDEV_PERSISTENT_NET_RULES:?}"
-
-  if [ -d "${TARGET}/etc/.git" ]; then
-    echo "Commit /etc/* changes using etckeeper"
-    chroot "$TARGET" etckeeper commit "Vagrant/VirtualBox changes on /etc/*"
-  fi
-
-  # disable vbox services so they are not run after reboot
-  # remove manually as we are in chroot now so can not use systemctl calls
-  # can be changed with systemd-nspawn
-  rm -f "${TARGET}/etc/systemd/system/multi-user.target.wants/vboxadd-service.service"
-  rm -f "${TARGET}/etc/systemd/system/multi-user.target.wants/vboxadd.service"
-}
-
 if "$VAGRANT" ; then
   echo "Bootoption vagrant present, executing vagrant_configuration."
   vagrant_configuration
 fi
 
 if [ -n "$PUPPET" ] ; then
-
-check_puppet_rc () {
-  local _puppet_rc="$1"
-  local _expected_rc="$2"
-
-  if [ "${_puppet_rc}" != "${_expected_rc}" ] ; then
-    # an exit code of '0' happens for 'puppet agent --enable' only,
-    # an exit code of '2' means there were changes,
-    # an exit code of '4' means there were failures during the transaction,
-    # an exit code of '6' means there were both changes and failures.
-    set_deploy_status "error"
-  fi
-}
-
-check_puppet_rerun() {
-  local repeat=1
-
-  if ! checkBootParam nopuppetrepeat && [ "$(get_deploy_status)" = "error" ] ; then
-    echo "Do you want to [r]epeat puppet run or [c]ontinue?"
-    while true; do
-      read -r a
-      case "${a,,}" in
-        r)
-          echo "Repeating puppet run."
-          repeat=0
-          set_deploy_status "puppet"
-          break
-          ;;
-        c)
-          echo "Continue without repeating puppet run."
-          set_deploy_status "puppet"
-          break
-          ;;
-        * ) echo -n "Please answer 'r' to repeat or 'c' to continue: " ;;
-      esac
-      unset a
-    done
-  fi
-
-  return "${repeat}"
-}
-
-check_puppetserver_time() {
-  while true; do
-    offset=$(ntpdate -q "$PUPPET_SERVER" | sed -n '1s/.*offset \(.*\),.*/\1/p' | tr -d -)
-    seconds=${offset%.*}
-    if (( seconds < 10 )) ; then
-      echo "All OK. Time offset between $PUPPET_SERVER and current server is $seconds seconds only."
-      break
-    elif checkBootParam nopuppetrepeat ; then
-      echo "WARNING: time offset between $PUPPET_SERVER and current server is $seconds seconds."
-      echo "(ignoring due to boot option nopuppetrepeat)"
-      break
-    else
-      echo "WARNING: time difference between the current server and $PUPPET_SERVER is ${seconds} seconds (bigger than 10 seconds)."
-      echo "Please synchronize time and press any key to recheck or [c]ontinue with puppet run."
-      read -r a
-      case "${a,,}" in
-        c)
-          echo "Continue ignoring time offset check."
-          break
-          ;;
-        * ) echo -n "Rechecking the offset..." ;;
-      esac
-      unset a
-    fi
-  done
-}
-
-puppet_install_from_git () {
-  local repeat
-
-  : "${PUPPET_GIT_REPO?ERROR: variable 'PUPPET_GIT_REPO' is NOT defined, cannot continue.}"
-  : "${PUPPET_LOCAL_GIT?ERROR: variable 'PUPPET_LOCAL_GIT' is NOT defined, cannot continue.}"
-  : "${PUPPET_GIT_BRANCH?ERROR: variable 'PUPPET_GIT_BRANCH' is NOT defined, cannot continue.}"
-
-  echo "Searching for Hiera rescue device by label '${PUPPET_RESCUE_LABEL}'..."
-  local PUPPET_RESCUE_DRIVE
-  PUPPET_RESCUE_DRIVE=$(blkid | grep -E "LABEL=\"${PUPPET_RESCUE_LABEL}" | head -1 | awk -F: '{print $1}')
-
-  if [ -n "${PUPPET_RESCUE_DRIVE}" ] ; then
-    echo "Found Hiera rescue device: '${PUPPET_RESCUE_DRIVE}'"
-  else
-    die "ERROR: No USB device found matching label '${PUPPET_RESCUE_LABEL}', cannot continue!"
-  fi
-
-  echo "Searching for Hiera rescue device type..."
-  local DEVICE_TYPE
-  DEVICE_TYPE=$(blkid | grep -E "LABEL=\"${PUPPET_RESCUE_LABEL}" | head -1 | sed 's/.*TYPE="\(.*\)".*/\1/')
-
-  if [ -n "${DEVICE_TYPE}" ] ; then
-    echo "Hiera rescue device type is:'${DEVICE_TYPE}'"
-  else
-    die "ERROR: Cannot detect device type for device '${PUPPET_RESCUE_LABEL}', cannot continue!"
-  fi
-
-  echo "Copying data from device '${PUPPET_RESCUE_DRIVE}' (mounted into '${PUPPET_RESCUE_PATH}', type '${DEVICE_TYPE}')"
-  mkdir -p "${PUPPET_RESCUE_PATH}"
-  mount -t "${DEVICE_TYPE}" -o ro "${PUPPET_RESCUE_DRIVE}" "${PUPPET_RESCUE_PATH}"
-  mkdir -p "${TARGET}/etc/puppetlabs/code/hieradata/"
-  chmod 0700 "${TARGET}/etc/puppetlabs/code/hieradata/"
-  cp -a "${PUPPET_RESCUE_PATH}"/hieradata/* "${TARGET}/etc/puppetlabs/code/hieradata/"
-  mkdir -p ~/.ssh
-  cp "${PUPPET_RESCUE_PATH}"/hieradata/defaults.d/id_rsa_r10k ~/.ssh/
-  chmod 600 ~/.ssh/id_rsa_r10k
-  umount -f "${PUPPET_RESCUE_PATH}"
-  rmdir "${PUPPET_RESCUE_PATH}"
-
-  echo "Cloning Puppet git repository from '${PUPPET_GIT_REPO}' to '${PUPPET_LOCAL_GIT}' (branch '${PUPPET_GIT_BRANCH}')"
-  echo 'ssh -i ~/.ssh/id_rsa_r10k -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $*' > ssh
-  chmod +x ssh
-  if ! GIT_SSH="${PWD}/ssh" git clone --depth 1 -b "${PUPPET_GIT_BRANCH}" "${PUPPET_GIT_REPO}" "${PUPPET_LOCAL_GIT}" ; then
-    die "ERROR: Cannot clone git repository, see the error above, cannot continue!"
-  fi
-  rm "${PWD}/ssh"
-
-  local PUPPET_CODE_PATH
-  PUPPET_CODE_PATH="/etc/puppetlabs/code/environments/${PUPPET}"
-
-  echo "Creating empty Puppet environment ${TARGET}/${PUPPET_CODE_PATH}"
-  mkdir -p "${TARGET}/${PUPPET_CODE_PATH}"
-  chmod 0755 "${TARGET}/${PUPPET_CODE_PATH}"
-
-  echo "Deploying Puppet code from Git repository to ${TARGET}/${PUPPET_CODE_PATH}"
-  cp -a "${PUPPET_LOCAL_GIT}"/* "${TARGET}/${PUPPET_CODE_PATH}"
-  rm -rf "${PUPPET_LOCAL_GIT:?}"
-
-  repeat=true
-  while $repeat ; do
-    repeat=false
-    echo "Initializing Hiera config..."
-    grml-chroot $TARGET puppet apply --test --modulepath="${PUPPET_CODE_PATH}/modules" \
-          -e "include puppet::hiera" 2>&1 | tee -a /tmp/puppet.log
-    check_puppet_rc "${PIPESTATUS[0]}" "2"
-    check_puppet_rerun && repeat=true
-  done
-
-  repeat=true
-  while $repeat ; do
-    repeat=false
-    echo "Running Puppet core deployment..."
-    grml-chroot $TARGET puppet apply --test --modulepath="${PUPPET_CODE_PATH}/modules" --tags core,apt \
-          "${PUPPET_CODE_PATH}/manifests/site.pp" 2>&1 | tee -a /tmp/puppet.log
-    check_puppet_rc "${PIPESTATUS[0]}" "2"
-    check_puppet_rerun && repeat=true
-  done
-
-  repeat=true
-  while $repeat ; do
-    repeat=false
-    echo "Running Puppet main deployment..."
-    grml-chroot $TARGET puppet apply --test --modulepath="${PUPPET_CODE_PATH}/modules" \
-          "${PUPPET_CODE_PATH}/manifests/site.pp" 2>&1 | tee -a /tmp/puppet.log
-    check_puppet_rc "${PIPESTATUS[0]}" "2"
-    check_puppet_rerun && repeat=true
-  done
-
-  return 0
-}
-
-puppet_install_from_puppet () {
-  local repeat
-
-  check_puppetserver_time
-
-  repeat=true
-  while $repeat ; do
-    repeat=false
-    echo "Running Puppet core deployment..."
-    grml-chroot $TARGET puppet agent --test --tags core,apt 2>&1 | tee -a /tmp/puppet.log
-    check_puppet_rc "${PIPESTATUS[0]}" "2"
-    check_puppet_rerun && repeat=true
-  done
-
-  repeat=true
-  while $repeat ; do
-    repeat=false
-    echo "Running Puppet main deployment..."
-    grml-chroot $TARGET puppet agent --test 2>&1 | tee -a /tmp/puppet.log
-    check_puppet_rc "${PIPESTATUS[0]}" "2"
-    check_puppet_rerun && repeat=true
-  done
-
-  return 0
-}
-
   set_deploy_status "puppet"
 
   echo "Setting hostname to ${IP_ARR[hostname]}"
@@ -2204,6 +2202,7 @@ umount $TARGET || umount -l $TARGET # fall back if a process is still being acti
 # rereading partition table won't work
 dmsetup remove_all || true
 
+declare efidev1 efidev2
 if [[ "${SWRAID}" = "true" ]] ; then
   if efi_support ; then
     partlabel="EFI System"
