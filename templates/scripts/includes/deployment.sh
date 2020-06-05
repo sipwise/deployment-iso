@@ -1749,7 +1749,7 @@ EOT
     # Check the current method of external interface
     # If it is manual - we need to reconfigure /e/n/i to get working network configuration after the reboot
     method=$( sed -rn "s/^iface ${INSTALL_DEV} inet ([A-Za-z]+)/\1/p" < /etc/network/interfaces )
-    netcardconf="${TARGET}/usr/share/ngcp-deployment-scripts/includes/netcardconfig"
+    netcardconf="/usr/sbin/netcardconfig"
     if [[ "${method}" == 'manual' ]]; then
       if "${DHCP}" ; then
         NET_DEV="${INSTALL_DEV}" METHOD='dhcp' "${netcardconf}"
