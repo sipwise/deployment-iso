@@ -1,0 +1,8 @@
+Verified+1: Jenkins Jenkins
+Code-Review+1: Manuel Montecelo <mmontecelo@sipwise.com>
+Code-Review+2: Mykola Malkov <mmalkov@sipwise.com>
+Submitted-by: Michael Prokop <mprokop@sipwise.com>
+Submitted-at: Fri, 05 Jun 2020 11:53:39 +0200
+Reviewed-on: http://gerrit.mgm.sipwise.com/c/deployment-iso/+/40561
+Project: deployment-iso
+Branch: refs/heads/master
