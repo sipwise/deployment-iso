@@ -238,12 +238,20 @@ is_package_installed() {
 }
 
 ensure_packages_installed() {
-  [[ -z "${ADDITIONAL_PACKAGES[*]}" ]] && return 0
+  declare -a packages=($*)
+
+  if [[ "${#packages[@]}" -eq 0 ]]; then
+    packages=("${ADDITIONAL_PACKAGES[@]}")
+  fi
+
+  if [[ "${#packages[@]}" -eq 0 ]]; then
+   return 0
+  fi
 
   local install_packages
   install_packages=()
-  echo "Ensuring packages installed: ${ADDITIONAL_PACKAGES[*]}"
-  for pkg in "${ADDITIONAL_PACKAGES[@]}"; do
+  echo "Ensuring packages installed: ${packages[*]}"
+  for pkg in "${packages[@]}"; do
     if is_package_installed "${pkg}"; then
       echo "Package '${pkg}' is already installed, nothing to do."
     else
@@ -819,6 +827,8 @@ vagrant_configuration() {
     die "Error: failed to wget public Sipwise SSH key for Vagrant boxes"
   fi
 
+  ensure_packages_installed 'virtualbox-guest-additions-iso'
+
   if "$NGCP_INSTALLER" ; then
     local SIPWISE_HOME="/nonexistent"
     SIPWISE_HOME=$(chroot "${TARGET}" getent passwd 'sipwise' | cut -d':' -f6)
@@ -1180,7 +1190,7 @@ VLAN_HA_INT=1721
 VLAN_RTP_EXT=1722
 SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
 NGCP_PXE_INSTALL=false
-ADDITIONAL_PACKAGES=(git augeas-tools gdisk virtualbox-guest-additions-iso)
+ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
 
 # trap signals: 1 SIGHUP, 2 SIGINT, 3 SIGQUIT, 6 SIGABRT, 15 SIGTERM
 trap 'wait_exit;' 1 2 3 6 15 ERR EXIT
