@@ -70,6 +70,30 @@
       "revId": "4d72ff20ceb74d9d46eac86e999d2bbf451e8ef2",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39dd9d95_ff755220",
+        "filename": "templates/scripts/includes/network_configuration.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-09T09:05:03Z",
+      "side": 1,
+      "message": "Sounds like a bug to me.\n\nAnyway, now that netcardconfig no longer exists in the Debian package we should use the netcardconfig from the running system then though, there won\u0027t be something inside the $TARGET / chroot then. New PS pushed",
+      "parentUuid": "7e11e36c_b9fc0639",
+      "range": {
+        "startLine": 6,
+        "startChar": 2,
+        "endLine": 6,
+        "endChar": 25
+      },
+      "revId": "4d72ff20ceb74d9d46eac86e999d2bbf451e8ef2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
