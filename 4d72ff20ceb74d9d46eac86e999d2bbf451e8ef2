@@ -46,6 +46,30 @@
       "revId": "4d72ff20ceb74d9d46eac86e999d2bbf451e8ef2",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e11e36c_b9fc0639",
+        "filename": "templates/scripts/includes/network_configuration.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-09T08:57:31Z",
+      "side": 1,
+      "message": "Don\u0027t remember the exact details but briefly - it\u0027s used for Carrier installation.",
+      "parentUuid": "cb63a88b_30215aad",
+      "range": {
+        "startLine": 6,
+        "startChar": 2,
+        "endLine": 6,
+        "endChar": 25
+      },
+      "revId": "4d72ff20ceb74d9d46eac86e999d2bbf451e8ef2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
