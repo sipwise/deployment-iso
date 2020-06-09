@@ -22,6 +22,30 @@
       "revId": "a2726147e77f049b82b22f050dcfe99d62e348f2",
       "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2af195ce_57327d75",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-09T07:49:57Z",
+      "side": 1,
+      "message": "Oh good point, let\u0027s get rid of it then, done! :)",
+      "parentUuid": "a101d96b_826d880d",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 48
+      },
+      "revId": "a2726147e77f049b82b22f050dcfe99d62e348f2",
+      "serverId": "85315e57-5f03-49c3-83f8-201ae2313a75",
+      "unresolved": true
     }
   ]
 }
