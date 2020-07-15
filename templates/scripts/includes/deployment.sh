@@ -72,12 +72,12 @@ enable_deploy_status_server() {
   mkdir -p "${STATUS_DIRECTORY}"
 
   # get rid of already running process
-  PID=$(pgrep -f 'python.*SimpleHTTPServer') || true
+  PID=$(pgrep -f 'python3.*http.server') || true
   [ -n "$PID" ] && kill "$PID"
 
   (
     cd "${STATUS_DIRECTORY}"
-    python -m SimpleHTTPServer 4242 >/tmp/status_server.log 2>&1 &
+    python3 -m http.server 4242 >/tmp/status_server.log 2>&1 &
   )
 }
 
