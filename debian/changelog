@@ -1,3 +1,10 @@
+ngcp-deployment-iso (9.0.0.0+0~mr9.0.0.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [862fb15] TT#83753 Port status server to py3
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 21 Jul 2020 14:47:38 +0200
+
 ngcp-deployment-iso (8.6.0.0+0~mr8.6.0.0) unstable; urgency=medium
 
   [ Michael Prokop ]
