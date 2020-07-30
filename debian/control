@@ -14,12 +14,6 @@ Depends:
  dmidecode,
  ${misc:Depends},
  ${shlibs:Depends},
-Provides:
- ngcp-netscript,
-Breaks:
- ngcp-netscript,
-Replaces:
- ngcp-netscript,
 Description: NGCP deployment ISO scripts
  Framework needed to install Sipwise NGCP system
  using iPXE and GRML during the boot process.
