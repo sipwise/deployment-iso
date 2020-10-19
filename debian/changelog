@@ -1,3 +1,11 @@
+ngcp-deployment-iso (8.5.2.1+0~mr8.5.2.1) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [941c127] TT#82852 Add missing working_dir variable
+  * [a5e72ab] TT#87854 Lower grml2usb version
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 19 Oct 2020 14:27:24 +0200
+
 ngcp-deployment-iso (8.5.2.0+0~mr8.5.2.0) unstable; urgency=medium
 
   [ Michael Prokop ]
