@@ -2093,11 +2093,7 @@ EOT
   grml-chroot "${TARGET}" /bin/bash /tmp/retrieve_authorized_keys.sh
 fi
 
-case "$DEBIAN_RELEASE" in
-  stretch|buster)
-    set_custom_grub_boot_options
-    ;;
-esac
+set_custom_grub_boot_options
 
 if "$VAGRANT" ; then
   echo "Bootoption vagrant present, executing vagrant_configuration."
@@ -2113,14 +2109,10 @@ if [ -n "$PUPPET" ] ; then
 
   chroot $TARGET apt-get -y install resolvconf libnss-myhostname
 
-  case "$DEBIAN_RELEASE" in
-    stretch|buster)
-      if [ ! -x "${TARGET}/usr/bin/dirmngr" ] ; then
-        echo  "Installing dirmngr on Debian ${DEBIAN_RELEASE}, otherwise the first puppet run fails: 'Could not find a suitable provider for apt_key'"
-        chroot $TARGET apt-get -y install dirmngr
-      fi
-      ;;
-  esac
+  if [ ! -x "${TARGET}/usr/bin/dirmngr" ] ; then
+    echo  "Installing dirmngr on Debian ${DEBIAN_RELEASE}, otherwise the first puppet run fails: 'Could not find a suitable provider for apt_key'"
+    chroot $TARGET apt-get -y install dirmngr
+  fi
 
   echo "Installing 'puppet-agent' with dependencies"
   cat >> ${TARGET}/etc/apt/sources.list.d/puppetlabs.list << EOF
@@ -2137,11 +2129,7 @@ EOF
   chroot ${TARGET} apt-get -y install puppet-agent openssh-server lsb-release ntpdate
 
   # Fix Facter error while running in chroot, facter fails if /etc/mtab is absent:
-  case "$DEBIAN_RELEASE" in
-    stretch|buster)
-      chroot ${TARGET} ln -s /proc/self/mounts /etc/mtab || true
-      ;;
-  esac
+  chroot ${TARGET} ln -s /proc/self/mounts /etc/mtab || true
 
   cat > ${TARGET}/etc/puppetlabs/puppet/puppet.conf<< EOF
 # This file has been created by deployment.sh
