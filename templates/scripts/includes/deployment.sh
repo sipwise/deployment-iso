@@ -274,7 +274,19 @@ ensure_packages_installed() {
     "${TMPDIR}/cachedir/archives/partial"
   chown _apt -R "${TMPDIR}"
 
-  echo "deb ${DEBIAN_URL}/debian/ buster main contrib non-free" > \
+  local deb_release
+  case "${DEBIAN_RELEASE}" in
+    buster|bullseye)
+      deb_release="${DEBIAN_RELEASE}"
+      echo "Using ${deb_release} as Debian repository for ${FUNCNAME[0]}"
+      ;;
+    *)
+      deb_release='buster'
+      echo "Enabling fallback to Debian ${deb_release} repository for ${FUNCNAME[0]}"
+      ;;
+  esac
+
+  echo "deb ${DEBIAN_URL}/debian/ ${deb_release} main contrib non-free" > \
     "${TMPDIR}/etc/sources.list"
 
   mkdir -p "${TMPDIR}"/etc/apt/apt.conf.d/
