@@ -654,6 +654,35 @@ lvm_setup() {
   eval "$saved_options"
 }
 
+retrieve_deployment_scripts_fake_uname() {
+  local target_path="$1"
+  local repos_base_path="${SIPWISE_URL}/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
+
+  wget --timeout=30 -O Packages.gz "${repos_base_path}Packages.gz"
+  # sed: display paragraphs matching the "Package: ..." string, then grab string "^Version: " and display the actual version via awk
+  # sort -u to avoid duplicates in repositories
+  local version
+  version=$(zcat Packages.gz | sed "/./{H;\$!d;};x;/Package: ngcp-deployment-scripts/b;d" | awk '/^Version: / {print $2}' | sort -u)
+
+  [ -n "$version" ] || die "Error: ngcp-deployment-scripts version for release-trunk-${DEBIAN_RELEASE} could not be detected."
+
+  # retrieve Debian package
+  local deb_package="ngcp-deployment-scripts_${version}_amd64.deb"
+  local deployment_scripts_package="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-deployment-iso/${deb_package}"
+  wget --timeout=30 -O "/root/${deb_package}" "${deployment_scripts_package}"
+
+  # extract Debian package
+  dpkg -x "/root/${deb_package}" /root/ngcp-deployment-scripts/
+
+  # finally install extracted fake-uname.so towards target
+  if [ -r /root/ngcp-deployment-scripts/usr/lib/ngcp-deployment-scripts/fake-uname.so ] ; then
+    echo "Installing fake-uname.so from ${deb_package} to ${target_path}"
+    cp /root/ngcp-deployment-scripts/usr/lib/ngcp-deployment-scripts/fake-uname.so "${target_path}" || die "Failed to install fake_uname.so in ${target_path}"
+  else
+    die "Error: can not access fake-uname.so from /root/${deb_package}"
+  fi
+}
+
 get_installer_path() {
   if [ -z "$SP_VERSION" ] && ! $TRUNK_VERSION ; then
     INSTALLER=ngcp-installer-latest.deb
@@ -900,8 +929,20 @@ vagrant_configuration() {
   # avoid "ERROR: ld.so: object '/usr/lib/ngcp-deployment-scripts/fake-uname.so' from LD_PRELOAD cannot be preloaded: ignored."
   # messages caused by the host system when running grml-chroot process
   mkdir -p /usr/lib/ngcp-deployment-scripts/
-  cp /mnt/usr/lib/ngcp-deployment-scripts/fake-uname.so /usr/lib/ngcp-deployment-scripts/
-  UTS_RELEASE="${KERNELVERSION}" LD_PRELOAD="/usr/lib/ngcp-deployment-scripts/fake-uname.so" \
+  if [ -r /mnt/usr/lib/ngcp-deployment-scripts/fake-uname.so ] ; then
+    cp /mnt/usr/lib/ngcp-deployment-scripts/fake-uname.so /usr/lib/ngcp-deployment-scripts/
+    FAKE_UNAME='/usr/lib/ngcp-deployment-scripts/fake-uname.so'
+  else
+    echo "File /mnt/usr/lib/ngcp-deployment-scripts/fake-uname.so does not exist (building base image without ngcp?)"
+    echo "Trying to retrieve fake-uname.so from ngcp-deployment-scripts of release-trunk..."
+    retrieve_deployment_scripts_fake_uname /tmp/
+    # we don't have /usr/lib/ngcp-deployment-scripts/, so use it
+    # via /tmp as that's automatically cleaned during reboot
+    cp /tmp/fake-uname.so /mnt/tmp/
+    FAKE_UNAME='/tmp/fake-uname.so'
+  fi
+
+  UTS_RELEASE="${KERNELVERSION}" LD_PRELOAD="${FAKE_UNAME}" \
     grml-chroot "${TARGET}" /media/cdrom/VBoxLinuxAdditions.run --nox11
   tail -10 "${TARGET}/var/log/vboxadd-install.log"
   umount "${TARGET}/media/cdrom/"
