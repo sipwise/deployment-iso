@@ -1831,15 +1831,17 @@ echo FSCK=no >>/etc/debootstrap/config
 echo "Clean the default /etc/debootstrap/packages"
 echo > /etc/debootstrap/packages
 
+cat >> /etc/debootstrap/packages << EOF
+# we want to have LVM support everywhere
+lvm2
+EOF
+
 if ! "$NGCP_INSTALLER" ; then
 
   echo "Install some packages to be able to login on the Debian plain system"
   cat >> /etc/debootstrap/packages << EOF
 # to be able to login on the Debian plain system via SSH
 openssh-server
-
-# deployment supports LVM only
-lvm2
 EOF
 
   if [[ "${SWRAID}" = "true" ]] ; then
