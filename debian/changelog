@@ -1,3 +1,13 @@
+ngcp-deployment-iso (9.2.1.0+0~mr9.2.1.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [3a5149e] TT#100201 Support Debian/bullseye by dropping stretch+buster checks
+  * [ed52e8f] TT#104221 Use bullseye repos in ensure_packages_installed appropriately
+  * [6ce51a8] TT#104221 Ensure to have fake-uname.so available also for plain images
+  * [91e047a] TT#105407 Ensure lvm2 is present before grub-install is executed
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 05 Jan 2021 15:30:26 +0100
+
 ngcp-deployment-iso (9.2.0.0+0~mr9.2.0.0) unstable; urgency=medium
 
   * New release.
