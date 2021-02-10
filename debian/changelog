@@ -1,3 +1,10 @@
+ngcp-deployment-iso (7.5.7.2+0~mr7.5.7.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [2087592] TT#105407 Ensure lvm2 is present before grub-install is executed
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Wed, 10 Feb 2021 12:20:55 +0100
+
 ngcp-deployment-iso (7.5.7.1+0~mr7.5.7.1) unstable; urgency=medium
 
   * New release.
