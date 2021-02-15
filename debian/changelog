@@ -1,3 +1,9 @@
+ngcp-deployment-iso (9.4.0.0+0~mr9.4.0.0) unstable; urgency=medium
+
+  * New release.
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 15 Feb 2021 17:51:35 +0100
+
 ngcp-deployment-iso (9.3.0.0+0~mr9.3.0.0) unstable; urgency=medium
 
   [ Michael Prokop ]
