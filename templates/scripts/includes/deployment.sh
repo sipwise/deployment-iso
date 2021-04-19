@@ -204,7 +204,7 @@ set_custom_grub_boot_options() {
 
   if [ -d "${TARGET}/etc/.git" ]; then
     echo "Commit /etc/default/grub changes using etckeeper"
-    chroot "$TARGET" etckeeper commit "/etc/default/grub changes"
+    grml-chroot "${TARGET}" etckeeper commit "/etc/default/grub changes"
   fi
 }
 
@@ -860,7 +860,7 @@ vagrant_configuration() {
   # bzip2, linux-headers-amd64 and make are required for VirtualBox Guest Additions installer
   # less + sudo are required for Vagrant itself
   echo "Installing software for VirtualBox Guest Additions installer"
-  if ! chroot "$TARGET" apt-get -y install bzip2 less linux-headers-amd64 make sudo ; then
+  if ! grml-chroot "${TARGET}" apt-get -y install bzip2 less linux-headers-amd64 make sudo ; then
     die "Error: failed to install 'bzip2 less linux-headers-amd64 make sudo' packages."
   fi
 
@@ -874,6 +874,9 @@ vagrant_configuration() {
 
   if "$NGCP_INSTALLER" ; then
     local SIPWISE_HOME="/nonexistent"
+    # it's necessary to use chroot instead of grml-chroot in variable=$() calls
+    # as grml-chroot also prints "Writing /etc/debian_chroot ..." line
+    # which breaks output
     SIPWISE_HOME=$(chroot "${TARGET}" getent passwd 'sipwise' | cut -d':' -f6)
     if [[ ! -d "${TARGET}/${SIPWISE_HOME}" ]] ; then
       die "Error: cannot determine home of 'sipwise' user, it does not exist or not a directory: ${TARGET}/${SIPWISE_HOME}"
@@ -889,14 +892,14 @@ vagrant_configuration() {
     echo "Adjusting ssh configuration for user sipwise (add Vagrant SSH key)"
     mkdir -p "${TARGET}/${SIPWISE_HOME}/.ssh/"
     cat "${vagrant_ssh_pub_key}" >> "${TARGET}/${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
-    chroot "${TARGET}" chown sipwise:sipwise "${SIPWISE_HOME}/.ssh" "${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
-    chroot "${TARGET}" chmod 0600 "${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
+    grml-chroot "${TARGET}" chown sipwise:sipwise "${SIPWISE_HOME}/.ssh" "${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
+    grml-chroot "${TARGET}" chmod 0600 "${SIPWISE_HOME}/.ssh/sipwise_vagrant_key"
   fi
 
   echo "Adjusting ssh configuration for user root"
   mkdir -p "${TARGET}/root/.ssh/"
   cat "${vagrant_ssh_pub_key}" >> "${TARGET}/root/.ssh/sipwise_vagrant_key"
-  chroot "${TARGET}" chmod 0600 /root/.ssh/sipwise_vagrant_key
+  grml-chroot "${TARGET}" chmod 0600 /root/.ssh/sipwise_vagrant_key
   sed -i 's|^[#\s]*\(AuthorizedKeysFile.*\)$|\1 %h/.ssh/sipwise_vagrant_key|g' "${TARGET}/etc/ssh/sshd_config"
 
   # see https://github.com/mitchellh/vagrant/issues/1673
@@ -944,7 +947,7 @@ vagrant_configuration() {
   fi
 
   UTS_RELEASE="${KERNELVERSION}" LD_PRELOAD="${FAKE_UNAME}" \
-    grml-chroot "${TARGET}" /media/cdrom/VBoxLinuxAdditions.run --nox11
+    grml-chroot "${TARGET}" /media/cdrom/VBoxLinuxAdditions.run --nox11 || true
   tail -10 "${TARGET}/var/log/vboxadd-install.log"
   umount "${TARGET}/media/cdrom/"
 
@@ -952,7 +955,7 @@ vagrant_configuration() {
   # is the case for our PRO systems shipping the heartbeat-2 package; then the
   # symlink /sbin/mount.vboxsf points to the non-existing /usr/lib64/VBoxGuestAdditions/mount.vboxsf
   # file instead of pointing to /usr/lib/x86_64-linux-gnu/VBoxGuestAdditions/mount.vboxsf
-  if ! chroot "$TARGET" readlink -f /sbin/mount.vboxsf ; then
+  if ! grml-chroot "${TARGET}" readlink -f /sbin/mount.vboxsf ; then
     echo "Installing mount.vboxsf symlink to work around /usr/lib64 issue"
     ln -sf /usr/lib/x86_64-linux-gnu/VBoxGuestAdditions/mount.vboxsf "${TARGET}/sbin/mount.vboxsf"
   fi
@@ -964,7 +967,7 @@ vagrant_configuration() {
 
   if [ -d "${TARGET}/etc/.git" ]; then
     echo "Commit /etc/* changes using etckeeper"
-    chroot "$TARGET" etckeeper commit "Vagrant/VirtualBox changes on /etc/*"
+    grml-chroot "${TARGET}" etckeeper commit "Vagrant/VirtualBox changes on /etc/*"
   fi
 
   # disable vbox services so they are not run after reboot
@@ -1984,7 +1987,7 @@ EOT
 fi
 
 # TT#41500: Make sure the timezone setup is coherent
-grml-chroot "$TARGET" dpkg-reconfigure --frontend=noninteractive tzdata
+grml-chroot "${TARGET}" dpkg-reconfigure --frontend=noninteractive tzdata
 
 # provide usable /ngcp-data partition
 if [ -n "${DATA_PARTITION}" ] ; then
@@ -2020,16 +2023,19 @@ if [[ -z "${SWAPFILE_SIZE_MB}" ]]; then
 fi
 
 # get rid of automatically installed packages
-chroot $TARGET apt-get --purge -y autoremove
+grml-chroot "${TARGET}" apt-get --purge -y autoremove
 
 # purge removed packages
-removed_packages=( $(chroot $TARGET dpkg --list | awk '/^rc/ {print $2}') )
+# it's necessary to use chroot instead of grml-chroot in variable=$() calls
+# as grml-chroot also prints "Writing /etc/debian_chroot ..." line
+# which breaks output
+removed_packages=( $(chroot "${TARGET}" dpkg --list | awk '/^rc/ {print $2}') )
 if [ ${#removed_packages[@]} -ne 0 ]; then
-  chroot "$TARGET" dpkg --purge "${removed_packages[@]}"
+  grml-chroot "${TARGET}" dpkg --purge "${removed_packages[@]}"
 fi
 
 # make sure `hostname` and `hostname --fqdn` return data from chroot
-grml-chroot $TARGET hostname -F /etc/hostname
+grml-chroot "${TARGET}" hostname -F /etc/hostname
 
 # make sure installations of packages works, will be overridden later again
 cat > $TARGET/etc/hosts << EOF
@@ -2161,13 +2167,13 @@ if [ -n "$PUPPET" ] ; then
 
   echo "Setting hostname to ${IP_ARR[hostname]}"
   echo "${IP_ARR[hostname]}" > "${TARGET}/etc/hostname"
-  grml-chroot "$TARGET" hostname -F /etc/hostname
+  grml-chroot "${TARGET}" hostname -F /etc/hostname
 
-  chroot $TARGET apt-get -y install resolvconf libnss-myhostname
+  grml-chroot "${TARGET}" apt-get -y install resolvconf libnss-myhostname
 
   if [ ! -x "${TARGET}/usr/bin/dirmngr" ] ; then
     echo  "Installing dirmngr on Debian ${DEBIAN_RELEASE}, otherwise the first puppet run fails: 'Could not find a suitable provider for apt_key'"
-    chroot $TARGET apt-get -y install dirmngr
+    grml-chroot "${TARGET}" apt-get -y install dirmngr
   fi
 
   echo "Installing 'puppet-agent' with dependencies"
@@ -2181,11 +2187,11 @@ EOF
   fi
   cp "${puppet_gpg}" "${TARGET}/etc/apt/trusted.gpg.d/"
 
-  chroot ${TARGET} apt-get update
-  chroot ${TARGET} apt-get -y install puppet-agent openssh-server lsb-release ntpdate
+  grml-chroot "${TARGET}" apt-get update
+  grml-chroot "${TARGET}" apt-get -y install puppet-agent openssh-server lsb-release ntpdate
 
   # Fix Facter error while running in chroot, facter fails if /etc/mtab is absent:
-  chroot ${TARGET} ln -s /proc/self/mounts /etc/mtab || true
+  grml-chroot "${TARGET}" ln -s /proc/self/mounts /etc/mtab || true
 
   cat > ${TARGET}/etc/puppetlabs/puppet/puppet.conf<< EOF
 # This file has been created by deployment.sh
@@ -2228,10 +2234,10 @@ if [[ "${SWRAID}" = "true" ]] ; then
   fi
 
   for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
-    grml-chroot "$TARGET" grub-install "/dev/$disk"
+    grml-chroot "${TARGET}" grub-install "/dev/$disk"
   done
 
-  grml-chroot "$TARGET" update-grub
+  grml-chroot "${TARGET}" update-grub
 fi
 
 # unmount /ngcp-data partition inside chroot (if available)
