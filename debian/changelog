@@ -1,3 +1,16 @@
+ngcp-deployment-iso (9.5.0.0+0~mr9.5.0.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [fe7553f] TT#115300 Dockerfile: update to latest grml-live version (v0.38.0)
+  * [66ee7d9] TT#115300 GRUB templates: just exit for boot from next device
+  * [097464c] TT#115300 GRUB templates: provide menu entry for UEFI Firmware Settings
+  * [8a54cd1] TT#119602 Properly handle trap also in case of errors in functions
+
+  [ Mykola Malkov ]
+  * [6e1c841] TT#119602 Hide errexit on VBoxLinuxAdditions.run call
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 20 Apr 2021 11:56:21 +0200
+
 ngcp-deployment-iso (9.4.0.0+0~mr9.4.0.0) unstable; urgency=medium
 
   * New release.
