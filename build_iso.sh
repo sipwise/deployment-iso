@@ -20,7 +20,7 @@ GRML2USB_VERSION='v0.18.3'
 
 usage () {
   echo "Usage: $0 compat <grml.iso> <mr version> <Debian dist>"
-  echo "Sample: $0 compat 'grml64-full_2014.11.iso' mr6.2.1 buster"
+  echo "Sample: $0 compat 'grml64-full_2014.11.iso' mr6.2.1 bullseye"
   exit 1
 }
 
@@ -116,7 +116,7 @@ mkdir -p artifacts
 echo "*** Moving ${SIPWISE_ISO} ${SIPWISE_ISO}.sha1 ${SIPWISE_ISO}.md5 to artifacts/ ***"
 mv "${SIPWISE_ISO}" "${SIPWISE_ISO}.sha1" "${SIPWISE_ISO}.md5" artifacts/
 
-docker run --rm -i --privileged -v "$(pwd)":/code/ docker.mgm.sipwise.com/deployment-iso-buster:latest \
+docker run --rm -i --privileged -v "$(pwd)":/code/ docker.mgm.sipwise.com/deployment-iso-bullseye:latest \
   /code/t/iso-tester /code/artifacts/"${SIPWISE_ISO}" /code/artifacts/memtest.jpg /code/t/screenshots/01-memtest.jpg
 
 popd &>/dev/null

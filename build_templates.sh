@@ -5,7 +5,7 @@ BASE="$(dirname "$0")"
 TEMPLATES="${TEMPLATES:-templates}"
 BOOT="${BASE}/${TEMPLATES}/boot"
 MR="${MR:-trunk}"
-DIST="${DIST:-buster}"
+DIST="${DIST:-bullseye}"
 
 echo "*** grub templates for RELEASE:${MR} DIST:${DIST} ***"
 

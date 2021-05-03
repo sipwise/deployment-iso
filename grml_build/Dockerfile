@@ -1,11 +1,11 @@
-# DOCKER_NAME=grml-build-buster
-FROM docker.mgm.sipwise.com/sipwise-buster:latest
+# DOCKER_NAME=grml-build-bullseye
+FROM docker.mgm.sipwise.com/sipwise-bullseye:latest
 
 # Important! Update this no-op ENV variable when this Dockerfile
 # is updated with the current date. It will force refresh of all
 # of the base images and things like `apt-get update` won't be using
 # old cached versions when the Dockerfile is built.
-ENV REFRESHED_AT 2021-03-12
+ENV REFRESHED_AT 2021-05-04
 
 # tools for building and testing
 RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
   wget \
   xorriso
 
-RUN echo "SECURE_BOOT=disable ./grml-live -s buster -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t /code/grml-live/templates/ -o /grml/ -r grml-sipwise -v 0.42" >/root/.bash_history && \
+RUN echo "SECURE_BOOT=disable ./grml-live -s bullseye -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t /code/grml-live/templates/ -o /grml/ -r grml-sipwise -v 0.42" >/root/.bash_history && \
   echo "export LIVE_CONF=/code/grml-live/etc/grml/grml-live.conf" >>/root/.bash_history && \
   echo "export SCRIPTS_DIRECTORY=/code/grml-live/scripts"         >>/root/.bash_history && \
   echo "export GRML_FAI_CONFIG=/code/grml-live/etc/grml/fai"      >>/root/.bash_history && \
@@ -84,7 +84,7 @@ WORKDIR /code/grml-live
 # export SCRIPTS_DIRECTORY=$(pwd)/scripts
 # export LIVE_CONF=$(pwd)/etc/grml/grml-live.conf
 # cp /deployment-iso/grml_build/package_config/SIPWISE /code/grml-live/etc/grml/fai/config/package_config/SIPWISE
-# ./grml-live -s buster -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t $(pwd)/templates/ -o /grml/ -r grml-sipwise -v 0.42
+# ./grml-live -s bullseye -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t $(pwd)/templates/ -o /grml/ -r grml-sipwise -v 0.42
 #
 ## A successful run results in ISO file in /grml/grml_isos/ (inside container),
 ## available via volume folder also outside of docker container ($pwd/grml/grml_isos/).

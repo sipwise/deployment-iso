@@ -282,7 +282,7 @@ ensure_packages_installed() {
       echo "Using ${deb_release} as Debian repository for ${FUNCNAME[0]}"
       ;;
     *)
-      deb_release='buster'
+      deb_release='bullseye'
       echo "Enabling fallback to Debian ${deb_release} repository for ${FUNCNAME[0]}"
       ;;
   esac
@@ -1215,7 +1215,7 @@ DHCP=false
 LOGO=true
 RETRIEVE_MGMT_CONFIG=false
 TRUNK_VERSION=false
-DEBIAN_RELEASE=buster
+DEBIAN_RELEASE=bullseye
 HALT=false
 REBOOT=false
 STATUS_DIRECTORY=/srv/deployment/
@@ -1600,6 +1600,8 @@ done
 
 ensure_packages_installed
 
+# this is important for "buster", do not update the string for "bullseye" or
+# future releases
 case "${DEBIAN_RELEASE}" in
   buster)
     UPGRADE_PACKAGES=()
