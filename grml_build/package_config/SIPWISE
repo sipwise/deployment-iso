@@ -12,7 +12,6 @@ cpio
 cpufrequtils
 diffutils
 disktype
-dmraid
 dmsetup
 dos2unix
 dosfstools
