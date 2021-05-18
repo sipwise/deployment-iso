@@ -1991,6 +1991,9 @@ fi
 # TT#41500: Make sure the timezone setup is coherent
 grml-chroot "${TARGET}" dpkg-reconfigure --frontend=noninteractive tzdata
 
+# TT#122950 Avoid time consuming "building database of manual pages"
+echo 'man-db man-db/auto-update boolean false' | grml-chroot "${TARGET}" debconf-set-selections
+
 # provide usable /ngcp-data partition
 if [ -n "${DATA_PARTITION}" ] ; then
   echo "Enabling ngcp-data partition ${DATA_PARTITION} via /etc/fstab"
