@@ -341,17 +341,85 @@ wait_exit() {
 
 # check for EFI support, if not present try to enable it
 efi_support() {
-  if lsmod | grep -q efivars ; then
+  if lsmod | grep -q efivarfs ; then
     echo "EFI support detected."
     return 0
   fi
 
-  if modprobe efivars &>/dev/null ; then
+  if modprobe efivarfs &>/dev/null ; then
     echo "EFI support enabled now."
     return 0
   fi
 
   return 1
+}
+
+# Debian kernels >=5.10 don't provide efivars support, ensure to either:
+# 1) have grml-debootstrap v0.97 or newer available (which provides according
+# efivarfs workaround), or otherwise:
+# 2) apply local workaround using pre and post scripts within grml-debootstrap
+# (to avoid having to update the grml-debootstrap package, because that's not
+# available within environments relying on our approx Debian mirror, which
+# doesn't the Grml repository)
+efivars_workaround() {
+  if lsmod | grep -q 'efivars' ; then
+    echo "We do have efivars support, no need to apply workarounds"
+    return 0
+  fi
+
+  echo "Running with kernel without efivars support"
+  if check_package_version grml-debootstrap 0.97~ ; then
+    echo "grml-debootstrap >=0.97 available, no need to apply pre/post script workaround"
+    return 0
+  fi
+
+  echo "Present grml-debootstrap version is not recent enough, falling back to workarounds using local scripts"
+
+  # pre script
+  mkdir -p /etc/debootstrap/pre-scripts/
+  cat > /etc/debootstrap/pre-scripts/efivarfs << "EOL"
+#!/bin/bash
+set -eu -p pipefail
+
+echo "Executing $0"
+
+if ! ls "${MNTPOINT}"/sys/firmware/efi/efivars/* &>/dev/null ; then
+  # we need to have /sys available to be able to mount /sys/firmware/efi/efivars
+  if ! chroot "${MNTPOINT}" test -d /sys/kernel ; then
+    echo "Mointing /sys"
+    chroot "${MNTPOINT}" mount -t sysfs none /sys
+  fi
+
+  echo "Mounting efivarfs on /sys/firmware/efi/efivars"
+  chroot "${MNTPOINT}" mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+fi
+echo "Finished execution of $0"
+EOL
+
+  chmod 775 /etc/debootstrap/pre-scripts/efivarfs
+  PRE_SCRIPTS_OPTION="--pre-scripts /etc/debootstrap/pre-scripts/"
+
+  # post script
+  mkdir -p /etc/debootstrap/post-scripts/
+  cat > /etc/debootstrap/post-scripts/efivarfs << "EOL"
+#!/bin/bash
+set -eu -p pipefail
+
+echo "Executing $0"
+
+if mountpoint "${MNTPOINT}"/sys/firmware/efi/efivars &>/dev/null ; then
+  umount "${MNTPOINT}"/sys/firmware/efi/efivars
+fi
+
+if mountpoint "${MNTPOINT}"/sys &>/dev/null ; then
+  umount "${MNTPOINT}"/sys
+fi
+
+echo "Finished execution of $0"
+EOL
+
+  chmod 775 /etc/debootstrap/post-scripts/efivarfs
+  POST_SCRIPTS_OPTION="--post-scripts /etc/debootstrap/post-scripts/"
 }
 
 cdr2mask() {
@@ -1934,6 +2002,9 @@ if [[ -n "${EFI_PARTITION}" ]] ; then
   if efi_support ; then
     echo "EFI support present, enabling EFI support within grml-debootstrap"
     EFI_OPTION="--efi ${EFI_PARTITION}"
+
+    # this can be dropped once we have grml-debootstrap >=v0.97 available in our squashfs
+    efivars_workaround
   else
     echo "EFI support NOT present, not enabling EFI support within grml-debootstrap"
   fi
@@ -1956,6 +2027,8 @@ echo y | grml-debootstrap \
   -r "$DEBIAN_RELEASE" \
   -t "$ROOT_FS" \
   $EFI_OPTION \
+  $PRE_SCRIPTS_OPTION \
+  $POST_SCRIPTS_OPTION \
   --password 'sipwise' 2>&1 | tee -a /tmp/grml-debootstrap.log
 
 if [ "${PIPESTATUS[1]}" != "0" ]; then
@@ -2228,6 +2301,13 @@ if [[ "${SWRAID}" = "true" ]] ; then
   if efi_support ; then
     grml-chroot "${TARGET}" mount /boot/efi
 
+    # if efivarfs kernel module is loaded, but efivars isn't,
+    # then we need to mount efivarfs for efibootmgr usage
+    if ! ls /sys/firmware/efi/efivars/* &>/dev/null ; then
+      echo "Mounting efivarfs on /sys/firmware/efi/efivars"
+      grml-chroot "${TARGET}" mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+    fi
+
     if efibootmgr | grep -q 'NGCP Fallback' ; then
       echo "Deleting existing NGCP Fallback entry from EFI boot manager"
       efi_entry=$(efibootmgr | awk '/ NGCP Fallback$/ {print $1; exit}' | sed 's/^Boot//; s/\*$//')
@@ -2253,6 +2333,7 @@ fi
 # don't leave any mountpoints
 sync
 
+umount ${TARGET}/sys/firmware/efi/efivars || true
 umount ${TARGET}/boot/efi || true
 umount ${TARGET}/proc    || true
 umount ${TARGET}/sys     || true
