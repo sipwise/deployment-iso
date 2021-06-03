@@ -2139,7 +2139,7 @@ for dev in ${NETWORK_DEVICES}; do
   [[ "${dev}" =~ ^lo ]] && continue
 
   pciid=$(ethtool -i "${dev}" | awk '/^bus-info: / {print $2}')
-  if [[ "${pciid}" =~ ^([0-9a-fA-F:.])+$ ]]; then
+  if [[ "${pciid}" =~ ^([0-9a-fA-F:.-])+$ ]]; then
     echo "Adding device '${dev}' with PCIID '${pciid}'"
     cat >> "${TARGET_UDEV_PERSISTENT_NET_RULES}" <<EOL
 SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", KERNELS=="${pciid}", NAME="${dev}"
