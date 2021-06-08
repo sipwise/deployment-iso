@@ -895,7 +895,7 @@ DHCP="${DHCP}"
 EXTERNAL_DEV="${EXTERNAL_DEV}"
 GW="${GW}"
 EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
-ORIGIN_INSTALL_DEV="${INSTALL_DEV}"
+ORIGIN_INSTALL_DEV="${ORIGIN_INSTALL_DEV}"
 FALLBACKFS_SIZE="${FALLBACKFS_SIZE}"
 ROOTFS_SIZE="${ROOTFS_SIZE}"
 SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB}"
@@ -1751,11 +1751,14 @@ IP1="${IP1:-${DEFAULT_IP1}}"
 IP2="${IP2:-${DEFAULT_IP2}}"
 IP_HA_SHARED="${IP_HA_SHARED:-${DEFAULT_IP_HA_SHARED}}"
 EXTERNAL_DEV="${EXTERNAL_DEV:-${INSTALL_DEV}}"
+EXTERNAL_DEV="n${EXTERNAL_DEV}" # rename eth*->neth*
 EXTERNAL_IP="${EXTERNAL_IP:-${INSTALL_IP}}"
 EADDR="${EXTERNAL_IP:-${EADDR}}"
 INTERNAL_NETMASK="${INTERNAL_NETMASK:-${DEFAULT_INTERNAL_NETMASK}}"
 MANAGEMENT_IP="${MANAGEMENT_IP:-${IP_HA_SHARED}}"
 INTERNAL_DEV="${INTERNAL_DEV:-${DEFAULT_INTERNAL_DEV}}"
+INTERNAL_DEV="n${INTERNAL_DEV}" # rename eth*->neth*
+ORIGIN_INSTALL_DEV="n${INSTALL_DEV}" # rename eth*->neth*
 if [[ -n "${EXT_GW}" ]]; then
   GW="${EXT_GW}"
 fi
@@ -2139,15 +2142,20 @@ for dev in ${NETWORK_DEVICES}; do
 
   pciid=$(ethtool -i "${dev}" | awk '/^bus-info: / {print $2}')
   if [[ "${pciid}" =~ ^([0-9a-fA-F:.-])+$ ]]; then
-    echo "Adding device '${dev}' with PCIID '${pciid}'"
+    dev_name_new="n${dev}"
+    echo "Adding device '${dev}' with PCIID '${pciid}', dev_name_new=${dev_name_new}"
     cat >> "${TARGET_UDEV_PERSISTENT_NET_RULES}" <<EOL
-SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", KERNELS=="${pciid}", NAME="${dev}"
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", KERNELS=="${pciid}", NAME="${dev_name_new}"
 EOL
   else
     echo "WARNING: could not find valid PCIID '${pciid}' for device '${dev}'"
   fi
   unset pciid
 done
+
+# Rename existing network devices at this time, to use the new names "neth*"
+# when creating config_deploy.inc later
+NETWORK_DEVICES="${NETWORK_DEVICES//eth/neth}"
 
 if "$NGCP_INSTALLER" ; then
   set_deploy_status "ngcp-installer"
@@ -2222,6 +2230,11 @@ EOT
     echo "Copying /etc/network/interfaces ..."
     cp /etc/network/interfaces "${TARGET}/etc/network/"
     sed -i '/iface lo inet dhcp/d' "${TARGET}/etc/network/interfaces"
+    echo "Renaming eth*->neth* in /etc/network/interfaces ..."
+    sed -i '/eth[0-9]/ s|eth|neth|g' "${TARGET}/etc/network/interfaces"
+    echo "Content of resulting /etc/network/interfaces:"
+    tail -v -n +0 "${TARGET}/etc/network/interfaces"
+    echo "========"
     unset method netcardconf
   else
     die "Error during installation of ngcp. Find details at: ${TARGET}/var/log/ngcp-installer.log"
