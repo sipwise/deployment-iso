@@ -1271,6 +1271,7 @@ PRO_EDITION=false
 CE_EDITION=false
 CARRIER_EDITION=false
 NGCP_INSTALLER=false
+EATMYDATA=true
 PUPPET=''
 PUPPET_SERVER=puppet.mgm.sipwise.com
 PUPPET_GIT_REPO=''
@@ -1489,6 +1490,11 @@ if checkBootParam nongcp ; then
   NGCP_INSTALLER=false
 fi
 
+if checkBootParam noeatmydata ; then
+  echo "Will NOT use 'eatmydata' when installing packages"
+  EATMYDATA=false
+fi
+
 # configure static network in installed system?
 if checkBootParam ngcpnw.dhcp || pgrep dhclient &>/dev/null ; then
   DHCP=true
@@ -1639,6 +1645,7 @@ for param in "$@" ; do
     *nongcp*) NGCP_INSTALLER=false;;
     *noinstall*) NGCP_INSTALLER=false;;
     *ngcpinst*) NGCP_INSTALLER=true;;
+    *noeatmydata*) EATMYDATA=false;;
     *ngcphostname=*) TARGET_HOSTNAME="${param//ngcphostname=/}";;
     *ngcpeaddr=*) EADDR="${param//ngcpeaddr=/}";;
     *ngcpip1=*) IP1="${param//ngcpip1=/}";;
@@ -1788,6 +1795,7 @@ echo "
   Install NW iface:  $INSTALL_DEV
   Install IP:        $INSTALL_IP
   Use DHCP in host:  $DHCP
+  Use 'eatmydata':   $EATMYDATA
 
   Installing in chassis? $CHASSIS
 
@@ -1994,7 +2002,11 @@ DEBOPT_OPTIONS=("--no-merged-usr")
 
 # install only "Essential:yes" packages plus apt (explicitly included in minbase variant),
 # systemd + network related packages
-DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,isc-dhcp-client,ifupdown")
+pkg_eatmydata=""
+if "${EATMYDATA}"; then
+  pkg_eatmydata=",eatmydata"
+fi
+DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,isc-dhcp-client,ifupdown${pkg_eatmydata}")
 # TT#61152 Add configuration Acquire::Retries=3, for apt to retry downloads
 DEBOPT_OPTIONS+=("--aptopt='Acquire::Retries=3'")
 
@@ -2170,9 +2182,27 @@ if "$NGCP_INSTALLER" ; then
   echo "Generating ngcp-installer run script ..."
   cat > "${TARGET}/tmp/ngcp-installer-deployment.sh" << "EOT"
 #!/bin/bash
-echo "Running ngcp-installer via grml-chroot."
-ngcp-installer 2>&1
+
+echo -n "Running ngcp-installer via grml-chroot, starting at: "
+date +'%F %T %Z'
+ngcp_installer_start=$(date +'%s')
+
+ngcp_installer_cmd="ngcp-installer"
+if command -v eatmydata &>/dev/null; then
+  echo "Running ngcp-installer with 'eatmydata'"
+  ngcp_installer_cmd="eatmydata ${ngcp_installer_cmd}"
+else
+  echo "Running ngcp-installer without 'eatmydata'"
+fi
+${ngcp_installer_cmd} 2>&1
 RC=$?
+
+echo -n "Finishing ngcp-installer at: "
+date +'%F %T %Z'
+ngcp_installer_end=$(date +'%s')
+
+echo "ngcp-installer total run: $((ngcp_installer_end - ngcp_installer_start)) seconds"
+
 if [ "${RC}" = "0" ]; then
   echo "OK, ngcp-installer finished successfully, continue netscript deployment."
 else
