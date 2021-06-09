@@ -195,19 +195,6 @@ ensure_recent_package_versions() {
   done
 }
 
-set_custom_grub_boot_options() {
-  echo "Adjusting default GRUB boot options (enabling net.ifnames=0)"
-  sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 net.ifnames=0"/' "${TARGET}/etc/default/grub"
-
-  echo "Invoking update-grub"
-  grml-chroot "${TARGET}" update-grub
-
-  if [ -d "${TARGET}/etc/.git" ]; then
-    echo "Commit /etc/default/grub changes using etckeeper"
-    grml-chroot "${TARGET}" etckeeper commit "/etc/default/grub changes"
-  fi
-}
-
 die() {
   echo "$@" >&2
   set_deploy_status "error"
@@ -2262,8 +2249,6 @@ chmod 600 /root/.ssh/authorized_keys
 EOT
   grml-chroot "${TARGET}" /bin/bash /tmp/retrieve_authorized_keys.sh
 fi
-
-set_custom_grub_boot_options
 
 if "$VAGRANT" ; then
   echo "Bootoption vagrant present, executing vagrant_configuration."
