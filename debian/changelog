@@ -1,3 +1,22 @@
+ngcp-deployment-iso (9.5.1.0+0~mr9.5.1.0) unstable; urgency=medium
+
+  [ Manuel Montecelo ]
+  * [c73a063] TT#118659 Add options to install bullseye
+  * [0c746e0] TT#104381 '-' is a valid character that appears in PCIID sometimes
+  * [cd50e49] TT#105151 Stop adding "net.ifnames=0" to grub config
+  * [ab62171] TT#105151 Revert "TT#105151 Stop adding "net.ifnames=0" to grub config"
+
+  [ Mykola Malkov ]
+  * [0a82752] TT#120300 Add mr9.5 LTS key to bootstrap
+
+  [ Michael Prokop ]
+  * [b368d86] TT#121951 Drop dmraid from our package list
+  * [93209fb] TT#122950 Disable building database of manual pages
+  * [535e6df] TT#118659 Use "efivarfs" instead of "efivars" + mount /sys/firmware/efi/efivars for efibootmgr.
+    Thanks to Manuel Montecelo <mmontecelo@sipwise.com> for the initial patch and Volodymyr Fedorov <vfedorov@sipwise.com> for underlying research
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 14 Jun 2021 16:34:47 +0200
+
 ngcp-deployment-iso (9.5.0.0+0~mr9.5.0.0) unstable; urgency=medium
 
   [ Michael Prokop ]
