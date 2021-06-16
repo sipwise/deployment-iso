@@ -1015,11 +1015,6 @@ vagrant_configuration() {
     ln -sf /usr/lib/x86_64-linux-gnu/VBoxGuestAdditions/mount.vboxsf "${TARGET}/sbin/mount.vboxsf"
   fi
 
-  # MACs are different on buildbox and on local VirtualBox
-  # see http://ablecoder.com/b/2012/04/09/vagrant-broken-networking-when-packaging-ubuntu-boxes/
-  echo "Removing '${TARGET_UDEV_PERSISTENT_NET_RULES}'"
-  rm -f "${TARGET_UDEV_PERSISTENT_NET_RULES:?}"
-
   if [ -d "${TARGET}/etc/.git" ]; then
     echo "Commit /etc/* changes using etckeeper"
     grml-chroot "${TARGET}" etckeeper commit "Vagrant/VirtualBox changes on /etc/*"
