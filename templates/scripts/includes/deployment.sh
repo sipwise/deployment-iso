@@ -2225,11 +2225,7 @@ EOT
     echo "Copying /etc/network/interfaces ..."
     cp /etc/network/interfaces "${TARGET}/etc/network/"
     sed -i '/iface lo inet dhcp/d' "${TARGET}/etc/network/interfaces"
-    echo "Renaming eth*->neth* in /etc/network/interfaces ..."
-    sed -i '/eth[0-9]/ s|eth|neth|g' "${TARGET}/etc/network/interfaces"
-    echo "Content of resulting /etc/network/interfaces:"
-    tail -v -n +0 "${TARGET}/etc/network/interfaces"
-    echo "========"
+    # renaming eth*->neth* done below, to also do it for non-ngcp installations
     unset method netcardconf
   else
     die "Error during installation of ngcp. Find details at: ${TARGET}/var/log/ngcp-installer.log"
@@ -2245,6 +2241,14 @@ EOT
     cp /tmp/grml-debootstrap.log "${TARGET}"/var/log/
   fi
 fi
+
+# network interfaces need to be renamed eth*->neth* with mr9.5 / Debian
+# bullseye, and not left with grml-bootstrap defaults
+echo "Renaming eth*->neth* in /etc/network/interfaces ..."
+sed -i '/eth[0-9]/ s|eth|neth|g' "${TARGET}/etc/network/interfaces"
+echo "Content of resulting /etc/network/interfaces:"
+tail -v -n +0 "${TARGET}/etc/network/interfaces"
+echo "========"
 
 if [[ -n "${MANAGEMENT_IP}" ]] && "${RETRIEVE_MGMT_CONFIG}" ; then
   echo "Retrieving public key from management node"
