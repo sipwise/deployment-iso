@@ -5,7 +5,7 @@ FROM docker.mgm.sipwise.com/sipwise-bullseye:latest
 # is updated with the current date. It will force refresh of all
 # of the base images and things like `apt-get update` won't be using
 # old cached versions when the Dockerfile is built.
-ENV REFRESHED_AT 2021-05-04
+ENV REFRESHED_AT 2021-07-14
 
 # tools for building and testing
 RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
@@ -43,7 +43,7 @@ RUN echo "SECURE_BOOT=disable ./grml-live -s bullseye -a amd64 -c GRMLBASE,SIPWI
 
 # base build tools
 WORKDIR /code/
-RUN git clone -b 'v0.38.0' --single-branch --depth 1 https://github.com/grml/grml-live
+RUN git clone -b 'v0.38.5' --single-branch --depth 1 https://github.com/grml/grml-live
 RUN mkdir -p /code/grml-live/templates/boot/addons/ \
   /code/grml-live/etc/grml/fai/config/files/etc/apt/sources.list.d/sipwise.list/ \
   /code/grml-live/etc/grml/fai/config/files/etc/apt/trusted.gpg.d/sipwise-keyring.gpg/ \
