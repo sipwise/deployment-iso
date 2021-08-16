@@ -342,12 +342,12 @@ efi_support() {
 }
 
 # Debian kernels >=5.10 don't provide efivars support, ensure to either:
-# 1) have grml-debootstrap v0.97 or newer available (which provides according
+# 1) have grml-debootstrap v0.99 or newer available (which provides according
 # efivarfs workaround), or otherwise:
-# 2) apply local workaround using pre and post scripts within grml-debootstrap
+# 2) apply local workaround using post script within grml-debootstrap
 # (to avoid having to update the grml-debootstrap package, because that's not
 # available within environments relying on our approx Debian mirror, which
-# doesn't the Grml repository)
+# doesn't provide the Grml repository)
 efivars_workaround() {
   if lsmod | grep -q 'efivars' ; then
     echo "We do have efivars support, no need to apply workarounds"
@@ -355,20 +355,35 @@ efivars_workaround() {
   fi
 
   echo "Running with kernel without efivars support"
-  if check_package_version grml-debootstrap 0.97~ ; then
-    echo "grml-debootstrap >=0.97 available, no need to apply pre/post script workaround"
+  if check_package_version grml-debootstrap 0.99~ ; then
+    echo "grml-debootstrap >=0.99 available, no need to apply pre/post script workaround"
     return 0
   fi
 
-  echo "Present grml-debootstrap version is not recent enough, falling back to workarounds using local scripts"
+  echo "Present grml-debootstrap version is not recent enough, falling back to workarounds using local script"
 
-  # pre script
-  mkdir -p /etc/debootstrap/pre-scripts/
-  cat > /etc/debootstrap/pre-scripts/efivarfs << "EOL"
+  # post script
+  mkdir -p /etc/debootstrap/post-scripts/
+  cat > /etc/debootstrap/post-scripts/efivarfs << "EOL"
 #!/bin/bash
 set -eu -p pipefail
 
 echo "Executing $0"
+
+if ! [ -d "${MNTPOINT}"/boot/efi/EFI ] ; then
+  echo "Mounting /boot/efi"
+  chroot "${MNTPOINT}" mount /boot/efi
+fi
+
+if ! [ -e "${MNTPOINT}"/dev/mapper/ngcp-root ] ; then
+  echo "Mounting /dev (via bind mount)"
+  mount --bind /dev "${MNTPOINT}"/dev/
+fi
+
+if ! [ -e "${MNTPOINT}"/proc/cmdline ] ; then
+  echo "Mounting /proc"
+  chroot "${MNTPOINT}" mount -t proc none /proc
+fi
 
 if ! ls "${MNTPOINT}"/sys/firmware/efi/efivars/* &>/dev/null ; then
   # we need to have /sys available to be able to mount /sys/firmware/efi/efivars
@@ -380,27 +395,16 @@ if ! ls "${MNTPOINT}"/sys/firmware/efi/efivars/* &>/dev/null ; then
   echo "Mounting efivarfs on /sys/firmware/efi/efivars"
   chroot "${MNTPOINT}" mount -t efivarfs efivarfs /sys/firmware/efi/efivars
 fi
-echo "Finished execution of $0"
-EOL
 
-  chmod 775 /etc/debootstrap/pre-scripts/efivarfs
-  PRE_SCRIPTS_OPTION="--pre-scripts /etc/debootstrap/pre-scripts/"
+echo "Invoking grub-install with proper EFI environment"
+chroot "${MNTPOINT}" grub-install
 
-  # post script
-  mkdir -p /etc/debootstrap/post-scripts/
-  cat > /etc/debootstrap/post-scripts/efivarfs << "EOL"
-#!/bin/bash
-set -eu -p pipefail
-
-echo "Executing $0"
-
-if mountpoint "${MNTPOINT}"/sys/firmware/efi/efivars &>/dev/null ; then
-  umount "${MNTPOINT}"/sys/firmware/efi/efivars
-fi
-
-if mountpoint "${MNTPOINT}"/sys &>/dev/null ; then
-  umount "${MNTPOINT}"/sys
-fi
+for f in /sys/firmware/efi/efivars /sys /proc /dev /boot/efi ; do
+  if mountpoint "${MNTPOINT}/$f" &>/dev/null ; then
+    echo "Unmounting $f"
+    umount "${MNTPOINT}/$f"
+  fi
+done
 
 echo "Finished execution of $0"
 EOL
@@ -2024,7 +2028,6 @@ echo y | grml-debootstrap \
   -r "$DEBIAN_RELEASE" \
   -t "$ROOT_FS" \
   $EFI_OPTION \
-  $PRE_SCRIPTS_OPTION \
   $POST_SCRIPTS_OPTION \
   --password 'sipwise' 2>&1 | tee -a /tmp/grml-debootstrap.log
 
