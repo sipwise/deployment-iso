@@ -1,3 +1,19 @@
+ngcp-deployment-iso (10.0.1.0+0~mr10.0.1.0) unstable; urgency=medium
+
+  [ Manuel Montecelo ]
+  * [d6b5097] TT#105151 Run installer under "eatmydata", unless disabled by parameter
+  * [a50903a] TT#105151 Stop adding "net.ifnames=0" to grub config
+  * [4475099] TT#105151 Rename network interfaces eth*->neth*
+  * [eaecf47] TT#105151 Stop removing just-generated udev-rules for network in VMs
+  * [a56c445] TT#105151 Do the renaming eth*->neth* outside of the "if $NGCP_INSTALLER" block
+
+  [ Michael Prokop ]
+  * [4a5e73a] TT#82852 Update grml2usb version to latest upstream
+  * [51b4ba2] TT#82852 Update grml-live version to latest upstream
+  * [f9aea18] TT#118659 Fixup for efivarfs handling with grml-debootstrap v0.98
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 24 Aug 2021 16:49:23 +0200
+
 ngcp-deployment-iso (10.0.0.0+0~mr10.0.0.0) unstable; urgency=medium
 
   [ Manuel Montecelo ]
