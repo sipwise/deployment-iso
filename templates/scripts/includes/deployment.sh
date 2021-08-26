@@ -2028,6 +2028,10 @@ if [[ -n "${EFI_PARTITION}" ]] ; then
     echo "EFI support present, enabling EFI support within grml-debootstrap"
     EFI_OPTION="--efi ${EFI_PARTITION}"
 
+    # ensure we force creation of a proper FAT filesystem
+    echo "Creating FAT filesystem on EFI partition ${EFI_PARTITION}"
+    mkfs.fat -F32 -n "EFI" "${EFI_PARTITION}"
+
     # this can be dropped once we have grml-debootstrap >=v0.99 available in our squashfs
     efivars_workaround
   else
