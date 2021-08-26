@@ -362,6 +362,30 @@ efivars_workaround() {
 
   echo "Present grml-debootstrap version is not recent enough, falling back to workarounds using local script"
 
+  # pre script, relevant for grml-debootstrap versions <=0.96 with EFI environments
+  mkdir -p /etc/debootstrap/pre-scripts/
+  cat > /etc/debootstrap/pre-scripts/efivarfs << "EOL"
+#!/bin/bash
+set -eu -p pipefail
+
+echo "Executing $0"
+
+if ! ls "${MNTPOINT}"/sys/firmware/efi/efivars/* &>/dev/null ; then
+  # we need to have /sys available to be able to mount /sys/firmware/efi/efivars
+  if ! chroot "${MNTPOINT}" test -d /sys/kernel ; then
+    echo "Mointing /sys"
+    chroot "${MNTPOINT}" mount -t sysfs none /sys
+  fi
+
+  echo "Mounting efivarfs on /sys/firmware/efi/efivars"
+  chroot "${MNTPOINT}" mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+fi
+echo "Finished execution of $0"
+EOL
+
+  chmod 775 /etc/debootstrap/pre-scripts/efivarfs
+  PRE_SCRIPTS_OPTION="--pre-scripts /etc/debootstrap/pre-scripts/"
+
   # post script
   mkdir -p /etc/debootstrap/post-scripts/
   cat > /etc/debootstrap/post-scripts/efivarfs << "EOL"
@@ -369,11 +393,6 @@ efivars_workaround() {
 set -eu -p pipefail
 
 echo "Executing $0"
-
-if ! [ -d "${MNTPOINT}"/boot/efi/EFI ] ; then
-  echo "Mounting /boot/efi"
-  chroot "${MNTPOINT}" mount /boot/efi
-fi
 
 if ! [ -e "${MNTPOINT}"/dev/mapper/ngcp-root ] ; then
   echo "Mounting /dev (via bind mount)"
@@ -396,10 +415,15 @@ if ! ls "${MNTPOINT}"/sys/firmware/efi/efivars/* &>/dev/null ; then
   chroot "${MNTPOINT}" mount -t efivarfs efivarfs /sys/firmware/efi/efivars
 fi
 
+if ! [ -d "${MNTPOINT}"/boot/efi/EFI ] ; then
+  echo "Mounting /boot/efi"
+  chroot "${MNTPOINT}" mount /boot/efi
+fi
+
 echo "Invoking grub-install with proper EFI environment"
 chroot "${MNTPOINT}" grub-install
 
-for f in /sys/firmware/efi/efivars /sys /proc /dev /boot/efi ; do
+for f in /boot/efi /sys/firmware/efi/efivars /sys /proc /dev ; do
   if mountpoint "${MNTPOINT}/$f" &>/dev/null ; then
     echo "Unmounting $f"
     umount "${MNTPOINT}/$f"
@@ -2004,7 +2028,7 @@ if [[ -n "${EFI_PARTITION}" ]] ; then
     echo "EFI support present, enabling EFI support within grml-debootstrap"
     EFI_OPTION="--efi ${EFI_PARTITION}"
 
-    # this can be dropped once we have grml-debootstrap >=v0.97 available in our squashfs
+    # this can be dropped once we have grml-debootstrap >=v0.99 available in our squashfs
     efivars_workaround
   else
     echo "EFI support NOT present, not enabling EFI support within grml-debootstrap"
@@ -2028,6 +2052,7 @@ echo y | grml-debootstrap \
   -r "$DEBIAN_RELEASE" \
   -t "$ROOT_FS" \
   $EFI_OPTION \
+  $PRE_SCRIPTS_OPTION \
   $POST_SCRIPTS_OPTION \
   --password 'sipwise' 2>&1 | tee -a /tmp/grml-debootstrap.log
 
