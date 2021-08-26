@@ -432,9 +432,6 @@ clear_partition_table() {
     die "Error: ${blockdevice} doesn't look like a valid block device." >&2
   fi
 
-  echo "Wiping disk signatures from ${blockdevice}"
-  wipefs -a "${blockdevice}"
-
   # make sure parted doesn't fail if LVM is already present
   blockdev --rereadpt "$blockdevice"
   for disk in "$blockdevice"* ; do
@@ -449,6 +446,9 @@ clear_partition_table() {
     echo "Removing possibly existing LVM/PV label from $disk"
     pvremove "$disk" --force --force --yes || true
   done
+
+  echo "Wiping disk signatures from ${blockdevice}"
+  wipefs -a "${blockdevice}"
 
   dd if=/dev/zero of="${blockdevice}" bs=1M count=1
   blockdev --rereadpt "${blockdevice}"
