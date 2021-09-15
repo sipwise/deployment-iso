@@ -1,3 +1,12 @@
+ngcp-deployment-iso (10.0.1.2+0~mr10.0.1.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [70058f0] TT#118659 Ensure that wiping disk signatures works more reliably
+  * [118bed3] TT#118659 EFI support: provide workaround for grml-debootstrap versions <=0.96
+  * [86cadac] TT#118659 EFI support: ensure to always have a proper FAT filesystem available
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Wed, 15 Sep 2021 12:04:00 +0200
+
 ngcp-deployment-iso (10.0.1.1+0~mr10.0.1.1) unstable; urgency=medium
 
   * New release.
