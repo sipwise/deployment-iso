@@ -1,3 +1,10 @@
+ngcp-deployment-iso (7.5.10.2+0~mr7.5.10.2) unstable; urgency=medium
+
+  [ Manuel Montecelo ]
+  * [b03cc40] TT#143801 Let's Encrypt expiration problem 20210930
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Fri, 01 Oct 2021 20:01:48 +0200
+
 ngcp-deployment-iso (7.5.10.1+0~mr7.5.10.1) unstable; urgency=medium
 
   * New release.
