@@ -306,6 +306,57 @@ EOF
   done
 }
 
+letsencrypt_expiration_fix() {
+  echo "Let's Encrypt expiration fix, installing new versions of ca-certificates and necessary crypto libs..."
+
+  letsencrypt_packages=()
+  letsencrypt_packages+=(ca-certificates)
+  letsencrypt_packages+=(libgnutls30)
+
+  echo "Versions before fix:"
+  dpkg-query --show --showformat="\${binary:Package} \${Version}\n" "${letsencrypt_packages[@]}" || true
+
+  # Use separate apt database and source list because non management node has no internet access
+  # so is installed from management node so these additional packages have to be accessible from
+  # sipwise repo
+  local TMPDIR
+  TMPDIR=$(mktemp -d)
+  mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
+    "${TMPDIR}/cachedir/archives/partial"
+  chown _apt -R "${TMPDIR}"
+
+  special_url="${DEBIAN_URL/https/http}"
+  suites="main contrib non-free"
+  {
+    echo "deb ${special_url}/debian/          ${DEBIAN_RELEASE}          ${suites}"
+    echo "deb ${special_url}/debian/          ${DEBIAN_RELEASE}-updates  ${suites}"
+    echo "deb ${special_url}/debian-security/ ${DEBIAN_RELEASE}-security ${suites}"
+  } >> "${TMPDIR}/etc/sources.list"
+
+  mkdir -p "${TMPDIR}"/etc/apt/apt.conf.d/
+  cat > "${TMPDIR}"/etc/apt/apt.conf.d/73_acquire_retries << EOF
+# NGCP_MANAGED_FILE -- deployment.sh
+Acquire::Retries "3";
+EOF
+
+  DEBIAN_FRONTEND='noninteractive' apt-get \
+    -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" \
+    -o dir::etc="${TMPDIR}/etc" \
+    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
+    update
+
+  DEBIAN_FRONTEND='noninteractive' apt-get \
+    -o dir::cache="${TMPDIR}/cachedir" \
+    -o dir::state="${TMPDIR}/statedir" \
+    -o dir::etc="${TMPDIR}/etc" \
+    -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
+    -y --no-install-recommends install "${letsencrypt_packages[@]}"
+
+  echo "Versions after fix:"
+  dpkg-query --show --showformat="\${binary:Package} \${Version}\n" "${letsencrypt_packages[@]}" || true
+}
+
 status_wait() {
   if [[ -n "${STATUS_WAIT}" ]] && [[ "${STATUS_WAIT}" != 0 ]]; then
     # if ngcpstatus boot option is used wait for a specific so a
@@ -1561,6 +1612,10 @@ case "${DEBIAN_RELEASE}" in
 esac
 
 
+# Fix for Let's Encrypt cert expiration problem at 20210930
+letsencrypt_expiration_fix
+
+
 if ! "$NGCP_INSTALLER" ; then
   CARRIER_EDITION=false
   PRO_EDITION=false
@@ -1867,7 +1922,7 @@ DEBOPT_OPTIONS=("--no-merged-usr")
 
 # install only "Essential:yes" packages plus apt (explicitly included in minbase variant),
 # systemd + network related packages
-DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,isc-dhcp-client,ifupdown")
+DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,isc-dhcp-client,ifupdown,ca-certificates")
 # TT#61152 Add configuration Acquire::Retries=3, for apt to retry downloads
 DEBOPT_OPTIONS+=("--aptopt='Acquire::Retries=3'")
 
