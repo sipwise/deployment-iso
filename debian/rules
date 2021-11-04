@@ -15,4 +15,4 @@ endif
 
 override_dh_auto_configure:
 	echo "NGCP_VERSION=$(NGCP_VERSION)"
-	make script_version
+	$(MAKE) script_version
