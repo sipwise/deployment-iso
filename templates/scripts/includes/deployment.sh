@@ -2352,12 +2352,10 @@ EOF
 
 fi # if [ -n "$PUPPET" ] ; then
 
-if [ -r "${INSTALL_LOG}" ] && [ -d "${TARGET}"/var/log/ ] ; then
-  cp "${INSTALL_LOG}" "${TARGET}"/var/log/
-fi
 
 if [[ "${SWRAID}" = "true" ]] ; then
   if efi_support ; then
+    set_deploy_status "swraidinstallefigrub"
     grml-chroot "${TARGET}" mount /boot/efi
 
     # if efivarfs kernel module is loaded, but efivars isn't,
@@ -2377,11 +2375,18 @@ if [[ "${SWRAID}" = "true" ]] ; then
     efibootmgr --create --disk "/dev/${SWRAID_DISK2}" -p 2 -w --label 'NGCP Fallback' --load '\EFI\debian\grubx64.efi'
   fi
 
+  set_deploy_status "swraidinstallgrub"
   for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
     grml-chroot "${TARGET}" grub-install "/dev/$disk"
   done
 
   grml-chroot "${TARGET}" update-grub
+fi
+
+if [ -r "${INSTALL_LOG}" ] && [ -d "${TARGET}"/var/log/ ] ; then
+  set_deploy_status "copylogfiles"
+  cp "${INSTALL_LOG}" "${TARGET}"/var/log/
+  sync
 fi
 
 # unmount /ngcp-data partition inside chroot (if available)
@@ -2410,6 +2415,7 @@ dmsetup remove_all || true
 declare efidev1 efidev2
 if [[ "${SWRAID}" = "true" ]] ; then
   if efi_support ; then
+    set_deploy_status "swraidclonegrub"
     partlabel="EFI System"
     max_tries=60
     get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK1}" "${partlabel}" "${max_tries}" efidev1
