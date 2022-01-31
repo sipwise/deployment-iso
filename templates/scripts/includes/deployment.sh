@@ -12,33 +12,69 @@ usage() {
 
 Control installation parameters:
 
-  ngcppro          - install Pro Edition
-  ngcpsp1          - install first node (Pro Edition only)
-  ngcpsp2          - install second node (Pro Edition only)
-  ngcpce           - install CE Edition
-  ngcpcrole=...    - server role (Carrier)
-  ngcpvers=...     - install specific SP/CE version
-  nongcp           - do not install NGCP but install plain Debian only
-  noinstall        - do not install neither Debian nor NGCP
-  ngcpinst         - force usage of NGCP installer
-  ngcpinstvers=... - use specific NGCP installer version
-  debianrepo=...   - hostname of Debian APT repository mirror
-  sipwiserepo=...  - hostname of Sipwise APT repository mirror
-  ngcpnomysqlrepl  - skip MySQL sp1<->sp2 replication configuration/check
-  ngcpppa=...      - use NGCP PPA Debian repository
+  debugmode                - enable additional debug information
+  help|-h|--help           - show this message
+  ngcphalt                 - poweroff the server in the end of deployment
+  ngcpnw.dhcp              - use DHCP as network configuration in installed system
+  ngcpreboot               - reboot the server in the end of deployment
+  ngcpstatus=...           - sleep for number of seconds befor deployment.sh is finished
+  nocolorlogo              - print the logo in the top of he screen
+  noinstall                - do not install neither Debian nor NGCP
+  nongcp                   - do not install NGCP but install plain Debian only
 
 Control target system:
 
-  ngcpnw.dhcp      - use DHCP as network configuration in installed system
-  ngcphostname=... - hostname of installed system (defaults to ngcp/sp[1,2])
-                     NOTE: do NOT use when installing Pro Edition!
-  ngcpeiface=...   - external interface device (defaults to eth0)
-  ngcpip1=...      - IP address of first node
-  ngcpip2=...      - IP address of second node
-  ngcpipshared=... - HA shared IP address
-  ngcpnetmask=...  - netmask of ha_int interface
-  ngcpeaddr=...    - Cluster IP address
-  swapfilesize=... - size of swap file in megabytes
+  arch=...                 - use specified architecture of debian packages
+  debianrelease=...        - install specified Debian release
+  debianrepo=...           - hostname of Debian APT repository mirror
+  debianrepotransport=...  - use specified transport for Debian repository
+  debootstrapkey=...       - use specified GPG key to bootstrap Debian
+  enablevmservices         - add some tricks for installation to VM
+  fallbackfssize=...       - size of ngcp-fallback partition. Equal to ngncp-root size if not specified
+  ip=...                   - standard Linux kernel ip= boot option
+  lowperformance           - add some tuning for low performance systems
+  ngcpce                   - install CE Edition
+  ngcpcrole=...            - server role (Carrier)
+  ngcpeaddr=...            - cluster IP address
+  ngcpextnetmask=...       - use the following netmask for external interface
+  ngcphostname=...         - hostname of installed system (defaults to ngcp/sp[1,2])
+  ngcpinst                 - force usage of NGCP installer
+  ngcpip1=...              - IP address of first node (Pro Edition only)
+  ngcpip2=...              - IP address of second node (Pro Edition only)
+  ngcpipshared=...         - HA shared IP address
+  ngcpmgmt=...             - name of management node
+  ngcpnetmask=...          - netmask of ha_int interface
+  ngcpnomysqlrepl          - skip MySQL sp1<->sp2 replication configuration/check
+  ngcpppa                  - use NGCP PPA Debian repository
+  ngcppro                  - install Pro Edition
+  ngcppxeinstall           - shows that system is deployed via iPXE
+  ngcpsp1                  - install first node (Pro Edition only)
+  ngcpsp2                  - install second node (Pro Edition only)
+  ngcpupload               - run ngcp-prepare-translations in the end of configuration
+  ngcpvers=...             - install specific SP/CE version
+  ngcpvlanbootint=...      - currently, not used
+  ngcpvlanhaint=...        - the ID of the vlan that is used for ha_int interface type
+  ngcpvlanrtpext=...       - the ID of the vlan that is used for rtp_ext interface type
+  ngcpvlansipext=...       - the ID of the vlan that is used for sip_ext interface type
+  ngcpvlansipint=...       - the ID of the vlan that is used for sip_int interface type
+  ngcpvlansshext=...       - the ID of the vlan that is used for ssh_ext interface type
+  ngcpvlanwebext=...       - the ID of the vlan that is used for web_ext interface type
+  noeatmydata              - use noeatmydata program to speed up packages installation
+  nopuppetrepeat           - do not repeat puppet deployment in case of errors
+  puppetenv=...            - use specified puppet environment
+  puppetgitbranch=...      - use specified git branch to get puppet configuration
+  puppetgitrepo=...        - clone puppet configuration from specified git repo
+  puppetserver=...         - install puppet configuration from specified puppet server
+  rootfssize=...           - size of ngcp-root partition
+  sipwiserepo=...          - hostname of Sipwise APT repository mirror
+  sipwiserepotransport=... - use specified transport for Sipwise repository
+  swapfilesize=...         - size of swap file in megabytes
+  swraiddestroy            - destroy the currently configured RAID and create a new one
+  swraiddisk1=...          - the 1st device which will be used for software RAID
+  swraiddisk2=...          - the 2nd device which will be used for software RAID
+  targetdisk=...           - use specified disk to place the system
+  vagrant                  - add some tricks for creation of vagrant image
+
 
 The command line options correspond with the available bootoptions.
 Command line overrides any present bootoption.
@@ -80,29 +116,6 @@ enable_deploy_status_server() {
     cd "${STATUS_DIRECTORY}"
     python3 -m http.server 4242 >/tmp/status_server.log 2>&1 &
   )
-}
-
-stringInString() {
-  local to_test_="$1"   # matching pattern
-  local source_="$2"    # string to search in
-  case "$source_" in *$to_test_*) return 0;; esac
-  return 1
-}
-
-checkBootParam() {
-  stringInString " $1" "$CMD_LINE"
-  return "$?"
-}
-
-getBootParam() {
-  local param_to_search="$1"
-  local result=''
-
-  stringInString " $param_to_search=" "$CMD_LINE" || return 1
-  result="${CMD_LINE##*$param_to_search=}"
-  result="${result%%[   ]*}"
-  echo "$result"
-  return 0
 }
 
 # load ":"-separated nfs ip into array BP[client-ip], BP[server-ip], ...
@@ -932,7 +945,7 @@ STATUS_WAIT_SECONDS=${STATUS_WAIT}
 export NGCP_INSTALLER=true
 EOF
 
-  if "${TRUNK_VERSION}" && checkBootParam ngcpupload ; then
+  if "${TRUNK_VERSION}" && "${NGCP_UPLOAD}"; then
     echo "NGCPUPLOAD=true" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
   else
     echo "NGCPUPLOAD=false" >> "${TARGET}/etc/ngcp-installer/config_deploy.inc"
@@ -1071,7 +1084,7 @@ check_puppet_rc() {
 check_puppet_rerun() {
   local repeat=1
 
-  if ! checkBootParam nopuppetrepeat && [ "$(get_deploy_status)" = "error" ] ; then
+  if ! "${NO_PUPPET_REPEAT}" && [ "$(get_deploy_status)" = "error" ] ; then
     echo "Do you want to [r]epeat puppet run or [c]ontinue?"
     while true; do
       read -r a
@@ -1103,7 +1116,7 @@ check_puppetserver_time() {
     if (( seconds < 10 )) ; then
       echo "All OK. Time offset between $PUPPET_SERVER and current server is $seconds seconds only."
       break
-    elif checkBootParam nopuppetrepeat ; then
+    elif "${NO_PUPPET_REPEAT}"; then
       echo "WARNING: time offset between $PUPPET_SERVER and current server is $seconds seconds."
       echo "(ignoring due to boot option nopuppetrepeat)"
       break
@@ -1272,19 +1285,14 @@ unset SHELL
 # defaults
 ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
 ADJUST_FOR_LOW_PERFORMANCE=false
+ARCH=$(dpkg --print-architecture)
 CARRIER_EDITION=false
 CE_EDITION=false
 CROLE=''
-DEBIAN_RELEASE=bullseye
+DEBIAN_RELEASE='bullseye'
 DEBIAN_REPO_HOST="debian.sipwise.com"
 DEBIAN_REPO_TRANSPORT="https"
-DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 DEBUG_MODE=false
-DEFAULT_INTERNAL_DEV=eth1
-DEFAULT_INTERNAL_NETMASK=255.255.255.248
-DEFAULT_IP1=192.168.255.251
-DEFAULT_IP2=192.168.255.252
-DEFAULT_IP_HA_SHARED=192.168.255.250
 DHCP=false
 DPL_MYSQL_REPLICATION=true
 EADDR=''
@@ -1295,10 +1303,18 @@ FALLBACKFS_SIZE=''
 FILESYSTEM="ext4"
 FILL_APPROX_CACHE=true
 HALT=false
-INTERACTIVE=false
+INTERACTIVE=true
+INTERNAL_DEV='eth1'
+INTERNAL_NETMASK='255.255.255.248'
+IP1='192.168.255.251'
+IP2='192.168.255.252'
+IP_HA_SHARED='192.168.255.250'
+IP_LINE=''
 LOGO=true
 NGCP_INSTALLER=false
 NGCP_PXE_INSTALL=false
+NGCP_UPLOAD=false
+NO_PUPPET_REPEAT=false
 PRO_EDITION=false
 PUPPET=''
 PUPPET_GIT_BRANCH=master
@@ -1306,7 +1322,7 @@ PUPPET_GIT_REPO=''
 PUPPET_LOCAL_GIT="${TARGET}/tmp/puppet.git"
 PUPPET_RESCUE_LABEL="SIPWRESCUE*"
 PUPPET_RESCUE_PATH="/mnt/rescue_drive"
-PUPPET_SERVER=puppet.mgm.sipwise.com
+PUPPET_SERVER='puppet.mgm.sipwise.com'
 REBOOT=false
 RETRIEVE_MGMT_CONFIG=false
 ROLE=''
@@ -1314,15 +1330,15 @@ ROOTFS_SIZE="10G"
 SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
 SIPWISE_REPO_HOST="deb.sipwise.com"
 SIPWISE_REPO_TRANSPORT="https"
-SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
-STATUS_DIRECTORY=/srv/deployment/
+STATUS_DIRECTORY='/srv/deployment/'
 STATUS_WAIT=0
 SWAPFILE_SIZE_MB=""
 SWAPFILE_SIZE_MB_MAX="16384"
 SWAPFILE_SIZE_MB_MIN="4096"
 SWRAID_DESTROY=false
 SWRAID_DEVICE="/dev/md0"
-TARGET=/mnt
+SWRAID=false
+TARGET='/mnt'
 TRUNK_VERSION=false
 VAGRANT=false
 VLAN_BOOT_INT=2
@@ -1333,11 +1349,8 @@ VLAN_SIP_INT=1720
 VLAN_SSH_EXT=300
 VLAN_WEB_EXT=1718
 
-
 # trap signals: 1 SIGHUP, 2 SIGINT, 3 SIGQUIT, 6 SIGABRT, 15 SIGTERM
 trap 'wait_exit;' 1 2 3 6 15 ERR EXIT
-
-CMD_LINE=$(cat /proc/cmdline)
 
 echo "Host IP: $(ip-screen)"
 echo "Deployment version: $SCRIPT_VERSION"
@@ -1346,30 +1359,224 @@ enable_deploy_status_server
 
 set_deploy_status "checkBootParam"
 
-if checkBootParam debugmode ; then
-  DEBUG_MODE=true
-  enable_trace
-  echo "CMD_LINE: ${CMD_LINE}"
-fi
+declare -a PARAMS=()
+CMD_LINE=$(cat /proc/cmdline)
+PARAMS+=(${CMD_LINE})
+PARAMS+=("$@")
+
+for param in "${PARAMS[@]}" ; do
+  case "${param}" in
+    arch=*)
+      ARCH="${param//arch=/}"
+    ;;
+    debianrelease=*)
+      DEBIAN_RELEASE="${param//debianrelease=/}"
+    ;;
+    debianrepo=*)
+      DEBIAN_REPO_HOST="${param//debianrepo=/}"
+    ;;
+    debianrepotransport=*)
+      DEBIAN_REPO_TRANSPORT="${param//debianrepotransport=/}"
+    ;;
+    debootstrapkey=*)
+      GPG_KEY="${param//debootstrapkey=/}"
+    ;;
+    debugmode)
+      DEBUG_MODE=true
+      enable_trace
+      echo "CMD_LINE: ${CMD_LINE}"
+    ;;
+    enablevmservices)
+      ENABLE_VM_SERVICES=true
+    ;;
+    help|-help)
+      usage
+      exit 0
+    ;;
+    lowperformance)
+      ADJUST_FOR_LOW_PERFORMANCE=true
+    ;;
+    ngcpce)
+      CE_EDITION=true
+      TARGET_HOSTNAME=spce
+      NGCP_INSTALLER=true
+    ;;
+    ngcpcrole=*)
+      CARRIER_EDITION=true
+      CROLE="${param//ngcpcrole=/}"
+    ;;
+    ngcpeaddr=*)
+      EADDR="${param//ngcpeaddr=/}"
+    ;;
+    ngcpextnetmask=*)
+      EXTERNAL_NETMASK="${param//ngcpextnetmask=/}"
+    ;;
+    ngcphalt)
+      HALT=true
+    ;;
+    ngcphostname=*)
+      TARGET_HOSTNAME="${param//ngcphostname=/}"
+    ;;
+    ngcpinst)
+      NGCP_INSTALLER=true
+    ;;
+    ngcpip1=*)
+      IP1="${param//ngcpip1=/}"
+    ;;
+    ngcpip2=*)
+      IP2="${param//ngcpip2=/}"
+    ;;
+    ngcpipshared=*)
+      IP_HA_SHARED="${param//ngcpipshared=/}"
+    ;;
+    *ngcpnetmask=*)
+      INTERNAL_NETMASK="${param//ngcpnetmask=/}"
+    ;;
+    ngcpnw.dhcp)
+      DHCP=true
+    ;;
+    ngcpppa=*)
+      NGCP_PPA="${param//ngcpppa=/}"
+    ;;
+    ngcppro)
+      PRO_EDITION=true
+      NGCP_INSTALLER=true
+    ;;
+    ngcpreboot)
+      REBOOT=true
+    ;;
+    ngcpsp1)
+      ROLE=sp1
+      TARGET_HOSTNAME=sp1
+      PRO_EDITION=true
+      NGCP_INSTALLER=true
+    ;;
+    ngcpsp2)
+      ROLE=sp2
+      TARGET_HOSTNAME=sp2
+      PRO_EDITION=true
+      NGCP_INSTALLER=true
+    ;;
+    ngcpstatus=*)
+      STATUS_WAIT="${param//ngcpstatus=/}"
+    ;;
+    ngcpvers=*)
+      SP_VERSION="${param//ngcpvers=/}"
+    ;;
+    ngcpvlanbootint=*)
+      VLAN_BOOT_INT="${param//ngcpvlanbootint=/}"
+    ;;
+    ngcpvlanhaint=*)
+      VLAN_HA_INT="${param//ngcpvlanhaint=/}"
+    ;;
+    ngcpvlanrtpext=*)
+      VLAN_RTP_EXT="${param//ngcpvlanrtpext=/}"
+    ;;
+    ngcpvlansipext=*)
+      VLAN_SIP_EXT="${param//ngcpvlansipext=/}"
+    ;;
+    ngcpvlansipint=*)
+      VLAN_SIP_INT="${param//ngcpvlansipint=/}"
+    ;;
+    ngcpvlansshext=*)
+      VLAN_SSH_EXT="${param//ngcpvlansshext=/}"
+    ;;
+    ngcpvlanwebext=*)
+      VLAN_WEB_EXT="${param//ngcpvlanwebext=/}"
+    ;;
+    nocolorlogo)
+      LOGO=false
+    ;;
+    noeatmydata)
+      EATMYDATA=false
+    ;;
+    noinstall)
+      echo "Exiting as requested via bootoption noinstall."
+      exit 0
+    ;;
+    nongcp)
+      NGCP_INSTALLER=false
+    ;;
+    targetdisk=*)
+      TARGET_DISK="${param//targetdisk=/}"
+    ;;
+    swraiddestroy)
+      SWRAID_DESTROY=true
+    ;;
+    swraiddisk1=*)
+      SWRAID_DISK1="${param//swraiddisk1=/}"
+      SWRAID_DISK1="${SWRAID_DISK1#/dev/}"
+    ;;
+    swraiddisk2=*)
+      SWRAID_DISK2="${param//swraiddisk2=/}"
+      SWRAID_DISK2="${SWRAID_DISK2#/dev/}"
+    ;;
+    swapfilesize=*)
+      SWAPFILE_SIZE_MB="${param//swapfilesize=/}"
+    ;;
+    vagrant)
+      VAGRANT=true
+    ;;
+    ngcpmgmt=*)
+      MANAGEMENT_IP="${param//ngcpmgmt=/}"
+      RETRIEVE_MGMT_CONFIG=true
+    ;;
+    puppetenv=*)
+      # we expected to get the environment for puppet
+      PUPPET="${param//puppetenv=/}"
+    ;;
+    puppetserver=*)
+      PUPPET_SERVER="${param//puppetserver=/}"
+    ;;
+    puppetgitrepo=*)
+      PUPPET_GIT_REPO="${param//puppetgitrepo=/}"
+    ;;
+    puppetgitbranch=*)
+      PUPPET_GIT_BRANCH="${param//puppetgitbranch=/}"
+    ;;
+    rootfssize=*)
+      ROOTFS_SIZE="${param//rootfssize=/}"
+    ;;
+    fallbackfssize=*)
+      FALLBACKFS_SIZE="${param//fallbackfssize=/}"
+    ;;
+    sipwiserepo=*)
+      SIPWISE_REPO_HOST="${param//sipwiserepo=/}"
+    ;;
+    ngcpnomysqlrepl)
+      DPL_MYSQL_REPLICATION=false
+    ;;
+    sipwiserepotransport=*)
+      SIPWISE_REPO_TRANSPORT="${param//sipwiserepotransport=/}"
+    ;;
+    ngcppxeinstall)
+      NGCP_PXE_INSTALL=true
+    ;;
+    ip=*)
+      IP_LINE="${param//ip=/}"
+    ;;
+    ngcpupload)
+      NGCP_UPLOAD=true
+    ;;
+    nopuppetrepeat)
+      NO_PUPPET_REPEAT=true
+    ;;
+    *)
+      echo "Parameter ${param} not defined in script, skipping"
+    ;;
+  esac
+done
+
 
 disable_systemd_tmpfiles_clean
 
-if checkBootParam 'targetdisk=' ; then
-  TARGET_DISK=$(getBootParam targetdisk)
+# configure static network in installed system?
+if pgrep dhclient &>/dev/null ; then
+  DHCP=true
 fi
 
-if checkBootParam "swraiddisk1=" ; then
-  SWRAID_DISK1=$(getBootParam swraiddisk1)
-  SWRAID_DISK1=${SWRAID_DISK1#/dev/}
-fi
-
-if checkBootParam "swraiddisk2=" ; then
-  SWRAID_DISK2=$(getBootParam swraiddisk2)
-  SWRAID_DISK2=${SWRAID_DISK2#/dev/}
-fi
-
-if checkBootParam swraiddestroy ; then
-  SWRAID_DESTROY=true
+if [[ "${SP_VERSION}" == "trunk" ]]; then
+  TRUNK_VERSION=true
 fi
 
 # if TARGET_DISK environment variable is set accept it
@@ -1390,8 +1597,6 @@ else # otherwise try to find sane default
     done
   fi
 fi
-
-SWRAID=false
 if [[ -n "${SWRAID_DISK1}" ]] && [[ -z "${SWRAID_DISK2}" ]] ; then
   die "Error: swraiddisk1 is set, but swraiddisk2 is unset."
 elif [[ -z "${SWRAID_DISK1}" ]] && [[ -n "${SWRAID_DISK2}" ]] ; then
@@ -1402,24 +1607,10 @@ elif [[ -n "${SWRAID_DISK1}" ]] && [[ -n "${SWRAID_DISK2}" ]] ; then
 else
   [[ -z "${DISK}" ]] && die "Error: No non-removable disk suitable for installation found"
 fi
-
-if checkBootParam 'ngcpstatus=' ; then
-  STATUS_WAIT=$(getBootParam ngcpstatus)
-  [ -n "$STATUS_WAIT" ] || STATUS_WAIT=30
-fi
-
-if checkBootParam noinstall ; then
-  echo "Exiting as requested via bootoption noinstall."
-  exit 0
-fi
-
-if checkBootParam nocolorlogo ; then
-  LOGO=false
-fi
-
-if checkBootParam 'ngcpmgmt=' ; then
-  MANAGEMENT_IP=$(getBootParam ngcpmgmt)
-  RETRIEVE_MGMT_CONFIG=true
+if [[ "${SWRAID}" = "true" ]] ; then
+  DISK_INFO="Software-RAID with $SWRAID_DISK1 $SWRAID_DISK2"
+else
+  DISK_INFO="/dev/$DISK"
 fi
 
 ## detect environment {{{
@@ -1432,207 +1623,20 @@ elif dmidecode| grep -q 'Location In Chassis'; then
   CHASSIS="Running in blade chassis $(dmidecode| awk '/Location In Chassis: Slot/ {print $4}')"
 fi
 
-if checkBootParam ngcpinst || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 || \
-  checkBootParam ngcppro || checkBootParam ngcpce ; then
-  NGCP_INSTALLER=true
-fi
-
-if checkBootParam ngcpce ; then
-  CE_EDITION=true
+if "${CE_EDITION}"; then
   NGCP_INSTALLER_EDITION_STR="Sipwise C5:        CE"
-elif checkBootParam ngcppro || checkBootParam ngcpsp1 || checkBootParam ngcpsp2 ; then
-  PRO_EDITION=true
+elif "${CARRIER_EDITION}"; then
+  NGCP_INSTALLER_EDITION_STR="Sipwise C5:        CARRIER"
+elif "${PRO_EDITION}"; then
   NGCP_INSTALLER_EDITION_STR="Sipwise C5:        PRO"
-  if checkBootParam ngcpsp2 ; then
-    ROLE=sp2
-  else
-    ROLE=sp1
-  fi
-elif checkBootParam "nongcp" ; then
+elif ! "${NGCP_INSTALLER}"; then
   # installing plain debian without NGCP
   NGCP_INSTALLER_EDITION_STR=""
-elif checkBootParam "puppetenv=" ; then
-  # will be determined later
-  :
+elif "${PUPPET}" ; then
+  NGCP_INSTALLER_EDITION_STR="PUPPET"
 else
   echo "Error: Could not determine 'edition' (spce, sppro, carrier)."
   exit 1
-fi
-
-# Carrier is a specialisation of Pro, Pro Role variables are needed
-if checkBootParam 'ngcpcrole=' ; then
-  CROLE=$(getBootParam ngcpcrole)
-  CARRIER_EDITION=true
-  NGCP_INSTALLER_EDITION_STR="Sipwise C5:        CARRIER"
-fi
-
-if checkBootParam "puppetenv=" ; then
-  # we expected to get the environment for puppet
-  PUPPET=$(getBootParam puppetenv)
-fi
-
-if checkBootParam "puppetserver=" ; then
-  PUPPET_SERVER=$(getBootParam puppetserver)
-fi
-
-if checkBootParam "puppetgitrepo=" ; then
-  PUPPET_GIT_REPO=$(getBootParam puppetgitrepo)
-fi
-
-if checkBootParam "puppetgitbranch=" ; then
-  PUPPET_GIT_BRANCH=$(getBootParam puppetgitbranch)
-fi
-
-if checkBootParam "debianrelease=" ; then
-  DEBIAN_RELEASE=$(getBootParam debianrelease)
-fi
-
-ARCH=$(dpkg --print-architecture)
-if checkBootParam "arch=" ; then
-  ARCH=$(getBootParam arch)
-fi
-
-# existing ngcp releases (like 2.2) with according repository and installer
-if checkBootParam 'ngcpvers=' ; then
-  SP_VERSION=$(getBootParam ngcpvers)
-  if [ "${SP_VERSION:-}" = "trunk" ] ; then
-    TRUNK_VERSION=true
-  fi
-fi
-
-if checkBootParam nongcp ; then
-  echo "Will not execute ngcp-installer as requested via bootoption nongcp."
-  NGCP_INSTALLER=false
-fi
-
-if checkBootParam noeatmydata ; then
-  echo "Will NOT use 'eatmydata' when installing packages"
-  EATMYDATA=false
-fi
-
-# configure static network in installed system?
-if checkBootParam ngcpnw.dhcp || pgrep dhclient &>/dev/null ; then
-  DHCP=true
-fi
-
-if checkBootParam 'ngcphostname=' ; then
-  TARGET_HOSTNAME="$(getBootParam ngcphostname)"
-fi
-
-if checkBootParam 'ngcpip1=' ; then
-  IP1=$(getBootParam ngcpip1)
-fi
-
-if checkBootParam 'ngcpip2=' ; then
-  IP2=$(getBootParam ngcpip2)
-fi
-
-if checkBootParam 'ngcpipshared=' ; then
-  IP_HA_SHARED=$(getBootParam ngcpipshared)
-fi
-
-if checkBootParam 'ngcpnetmask=' ; then
-  INTERNAL_NETMASK=$(getBootParam ngcpnetmask)
-fi
-
-if checkBootParam 'ngcpextnetmask=' ; then
-  EXTERNAL_NETMASK=$(getBootParam ngcpextnetmask)
-fi
-
-if checkBootParam 'ngcpeaddr=' ; then
-  EADDR=$(getBootParam ngcpeaddr)
-fi
-
-if checkBootParam "rootfssize=" ; then
-  ROOTFS_SIZE=$(getBootParam rootfssize)
-fi
-
-if checkBootParam "fallbackfssize=" ; then
-  FALLBACKFS_SIZE=$(getBootParam fallbackfssize)
-fi
-
-if checkBootParam ngcphalt ; then
-  HALT=true
-fi
-
-if checkBootParam ngcpreboot ; then
-  REBOOT=true
-fi
-
-if checkBootParam vagrant ; then
-  VAGRANT=true
-fi
-
-if checkBootParam lowperformance ; then
-  ADJUST_FOR_LOW_PERFORMANCE=true
-fi
-
-if checkBootParam enablevmservices ; then
-  ENABLE_VM_SERVICES=true
-fi
-
-if checkBootParam "debianrepo=" ; then
-  DEBIAN_REPO_HOST=$(getBootParam debianrepo)
-fi
-
-if checkBootParam "sipwiserepo=" ; then
-  SIPWISE_REPO_HOST=$(getBootParam sipwiserepo)
-fi
-
-if checkBootParam ngcpnomysqlrepl ; then
-  DPL_MYSQL_REPLICATION=false
-fi
-
-if checkBootParam 'ngcpvlanbootint=' ; then
-  VLAN_BOOT_INT=$(getBootParam ngcpvlanbootint)
-fi
-
-if checkBootParam 'ngcpvlansshext=' ; then
-  VLAN_SSH_EXT=$(getBootParam ngcpvlansshext)
-fi
-
-if checkBootParam 'ngcpvlanwebext=' ; then
-  VLAN_WEB_EXT=$(getBootParam ngcpvlanwebext)
-fi
-
-if checkBootParam 'ngcpvlansipext=' ; then
-  VLAN_SIP_EXT=$(getBootParam ngcpvlansipext)
-fi
-
-if checkBootParam 'ngcpvlansipint=' ; then
-  VLAN_SIP_INT=$(getBootParam ngcpvlansipint)
-fi
-
-if checkBootParam 'ngcpvlanhaint=' ; then
-  VLAN_HA_INT=$(getBootParam ngcpvlanhaint)
-fi
-
-if checkBootParam 'ngcpvlanrtpext=' ; then
-  VLAN_RTP_EXT=$(getBootParam ngcpvlanrtpext)
-fi
-
-if checkBootParam 'ngcpppa=' ; then
-  NGCP_PPA=$(getBootParam ngcpppa)
-fi
-
-if checkBootParam 'debianrepotransport=' ; then
-  DEBIAN_REPO_TRANSPORT=$(getBootParam debianrepotransport)
-fi
-
-if checkBootParam 'sipwiserepotransport=' ; then
-  SIPWISE_REPO_TRANSPORT=$(getBootParam sipwiserepotransport)
-fi
-
-if checkBootParam 'debootstrapkey=' ; then
-  GPG_KEY=$(getBootParam debootstrapkey)
-fi
-
-if checkBootParam 'ngcppxeinstall' ; then
-  NGCP_PXE_INSTALL=true
-fi
-
-if checkBootParam 'swapfilesize=' ; then
-  SWAPFILE_SIZE_MB=$(getBootParam swapfilesize)
 fi
 
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
@@ -1642,129 +1646,10 @@ FALLBACKFS_SIZE="${FALLBACKFS_SIZE:-${ROOTFS_SIZE}}"
 
 ## }}}
 
-## interactive mode {{{
-# support command line options, overriding autodetected defaults
-INTERACTIVE=true
-
 if [ -n "$NETSCRIPT" ] ; then
   echo "Automatic deployment via bootoption netscript detected."
   INTERACTIVE=false
 fi
-
-for param in "$@" ; do
-  case $param in
-    *enablevmservices*)
-      ENABLE_VM_SERVICES=true
-    ;;
-    *-h*|*--help*|*help*)
-      usage
-      exit 0
-    ;;
-    *lowperformance*)
-      ADJUST_FOR_LOW_PERFORMANCE=true
-    ;;
-    *ngcpce*)
-      CE_EDITION=true
-      TARGET_HOSTNAME=spce
-      NGCP_INSTALLER=true
-    ;;
-    *ngcpcrole=*)
-      CARRIER_EDITION=true
-      CROLE="${param//ngcpcrole=/}"
-    ;;
-    *ngcpeaddr=*)
-      EADDR="${param//ngcpeaddr=/}"
-    ;;
-    *ngcpextnetmask=*)
-      EXTERNAL_NETMASK="${param//ngcpextnetmask=/}"
-    ;;
-    *ngcphalt*)
-      HALT=true
-    ;;
-    *ngcphostname=*)
-      TARGET_HOSTNAME="${param//ngcphostname=/}"
-    ;;
-    *ngcpinst*)
-      NGCP_INSTALLER=true
-    ;;
-    *ngcpip1=*)
-      IP1="${param//ngcpip1=/}"
-    ;;
-    *ngcpip2=*)
-      IP2="${param//ngcpip2=/}"
-    ;;
-    *ngcpipshared=*)
-      IP_HA_SHARED="${param//ngcpipshared=/}"
-    ;;
-    *ngcpnetmask=*)
-      INTERNAL_NETMASK="${param//ngcpnetmask=/}"
-    ;;
-    *ngcpnw.dhcp*)
-      DHCP=true
-    ;;
-    *ngcpppa*)
-      NGCP_PPA="${param//ngcpppa=/}"
-    ;;
-    *ngcppro*)
-      PRO_EDITION=true
-      NGCP_INSTALLER=true
-    ;;
-    *ngcpreboot*)
-      REBOOT=true
-    ;;
-    *ngcpsp1*)
-      ROLE=sp1
-      TARGET_HOSTNAME=sp1
-      PRO_EDITION=true
-      NGCP_INSTALLER=true
-    ;;
-    *ngcpsp2*)
-      ROLE=sp2
-      TARGET_HOSTNAME=sp2
-      PRO_EDITION=true
-      NGCP_INSTALLER=true
-    ;;
-    *ngcpvers=*)
-      SP_VERSION="${param//ngcpvers=/}"
-    ;;
-    *ngcpvlanbootint*)
-      VLAN_BOOT_INT="${param//ngcpvlanbootint=/}"
-    ;;
-    *ngcpvlanhaint*)
-      VLAN_HA_INT="${param//ngcpvlanhaint=/}"
-    ;;
-    *ngcpvlanrtpext*)
-      VLAN_RTP_EXT="${param//ngcpvlanrtpext=/}"
-    ;;
-    *ngcpvlansipext*)
-      VLAN_SIP_EXT="${param//ngcpvlansipext=/}"
-    ;;
-    *ngcpvlansipint*)
-      VLAN_SIP_INT="${param//ngcpvlansipint=/}"
-    ;;
-    *ngcpvlansshext*)
-      VLAN_SSH_EXT="${param//ngcpvlansshext=/}"
-    ;;
-    *ngcpvlanwebext*)
-      VLAN_WEB_EXT="${param//ngcpvlanwebext=/}"
-    ;;
-    *noeatmydata*)
-      EATMYDATA=false
-    ;;
-    *noinstall*)
-      NGCP_INSTALLER=false
-    ;;
-    *nongcp*)
-      NGCP_INSTALLER=false
-    ;;
-    *swapfilesize*)
-      SWAPFILE_SIZE_MB="${param//swapfilesize=/}"
-    ;;
-    *vagrant*)
-      VAGRANT=true
-    ;;
-  esac
-done
 
 ensure_packages_installed
 
@@ -1786,7 +1671,6 @@ case "${DEBIAN_RELEASE}" in
     ensure_recent_package_versions
     ;;
 esac
-
 
 if ! "$NGCP_INSTALLER" ; then
   CARRIER_EDITION=false
@@ -1818,7 +1702,6 @@ if [ -z "$TARGET_HOSTNAME" ] ; then
     fi
   fi
 fi
-
 [ -z "$HOSTNAME" ] && HOSTNAME="nohostname"
 if [ -n "$TARGET_HOSTNAME" ] ; then
   HOSTNAME="$TARGET_HOSTNAME"
@@ -1826,9 +1709,9 @@ fi
 export HOSTNAME
 
 # get install device from "ip=<client-ip:<srv-ip>:..." boot arg
-if checkBootParam 'ip=' ; then
+if [[ -n "${IP_LINE}" ]]; then
   declare -A IP_ARR
-  if loadNfsIpArray IP_ARR "$(getBootParam ip)" ; then
+  if loadNfsIpArray IP_ARR "${IP_LINE}" ; then
     INSTALL_DEV=${IP_ARR[device]}
     EXT_GW=${IP_ARR[gw-ip]}
     [[ "${IP_ARR[autoconf]}" == 'dhcp' ]] && DHCP=true
@@ -1850,28 +1733,16 @@ else
   unset external_ip_data current_netmask
   GW="$(ip route show dev "${INSTALL_DEV}" | awk '/^default via/ {print $3; exit}')"
 fi
-
 echo "INSTALL_IP is ${INSTALL_IP}"
-
-IP1="${IP1:-${DEFAULT_IP1}}"
-IP2="${IP2:-${DEFAULT_IP2}}"
-IP_HA_SHARED="${IP_HA_SHARED:-${DEFAULT_IP_HA_SHARED}}"
-EXTERNAL_DEV="${EXTERNAL_DEV:-${INSTALL_DEV}}"
+EXTERNAL_DEV="${INSTALL_DEV}"
 EXTERNAL_DEV="n${EXTERNAL_DEV}" # rename eth*->neth*
-EXTERNAL_IP="${EXTERNAL_IP:-${INSTALL_IP}}"
+EXTERNAL_IP="${INSTALL_IP}"
 EADDR="${EXTERNAL_IP:-${EADDR}}"
-INTERNAL_NETMASK="${INTERNAL_NETMASK:-${DEFAULT_INTERNAL_NETMASK}}"
 MANAGEMENT_IP="${MANAGEMENT_IP:-${IP_HA_SHARED}}"
-INTERNAL_DEV="${INTERNAL_DEV:-${DEFAULT_INTERNAL_DEV}}"
 INTERNAL_DEV="n${INTERNAL_DEV}" # rename eth*->neth*
 ORIGIN_INSTALL_DEV="n${INSTALL_DEV}" # rename eth*->neth*
 if [[ -n "${EXT_GW}" ]]; then
   GW="${EXT_GW}"
-fi
-if [[ "${SWRAID}" = "true" ]] ; then
-  DISK_INFO="Software-RAID with $SWRAID_DISK1 $SWRAID_DISK2"
-else
-  DISK_INFO="/dev/$DISK"
 fi
 
 set_deploy_status "settings"
