@@ -1270,64 +1270,69 @@ export LANG=C
 unset SHELL
 
 # defaults
+ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
+ADJUST_FOR_LOW_PERFORMANCE=false
+CARRIER_EDITION=false
+CE_EDITION=false
+CROLE=''
+DEBIAN_RELEASE=bullseye
+DEBIAN_REPO_HOST="debian.sipwise.com"
+DEBIAN_REPO_TRANSPORT="https"
+DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 DEBUG_MODE=false
 DEFAULT_INTERNAL_DEV=eth1
+DEFAULT_INTERNAL_NETMASK=255.255.255.248
 DEFAULT_IP1=192.168.255.251
 DEFAULT_IP2=192.168.255.252
 DEFAULT_IP_HA_SHARED=192.168.255.250
-DEFAULT_INTERNAL_NETMASK=255.255.255.248
-TARGET=/mnt
-PRO_EDITION=false
-CE_EDITION=false
-CARRIER_EDITION=false
-NGCP_INSTALLER=false
-EATMYDATA=true
-PUPPET=''
-PUPPET_SERVER=puppet.mgm.sipwise.com
-PUPPET_GIT_REPO=''
-PUPPET_GIT_BRANCH=master
-PUPPET_LOCAL_GIT="${TARGET}/tmp/puppet.git"
-PUPPET_RESCUE_PATH="/mnt/rescue_drive"
-PUPPET_RESCUE_LABEL="SIPWRESCUE*"
-INTERACTIVE=false
 DHCP=false
-LOGO=true
-RETRIEVE_MGMT_CONFIG=false
-TRUNK_VERSION=false
-DEBIAN_RELEASE=bullseye
-HALT=false
-REBOOT=false
-STATUS_DIRECTORY=/srv/deployment/
-STATUS_WAIT=0
-VAGRANT=false
-ADJUST_FOR_LOW_PERFORMANCE=false
+DPL_MYSQL_REPLICATION=true
+EADDR=''
+EATMYDATA=true
 ENABLE_VM_SERVICES=false
+EXTERNAL_NETMASK=''
+FALLBACKFS_SIZE=''
 FILESYSTEM="ext4"
+FILL_APPROX_CACHE=true
+HALT=false
+INTERACTIVE=false
+LOGO=true
+NGCP_INSTALLER=false
+NGCP_PXE_INSTALL=false
+PRO_EDITION=false
+PUPPET=''
+PUPPET_GIT_BRANCH=master
+PUPPET_GIT_REPO=''
+PUPPET_LOCAL_GIT="${TARGET}/tmp/puppet.git"
+PUPPET_RESCUE_LABEL="SIPWRESCUE*"
+PUPPET_RESCUE_PATH="/mnt/rescue_drive"
+PUPPET_SERVER=puppet.mgm.sipwise.com
+REBOOT=false
+RETRIEVE_MGMT_CONFIG=false
+ROLE=''
 ROOTFS_SIZE="10G"
-FALLBACKFS_SIZE="${ROOTFS_SIZE}"
-SWAPFILE_SIZE_MB_MIN="4096"
-SWAPFILE_SIZE_MB_MAX="16384"
-SWAPFILE_SIZE_MB=""
-SWRAID_DEVICE="/dev/md0"
-SWRAID_DESTROY=false
-DEBIAN_REPO_HOST="debian.sipwise.com"
-DEBIAN_REPO_TRANSPORT="https"
+SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
 SIPWISE_REPO_HOST="deb.sipwise.com"
 SIPWISE_REPO_TRANSPORT="https"
-DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
-DPL_MYSQL_REPLICATION=true
-FILL_APPROX_CACHE=true
+STATUS_DIRECTORY=/srv/deployment/
+STATUS_WAIT=0
+SWAPFILE_SIZE_MB=""
+SWAPFILE_SIZE_MB_MAX="16384"
+SWAPFILE_SIZE_MB_MIN="4096"
+SWRAID_DESTROY=false
+SWRAID_DEVICE="/dev/md0"
+TARGET=/mnt
+TRUNK_VERSION=false
+VAGRANT=false
 VLAN_BOOT_INT=2
-VLAN_SSH_EXT=300
-VLAN_WEB_EXT=1718
-VLAN_SIP_EXT=1719
-VLAN_SIP_INT=1720
 VLAN_HA_INT=1721
 VLAN_RTP_EXT=1722
-SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
-NGCP_PXE_INSTALL=false
-ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
+VLAN_SIP_EXT=1719
+VLAN_SIP_INT=1720
+VLAN_SSH_EXT=300
+VLAN_WEB_EXT=1718
+
 
 # trap signals: 1 SIGHUP, 2 SIGINT, 3 SIGQUIT, 6 SIGABRT, 15 SIGTERM
 trap 'wait_exit;' 1 2 3 6 15 ERR EXIT
@@ -1633,6 +1638,8 @@ fi
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
 
+FALLBACKFS_SIZE="${FALLBACKFS_SIZE:-${ROOTFS_SIZE}}"
+
 ## }}}
 
 ## interactive mode {{{
@@ -1646,41 +1653,117 @@ fi
 
 for param in "$@" ; do
   case $param in
-    *-h*|*--help*|*help*) usage ; exit 0;;
-    *ngcpsp1*) ROLE=sp1 ; TARGET_HOSTNAME=sp1; PRO_EDITION=true; CE_EDITION=false ; NGCP_INSTALLER=true ;;
-    *ngcpsp2*) ROLE=sp2 ; TARGET_HOSTNAME=sp2; PRO_EDITION=true; CE_EDITION=false ; NGCP_INSTALLER=true ;;
-    *ngcppro*) PRO_EDITION=true; CE_EDITION=false ; NGCP_INSTALLER=true ;;
-    *ngcpce*) PRO_EDITION=false; CE_EDITION=true ; TARGET_HOSTNAME=spce ; ROLE='' ; NGCP_INSTALLER=true ;;
-    *ngcpvers=*) SP_VERSION="${param//ngcpvers=/}";;
-    *nongcp*) NGCP_INSTALLER=false;;
-    *noinstall*) NGCP_INSTALLER=false;;
-    *ngcpinst*) NGCP_INSTALLER=true;;
-    *noeatmydata*) EATMYDATA=false;;
-    *ngcphostname=*) TARGET_HOSTNAME="${param//ngcphostname=/}";;
-    *ngcpeaddr=*) EADDR="${param//ngcpeaddr=/}";;
-    *ngcpip1=*) IP1="${param//ngcpip1=/}";;
-    *ngcpip2=*) IP2="${param//ngcpip2=/}";;
-    *ngcpipshared=*) IP_HA_SHARED="${param//ngcpipshared=/}";;
-    *ngcpnetmask=*) INTERNAL_NETMASK="${param//ngcpnetmask=/}";;
-    *ngcpextnetmask=*) EXTERNAL_NETMASK="${param//ngcpextnetmask=/}";;
-    *ngcpcrole=*) CARRIER_EDITION=true; CROLE="${param//ngcpcrole=/}";;
-    *ngcpnw.dhcp*) DHCP=true;;
-    *ngcphalt*) HALT=true;;
-    *ngcpreboot*) REBOOT=true;;
-    *vagrant*) VAGRANT=true;;
-    *lowperformance*) ADJUST_FOR_LOW_PERFORMANCE=true;;
-    *enablevmservices*) ENABLE_VM_SERVICES=true;;
-    *ngcpvlanbootint*) VLAN_BOOT_INT="${param//ngcpvlanbootint=/}";;
-    *ngcpvlansshext*) VLAN_SSH_EXT="${param//ngcpvlansshext=/}";;
-    *ngcpvlanwebext*) VLAN_WEB_EXT="${param//ngcpvlanwebext=/}";;
-    *ngcpvlansipext*) VLAN_SIP_EXT="${param//ngcpvlansipext=/}";;
-    *ngcpvlansipint*) VLAN_SIP_INT="${param//ngcpvlansipint=/}";;
-    *ngcpvlanhaint*) VLAN_HA_INT="${param//ngcpvlanhaint=/}";;
-    *ngcpvlanrtpext*) VLAN_RTP_EXT="${param//ngcpvlanrtpext=/}";;
-    *ngcpppa*) NGCP_PPA="${param//ngcpppa=/}";;
-    *swapfilesize*) SWAPFILE_SIZE_MB="${param//swapfilesize=/}";;
+    *enablevmservices*)
+      ENABLE_VM_SERVICES=true
+    ;;
+    *-h*|*--help*|*help*)
+      usage
+      exit 0
+    ;;
+    *lowperformance*)
+      ADJUST_FOR_LOW_PERFORMANCE=true
+    ;;
+    *ngcpce*)
+      CE_EDITION=true
+      TARGET_HOSTNAME=spce
+      NGCP_INSTALLER=true
+    ;;
+    *ngcpcrole=*)
+      CARRIER_EDITION=true
+      CROLE="${param//ngcpcrole=/}"
+    ;;
+    *ngcpeaddr=*)
+      EADDR="${param//ngcpeaddr=/}"
+    ;;
+    *ngcpextnetmask=*)
+      EXTERNAL_NETMASK="${param//ngcpextnetmask=/}"
+    ;;
+    *ngcphalt*)
+      HALT=true
+    ;;
+    *ngcphostname=*)
+      TARGET_HOSTNAME="${param//ngcphostname=/}"
+    ;;
+    *ngcpinst*)
+      NGCP_INSTALLER=true
+    ;;
+    *ngcpip1=*)
+      IP1="${param//ngcpip1=/}"
+    ;;
+    *ngcpip2=*)
+      IP2="${param//ngcpip2=/}"
+    ;;
+    *ngcpipshared=*)
+      IP_HA_SHARED="${param//ngcpipshared=/}"
+    ;;
+    *ngcpnetmask=*)
+      INTERNAL_NETMASK="${param//ngcpnetmask=/}"
+    ;;
+    *ngcpnw.dhcp*)
+      DHCP=true
+    ;;
+    *ngcpppa*)
+      NGCP_PPA="${param//ngcpppa=/}"
+    ;;
+    *ngcppro*)
+      PRO_EDITION=true
+      NGCP_INSTALLER=true
+    ;;
+    *ngcpreboot*)
+      REBOOT=true
+    ;;
+    *ngcpsp1*)
+      ROLE=sp1
+      TARGET_HOSTNAME=sp1
+      PRO_EDITION=true
+      NGCP_INSTALLER=true
+    ;;
+    *ngcpsp2*)
+      ROLE=sp2
+      TARGET_HOSTNAME=sp2
+      PRO_EDITION=true
+      NGCP_INSTALLER=true
+    ;;
+    *ngcpvers=*)
+      SP_VERSION="${param//ngcpvers=/}"
+    ;;
+    *ngcpvlanbootint*)
+      VLAN_BOOT_INT="${param//ngcpvlanbootint=/}"
+    ;;
+    *ngcpvlanhaint*)
+      VLAN_HA_INT="${param//ngcpvlanhaint=/}"
+    ;;
+    *ngcpvlanrtpext*)
+      VLAN_RTP_EXT="${param//ngcpvlanrtpext=/}"
+    ;;
+    *ngcpvlansipext*)
+      VLAN_SIP_EXT="${param//ngcpvlansipext=/}"
+    ;;
+    *ngcpvlansipint*)
+      VLAN_SIP_INT="${param//ngcpvlansipint=/}"
+    ;;
+    *ngcpvlansshext*)
+      VLAN_SSH_EXT="${param//ngcpvlansshext=/}"
+    ;;
+    *ngcpvlanwebext*)
+      VLAN_WEB_EXT="${param//ngcpvlanwebext=/}"
+    ;;
+    *noeatmydata*)
+      EATMYDATA=false
+    ;;
+    *noinstall*)
+      NGCP_INSTALLER=false
+    ;;
+    *nongcp*)
+      NGCP_INSTALLER=false
+    ;;
+    *swapfilesize*)
+      SWAPFILE_SIZE_MB="${param//swapfilesize=/}"
+    ;;
+    *vagrant*)
+      VAGRANT=true
+    ;;
   esac
-  shift
 done
 
 ensure_packages_installed
