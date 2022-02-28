@@ -71,7 +71,8 @@ get_disk_info() {
 rm -f /tmp/disk_options
 
 declare -a AVAILABLE_DISKS
-AVAILABLE_DISKS=( $(awk '/[a-z]$/ {print $4}' /proc/partitions | grep -v '^name$' | sort -u) )
+AVAILABLE_DISKS=( $(lsblk --list -o NAME,TYPE | awk '$2 == "disk" {print $1}' | sort -u) )
+
 if [[ -z "${AVAILABLE_DISKS[*]}" ]] ; then
   dialog --title "Disk selection" \
     --msgbox "Sorry, no disks found. Please make sure to have a hard disk attached to your system/VM." 0 0
