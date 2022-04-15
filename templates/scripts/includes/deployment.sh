@@ -44,12 +44,11 @@ Control target system:
   ngcpipshared=...         - HA shared IP address
   ngcpmgmt=...             - name of management node
   ngcpnetmask=...          - netmask of ha_int interface
+  ngcpnodename=...         - name of the node in terms of spN
   ngcpnomysqlrepl          - skip MySQL sp1<->sp2 replication configuration/check
   ngcpppa                  - use NGCP PPA Debian repository
   ngcppro                  - install Pro Edition
   ngcppxeinstall           - shows that system is deployed via iPXE
-  ngcpsp1                  - install first node (Pro Edition only)
-  ngcpsp2                  - install second node (Pro Edition only)
   ngcpupload               - run ngcp-prepare-translations in the end of configuration
   ngcpvers=...             - install specific SP/CE version
   ngcpvlanbootint=...      - currently, not used
@@ -84,10 +83,10 @@ Usage examples:
   # ngcp-deployment ngcpce ngcpnw.dhcp
 
   # netcardconfig # configure eth0 with static configuration
-  # ngcp-deployment ngcppro ngcpsp1
+  # ngcp-deployment ngcppro ngcpnodename=sp1
 
   # netcardconfig # configure eth0 with static configuration
-  # ngcp-deployment ngcppro ngcpsp2
+  # ngcp-deployment ngcppro ngcpnodename=sp2
 "
 }
 
@@ -897,52 +896,52 @@ EOF
     cat >> "${conf_file}" << EOF
 CROLE="${CROLE}"
 VLAN_BOOT_INT="${VLAN_BOOT_INT}"
-VLAN_SSH_EXT="${VLAN_SSH_EXT}"
-VLAN_WEB_EXT="${VLAN_WEB_EXT}"
-VLAN_SIP_EXT="${VLAN_SIP_EXT}"
-VLAN_SIP_INT="${VLAN_SIP_INT}"
 VLAN_HA_INT="${VLAN_HA_INT}"
 VLAN_RTP_EXT="${VLAN_RTP_EXT}"
+VLAN_SIP_EXT="${VLAN_SIP_EXT}"
+VLAN_SIP_INT="${VLAN_SIP_INT}"
+VLAN_SSH_EXT="${VLAN_SSH_EXT}"
+VLAN_WEB_EXT="${VLAN_WEB_EXT}"
 EOF
   fi
   if "${PRO_EDITION}" ; then
     cat >> "${conf_file}" << EOF
-HNAME="${ROLE}"
+DPL_MYSQL_REPLICATION="${DPL_MYSQL_REPLICATION}"
+FILL_APPROX_CACHE="${FILL_APPROX_CACHE}"
+HNAME="${NODE_NAME}"
+INTERNAL_DEV="${INTERNAL_DEV}"
+INTERNAL_NETMASK="${INTERNAL_NETMASK}"
 IP1="${IP1}"
 IP2="${IP2}"
 IP_HA_SHARED="${IP_HA_SHARED}"
-DPL_MYSQL_REPLICATION="${DPL_MYSQL_REPLICATION}"
-TARGET_HOSTNAME="${TARGET_HOSTNAME}"
-INTERNAL_DEV="${INTERNAL_DEV}"
-NETWORK_DEVICES="${NETWORK_DEVICES}"
-INTERNAL_NETMASK="${INTERNAL_NETMASK}"
 MANAGEMENT_IP="${MANAGEMENT_IP}"
+NETWORK_DEVICES="${NETWORK_DEVICES}"
 NGCP_PXE_INSTALL="${NGCP_PXE_INSTALL}"
-FILL_APPROX_CACHE="${FILL_APPROX_CACHE}"
+TARGET_HOSTNAME="${TARGET_HOSTNAME}"
 EOF
   fi
 
   cat >> "${conf_file}" << EOF
-FORCE=no
 ADJUST_FOR_LOW_PERFORMANCE="${ADJUST_FOR_LOW_PERFORMANCE}"
+DEBUG_MODE="${DEBUG_MODE}"
+DEPLOYMENT_SH=true
+DHCP="${DHCP}"
+EADDR="${EADDR}"
 ENABLE_VM_SERVICES="${ENABLE_VM_SERVICES}"
-SIPWISE_REPO_HOST="${SIPWISE_REPO_HOST}"
-SIPWISE_URL="${SIPWISE_URL}"
+export NGCP_INSTALLER=true
+EXTERNAL_DEV="${EXTERNAL_DEV}"
+EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
+FALLBACKFS_SIZE="${FALLBACKFS_SIZE}"
+FORCE=no
+GW="${GW}"
 NAMESERVER="$(awk '/^nameserver/ {print $2}' /etc/resolv.conf)"
 NGCP_PPA="${NGCP_PPA}"
-DEBUG_MODE="${DEBUG_MODE}"
-EADDR="${EADDR}"
-DHCP="${DHCP}"
-EXTERNAL_DEV="${EXTERNAL_DEV}"
-GW="${GW}"
-EXTERNAL_NETMASK="${EXTERNAL_NETMASK}"
 ORIGIN_INSTALL_DEV="${ORIGIN_INSTALL_DEV}"
-FALLBACKFS_SIZE="${FALLBACKFS_SIZE}"
 ROOTFS_SIZE="${ROOTFS_SIZE}"
-SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB}"
-DEPLOYMENT_SH=true
+SIPWISE_REPO_HOST="${SIPWISE_REPO_HOST}"
+SIPWISE_URL="${SIPWISE_URL}"
 STATUS_WAIT_SECONDS=${STATUS_WAIT}
-export NGCP_INSTALLER=true
+SWAPFILE_SIZE_MB="${SWAPFILE_SIZE_MB}"
 EOF
 
   if "${TRUNK_VERSION}" && "${NGCP_UPLOAD}"; then
@@ -1314,6 +1313,7 @@ LOGO=true
 NGCP_INSTALLER=false
 NGCP_PXE_INSTALL=false
 NGCP_UPLOAD=false
+NODE_NAME=''
 NO_PUPPET_REPEAT=false
 PRO_EDITION=false
 PUPPET=''
@@ -1325,7 +1325,6 @@ PUPPET_RESCUE_PATH="/mnt/rescue_drive"
 PUPPET_SERVER='puppet.mgm.sipwise.com'
 REBOOT=false
 RETRIEVE_MGMT_CONFIG=false
-ROLE=''
 ROOTFS_SIZE="10G"
 SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
 SIPWISE_REPO_HOST="deb.sipwise.com"
@@ -1398,8 +1397,9 @@ for param in "${PARAMS[@]}" ; do
     ;;
     ngcpce)
       CE_EDITION=true
-      TARGET_HOSTNAME=spce
+      TARGET_HOSTNAME='spce'
       NGCP_INSTALLER=true
+      NODE_NAME='spce'
     ;;
     ngcpcrole=*)
       CARRIER_EDITION=true
@@ -1445,17 +1445,8 @@ for param in "${PARAMS[@]}" ; do
     ngcpreboot)
       REBOOT=true
     ;;
-    ngcpsp1)
-      ROLE=sp1
-      TARGET_HOSTNAME=sp1
-      PRO_EDITION=true
-      NGCP_INSTALLER=true
-    ;;
-    ngcpsp2)
-      ROLE=sp2
-      TARGET_HOSTNAME=sp2
-      PRO_EDITION=true
-      NGCP_INSTALLER=true
+    ngcpnodename=*)
+      NODE_NAME="${param//ngcpnodename=/}"
     ;;
     ngcpstatus=*)
       STATUS_WAIT="${param//ngcpstatus=/}"
@@ -1676,7 +1667,7 @@ if ! "$NGCP_INSTALLER" ; then
   CARRIER_EDITION=false
   PRO_EDITION=false
   CE_EDITION=false
-  unset ROLE
+  unset NODE_NAME
 fi
 
 set_deploy_status "getconfig"
@@ -1686,7 +1677,7 @@ set_deploy_status "getconfig"
 # and use it for IP address check in pro edition
 if [ -z "$TARGET_HOSTNAME" ] ; then
   if "$PRO_EDITION" ; then
-    TARGET_HOSTNAME="$ROLE"
+    TARGET_HOSTNAME="${NODE_NAME}"
   elif "$CE_EDITION" ; then
     TARGET_HOSTNAME="spce"
   fi
@@ -1770,7 +1761,7 @@ echo "
 
 if "$PRO_EDITION" ; then
   echo "
-  Host Role:         $ROLE
+  Node name:         $NODE_NAME
   Host Role Carrier: $CROLE
 
   External NW iface: $EXTERNAL_DEV
@@ -1811,7 +1802,7 @@ if "$LOGO" ; then
   CPU_INFO=$(lscpu | awk '/^CPU\(s\)/ {print $2}')
   RAM_INFO=$(/usr/bin/gawk '/MemTotal/{print $2}' /proc/meminfo)
   DATE_INFO=$(date)
-  INSTALLER_TYPE="Install CE: $CE_EDITION PRO: $PRO_EDITION [$ROLE] Carrier: $CARRIER_EDITION [$CROLE]"
+  INSTALLER_TYPE="Install CE: ${CE_EDITION} PRO: ${PRO_EDITION} [${NODE_NAME}] Carrier: ${CARRIER_EDITION} [${NODE_NAME}] [${CROLE}]"
   if [ -n "$NGCP_PPA" ] ; then
     PPA_INFO="| PPA: ${NGCP_PPA} "
   fi
@@ -1854,8 +1845,8 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
 
-127.0.0.1 $ROLE $HOSTNAME
-$INSTALL_IP $ROLE $HOSTNAME
+127.0.0.1 ${NODE_NAME} ${HOSTNAME}
+${INSTALL_IP} ${NODE_NAME} ${HOSTNAME}
 EOF
 fi
 
