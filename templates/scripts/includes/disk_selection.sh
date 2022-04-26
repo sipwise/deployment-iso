@@ -11,7 +11,7 @@ prompt_for_raid() {
                 echo "${i}" "${disk_info}" off
               done) )
   local TMP
-  TMP=$(mktemp)
+  TMP=$(mktemp -t ngcp-deployment-raid-prompt.XXXXXXXXXX)
   if ! dialog --title "Disk selection for Software RAID" --separate-output \
     --checklist "Please select the disks you would like to use for your RAID1:" 0 0 0 \
     "${DISK_LIST[@]}" 2>"${TMP}" ; then
@@ -36,7 +36,7 @@ prompt_for_target() {
               done) )
 
   local TMP
-  TMP=$(mktemp)
+  TMP=$(mktemp -t ngcp-deployment-target-prompt.XXXXXXXXXX)
   if ! dialog --title "Disk selection" --single-quoted \
     --ok-label OK --cancel-label Exit \
     --menu "Please select the target disk for installing Debian/ngcp:" 0 0 0 \

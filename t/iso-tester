@@ -31,8 +31,8 @@ if [ -n "${3:-}" ] ; then
   SCREENSHOT_COMPARE="$3"
 fi
 
-QEMU_MONITOR=$(mktemp)
-SCREENDUMP=$(mktemp)
+QEMU_MONITOR=$(mktemp -t iso-tester-qemu.XXXXXXXXXX)
+SCREENDUMP=$(mktemp -t iso-tester-screen.XXXXXXXXXX)
 
 send_command() {
   echo "$*" | socat - UNIX-CONNECT:"${QEMU_MONITOR}"

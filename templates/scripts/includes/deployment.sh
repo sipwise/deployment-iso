@@ -176,10 +176,10 @@ ensure_recent_package_versions() {
 
   # use temporary apt database for speed reasons
   local TMPDIR
-  TMPDIR=$(mktemp -d)
+  TMPDIR=$(mktemp -d -t ngcp-deployment-recent-tmp.XXXXXXXXXX)
   mkdir -p "${TMPDIR}/statedir/lists/partial" "${TMPDIR}/cachedir/archives/partial"
   local debsrcfile
-  debsrcfile=$(mktemp)
+  debsrcfile=$(mktemp -t ngcp-deployment-recent-debsrc.XXXXXXXXXX)
   echo "deb ${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}/grml.org grml-testing main" >> "${debsrcfile}"
 
   DEBIAN_FRONTEND='noninteractive' apt-get \
@@ -269,7 +269,7 @@ ensure_packages_installed() {
   # so is installed from management node so these additional packages have to be accessible from
   # sipwise repo
   local TMPDIR
-  TMPDIR=$(mktemp -d)
+  TMPDIR=$(mktemp -d -t ngcp-deployment-ensure-tmp.XXXXXXXXXX)
   mkdir -p "${TMPDIR}/etc/preferences.d" "${TMPDIR}/statedir/lists/partial" \
     "${TMPDIR}/cachedir/archives/partial"
   chown _apt -R "${TMPDIR}"
@@ -811,7 +811,7 @@ get_installer_path() {
 
   if [ -n "${NGCP_PPA}" ] ; then
     local ppa_tmp_packages
-    ppa_tmp_packages=$(mktemp)
+    ppa_tmp_packages=$(mktemp -t ngcp-deployment-installer-path.XXXXXXXXXX)
 
     echo "NGCP PPA requested, checking ngcp-installer package availability in PPA repo"
     local ppa_repos_base_path="${SIPWISE_URL}/autobuild/dists/${NGCP_PPA}/main/binary-amd64/"
