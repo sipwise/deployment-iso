@@ -1,3 +1,10 @@
+ngcp-deployment-iso (9.5.6.0+0~mr9.5.6.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [62455c5] TT#165600 Add support for NVMe disks
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Fri, 03 Jun 2022 18:09:00 +0200
+
 ngcp-deployment-iso (9.5.5.0+0~mr9.5.5.0) unstable; urgency=medium
 
   * New release.
