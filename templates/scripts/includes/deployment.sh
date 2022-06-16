@@ -805,8 +805,17 @@ get_installer_path() {
 
   # use a separate repos for trunk releases
   if $TRUNK_VERSION ; then
-    local repos_base_path="${SIPWISE_URL}/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
-    INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
+    case "${SP_VERSION}" in
+      trunk)
+        local repos_base_path="${SIPWISE_URL}/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
+        INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
+        ;;
+      trunk-weekly)
+        local repos_base_path="${SIPWISE_URL}/autobuild/release/release-${SP_VERSION}/main/binary-amd64/"
+        INSTALLER_PATH="${SIPWISE_URL}/autobuild/release/release-${SP_VERSION}/pool/main/n/ngcp-installer/"
+        ;;
+      *) die "Error: unknown TRUNK_VERSION ${SP_VERSION}" ;;
+    esac
   fi
 
   if [ -n "${NGCP_PPA}" ] ; then
@@ -1566,7 +1575,7 @@ if pgrep dhclient &>/dev/null ; then
   DHCP=true
 fi
 
-if [[ "${SP_VERSION}" == "trunk" ]]; then
+if [[ ${SP_VERSION} =~ ^trunk ]]; then
   TRUNK_VERSION=true
 fi
 
