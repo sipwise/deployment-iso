@@ -752,7 +752,17 @@ lvm_setup() {
 
 retrieve_deployment_scripts_fake_uname() {
   local target_path="$1"
-  local repos_base_path="${SIPWISE_URL}/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
+  case "${SP_VERSION}" in
+    trunk)
+      local repos_base_path="${SIPWISE_URL}/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
+      local deployment_path="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-deployment-iso"
+      ;;
+    trunk-weekly)
+      local repos_base_path="${SIPWISE_URL}/autobuild/release/release-${SP_VERSION}/dists/release-${SP_VERSION}/main/binary-amd64/"
+      local deployment_path="${SIPWISE_URL}/autobuild/release/release-${SP_VERSION}/pool/main/n/ngcp-deployment-iso/"
+      ;;
+    *) die "Error: unknown TRUNK_VERSION ${SP_VERSION}" ;;
+  esac
 
   wget --timeout=30 -O Packages.gz "${repos_base_path}Packages.gz"
   # sed: display paragraphs matching the "Package: ..." string, then grab string "^Version: " and display the actual version via awk
@@ -764,7 +774,7 @@ retrieve_deployment_scripts_fake_uname() {
 
   # retrieve Debian package
   local deb_package="ngcp-deployment-scripts_${version}_amd64.deb"
-  local deployment_scripts_package="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-deployment-iso/${deb_package}"
+  local deployment_scripts_package="${deployment_path}/${deb_package}"
   wget --timeout=30 -O "/root/${deb_package}" "${deployment_scripts_package}"
 
   # extract Debian package
@@ -811,7 +821,7 @@ get_installer_path() {
         INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
         ;;
       trunk-weekly)
-        local repos_base_path="${SIPWISE_URL}/autobuild/release/release-${SP_VERSION}/main/binary-amd64/"
+        local repos_base_path="${SIPWISE_URL}/autobuild/release/release-${SP_VERSION}/dists/release-${SP_VERSION}/main/binary-amd64/"
         INSTALLER_PATH="${SIPWISE_URL}/autobuild/release/release-${SP_VERSION}/pool/main/n/ngcp-installer/"
         ;;
       *) die "Error: unknown TRUNK_VERSION ${SP_VERSION}" ;;
