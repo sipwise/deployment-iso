@@ -1,3 +1,11 @@
+ngcp-deployment-iso (11.0.1.0+0~mr11.0.1.0) unstable; urgency=medium
+
+  [ Victor Seva ]
+  * [6661b04] TT#15305 deployment.sh: support trunk-weekly
+  * [1d4f08b] TT#15305 development.sh: support trunk-weekly, take two
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 22 Aug 2022 20:00:23 +0200
+
 ngcp-deployment-iso (11.0.0.0+0~mr11.0.0.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
