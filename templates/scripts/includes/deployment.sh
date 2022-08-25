@@ -761,7 +761,12 @@ retrieve_deployment_scripts_fake_uname() {
       local repos_base_path="${SIPWISE_URL}/autobuild/release/release-${SP_VERSION}/dists/release-${SP_VERSION}/main/binary-amd64/"
       local deployment_path="${SIPWISE_URL}/autobuild/release/release-${SP_VERSION}/pool/main/n/ngcp-deployment-iso/"
       ;;
-    *) die "Error: unknown TRUNK_VERSION ${SP_VERSION}" ;;
+    *)
+      echo "NOTE: SP_VERSION is unset, assuming we're installing a non-NGCP system"
+      echo "NOTE: using fake-uname.so of ngcp-deployment-scripts from release-trunk-${DEBIAN_RELEASE}"
+      local repos_base_path="${SIPWISE_URL}/autobuild/dists/release-trunk-${DEBIAN_RELEASE}/main/binary-amd64/"
+      local deployment_path="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-deployment-iso"
+      ;;
   esac
 
   wget --timeout=30 -O Packages.gz "${repos_base_path}Packages.gz"
