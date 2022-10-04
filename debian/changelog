@@ -1,3 +1,10 @@
+ngcp-deployment-iso (11.1.1.0+0~mr11.1.1.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [b372471] TT#15305 Fix ngcp-deployment-scripts usage for daily-build-matrix-debian-boxes
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 04 Oct 2022 13:49:43 +0200
+
 ngcp-deployment-iso (11.1.0.0+0~mr11.1.0.0) unstable; urgency=medium
 
   [ Victor Seva ]
