@@ -1978,17 +1978,30 @@ ADDITIONAL_PACKAGES+=(mmdebstrap)
 ensure_packages_installed
 export DEBOOTSTRAP=mmdebstrap  # for usage with grml-debootstrap
 
-# it's a no-op in mmdebstrap v0.4.1, but force its usage to not be surprised
-# if that default should ever change
-DEBOPT_OPTIONS=("--no-merged-usr")
-
 # install only "Essential:yes" packages plus apt (explicitly included in minbase variant),
 # systemd + network related packages
 pkg_eatmydata=""
 if "${EATMYDATA}"; then
   pkg_eatmydata=",eatmydata"
 fi
-DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,isc-dhcp-client,ifupdown${pkg_eatmydata}")
+
+DEBOPT_OPTIONS=()
+pkg_usrmerge=""
+case "${DEBIAN_RELEASE}" in
+  stretch|buster|bullseye)
+    # don't install usrmerge before Debian/bookworm AKA v12; instead invoke with
+    # --no-merged-usr, which is a no-op in mmdebstrap (at least until v1.2.1),
+    # but force its usage to not be surprised if that default should ever change
+    DEBOPT_OPTIONS+=("--no-merged-usr")
+    ;;
+  *)
+    # to use a merged-/usr (expected for Debian/bookworm and newer), we need to
+    # tell mmdebstrap to include the usrmerge package
+    pkg_usrmerge=",usrmerge"
+    ;;
+esac
+
+DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,isc-dhcp-client,ifupdown${pkg_eatmydata}${pkg_usrmerge}")
 # TT#61152 Add configuration Acquire::Retries=3, for apt to retry downloads
 DEBOPT_OPTIONS+=("--aptopt='Acquire::Retries=3'")
 
