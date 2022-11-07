@@ -1065,8 +1065,9 @@ vagrant_configuration() {
     FAKE_UNAME='/tmp/fake-uname.so'
   fi
 
-  UTS_RELEASE="${KERNELVERSION}" LD_PRELOAD="${FAKE_UNAME}" \
-    grml-chroot "${TARGET}" /media/cdrom/VBoxLinuxAdditions.run --nox11 || true
+  grml-chroot "${TARGET}" env \
+    UTS_RELEASE="${KERNELVERSION}" LD_PRELOAD="${FAKE_UNAME}" \
+    /media/cdrom/VBoxLinuxAdditions.run --nox11 || true
   tail -10 "${TARGET}/var/log/vboxadd-install.log"
   umount "${TARGET}/media/cdrom/"
 
