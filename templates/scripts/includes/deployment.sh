@@ -2002,7 +2002,7 @@ case "${DEBIAN_RELEASE}" in
     ;;
 esac
 
-DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,isc-dhcp-client,ifupdown${pkg_eatmydata}${pkg_usrmerge}")
+DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,isc-dhcp-client,ifupdown,ca-certificates${pkg_eatmydata}${pkg_usrmerge}")
 # TT#61152 Add configuration Acquire::Retries=3, for apt to retry downloads
 DEBOPT_OPTIONS+=("--aptopt='Acquire::Retries=3'")
 

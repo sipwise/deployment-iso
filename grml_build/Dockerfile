@@ -1,11 +1,11 @@
-# DOCKER_NAME=grml-build-bullseye
-FROM docker.mgm.sipwise.com/sipwise-bullseye:latest
+# DOCKER_NAME=grml-build-bookworm
+FROM docker.mgm.sipwise.com/sipwise-bookworm:latest
 
 # Important! Update this no-op ENV variable when this Dockerfile
 # is updated with the current date. It will force refresh of all
 # of the base images and things like `apt-get update` won't be using
 # old cached versions when the Dockerfile is built.
-ENV REFRESHED_AT 2021-07-14
+ENV REFRESHED_AT 2022-11-11
 
 # tools for building and testing
 RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
   imagemagick \
   isolinux \
   isomd5sum \
+  jo \
   kmod \
   memtest86+ \
   mksh \
@@ -35,7 +36,7 @@ RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
   wget \
   xorriso
 
-RUN echo "SECURE_BOOT=disable ./grml-live -s bullseye -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t /code/grml-live/templates/ -o /grml/ -r grml-sipwise -v 0.42" >/root/.bash_history && \
+RUN echo "SECURE_BOOT=disable ./grml-live -s bookworm -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t /code/grml-live/templates/ -o /grml/ -r grml-sipwise -v 0.42" >/root/.bash_history && \
   echo "export LIVE_CONF=/code/grml-live/etc/grml/grml-live.conf" >>/root/.bash_history && \
   echo "export SCRIPTS_DIRECTORY=/code/grml-live/scripts"         >>/root/.bash_history && \
   echo "export GRML_FAI_CONFIG=/code/grml-live/etc/grml/fai"      >>/root/.bash_history && \
@@ -43,7 +44,7 @@ RUN echo "SECURE_BOOT=disable ./grml-live -s bullseye -a amd64 -c GRMLBASE,SIPWI
 
 # base build tools
 WORKDIR /code/
-RUN git clone -b 'v0.38.5' --single-branch --depth 1 https://github.com/grml/grml-live
+RUN git clone -b 'v0.42.0' --single-branch --depth 1 https://github.com/grml/grml-live
 RUN mkdir -p /code/grml-live/templates/boot/addons/ \
   /code/grml-live/etc/grml/fai/config/files/etc/apt/sources.list.d/sipwise.list/ \
   /code/grml-live/etc/grml/fai/config/files/etc/apt/trusted.gpg.d/sipwise-keyring.gpg/ \
@@ -52,9 +53,10 @@ RUN mkdir -p /code/grml-live/templates/boot/addons/ \
   /code/grml-live/etc/grml/fai/config/scripts/PUPPETLABS/
 
 # addons
-RUN wget https://debian.sipwise.com/debian/pool/main/m/memtest86+/memtest86+_5.01-3_amd64.deb && \
-  dpkg -x memtest86+_5.01-3_amd64.deb /tmp/memtest86 && \
-  cp /tmp/memtest86/boot/memtest86+.bin /code/grml-live/templates/boot/addons/memtest && \
+RUN wget https://debian.sipwise.com/debian/pool/main/m/memtest86+/memtest86+_6.00-1_amd64.deb && \
+  dpkg -x memtest86+_6.00-1_amd64.deb /tmp/memtest86 && \
+  cp /tmp/memtest86/boot/memtest86+x64.bin /code/grml-live/templates/boot/addons/memtest86+x64.bin && \
+  cp /tmp/memtest86/boot/memtest86+x64.efi /code/grml-live/templates/boot/addons/memtest86+x64.efi && \
   rm -rf /tmp/memtest86
 
 RUN wget -O /code/grml-live/templates/boot/addons/netboot.xyz.efi https://boot.netboot.xyz/ipxe/netboot.xyz.efi && \
@@ -84,7 +86,7 @@ WORKDIR /code/grml-live
 # export SCRIPTS_DIRECTORY=$(pwd)/scripts
 # export LIVE_CONF=$(pwd)/etc/grml/grml-live.conf
 # cp /deployment-iso/grml_build/package_config/SIPWISE /code/grml-live/etc/grml/fai/config/package_config/SIPWISE
-# ./grml-live -s bullseye -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t $(pwd)/templates/ -o /grml/ -r grml-sipwise -v 0.42
+# ./grml-live -s bookworm -a amd64 -c GRMLBASE,SIPWISE,AMD64 -t $(pwd)/templates/ -o /grml/ -r grml-sipwise -v 0.42
 #
 ## A successful run results in ISO file in /grml/grml_isos/ (inside container),
 ## available via volume folder also outside of docker container ($pwd/grml/grml_isos/).

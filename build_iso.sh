@@ -52,6 +52,17 @@ case "${GRML_ISO}" in
     ;;
 esac
 
+case "${GRML_ISO}" in
+  grml*buster*|grml*bullseye*)
+    MEMTEST_SCREENSHOT="/code/t/screenshots/01-memtest-v5.jpg"
+    echo "*** NOTE: identified Grml ISO ${GRML_ISO}, assuming we have memtest v5"
+    ;;
+  *)
+    MEMTEST_SCREENSHOT="/code/t/screenshots/01-memtest-v6.jpg"
+    echo "*** NOTE: identified Grml ISO ${GRML_ISO}, assuming we have memtest v6"
+    ;;
+esac
+
 SCRIPT="$(readlink -f "$0")"
 SCRIPTPATH="$(dirname "${SCRIPT}")"
 pushd "${SCRIPTPATH}" &>/dev/null
@@ -117,6 +128,6 @@ echo "*** Moving ${SIPWISE_ISO} ${SIPWISE_ISO}.sha1 ${SIPWISE_ISO}.md5 to artifa
 mv "${SIPWISE_ISO}" "${SIPWISE_ISO}.sha1" "${SIPWISE_ISO}.md5" artifacts/
 
 docker run --rm -i --privileged -v "$(pwd)":/code/ docker.mgm.sipwise.com/deployment-iso-bullseye:latest \
-  /code/t/iso-tester /code/artifacts/"${SIPWISE_ISO}" /code/artifacts/memtest.jpg /code/t/screenshots/01-memtest.jpg
+  /code/t/iso-tester /code/artifacts/"${SIPWISE_ISO}" /code/artifacts/memtest.jpg "${MEMTEST_SCREENSHOT}"
 
 popd &>/dev/null
