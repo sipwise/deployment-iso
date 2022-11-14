@@ -725,6 +725,33 @@ display_partition_table() {
   fi
 }
 
+enable_ntp() {
+  echo "Displaying original timedatectl status:"
+  timedatectl status
+
+  if systemctl cat chrony &>/dev/null ; then
+    echo "Ensuring chrony service is running"
+    systemctl start chrony
+
+    echo "Enabling NTP synchronization"
+    timedatectl set-ntp true || true
+  elif systemctl cat ntp &>/dev/null ; then
+    echo "Ensuring ntp service is running"
+    systemctl start ntp
+
+    echo "Enabling NTP synchronization"
+    timedatectl set-ntp true || true
+  else
+    echo "No ntp service identified, skipping NTP synchronization"
+  fi
+
+  echo "Disabling RTC for local time"
+  timedatectl set-local-rtc false
+
+  echo "Displaying new timedatectl status:"
+  timedatectl status
+}
+
 lvm_setup() {
   local saved_options
   saved_options="$(set +o)"
@@ -1878,6 +1905,9 @@ fi
 # remote login ftw
 service ssh start >/dev/null &
 echo "root:sipwise" | chpasswd
+
+# date/time settings, so live system has proper date set
+enable_ntp
 
 ## partition disk
 set_deploy_status "disksetup"

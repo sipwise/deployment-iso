@@ -7,6 +7,7 @@ binutils
 bridge-utils
 bsdmainutils
 buffer
+chrony
 coreutils
 cpio
 cpufrequtils
