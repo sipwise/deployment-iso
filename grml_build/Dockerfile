@@ -5,7 +5,7 @@ FROM docker.mgm.sipwise.com/sipwise-bookworm:latest
 # is updated with the current date. It will force refresh of all
 # of the base images and things like `apt-get update` won't be using
 # old cached versions when the Dockerfile is built.
-ENV REFRESHED_AT 2022-11-14
+ENV REFRESHED_AT 2022-11-28
 
 # tools for building and testing
 RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
@@ -44,7 +44,7 @@ RUN echo "SECURE_BOOT=disable ./grml-live -s bookworm -a amd64 -c GRMLBASE,SIPWI
 
 # base build tools
 WORKDIR /code/
-RUN git clone -b 'v0.42.0' --single-branch --depth 1 https://github.com/grml/grml-live
+RUN git clone -b 'v0.42.2' --single-branch --depth 1 https://github.com/grml/grml-live
 RUN mkdir -p /code/grml-live/templates/boot/addons/ \
   /code/grml-live/etc/grml/fai/config/files/etc/apt/sources.list.d/sipwise.list/ \
   /code/grml-live/etc/grml/fai/config/files/etc/apt/trusted.gpg.d/sipwise-keyring.gpg/ \
