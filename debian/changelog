@@ -1,3 +1,19 @@
+ngcp-deployment-iso (11.2.1.0+0~mr11.2.1.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [d1d0e61] MT#55379 Use usrmerge for Debian/bookworm based systems
+  * [245c7ef] MT#55861 Update Grml ISO + update to Debian/bookworm
+  * [6412814] MT#55949 Ensure we have proper date/time configuration
+  * [338ba4f] MT#55861 Update Grml ISO + latest grml-live version
+  * [d44bcef] MT#55988 Update kernel command line for installing Debian w/wo puppet
+  * [ae7db13] MT#55944 Fix networking for plain Debian systems
+  * [e6819fe] MT#55944 Use ngcp-initialize-udev-rules-net to deploy 70-persistent-net.rules
+
+  [ Guillem Jover ]
+  * [ad9e94e] MT#55861 Load the fake-uname.so pre-loaded library from within the chroot
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Tue, 17 Jan 2023 17:41:54 +0100
+
 ngcp-deployment-iso (11.2.0.0+0~mr11.2.0.0) unstable; urgency=medium
 
   [ Michael Prokop ]
