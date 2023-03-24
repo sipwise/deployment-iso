@@ -1,3 +1,10 @@
+ngcp-deployment-iso (11.3.1.0+0~mr11.3.1.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [54d48f2] MT#55861 Update grml-live version to 0.43.0
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Fri, 24 Mar 2023 13:03:02 +0100
+
 ngcp-deployment-iso (11.3.0.0+0~mr11.3.0.0) unstable; urgency=medium
 
   [ Michael Prokop ]
