@@ -107,14 +107,21 @@ set_deploy_status() {
 enable_deploy_status_server() {
   mkdir -p "${STATUS_DIRECTORY}"
 
-  # get rid of already running process
-  PID=$(pgrep -f 'python3.*http.server') || true
-  [ -n "$PID" ] && kill "$PID"
+  cat > /etc/systemd/system/deployment-status.service << EOF
+[Unit]
+Description=Deployment Status Server
+After=network.target
 
-  (
-    cd "${STATUS_DIRECTORY}"
-    python3 -m http.server 4242 >/tmp/status_server.log 2>&1 &
-  )
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/python3 -m http.server 4242 --directory=/srv/deployment/
+
+[Install]
+WantedBy=sysinit.target
+EOF
+  systemctl daemon-reload
+  systemctl restart deployment-status.service
 }
 
 # load ":"-separated nfs ip into array BP[client-ip], BP[server-ip], ...
