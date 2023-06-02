@@ -2456,10 +2456,6 @@ if [ "$(get_deploy_status)" != "error" ] ; then
   set_deploy_status "finished"
 fi
 
-if "$INTERACTIVE" ; then
-  exit 0
-fi
-
 status_wait
 
 # do not prompt when running in automated mode
@@ -2473,21 +2469,23 @@ if "$HALT" ; then
   systemctl poweroff
 fi
 
-echo "Do you want to [r]eboot or [h]alt the system now? (Press any other key to cancel.)"
-unset a
-read -r a
-case "${a,,}" in
-  r)
-    echo "Rebooting system as requested."
-    systemctl reboot
-  ;;
-  h)
-    echo "Halting system as requested."
-    systemctl poweroff
-  ;;
-  *)
-    echo "Not halting system as requested. Please do not forget to reboot."
+if "$INTERACTIVE" ; then
+  echo "Do you want to [r]eboot or [h]alt the system now? (Press any other key to cancel.)"
+  unset a
+  read -r a
+  case "${a,,}" in
+    r)
+      echo "Rebooting system as requested."
+      systemctl reboot
     ;;
-esac
+    h)
+      echo "Halting system as requested."
+      systemctl poweroff
+    ;;
+    *)
+      echo "Not halting system as requested. Please do not forget to reboot."
+      ;;
+  esac
+fi
 
 ## END OF FILE #################################################################1
