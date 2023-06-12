@@ -2437,6 +2437,9 @@ if [[ "${SWRAID}" = "true" ]] ; then
     echo "Cloning EFI partition from ${efidev1} to ${efidev2}"
     dd if="${efidev1}" of="${efidev2}" bs=10M
   fi
+
+  echo "Ensuring ${SWRAID_DEVICE} is stopped"
+  mdadm --stop "${SWRAID_DEVICE}" || true
 fi
 
 if ! blockdev --rereadpt "/dev/${DISK}" ; then
