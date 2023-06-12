@@ -1324,6 +1324,35 @@ set_custom_grub_boot_options() {
   fi
 }
 
+get_ping_host() {
+  local route
+
+  route="$(route -n | awk '/^0\.0\.0\.0/{print $2}')"
+
+  if [ -n "${route:-}" ] ; then
+    ping_host="${route}"
+    echo "Default route identified, using host ${ping_host}"
+  else
+    ping_host="${SIPWISE_REPO_HOST:-deb.sipwise.com}"
+    echo "Default route identified, using host ${ping_host} instead"
+  fi
+}
+
+wait_for_network_online() {
+  local tries="${1:-30}"
+
+  echo "Trying reach host ${ping_host} via ICMP/ping to check connectivity"
+  while ! ping -O -D -c 1 -i 1 -W 1 "${ping_host}" ; do
+    if [ "${tries}" -gt 0 ] ; then
+      tries=$((tries-1))
+      echo "Retrying ping to ${ping_host} again ($tries tries left)..."
+      sleep 1
+    else
+      echo "WARN: couldn't reach host ${ping_host} via ICMP/ping, continuing anyway"
+      break
+    fi
+  done
+}
 
 # Main script
 
@@ -2247,6 +2276,9 @@ EOT
   if grml-chroot "${TARGET}" /bin/bash /tmp/ngcp-installer-deployment.sh ; then
     echo "ngcp-installer finished successfully"
 
+    echo "Trying to identify ping_host"
+    get_ping_host
+
     # Check the current method of external interface
     # If it is manual - we need to reconfigure /e/n/i to get working network configuration after the reboot
     method=$( sed -rn "s/^iface ${INSTALL_DEV} inet ([A-Za-z]+)/\1/p" < /etc/network/interfaces )
@@ -2272,6 +2304,9 @@ EOT
   else
     die "Error during installation of ngcp. Find details at: ${TARGET}/var/log/ngcp-installer.log"
   fi
+
+  echo "Checking for network connectivity (workaround for e.g. ice network drive issue)"
+  wait_for_network_online 15
 
   echo "Generating udev persistent net rules ..."
   grml-chroot "${TARGET}" /usr/sbin/ngcp-initialize-udev-rules-net
