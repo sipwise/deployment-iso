@@ -1234,7 +1234,7 @@ puppet_install_from_git() {
   rmdir "${PUPPET_RESCUE_PATH}"
 
   echo "Cloning Puppet git repository from '${PUPPET_GIT_REPO}' to '${PUPPET_LOCAL_GIT}' (branch '${PUPPET_GIT_BRANCH}')"
-  echo 'ssh -i ~/.ssh/id_rsa_r10k -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $*' > ssh
+  echo 'ssh -i ~/.ssh/id_rsa_r10k -o PubkeyAcceptedKeyTypes=+ssh-rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $*' > ssh
   chmod +x ssh
   if ! GIT_SSH="${PWD}/ssh" git clone --depth 1 -b "${PUPPET_GIT_BRANCH}" "${PUPPET_GIT_REPO}" "${PUPPET_LOCAL_GIT}" ; then
     die "ERROR: Cannot clone git repository, see the error above, cannot continue!"
