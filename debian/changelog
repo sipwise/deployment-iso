@@ -1,3 +1,15 @@
+ngcp-deployment-iso (11.4.1.0+0~mr11.4.1.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [98d11bf] MT#57280 Run deployment status server under systemd
+  * [2ad306c] MT#57556 Prompt for reboot/halt only in interactive mode
+  * [f4da3e0] MT#57049 Ensure SW-RAID device is inactive before re-reading partition table
+  * [8cfb8c8] MT#57630 Check online connectivity to work around Intel E810 / ice issue
+  * [eccdc58] MT#57644 puppet/git: allow ssh-rsa pubkey usage
+  * [0fedba6] MT#57643 Ensure /var/lib/dpkg/available exists on Debian releases <=buster
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 26 Jun 2023 14:09:37 +0200
+
 ngcp-deployment-iso (11.4.0.0+0~mr11.4.0.0) unstable; urgency=medium
 
   [ Michael Prokop ]
