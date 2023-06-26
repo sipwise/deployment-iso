@@ -1,11 +1,11 @@
-# DOCKER_NAME=deployment-iso-bullseye
-FROM docker.mgm.sipwise.com/sipwise-bullseye:latest
+# DOCKER_NAME=deployment-iso-bookworm
+FROM docker.mgm.sipwise.com/sipwise-bookworm:latest
 
 # Important! Update this no-op ENV variable when this Dockerfile
 # is updated with the current date. It will force refresh of all
 # of the base images and things like `apt-get update` won't be using
 # old cached versions when the Dockerfile is built.
-ENV REFRESHED_AT 2020-05-08
+ENV REFRESHED_AT 2023-06-26
 
 RUN apt-get update && apt-get install --assume-yes git make gcc dpkg-dev
 
@@ -19,13 +19,13 @@ WORKDIR /code/
 # When you want to build the base image from scratch
 # jump to the next section if you don't want to build yourself!:
 #
-# % docker build --tag="deployment-iso-bullseye" -f t/Dockerfile .
-# % docker run --rm -i -t -v $(pwd):/code:rw deployment-iso-bullseye:latest bash
+# % docker build --tag="deployment-iso-bookworm" -f t/Dockerfile .
+# % docker run --rm -i -t -v $(pwd):/code:rw deployment-iso-bookworm:latest bash
 #
 # Use the existing docker image:
-# % docker pull docker.mgm.sipwise.com/deployment-iso-bullseye
+# % docker pull docker.mgm.sipwise.com/deployment-iso-bookworm
 # NOTE: run the following command from root folder of git repository:
-# % docker run --rm -i -t -v $(pwd):/code:rw docker.mgm.sipwise.com/deployment-iso-bullseye:latest bash
+# % docker run --rm -i -t -v $(pwd):/code:rw docker.mgm.sipwise.com/deployment-iso-bookworm:latest bash
 #
 # Inside docker (the command is in history, just press UP button):
 #   ./t/testrunner
