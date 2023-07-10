@@ -283,12 +283,12 @@ ensure_packages_installed() {
 
   local deb_release
   case "${DEBIAN_RELEASE}" in
-    buster|bullseye)
+    buster|bullseye|bookworm)
       deb_release="${DEBIAN_RELEASE}"
       echo "Using ${deb_release} as Debian repository for ${FUNCNAME[0]}"
       ;;
     *)
-      deb_release='bullseye'
+      deb_release='bookworm'
       echo "Enabling fallback to Debian ${deb_release} repository for ${FUNCNAME[0]}"
       ;;
   esac
