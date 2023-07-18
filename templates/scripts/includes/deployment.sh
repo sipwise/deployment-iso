@@ -1099,6 +1099,11 @@ vagrant_configuration() {
     FAKE_UNAME='/tmp/fake-uname.so'
   fi
 
+#  if ! [ -d "${TARGET}/run/systemd/system" ] ; then
+    echo "Creating /run/systemd/system for systemd detection within VBoxLinuxAdditions"
+    mkdir -p "${TARGET}/run/systemd/system"
+#  fi
+
   grml-chroot "${TARGET}" env \
     UTS_RELEASE="${KERNELVERSION}" LD_PRELOAD="${FAKE_UNAME}" \
     /media/cdrom/VBoxLinuxAdditions.run --nox11 || true
