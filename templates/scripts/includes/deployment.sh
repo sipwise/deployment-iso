@@ -1099,16 +1099,23 @@ vagrant_configuration() {
     FAKE_UNAME='/tmp/fake-uname.so'
   fi
 
-#  if ! [ -d "${TARGET}/run/systemd/system" ] ; then
+  local vbox_systemd_workaround=false
+  if ! [ -d "${TARGET}/run/systemd/system" ] ; then
     echo "Creating /run/systemd/system for systemd detection within VBoxLinuxAdditions"
     mkdir -p "${TARGET}/run/systemd/system"
-#  fi
+    vbox_systemd_workaround=true
+  fi
 
   grml-chroot "${TARGET}" env \
     UTS_RELEASE="${KERNELVERSION}" LD_PRELOAD="${FAKE_UNAME}" \
     /media/cdrom/VBoxLinuxAdditions.run --nox11 || true
   tail -10 "${TARGET}/var/log/vboxadd-install.log"
   umount "${TARGET}/media/cdrom/"
+
+  if "${vbox_systemd_workaround}" ; then
+    echo "Removing /run/systemd/system workaround for VBoxLinuxAdditions again"
+    rmdir "${TARGET}/run/systemd/system" || true
+  fi
 
   # VBoxLinuxAdditions.run chooses /usr/lib64 as soon as this directory exists, which
   # is the case for our PRO systems shipping the heartbeat-2 package; then the
