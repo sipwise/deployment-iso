@@ -1365,6 +1365,22 @@ INSTALL_LOG='/tmp/deployment-installer-debug.log'
 exec  > >(tee -a $INSTALL_LOG    )
 exec 2> >(tee -a $INSTALL_LOG >&2)
 
+# ensure we can interact with stdin
+grml_autoconfig_active=false
+case "$(systemctl is-active grml-autoconfig)" in
+  active|activating)
+    grml_autoconfig_active=true
+    ;;
+esac
+
+if "${grml_autoconfig_active}" ; then
+  if systemctl cat grml-autoconfig.service | grep -q StandardInput=null ; then
+    echo "Looks like we're running under systemd with /dev/null for stdin."
+    echo "Re-executing with usage of /dev/tty1 for stdin"
+    exec < /dev/tty1
+  fi
+fi
+
 # set version to git commit ID
 SCRIPT_VERSION="%SCRIPT_VERSION%"
 
