@@ -1,3 +1,10 @@
+ngcp-deployment-iso (11.4.1.2+0~mr11.4.1.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [4e1e6ab] MT#57453 Use tty1 for stdin when running under grml-autoconfig service
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Fri, 21 Jul 2023 14:26:52 +0200
+
 ngcp-deployment-iso (11.4.1.1+0~mr11.4.1.1) unstable; urgency=medium
 
   [ Mykola Malkov ]
