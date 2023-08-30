@@ -1,3 +1,22 @@
+ngcp-deployment-iso (11.5.1.0+0~mr11.5.1.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [3a942b1] MT#57453 Switch docker image to bookworm
+
+  [ Michael Prokop ]
+  * [3716353] MT#56773 Use bullseye puppetlabs repository for bookworm
+  * [8601193] MT#57453 vagrant_configuration: fake systemd presence
+  * [5613033] MT#57453 Use tty1 for stdin when running under grml-autoconfig service
+  * [793a93b] MT#57453 vagrant_configuration: remove fake systemd presence after execution
+
+  [ Victor Seva ]
+  * [6c960af] TT#104221 Use bookworm repos in ensure_packages_installed appropriately
+
+  [ Sipwise Jenkins Builder ]
+  * [366c412] MT#57980 Add mr11.5 LTS key to bootstrap
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Wed, 30 Aug 2023 18:03:23 +0200
+
 ngcp-deployment-iso (11.5.0.0+0~mr11.5.0.0) unstable; urgency=medium
 
   [ Michael Prokop ]
