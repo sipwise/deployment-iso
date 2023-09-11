@@ -77,3 +77,4 @@ zsh
 
 # Sipwise specific packages
 ngcp-archive-keyring
+ngcp-kernel-firmware
