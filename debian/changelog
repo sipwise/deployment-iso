@@ -1,3 +1,13 @@
+ngcp-deployment-iso (12.0.2.0+0~mr12.0.2.0) unstable; urgency=medium
+
+  [ Mykola Malkov ]
+  * [d132ecc] MT#57165 Add ngcp-kernel-firmware package to grml-sipwise
+
+  [ Guillem Jover ]
+  * [39949fc] MT#58356 Update packaging for bookworm
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Sun, 15 Oct 2023 08:22:44 +0200
+
 ngcp-deployment-iso (12.0.1.0+0~mr12.0.1.0) unstable; urgency=medium
 
   [ Mykola Malkov ]
