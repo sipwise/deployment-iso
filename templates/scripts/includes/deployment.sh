@@ -742,9 +742,9 @@ enable_ntp() {
 
     echo "Enabling NTP synchronization"
     timedatectl set-ntp true || true
-  elif systemctl cat ntp &>/dev/null ; then
-    echo "Ensuring ntp service is running"
-    systemctl start ntp
+  elif systemctl cat ntpsec &>/dev/null ; then
+    echo "Ensuring ntpsec service is running"
+    systemctl start ntpsec
 
     echo "Enabling NTP synchronization"
     timedatectl set-ntp true || true
