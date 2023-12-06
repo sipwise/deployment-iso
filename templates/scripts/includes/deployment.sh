@@ -1013,8 +1013,8 @@ vagrant_configuration() {
   # bzip2, linux-headers-amd64 and make are required for VirtualBox Guest Additions installer
   # less + sudo are required for Vagrant itself
   echo "Installing software for VirtualBox Guest Additions installer"
-  if ! grml-chroot "${TARGET}" apt-get -y install bzip2 less linux-headers-amd64 make sudo ; then
-    die "Error: failed to install 'bzip2 less linux-headers-amd64 make sudo' packages."
+  if ! grml-chroot "${TARGET}" apt-get -y install bzip2 less libxmu6 linux-headers-amd64 make sudo ; then
+    die "Error: failed to install 'bzip2 less libxmu6 linux-headers-amd64 make sudo' packages."
   fi
 
   vagrant_ssh_pub_key='/var/tmp/id_rsa_sipwise.pub'
