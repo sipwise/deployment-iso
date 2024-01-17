@@ -490,6 +490,14 @@ clear_partition_table() {
     pvremove "$disk" --force --force --yes || true
   done
 
+  # ensure we remove signatures from partitions like /dev/nvme1n1p3 first,
+  # and only then get rid of signaturs from main blockdevice /dev/nvme1n1
+  for partition in $(lsblk --noheadings --output KNAME "${blockdevice}" | grep -v "^${blockdevice#\/dev\/}$") ; do
+    [ -b "${partition}" ] || continue
+    echo "Wiping disk signatures from partition ${partition}"
+    wipefs -a "${partition}"
+  done
+
   echo "Wiping disk signatures from ${blockdevice}"
   wipefs -a "${blockdevice}"
 
@@ -608,9 +616,19 @@ set_up_partition_table_swraid() {
 
   if [[ -b "${SWRAID_DEVICE}" ]] ; then
     if [[ "${SWRAID_DESTROY}" = "true" ]] ; then
+      echo "Wiping signatures from ${SWRAID_DEVICE}"
+      wipefs -a "${SWRAID_DEVICE}"
+
+      echo "Removing mdadm device ${SWRAID_DEVICE}"
       mdadm --remove "${SWRAID_DEVICE}"
+
+      echo "Stopping mdadm device ${SWRAID_DEVICE}"
       mdadm --stop "${SWRAID_DEVICE}"
+
+      echo "Zero-ing superblock from /dev/${SWRAID_DISK1}"
       mdadm --zero-superblock "/dev/${SWRAID_DISK1}"
+
+      echo "Zero-ing superblock from /dev/${SWRAID_DISK2}"
       mdadm --zero-superblock "/dev/${SWRAID_DISK2}"
     else
       echo "NOTE: if you are sure you don't need it SW-RAID device any longer, execute:"
