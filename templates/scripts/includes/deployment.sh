@@ -492,7 +492,7 @@ clear_partition_table() {
 
   # ensure we remove signatures from partitions like /dev/nvme1n1p3 first,
   # and only then get rid of signaturs from main blockdevice /dev/nvme1n1
-  for partition in $(lsblk --noheadings --output KNAME "${blockdevice}" | grep -v "^${blockdevice#\/dev\/}$") ; do
+  for partition in $(lsblk --noheadings --output KNAME "${blockdevice}" | grep -v "^${blockdevice#\/dev\/}$" || true) ; do
     [ -b "${partition}" ] || continue
     echo "Wiping disk signatures from partition ${partition}"
     wipefs -a "${partition}"
