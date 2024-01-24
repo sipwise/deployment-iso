@@ -609,10 +609,38 @@ set_up_partition_table_noswraid() {
 }
 
 set_up_partition_table_swraid() {
-  # make sure we don't overlook unassembled SW-RAIDs
-  local raidev1
-  local raidev2
-  mdadm --assemble --scan || true # fails if there's nothing to assemble
+  local orig_swraid_device raidev1 raidev2 raid_device raid_disks
+
+  # make sure we don't overlook unassembled SW-RAIDs:
+  mdadm --assemble --scan --config /dev/null || true # fails if there's nothing to assemble
+
+  # "local" arrays get assembled as /dev/md0 and upwards,
+  # whereas "foreign" arrays start ad md127 downwards;
+  # since we need to also handle those, identify them:
+  raid_device=$(lsblk --list --noheadings --output TYPE,NAME | awk '/^raid/ {print $2}' | head -1)
+
+  # only consider changing SWRAID_DEVICE if we actually identified an RAID array:
+  if [[ -n "${raid_device:-}" ]] ; then
+    if ! [[ -b /dev/"${raid_device}" ]] ; then
+      die "Error: identified SW-RAID device '/dev/${raid_device}' not a valid block device."
+    fi
+
+    # identify which disks are part of the RAID array:
+    raid_disks=$(lsblk -l -n -s /dev/"${raid_device}" | grep -vw "^${raid_device}" | awk '{print $1}')
+    for d in ${raid_disks} ; do
+      # compare against expected SW-RAID disks to avoid unexpected behavior:
+      if ! printf "%s\n" "$d" | grep -qE "(${SWRAID_DISK1}|${SWRAID_DISK2})" ; then
+        die "Error: unexpected disk in RAID array /dev/${raid_device}: $d [expected SW-RAID disks: $SWRAID_DISK1 + $SWRAID_DISK2]"
+      fi
+    done
+
+    # remember the original setting, so we can use it after mdadm cleanup:
+    orig_swraid_device="${SWRAID_DEVICE}"
+
+    echo "NOTE: default SWRAID_DEVICE set to ${SWRAID_DEVICE} though we identified active ${raid_device}"
+    SWRAID_DEVICE="/dev/${raid_device}"
+    echo "NOTE: will continue with '${SWRAID_DEVICE}' as SWRAID_DEVICE for mdadm cleanup"
+  fi
 
   if [[ -b "${SWRAID_DEVICE}" ]] ; then
     if [[ "${SWRAID_DESTROY}" = "true" ]] ; then
@@ -636,6 +664,11 @@ set_up_partition_table_swraid() {
       echo "      (also you can use boot option 'swraiddestroy' to destroy SW-RAID automatically)"
       die "Error: SW-RAID device ${SWRAID_DEVICE} exists already."
     fi
+  fi
+
+  if [[ -n "${orig_swraid_device}" ]] ; then
+    echo "NOTE: modified RAID array detected, setting SWRAID_DEVICE back to original setting '${orig_swraid_device}'"
+    SWRAID_DEVICE="${orig_swraid_device}"
   fi
 
   for disk in "${SWRAID_DISK1}" "${SWRAID_DISK2}" ; do
