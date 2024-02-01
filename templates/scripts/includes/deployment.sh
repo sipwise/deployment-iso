@@ -666,7 +666,7 @@ set_up_partition_table_swraid() {
     fi
   fi
 
-  if [[ -n "${orig_swraid_device}" ]] ; then
+  if [[ -n "${orig_swraid_device:-}" ]] ; then
     echo "NOTE: modified RAID array detected, setting SWRAID_DEVICE back to original setting '${orig_swraid_device}'"
     SWRAID_DEVICE="${orig_swraid_device}"
   fi
