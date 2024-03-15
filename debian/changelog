@@ -1,3 +1,13 @@
+ngcp-deployment-iso (12.4.0.0+0~mr12.4.0.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [e9244a2] TT#118659 Wipe disk signatures more reliably with SW-RAID and NVMe setup
+  * [fc9b43f] TT#118659 Fix re-deploying over existing SW-RAID arrays
+  * [1d59d89] TT#118659 Do not abort on disk partition listing failures
+  * [e99f33e] TT#118659 Do not fail when deploying SW-RAID if no RAID was present yet
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Fri, 15 Mar 2024 08:47:16 +0100
+
 ngcp-deployment-iso (12.3.0.0+0~mr12.3.0.0) unstable; urgency=medium
 
   [ Michael Prokop ]
