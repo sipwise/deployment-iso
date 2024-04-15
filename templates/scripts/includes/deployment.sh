@@ -28,7 +28,6 @@ Control target system:
   debianrelease=...        - install specified Debian release
   debianrepo=...           - hostname of Debian APT repository mirror
   debianrepotransport=...  - use specified transport for Debian repository
-  debootstrapkey=...       - use specified GPG key to bootstrap Debian
   enablevmservices         - add some tricks for installation to VM
   fallbackfssize=...       - size of ngcp-fallback partition. Equal to ngncp-root size if not specified
   ip=...                   - standard Linux kernel ip= boot option
@@ -1558,9 +1557,6 @@ for param in "${PARAMS[@]}" ; do
     debianrepotransport=*)
       DEBIAN_REPO_TRANSPORT="${param//debianrepotransport=/}"
     ;;
-    debootstrapkey=*)
-      GPG_KEY="${param//debootstrapkey=/}"
-    ;;
     debugmode)
       DEBUG_MODE=true
       enable_trace
@@ -2095,28 +2091,7 @@ MIRROR="${DEBIAN_URL}/debian/"
 SEC_MIRROR="${DEBIAN_URL}/debian-security/"
 DBG_MIRROR="${DEBIAN_URL}/debian-debug/"
 
-if [ -z "${GPG_KEY}" ] ; then
-  KEYRING="${SIPWISE_APT_KEY_PATH}"
-else
-  KEYRING='/etc/apt/trusted.gpg'
-
-  echo "Fetching debootstrap keyring as GPG key '${GPG_KEY}'..."
-
-  TRY=60
-  while ! gpg --keyserver "${GPG_KEY_SERVER}" --recv-keys "${GPG_KEY}" ; do
-    if [ ${TRY} -gt 0 ] ; then
-      TRY=$((TRY-5))
-      echo "Waiting for gpg keyserver '${GPG_KEY_SERVER}' availability ($TRY seconds)..."
-      sleep 5
-    else
-      die "Failed to fetch GPG key '${GPG_KEY}' from '${GPG_KEY_SERVER}'"
-    fi
-  done
-
-  if ! gpg -a --export "${GPG_KEY}" | apt-key add - ; then
-    die "Failed to import GPG key '${GPG_KEY}' as apt-key"
-  fi
-fi
+KEYRING="${SIPWISE_APT_KEY_PATH}"
 
 set_deploy_status "debootstrap"
 
