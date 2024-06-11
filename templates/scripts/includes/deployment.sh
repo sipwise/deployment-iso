@@ -1536,7 +1536,8 @@ echo "Host IP: $(ip-screen)"
 echo "Deployment version: $SCRIPT_VERSION"
 
 # MT#60284 ensure qemu-guest-agent is running if it's available in VM
-if [ -S /dev/virtio-ports/org.qemu.guest_agent.0 ] ; then
+if [ -e /dev/virtio-ports/org.qemu.guest_agent.0 ] ; then
+  echo "Guest Agent VirtIO device detected, starting qemu-guest-agent service"
   systemctl start qemu-guest-agent
 fi
 
