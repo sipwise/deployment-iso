@@ -1420,12 +1420,6 @@ trap 'wait_exit;' 1 2 3 6 15 ERR EXIT
 echo "Host IP: $(ip-screen)"
 echo "Deployment version: $SCRIPT_VERSION"
 
-# MT#60284 ensure qemu-guest-agent is running if it's available in VM
-if [ -e /dev/virtio-ports/org.qemu.guest_agent.0 ] ; then
-  echo "Guest Agent VirtIO device detected, starting qemu-guest-agent service"
-  systemctl start qemu-guest-agent
-fi
-
 enable_deploy_status_server
 
 set_deploy_status "checkBootParam"
@@ -1715,6 +1709,12 @@ if [ -n "$NETSCRIPT" ] ; then
 fi
 
 ensure_packages_installed
+
+# MT#60284 ensure qemu-guest-agent is running if it's available in VM
+if [ -e /dev/virtio-ports/org.qemu.guest_agent.0 ] ; then
+  echo "Guest Agent VirtIO device detected, starting qemu-guest-agent service"
+  systemctl start qemu-guest-agent
+fi
 
 # this is important for "buster", do not update the string for "bullseye" or
 # future releases
