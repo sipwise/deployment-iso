@@ -1461,7 +1461,7 @@ export LANG=C
 unset SHELL
 
 # defaults
-ADDITIONAL_PACKAGES=(git augeas-tools gdisk)
+ADDITIONAL_PACKAGES=(git augeas-tools gdisk qemu-guest-agent)
 ADJUST_FOR_LOW_PERFORMANCE=false
 ARCH=$(dpkg --print-architecture)
 CARRIER_EDITION=false
@@ -1532,6 +1532,11 @@ trap 'wait_exit;' 1 2 3 6 15 ERR EXIT
 
 echo "Host IP: $(ip-screen)"
 echo "Deployment version: $SCRIPT_VERSION"
+
+# MT#60284 ensure qemu-guest-agent is running if it's available in VM
+if [ -S /dev/virtio-ports/org.qemu.guest_agent.0 ] ; then
+  systemctl start qemu-guest-agent
+fi
 
 enable_deploy_status_server
 
@@ -2135,7 +2140,7 @@ case "${DEBIAN_RELEASE}" in
     ;;
 esac
 
-DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,zstd,isc-dhcp-client,ifupdown,ca-certificates${pkg_eatmydata}${pkg_usrmerge}")
+DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,zstd,isc-dhcp-client,ifupdown,ca-certificates,qemu-guest-agent${pkg_eatmydata}${pkg_usrmerge}")
 # TT#61152 Add configuration Acquire::Retries=3, for apt to retry downloads
 DEBOPT_OPTIONS+=("--aptopt='Acquire::Retries=3'")
 
