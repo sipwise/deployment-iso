@@ -1,3 +1,12 @@
+ngcp-deployment-iso (12.3.1.2+0~mr12.3.1.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [f095a92] MT#60284 Make sure qemu-guest-agent is available
+  * [2c240fb] MT#60284 Only check whether /dev/virtio-ports/org.qemu.guest_agent.0 exists
+  * [714f67a] MT#60284 Ensure to start qemu-guest-agent only after package got installed
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Fri, 14 Jun 2024 18:20:24 +0200
+
 ngcp-deployment-iso (12.3.1.1+0~mr12.3.1.1) unstable; urgency=medium
 
   * New release.
