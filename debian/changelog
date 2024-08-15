@@ -1,3 +1,9 @@
+ngcp-deployment-iso (12.5.1.2+0~mr12.5.1.2) unstable; urgency=medium
+
+  * [c23d874] MT#60698 Add mr12.5 LTS key to bootstrap
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Thu, 15 Aug 2024 12:21:39 +0200
+
 ngcp-deployment-iso (12.5.1.1+0~mr12.5.1.1) unstable; urgency=medium
 
   * New release.
