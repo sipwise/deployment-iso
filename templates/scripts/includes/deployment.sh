@@ -2216,6 +2216,15 @@ case "${DEBIAN_RELEASE}" in
     ;;
 esac
 
+# MT#61265 avoid "penalty: failed authentication" in automated SSH/SCP actions in Jenkins jobs
+case "${DEBIAN_RELEASE}" in
+  trixie)
+    echo "Disabling PerSourcePenalties in /etc/ssh/sshd_config for Debian release '${DEBIAN_RELEASE}'"
+    echo '# added by deployment.sh' >> "${TARGET}"/etc/ssh/sshd_config
+    echo 'PerSourcePenalties no'    >> "${TARGET}"/etc/ssh/sshd_config
+    ;;
+esac
+
 # MT#7805
 if "$NGCP_INSTALLER" ; then
   cat << EOT | augtool --root="$TARGET"
