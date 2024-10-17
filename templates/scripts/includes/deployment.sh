@@ -2216,15 +2216,6 @@ case "${DEBIAN_RELEASE}" in
     ;;
 esac
 
-# MT#61265 avoid "penalty: failed authentication" in automated SSH/SCP actions in Jenkins jobs
-case "${DEBIAN_RELEASE}" in
-  trixie)
-    echo "Disabling PerSourcePenalties in /etc/ssh/sshd_config for Debian release '${DEBIAN_RELEASE}'"
-    echo '# added by deployment.sh' >> "${TARGET}"/etc/ssh/sshd_config
-    echo 'PerSourcePenalties no'    >> "${TARGET}"/etc/ssh/sshd_config
-    ;;
-esac
-
 # MT#7805
 if "$NGCP_INSTALLER" ; then
   cat << EOT | augtool --root="$TARGET"
@@ -2422,6 +2413,19 @@ chmod 600 /root/.ssh/authorized_keys
 EOT
   grml-chroot "${TARGET}" /bin/bash /tmp/retrieve_authorized_keys.sh
 fi
+
+# MT#61265 avoid "penalty: failed authentication" in automated SSH/SCP actions in Jenkins jobs
+case "${DEBIAN_RELEASE}" in
+  trixie)
+    echo "Adjusting /etc/ssh/sshd_config for Debian release '${DEBIAN_RELEASE}'"
+    echo '# added by deployment.sh' >> "${TARGET}"/etc/ssh/sshd_config
+
+    echo "Disabling PerSourcePenalties in /etc/ssh/sshd_config"
+    echo 'PerSourcePenalties no'    >> "${TARGET}"/etc/ssh/sshd_config
+
+    echo '# end of deployment.sh changes' >> "${TARGET}"/etc/ssh/sshd_config
+    ;;
+esac
 
 if "$VAGRANT" ; then
   echo "Bootoption vagrant present, executing vagrant_configuration."
