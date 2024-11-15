@@ -571,17 +571,24 @@ parted_execution() {
   parted -a optimal -s "${blockdevice}" set 1 bios_grub on
   parted -a optimal -s "${blockdevice}" "name 1 'BIOS Boot'"
 
-  # EFI boot with GPT
-  parted -a optimal -s "${blockdevice}" mkpart primary 2M 512M
-  parted -a optimal -s "${blockdevice}" "name 2 'EFI System'"
-  parted -a optimal -s "${blockdevice}" set 2 boot on
+  if efi_support ; then
+    # EFI boot with GPT
+    parted -a optimal -s "${blockdevice}" mkpart primary 2M 512M
+    parted -a optimal -s "${blockdevice}" "name 2 'EFI System'"
+    parted -a optimal -s "${blockdevice}" set 2 boot on
+  else
+    # unused partition if we don't run in an EFI environment
+    parted -a optimal -s "${blockdevice}" mkpart primary 2M 512M
+  fi
 
   blockdev --flushbufs "${blockdevice}"
 
-  echo "Get path of EFI partition"
-  local max_tries=60
-  EFI_PARTITION=""
-  get_pvdevice_by_label_with_retries "${blockdevice}" "EFI System" "${max_tries}" EFI_PARTITION
+  if efi_support ; then
+    echo "Get path of EFI partition"
+    local max_tries=60
+    EFI_PARTITION=""
+    get_pvdevice_by_label_with_retries "${blockdevice}" "EFI System" "${max_tries}" EFI_PARTITION
+  fi
 }
 
 set_up_partition_table_noswraid() {
