@@ -1,3 +1,12 @@
+ngcp-deployment-iso (13.2.0.0+0~mr13.2.0.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [6eee97d] MT#61265 trixie: avoid SSH login failures due to OpenSSH penalize feature
+  * [cfe9cce] MT#61271 trixie: adjust sshd_config after system is installed
+  * [41029ed] MT#61264 Mark EFI partition as such only when running in an EFI environment
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 09 Dec 2024 11:25:32 +0100
+
 ngcp-deployment-iso (13.1.0.0+0~mr13.1.0.0) unstable; urgency=medium
 
   * [862c84c] MT#60698 Add mr12.5 LTS key to bootstrap
