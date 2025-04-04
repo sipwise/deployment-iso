@@ -1186,12 +1186,6 @@ vagrant_configuration() {
     echo "Commit /etc/* changes using etckeeper"
     grml-chroot "${TARGET}" etckeeper commit "Vagrant/VirtualBox changes on /etc/*"
   fi
-
-  # disable vbox services so they are not run after reboot
-  # remove manually as we are in chroot now so can not use systemctl calls
-  # can be changed with systemd-nspawn
-  rm -f "${TARGET}/etc/systemd/system/multi-user.target.wants/vboxadd-service.service"
-  rm -f "${TARGET}/etc/systemd/system/multi-user.target.wants/vboxadd.service"
 }
 
 check_puppet_rc() {
