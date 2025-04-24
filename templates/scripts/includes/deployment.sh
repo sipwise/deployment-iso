@@ -282,13 +282,13 @@ ensure_packages_installed() {
 
   local deb_release
   case "${DEBIAN_RELEASE}" in
-    buster|bullseye|bookworm)
+    buster|bullseye|bookworm|trixie)
       deb_release="${DEBIAN_RELEASE}"
       echo "Using ${deb_release} as Debian repository for ${FUNCNAME[0]}"
       ;;
     *)
-      deb_release='bookworm'
-      echo "Enabling fallback to Debian ${deb_release} repository for ${FUNCNAME[0]}"
+      echo "Error: Unsupported Debian release '${DEBIAN_RELEASE}' in ensure_packages_installed()" >&2
+      exit 1
       ;;
   esac
 
