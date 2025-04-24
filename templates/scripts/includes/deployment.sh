@@ -1066,6 +1066,24 @@ EOF
   fi
 }
 
+install_vbox_guest_additions_iso() {
+  echo "Downloading virtualbox-guest-additions ISO"
+
+  local virtualbox_dir="/usr/share/virtualbox"
+  local virtualbox_iso="VBoxGuestAdditions_7.1.8.iso"
+  local virtualbox_iso_checksum="0001ed19cc389f04723c9b911338559b9b74bea0d24edf794d8d2ce5b5cb14e0" # sha256
+  local virtualbox_iso_url_path="/files/${virtualbox_iso}"
+
+  mkdir -p "${virtualbox_dir}"
+  # hardcode filename here, so we can re-use it within vagrant_configuration()
+  vbox_isofile="${virtualbox_dir}/VBoxGuestAdditions.iso"
+  wget --retry-connrefused --no-verbose -c -O "${vbox_isofile}" "${SIPWISE_URL}${virtualbox_iso_url_path}"
+
+  if ! echo "${virtualbox_iso_checksum} ${vbox_isofile}" | sha256sum --check ; then
+    die "Error: failed to compute checksum for ${virtualbox_iso}. Exiting."
+  fi
+}
+
 vagrant_configuration() {
   # bzip2, linux-headers-amd64 and make are required for VirtualBox Guest Additions installer
   # less + sudo are required for Vagrant itself
@@ -1080,7 +1098,15 @@ vagrant_configuration() {
     die "Error: failed to wget public Sipwise SSH key for Vagrant boxes"
   fi
 
-  ensure_packages_installed 'virtualbox-guest-additions-iso'
+  case "${DEBIAN_RELEASE}" in
+    trixie)
+      # we need a newer virtualbox-guest-additions-iso version than present in Debian/trixie
+      install_vbox_guest_additions_iso
+      ;;
+    *)
+      ensure_packages_installed 'virtualbox-guest-additions-iso'
+      ;;
+  esac
 
   if "$NGCP_INSTALLER" ; then
     local SIPWISE_HOME="/nonexistent"
