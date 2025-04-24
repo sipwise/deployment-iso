@@ -313,6 +313,7 @@ EOF
     -o dir::state="${TMPDIR}/statedir" \
     -o dir::etc="${TMPDIR}/etc" \
     -o dir::etc::trustedparts="/etc/apt/trusted.gpg.d/" \
+    -o DPkg::Options::=--force-confnew \
     -y --no-install-recommends install "${install_packages[@]}"
 
   for pkg in "${install_packages[@]}"; do
