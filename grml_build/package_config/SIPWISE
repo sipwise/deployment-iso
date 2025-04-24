@@ -34,6 +34,7 @@ iputils-ping
 isc-dhcp-client
 isomd5sum
 iw
+jq
 ldnsutils
 libnss-myhostname
 linux-image-amd64

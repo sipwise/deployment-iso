@@ -1540,7 +1540,7 @@ set_deploy_status "checkBootParam"
 
 declare -a PARAMS=()
 CMD_LINE=$(cat /proc/cmdline)
-PARAMS+=(${CMD_LINE})
+IFS=" " read -r -a PARAMS <<< "${CMD_LINE}"
 PARAMS+=("$@")
 
 for param in "${PARAMS[@]}" ; do
@@ -1892,17 +1892,18 @@ if [[ -n "${IP_LINE}" ]]; then
   fi
 fi
 
-# Get current IP
+# Get current IP information, programmatically with jq(1)
+ensure_packages_installed 'jq'
 ## try ipv4
-INSTALL_DEV=$(ip -4 r | awk '/default/ {print $5; exit}')
+INSTALL_DEV=$(ip -4 -j route show | jq -r '.[] | select(.dst == "default") | .dev')
 if [[ -z "${INSTALL_DEV}" ]]; then
   ## try ipv6
-  INSTALL_DEV=$(ip -6 r | awk '/default/ {print $3; exit}')
-  INSTALL_IP=$(ip -6 addr show "${INSTALL_DEV}" | sed -rn 's/^[ ]+inet6 ([a-fA-F0-9:]+)\/.*$/\1/p')
+  INSTALL_DEV=$(ip -6 -j route show | jq -r '.[] | select(.dst == "default") | .gateway')
+  INSTALL_IP=$(ip -6 -j addr show dev "${INSTALL_DEV}" | jq -r '.[0].addr_info[0].local')
 else
-  external_ip_data=( $( ip -4 addr show "${INSTALL_DEV}" | sed -rn 's/^[ ]+inet ([0-9]+(\.[0-9]+){3})\/([0-9]+).*$/\1 \3/p' ) )
-  INSTALL_IP="${external_ip_data[0]}"
-  current_netmask="$( cdr2mask "${external_ip_data[1]}" )"
+  INSTALL_IP=$(ip -4 -j addr show dev "${INSTALL_DEV}" | jq -r '.[0].addr_info[0].local')
+  install_ip_netmask=$(ip -4 -j addr show "${INSTALL_DEV}" | jq -r '.[0].addr_info[0].prefixlen')
+  current_netmask="$( cdr2mask "${install_ip_netmask}" )"
   EXTERNAL_NETMASK="${EXTERNAL_NETMASK:-${current_netmask}}"
   unset external_ip_data current_netmask
   GW="$(ip route show dev "${INSTALL_DEV}" | awk '/^default via/ {print $3; exit}')"
@@ -2272,7 +2273,7 @@ grml-chroot "${TARGET}" apt-get --purge -y autoremove
 # it's necessary to use chroot instead of grml-chroot in variable=$() calls
 # as grml-chroot also prints "Writing /etc/debian_chroot ..." line
 # which breaks output
-removed_packages=( $(chroot "${TARGET}" dpkg --list | awk '/^rc/ {print $2}') )
+mapfile -t removed_packages < <(chroot "${TARGET}" dpkg --list | awk '/^rc/ {print $2}')
 if [ ${#removed_packages[@]} -ne 0 ]; then
   grml-chroot "${TARGET}" dpkg --purge "${removed_packages[@]}"
 fi
@@ -2483,6 +2484,7 @@ EOF
 
   if [ -f "${TARGET}/etc/profile.d/puppet-agent.sh" ] ; then
     echo "Exporting Puppet 4 new PATH (otherwise /opt/puppetlabs/bin/puppet is not found)"
+    # shellcheck disable=SC1091
     source "${TARGET}/etc/profile.d/puppet-agent.sh"
   fi
 
