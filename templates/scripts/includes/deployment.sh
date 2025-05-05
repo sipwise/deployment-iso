@@ -1065,6 +1065,23 @@ EOF
   fi
 }
 
+vbox_adjust_vboxadd_service() {
+  mkdir -p "${TARGET}"/etc/systemd/system/vboxadd.service.d
+  mkdir -p "${TARGET}"/etc/systemd/system/vboxadd-service.service.d
+
+  cat > "${TARGET}"/etc/systemd/system/vboxadd.service.d/override.conf << EOF
+# deployed via deployment-iso's deployment.sh
+[Unit]
+ConditionVirtualization=oracle
+EOF
+
+  cat > "${TARGET}"/etc/systemd/system/vboxadd-service.service.d/override.conf << EOF
+# deployed via deployment-iso's deployment.sh
+[Unit]
+ConditionVirtualization=oracle
+EOF
+}
+
 vagrant_configuration() {
   # bzip2, linux-headers-amd64 and make are required for VirtualBox Guest Additions installer
   # less + sudo are required for Vagrant itself
@@ -1135,6 +1152,9 @@ vagrant_configuration() {
   if [ ! -r "$vbox_isofile" ] ; then
     die "Error: could not find $vbox_isofile"
   fi
+
+  # ensure we don't try to run vbox* services outside of VirtualBox environments
+  vbox_adjust_vboxadd_service
 
   mkdir -p "${TARGET}/media/cdrom"
   mountpoint "${TARGET}/media/cdrom" >/dev/null && umount "${TARGET}/media/cdrom"
