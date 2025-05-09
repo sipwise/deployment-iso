@@ -1794,24 +1794,11 @@ if [[ ${SP_VERSION} =~ ^trunk ]]; then
   TRUNK_VERSION=true
 fi
 
-# if TARGET_DISK environment variable is set accept it
-if [ -n "$TARGET_DISK" ] ; then
+# iff environment variable TARGET_DISK is set, use it as main disk
+if [ -n "${TARGET_DISK}" ] ; then
   export DISK="${TARGET_DISK}"
-else # otherwise try to find sane default
-  if [ -L /sys/block/vda ] ; then
-    export DISK=vda # will be configured as /dev/vda
-  else
-    # in some cases, sda is not the HDD, but the CDROM,
-    # so better walk through all devices.
-    for i in /sys/block/sd*; do
-      if grep -q 0 "${i}/removable"; then
-        DISK=$(basename "$i")
-        export DISK
-        break
-      fi
-    done
-  fi
 fi
+
 if [[ -n "${SWRAID_DISK1}" ]] && [[ -z "${SWRAID_DISK2}" ]] ; then
   die "Error: swraiddisk1 is set, but swraiddisk2 is unset."
 elif [[ -z "${SWRAID_DISK1}" ]] && [[ -n "${SWRAID_DISK2}" ]] ; then
