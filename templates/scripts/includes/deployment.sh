@@ -1822,10 +1822,14 @@ elif [[ -n "${SWRAID_DISK1}" ]] && [[ -n "${SWRAID_DISK2}" ]] ; then
 else
   [[ -z "${DISK}" ]] && die "Error: No non-removable disk suitable for installation found"
 fi
+
+# disk information and set GRUB target
 if [[ "${SWRAID}" = "true" ]] ; then
   DISK_INFO="Software-RAID with $SWRAID_DISK1 $SWRAID_DISK2"
+  GRUB_DISK="${SWRAID_DEVICE}"
 else
   DISK_INFO="/dev/$DISK"
+  GRUB_DISK="/dev/$DISK"
 fi
 
 ## detect environment {{{
@@ -2217,7 +2221,7 @@ debootstrap_sipwise_key
 # shellcheck disable=SC2086
 echo y | grml-debootstrap \
   --arch "${ARCH}" \
-  --grub "/dev/${DISK}" \
+  --grub "${GRUB_DISK}" \
   --filesystem "${FILESYSTEM}" \
   --hostname "${TARGET_HOSTNAME}" \
   --mirror "$MIRROR" \
