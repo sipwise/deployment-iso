@@ -1798,20 +1798,17 @@ fi
 if [ -n "$TARGET_DISK" ] ; then
   export DISK="${TARGET_DISK}"
 else # otherwise try to find sane default
-  if [ -L /sys/block/vda ] ; then
-    export DISK=vda # will be configured as /dev/vda
-  else
-    # in some cases, sda is not the HDD, but the CDROM,
-    # so better walk through all devices.
-    for i in /sys/block/sd*; do
-      if grep -q 0 "${i}/removable"; then
-        DISK=$(basename "$i")
-        export DISK
-        break
-      fi
-    done
-  fi
+  for i in /sys/block/sd* /sys/block/vd* /sys/block/nvme*n* ; do
+    # device might not be a HDD, but a CDROM or a removable device
+    if grep -q 0 "${i}/removable" 2>/dev/null; then
+      DISK=$(basename "$i")
+      export DISK
+      break
+    fi
+  done
+  echo "NOTE: used autodetection code to assigning disk '${DISK}'"
 fi
+
 if [[ -n "${SWRAID_DISK1}" ]] && [[ -z "${SWRAID_DISK2}" ]] ; then
   die "Error: swraiddisk1 is set, but swraiddisk2 is unset."
 elif [[ -z "${SWRAID_DISK1}" ]] && [[ -n "${SWRAID_DISK2}" ]] ; then
