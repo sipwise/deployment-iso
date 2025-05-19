@@ -1069,7 +1069,7 @@ EOF
 install_vbox_guest_additions_iso() {
   echo "Downloading virtualbox-guest-additions ISO"
 
-  local virtualbox_dir="/usr/share/virtualbox"
+  local virtualbox_dir="${TARGET}/usr/share/virtualbox"
   local virtualbox_iso="VBoxGuestAdditions_7.1.8.iso"
   local virtualbox_iso_checksum="0001ed19cc389f04723c9b911338559b9b74bea0d24edf794d8d2ce5b5cb14e0" # sha256
   local virtualbox_iso_url_path="/files/${virtualbox_iso}"
@@ -1121,7 +1121,9 @@ vagrant_configuration() {
       install_vbox_guest_additions_iso
       ;;
     *)
-      ensure_packages_installed 'virtualbox-guest-additions-iso'
+      if ! grml-chroot "${TARGET}" apt-get -y install 'virtualbox-guest-additions-iso' ; then
+        die "Error: failed to install 'virtualbox-guest-additions-iso' package."
+      fi
       ;;
   esac
 
@@ -1172,7 +1174,7 @@ vagrant_configuration() {
     die "Error: no kernel version could be identified."
   fi
 
-  local VIRTUALBOX_DIR="/usr/share/virtualbox"
+  local VIRTUALBOX_DIR="${TARGET}/usr/share/virtualbox"
   local VIRTUALBOX_ISO="VBoxGuestAdditions.iso"
   local vbox_isofile="${VIRTUALBOX_DIR}/${VIRTUALBOX_ISO}"
 
