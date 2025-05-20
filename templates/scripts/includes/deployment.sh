@@ -2111,6 +2111,11 @@ cat >> /etc/debootstrap/packages << EOF
 lvm2
 EOF
 
+cat >> /etc/debootstrap/packages << EOF
+# we want to always have fsck.ext4 available, e.g. for usage in initramfs
+e2fsprogs
+EOF
+
 if ! "$NGCP_INSTALLER" ; then
 
   echo "Install some packages to be able to login on the Debian plain system"
