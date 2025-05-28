@@ -13,28 +13,35 @@ RC=0
 YELLOW="$(tput setaf 3)"
 NORMAL="$(tput op)"
 
+# shellcheck disable=SC1091
 . /etc/grml/lsb-functions
 
 einfo "Executing grml-sipwise specific checks..."
 eindent
 
 report_ssh_password() {
-  local rootpwd=$(grep -Eo '\<ssh=[^ ]+' /proc/cmdline || true)
+  local rootpwd
+  rootpwd=$(grep -Eo '\<ssh=[^ ]+' /proc/cmdline || true)
 
   if [ "$rootpwd" ]; then
     rootpwd=${rootpwd#*=}
 
-    local user=$(getent passwd 1000 | cut -d: -f1)
+    local user
+    user=$(getent passwd 1000 | cut -d: -f1)
     [ -n "$user" ] || user="grml"
 
-    local local_if=$(ip -o route show | sed -nre '/^default /s/^default .*dev ([^ ]+).*/\1/p' | head -1)
+    local local_if
+    local_if=$(ip -o route show | sed -nre '/^default /s/^default .*dev ([^ ]+).*/\1/p' | head -1)
     if [ -n "$local_if" ] ; then
-      local ipaddr="$(ip -o addr show "$local_if" | grep ' inet ' | head -n 1 | sed -e 's/.*inet \([^ ]*\) .*/\1/' -e 's/\/.*//')"
+      local ipaddr
+      ipaddr="$(ip -o addr show "$local_if" | grep ' inet ' | head -n 1 | sed -e 's/.*inet \([^ ]*\) .*/\1/' -e 's/\/.*//')"
     fi
 
-    local local_if6=$(ip -6 -o route show | sed -nre '/^default /s/^default .*dev ([^ ]+).*/\1/p' | head -1)
+    local local_if6
+    local_if6=$(ip -6 -o route show | sed -nre '/^default /s/^default .*dev ([^ ]+).*/\1/p' | head -1)
     if [ -n "$local_if6" ] ; then
-      local ipaddr6="$(ip -6 -o addr show "$local_if6" | grep ' inet6 ' | head -n 1 | sed -e 's/.*inet6 \([^ ]*\) .*/\1/' -e 's/\/.*//')"
+      local ipaddr6
+      ipaddr6="$(ip -6 -o addr show "$local_if6" | grep ' inet6 ' | head -n 1 | sed -e 's/.*inet6 \([^ ]*\) .*/\1/' -e 's/\/.*//')"
     fi
 
   fi
@@ -52,11 +59,13 @@ check_for_existing_pvs()
 {
   # make sure we don't have a PV named "ngcp" on a different disk,
   # otherwise partitioning and booting won't work
-  local EXISTING_VGS=$(pvs | awk '/\/dev\// {print $2 " " $1}')
+  local EXISTING_VGS
+  EXISTING_VGS=$(pvs | awk '/\/dev\// {print $2 " " $1}')
 
   if echo "$EXISTING_VGS" | grep -q '^ngcp ' ; then
     # which disk has the PV named "ngcp"?
-    local NGCP_DISK="$(echo "$EXISTING_VGS" | awk '/^ngcp/ {print $2}')"
+    local NGCP_DISK
+    NGCP_DISK="$(echo "$EXISTING_VGS" | awk '/^ngcp/ {print $2}')"
     # drop any trailing digits, so we get e.g. /dev/sda for /dev/sda1
     NGCP_DISK="${NGCP_DISK%%[0-9]*}"
 
@@ -74,7 +83,8 @@ check_for_existing_pvs()
 
 deploy() {
   # choose appropriate deployment.sh script:
-  local version=$(grep -Eo '\<ngcpvers=[^ ]+' /proc/cmdline || true)
+  local version
+  version=$(grep -Eo '\<ngcpvers=[^ ]+' /proc/cmdline || true)
   if [ "$version" ]; then
     version=${version#*=}
   else
@@ -104,11 +114,11 @@ deploy() {
 if [[ ! -r '/tmp/disk_options' ]]; then
   eerror "There is no /tmp/disk_options which should be available after disk selection" ; eend 0
 fi
-DISK_OPTIONS="$(cat '/tmp/disk_options')"
-if [[ -z "${DISK_OPTIONS}" ]]; then
+# shellcheck disable=SC1091
+source /tmp/disk_options
+if [[ -z "${TARGET_DISK}" ]] || { [[ -z "${SWRAID_DISK1}" ]] && [[ -z "${SWRAID_DISK2}" ]]; }; then
   ewarn "There are no disk options configured, continuing anyway." ; eend 0
 fi
-export ${DISK_OPTIONS}
 check_for_existing_pvs
 report_ssh_password
 deploy

@@ -23,7 +23,7 @@ getBootParam() {
   local result=''
 
   stringInString " ${param_to_search}=" "${CMD_LINE}" || return 1
-  result="${CMD_LINE##*$param_to_search=}"
+  result="${CMD_LINE##*"$param_to_search"=}"
   result="${result%%[   ]*}"
   echo "${result}"
   return 0
