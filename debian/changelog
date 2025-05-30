@@ -1,3 +1,10 @@
+ngcp-deployment-iso (13.3.1.2+0~mr13.3.1.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [47601a3] MT#62436 Prevent vboxadd* services to run outside of VirtualBox envs
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Fri, 30 May 2025 22:50:52 +0200
+
 ngcp-deployment-iso (13.3.1.1+0~mr13.3.1.1) unstable; urgency=medium
 
   * New release.
