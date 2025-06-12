@@ -2525,7 +2525,7 @@ EOF
   cp "${puppet_gpg}" "${TARGET}/etc/apt/trusted.gpg.d/"
 
   grml-chroot "${TARGET}" apt-get update
-  grml-chroot "${TARGET}" apt-get -y install puppet-agent openssh-server lsb-release ntpdate
+  grml-chroot "${TARGET}" apt-get -y install puppet-agent openssh-server lsb-release ntpsec-ntpdate
 
   # Fix Facter error while running in chroot, facter fails if /etc/mtab is absent:
   grml-chroot "${TARGET}" ln -s /proc/self/mounts /etc/mtab || true

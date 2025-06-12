@@ -48,7 +48,7 @@ mtr-tiny
 netbase
 netcat-openbsd
 net-tools
-ntpdate
+ntpsec-ntpdate
 nwipe
 parted
 partimage
