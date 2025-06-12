@@ -10,7 +10,6 @@ buffer
 chrony
 coreutils
 cpio
-cpufrequtils
 diffutils
 disktype
 dmsetup
