@@ -1517,7 +1517,7 @@ ARCH=$(dpkg --print-architecture)
 CARRIER_EDITION=false
 CE_EDITION=false
 CROLE=''
-DEBIAN_RELEASE='bullseye'
+DEBIAN_RELEASE='bookworm'
 DEBIAN_REPO_HOST="debian.sipwise.com"
 DEBIAN_REPO_TRANSPORT="https"
 DEBUG_MODE=false
@@ -1876,25 +1876,6 @@ if [ -e /dev/virtio-ports/org.qemu.guest_agent.0 ] ; then
   echo "Guest Agent VirtIO device detected, starting qemu-guest-agent service"
   systemctl start qemu-guest-agent
 fi
-
-# this is important for "buster", do not update the string for "bullseye" or
-# future releases
-case "${DEBIAN_RELEASE}" in
-  buster)
-    UPGRADE_PACKAGES=()
-    echo "Upgrading grml-scripts + grml-debootstrap for usage with LVM on Debian/buster"
-
-    if ! check_package_version grml-scripts 2.8.4 ; then
-      UPGRADE_PACKAGES+=( grml-scripts )
-    fi
-
-    if ! check_package_version grml-debootstrap 0.86 ; then
-      UPGRADE_PACKAGES+=( grml-debootstrap )
-    fi
-
-    ensure_recent_package_versions
-    ;;
-esac
 
 if ! "$NGCP_INSTALLER" ; then
   CARRIER_EDITION=false
@@ -2259,19 +2240,6 @@ if [ -d "${TARGET}/var/lib/apt/lists/auxfiles" ]; then
   echo "Removing apt's > 1.6 auxfiles directory"
   rmdir "${TARGET}/var/lib/apt/lists/auxfiles"
 fi
-
-# MT#57643: dpkg >=1.20.0 (as present on Debian/bookworm and newer) no
-# longer creates /var/lib/dpkg/available (see #647911). mmdebstrap relies
-# on and uses dpkg of the host system. But on Debian releases until and
-# including buster, dpkg fails to operate with e.g. `dpkg
-# --set-selections`, if /var/lib/dpkg/available doesn't exist, so let's
-# ensure /var/lib/dpkg/available exists on Debian releases <=buster.
-case "${DEBIAN_RELEASE}" in
-  stretch|buster)
-    echo "Generating /var/lib/dpkg/available to work around dpkg >=1.20.0 issue for Debian release '${DEBIAN_RELEASE}'"
-    chroot "${TARGET}" /usr/lib/dpkg/methods/apt/update /var/lib/dpkg
-    ;;
-esac
 
 # MT#7805
 if "$NGCP_INSTALLER" ; then
