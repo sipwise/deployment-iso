@@ -11,3 +11,11 @@ Execute:
 
 This will generate ISO file, providing the custom bootsplash
 with Sipwise specific boot menu entries.
+
+To generate the underlying base ISO, you can use the wrapper script:
+
+  % osversion=auto release=trunk ./wrapper.sh
+
+To not use release-trunk, use something like:
+
+  % osversion=auto release=mr13.3.1 ./wrapper.sh

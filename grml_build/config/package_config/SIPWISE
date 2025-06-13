@@ -30,6 +30,7 @@ imvirt
 iproute2
 iptstate
 iputils-ping
+ipxe
 isc-dhcp-client
 isomd5sum
 iw
@@ -41,6 +42,7 @@ locales
 lsof
 lsscsi
 mawk
+memtest86+
 mmdebstrap
 mount
 mtools

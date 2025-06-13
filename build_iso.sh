@@ -120,7 +120,7 @@ mkdir -p artifacts
 echo "*** Moving ${SIPWISE_ISO} ${SIPWISE_ISO}.sha1 ${SIPWISE_ISO}.md5 to artifacts/ ***"
 mv "${SIPWISE_ISO}" "${SIPWISE_ISO}.sha1" "${SIPWISE_ISO}.md5" artifacts/
 
-docker run --rm -i --privileged -v "$(pwd)":/code/ docker.mgm.sipwise.com/deployment-iso-bullseye:latest \
+docker run --rm -i -v "$(pwd)":/code/ docker.mgm.sipwise.com/deployment-iso-trixie:latest \
   /code/t/iso-tester /code/artifacts/"${SIPWISE_ISO}" /code/artifacts/memtest.jpg "${MEMTEST_SCREENSHOT}"
 
 popd &>/dev/null

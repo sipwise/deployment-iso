@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -eux
+
+# shellcheck disable=SC2154
+echo "Deploying /usr/share/keyrings/sipwise-archive-keyring.gpg to ${target}/etc/apt/trusted.gpg.d/"
+cp /usr/share/keyrings/sipwise-archive-keyring.gpg "${target}"/etc/apt/trusted.gpg.d/
