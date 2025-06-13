@@ -16,7 +16,7 @@ TEMPLATES="templates"
 GRML_URL="${GRML_URL:-https://deb.sipwise.com/deployment-iso/grml/}"
 GRML_HASH_URL="${GRML_HASH_URL:-https://deb.sipwise.com/deployment-iso/grml/}"
 SIPWISE_ISO="sip_provider_${MR}_${DATE}.iso"
-GRML2USB_VERSION='v0.19.2'
+GRML2USB_VERSION='v0.20.6'
 
 usage () {
   echo "Usage: $0 compat <grml.iso> <mr version> <Debian dist>"
@@ -44,13 +44,6 @@ if [[ -n "${GRML_ISO}" ]]; then
 else
   usage
 fi
-
-case "${GRML_ISO}" in
-  grml64-small_2018.04.11-efi*)
-    GRML2USB_VERSION='v0.14.14'
-    echo "*** NOTE: identified Grml ISO ${GRML_ISO}, falling back to grml2usb version ${GRML2USB_VERSION} for building"
-    ;;
-esac
 
 case "${GRML_ISO}" in
   grml*buster*|grml*bullseye*)
