@@ -2471,19 +2471,9 @@ if [ -n "$PUPPET" ] ; then
     grml-chroot "${TARGET}" apt-get -y install dirmngr
   fi
 
-  # puppetlabs doesn't provide packages for Debian/bookworm yet, so use
-  # the AIO packages from the bullseye repos for now,
-  puppet_deb_release="${DEBIAN_RELEASE}"
-  case "${DEBIAN_RELEASE}" in
-    bookworm)
-      puppet_deb_release="bullseye"
-      echo "WARN: enabling ${puppet_deb_release} puppetlabs repository for ${DEBIAN_RELEASE} (see PA-4995)"
-      ;;
-  esac
-
   echo "Installing 'puppet-agent' with dependencies"
   cat >> ${TARGET}/etc/apt/sources.list.d/puppetlabs.list << EOF
-deb ${DEBIAN_URL}/puppetlabs/ ${puppet_deb_release} main puppet dependencies
+deb ${DEBIAN_URL}/puppetlabs/ ${DEBIAN_RELEASE} main puppet dependencies
 EOF
 
   puppet_gpg='/root/puppet.gpg'
