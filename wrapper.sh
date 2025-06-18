@@ -69,7 +69,7 @@ echo "${repo_addr}" > "${outside_fai_config}files/SIPWISE/${source_list_path}"
 
 # get the puppet public key, so no need to download it in deployment.sh
 puppet_key='puppet.gpg'
-wget -O "${outside_fai_config}/files/PUPPETLABS/root/${puppet_key}" http://apt.puppetlabs.com/DEB-GPG-KEY-puppetlabs
+wget -O "${outside_fai_config}/files/PUPPETLABS/root/${puppet_key}" https://deb.sipwise.com/files/puppetlabs-pubkey-2025.gpg
 
 build_command=''
 build_command+=" cp -rv /grml/config/ /code/grml-live/"

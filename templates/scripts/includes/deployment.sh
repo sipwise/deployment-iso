@@ -2488,7 +2488,17 @@ EOF
   if [[ ! -f "${puppet_gpg}" ]]; then
     die "Can't find ${puppet_gpg} file"
   fi
-  cp "${puppet_gpg}" "${TARGET}/etc/apt/trusted.gpg.d/"
+
+  if echo "7b4ed31e1028f921b5c965df0a42e508  /root/puppet.gpg" | md5sum -c ; then
+    echo "Identified outdated puppetlabs key, fetching key (see MT#60283)"
+    wget https://deb.sipwise.com/files/puppetlabs-pubkey-2025.gpg -O "${TARGET}/etc/apt/trusted.gpg.d/puppet.asc"
+  elif echo "d6368c2df370ff2093831daad16d9eeb  /root/puppet.gpg" | md5sum -c ; then
+    echo "Puppetlabs key seems to be in 'Public-Key (old)' format, installing as puppet.asc"
+    cp "${puppet_gpg}" "${TARGET}/etc/apt/trusted.gpg.d/puppet.asc"
+  else
+    echo "Installing Puppetlabs key as puppet.gpg"
+    cp "${puppet_gpg}" "${TARGET}/etc/apt/trusted.gpg.d/"
+  fi
 
   grml-chroot "${TARGET}" apt-get update
   grml-chroot "${TARGET}" apt-get -y install puppet-agent openssh-server lsb-release ntpsec-ntpdate
