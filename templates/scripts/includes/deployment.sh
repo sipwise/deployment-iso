@@ -148,10 +148,10 @@ debootstrap_sipwise_key() {
 #!/bin/bash
 # installed via deployment.sh
 target_file=sipwise-keyring-bootstrap.gpg
-if [[ "${KEYRING}" =~ trusted.gpg\$ ]]; then
+if [[ "${SIPWISE_APT_KEY_PATH}" =~ trusted.gpg\$ ]]; then
   target_file=trusted.gpg
 fi
-cp ${KEYRING} "\${MNTPOINT}/etc/apt/trusted.gpg.d/\${target_file}"
+cp ${SIPWISE_APT_KEY_PATH} "\${MNTPOINT}/etc/apt/trusted.gpg.d/\${target_file}"
 EOF
   chmod 775 /etc/debootstrap/pre-scripts/install-sipwise-key.sh
 }
@@ -1555,7 +1555,6 @@ PUPPET_SERVER='puppet.mgm.sipwise.com'
 REBOOT=false
 RETRIEVE_MGMT_CONFIG=false
 ROOTFS_SIZE="10G"
-SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
 SIPWISE_REPO_HOST="deb.sipwise.com"
 SIPWISE_REPO_TRANSPORT="https"
 STATUS_DIRECTORY='/srv/deployment/'
@@ -2134,7 +2133,16 @@ MIRROR="${DEBIAN_URL}/debian/"
 SEC_MIRROR="${DEBIAN_URL}/debian-security/"
 DBG_MIRROR="${DEBIAN_URL}/debian-debug/"
 
-KEYRING="${SIPWISE_APT_KEY_PATH}"
+# MT#60283 Newer Grml-Sipwise deployment ISOs no longer ship
+# sipwise-keyring-bootstrap.gpg (see commit 8647b3d)
+if [ -r /etc/apt/trusted.gpg.d/sipwise-archive-keyring.gpg ] ; then  # >= mr13.4 / sipwise20250616
+  SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-archive-keyring.gpg"
+elif [ -r /etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg ] ; then  # before mr13.4
+  SIPWISE_APT_KEY_PATH="/etc/apt/trusted.gpg.d/sipwise-keyring-bootstrap.gpg"
+else
+  echo "Error: couldn't find /etc/apt/trusted.gpg.d/sipwise* key for Debian repository usage." >&2
+  exit 1
+fi
 
 set_deploy_status "debootstrap"
 
