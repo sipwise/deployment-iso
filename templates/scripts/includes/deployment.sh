@@ -701,7 +701,7 @@ set_up_partition_table_swraid() {
   get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK1}" "${partlabel}" "${max_tries}" raidev1
   get_pvdevice_by_label_with_retries "/dev/${SWRAID_DISK2}" "${partlabel}" "${max_tries}" raidev2
 
-  echo y | mdadm --create --verbose "${SWRAID_DEVICE}" --level=1 --raid-devices=2 "${raidev1}" "${raidev2}"
+  mdadm --create --run --verbose "${SWRAID_DEVICE}" --level=1 --raid-devices=2 "${raidev1}" "${raidev2}"
 
   echo "Creating PV + VG on ${SWRAID_DEVICE}"
   pvcreate -ff -y "${SWRAID_DEVICE}"
