@@ -1,3 +1,36 @@
+ngcp-deployment-iso (13.4.1.0+0~mr13.4.1.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [b2e2954] MT#62436 Fix shellcheck issues + parse IP information programmatically
+  * [779b43b] MT#62436 Support Debian/trixie in ensure_packages_installed
+  * [112f883] MT#62436 ensure_packages_installed: to not get stuck on conf file conflicts
+  * [c828990] MT#62436 Use virtualbox-guest-additions ISO from upstream on Debian/trixie
+  * [e2db6df] MT#62436 Prevent vboxadd* services to run outside of VirtualBox envs
+  * [001c9c6] MT#62787 Ensure grml-debootstrap's GRUB device is set also in SW-RAID setups
+  * [2974f71] MT#62787 Drop /sys/block autodetection code.
+    Thanks to Volodymyr Fedorov for reporting and assistance
+  * [b6f8f41] Revert "MT#62787 Drop /sys/block autodetection code"
+  * [b2007bd] MT#62787 Support NVMe disks in autodetection code
+  * [6c4ea75] MT#62864 Ensure to always have e2fsprogs available
+  * [ab97f43] MT#62988 Drop cpufrequtils from software selection
+  * [9a6278e] MT#62988 Switch from ntpdate to ntpsec-ntpdate
+  * [c0285b7] MT#56773 deployment.sh: assume bookworm  by default and drop deprecated workarounds
+  * [cd2dabc] MT#56773 deployment.sh: use recent packages of puppetlabs for Debian/bookworm
+  * [f2f4f0d] MT#60283 GRUB/ISOLINUX: update Debian releases in boot templates
+  * [9b12000] MT#60283 Update to grml2usb version v0.20.6
+  * [8647b3d] MT#60283 Update to grml-live version v0.53.2 + Debian/trixie
+  * [463dd9c] MT#60283 Fix repository key situation
+  * [3afd4c0] MT#60283 Fix puppetlabs repository situation with puppet.gpg key
+  * [bfc2bee] MT#63024 Support mdadm array creation with mdadm versions >=4.4
+
+  [ Guillem Jover ]
+  * [70ebf21] MT#62436 Install the VirtualBox Guest Additions in the target
+
+  [ Sipwise Jenkins Builder ]
+  * [b768547] MT#62971 Add mr13.5 LTS key to bootstrap
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Fri, 20 Jun 2025 10:42:40 +0200
+
 ngcp-deployment-iso (13.4.0.0+0~mr13.4.0.0) unstable; urgency=medium
 
   [ Guillem Jover ]
