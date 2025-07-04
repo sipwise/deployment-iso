@@ -345,115 +345,19 @@ wait_exit() {
   exit "${e_code}"
 }
 
-# check for EFI support, if not present try to enable it
+# check for EFI support or try to enable it
 efi_support() {
-  if lsmod | grep -q efivarfs ; then
-    echo "EFI support detected."
-    return 0
-  fi
+  # Absence of an EFI runtime does not prevent loading efivarfs since commit
+  # 301de9a2055357375a4e1053d9df0f8f3467ff00 which landed in Linux v6.3.
+  # Unconditionally load it, in case nothing else attempted it.
+  modprobe efivarfs &>/dev/null || true
 
-  if modprobe efivarfs &>/dev/null ; then
-    echo "EFI support enabled now."
+  if [ -d /sys/firmware/efi ] ; then
+    einfo "EFI support detected."
     return 0
   fi
 
   return 1
-}
-
-# Debian kernels >=5.10 don't provide efivars support, ensure to either:
-# 1) have grml-debootstrap v0.99 or newer available (which provides according
-# efivarfs workaround), or otherwise:
-# 2) apply local workaround using post script within grml-debootstrap
-# (to avoid having to update the grml-debootstrap package, because that's not
-# available within environments relying on our approx Debian mirror, which
-# doesn't provide the Grml repository)
-efivars_workaround() {
-  if lsmod | grep -q 'efivars' ; then
-    echo "We do have efivars support, no need to apply workarounds"
-    return 0
-  fi
-
-  echo "Running with kernel without efivars support"
-  if check_package_version grml-debootstrap 0.99~ ; then
-    echo "grml-debootstrap >=0.99 available, no need to apply pre/post script workaround"
-    return 0
-  fi
-
-  echo "Present grml-debootstrap version is not recent enough, falling back to workarounds using local script"
-
-  # pre script, relevant for grml-debootstrap versions <=0.96 with EFI environments
-  mkdir -p /etc/debootstrap/pre-scripts/
-  cat > /etc/debootstrap/pre-scripts/efivarfs << "EOL"
-#!/bin/bash
-set -eu -p pipefail
-
-echo "Executing $0"
-
-if ! ls "${MNTPOINT}"/sys/firmware/efi/efivars/* &>/dev/null ; then
-  # we need to have /sys available to be able to mount /sys/firmware/efi/efivars
-  if ! chroot "${MNTPOINT}" test -d /sys/kernel ; then
-    echo "Mointing /sys"
-    chroot "${MNTPOINT}" mount -t sysfs none /sys
-  fi
-
-  echo "Mounting efivarfs on /sys/firmware/efi/efivars"
-  chroot "${MNTPOINT}" mount -t efivarfs efivarfs /sys/firmware/efi/efivars
-fi
-echo "Finished execution of $0"
-EOL
-
-  chmod 775 /etc/debootstrap/pre-scripts/efivarfs
-  PRE_SCRIPTS_OPTION="--pre-scripts /etc/debootstrap/pre-scripts/"
-
-  # post script
-  mkdir -p /etc/debootstrap/post-scripts/
-  cat > /etc/debootstrap/post-scripts/efivarfs << "EOL"
-#!/bin/bash
-set -eu -p pipefail
-
-echo "Executing $0"
-
-if ! [ -e "${MNTPOINT}"/dev/mapper/ngcp-root ] ; then
-  echo "Mounting /dev (via bind mount)"
-  mount --bind /dev "${MNTPOINT}"/dev/
-fi
-
-if ! [ -e "${MNTPOINT}"/proc/cmdline ] ; then
-  echo "Mounting /proc"
-  chroot "${MNTPOINT}" mount -t proc none /proc
-fi
-
-if ! ls "${MNTPOINT}"/sys/firmware/efi/efivars/* &>/dev/null ; then
-  # we need to have /sys available to be able to mount /sys/firmware/efi/efivars
-  if ! chroot "${MNTPOINT}" test -d /sys/kernel ; then
-    echo "Mointing /sys"
-    chroot "${MNTPOINT}" mount -t sysfs none /sys
-  fi
-
-  echo "Mounting efivarfs on /sys/firmware/efi/efivars"
-  chroot "${MNTPOINT}" mount -t efivarfs efivarfs /sys/firmware/efi/efivars
-fi
-
-if ! [ -d "${MNTPOINT}"/boot/efi/EFI ] ; then
-  echo "Mounting /boot/efi"
-  chroot "${MNTPOINT}" mount /boot/efi
-fi
-
-echo "Invoking grub-install with proper EFI environment"
-chroot "${MNTPOINT}" grub-install
-
-for f in /boot/efi /sys/firmware/efi/efivars /sys /proc /dev ; do
-  if mountpoint "${MNTPOINT}/$f" &>/dev/null ; then
-    echo "Unmounting $f"
-    umount "${MNTPOINT}/$f"
-  fi
-done
-
-echo "Finished execution of $0"
-EOL
-
-  chmod 775 /etc/debootstrap/post-scripts/efivarfs
-  POST_SCRIPTS_OPTION="--post-scripts /etc/debootstrap/post-scripts/"
 }
 
 cdr2mask() {
@@ -2199,9 +2103,6 @@ if [[ -n "${EFI_PARTITION}" ]] ; then
     # ensure we force creation of a proper FAT filesystem
     echo "Creating FAT filesystem on EFI partition ${EFI_PARTITION}"
     mkfs.fat -F32 -n "EFI" "${EFI_PARTITION}"
-
-    # this can be dropped once we have grml-debootstrap >=v0.99 available in our squashfs
-    efivars_workaround
   else
     echo "EFI support NOT present, not enabling EFI support within grml-debootstrap"
   fi
