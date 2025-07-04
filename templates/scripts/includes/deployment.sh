@@ -1728,7 +1728,7 @@ fi
 # disk information and set GRUB target
 if [[ "${SWRAID}" = "true" ]] ; then
   DISK_INFO="Software-RAID with $SWRAID_DISK1 $SWRAID_DISK2"
-  GRUB_DISK="${SWRAID_DEVICE}"
+  GRUB_DISK="/dev/${SWRAID_DISK1}"  # we iterate over the disks in swraidinstallgrub
 else
   DISK_INFO="/dev/$DISK"
   GRUB_DISK="/dev/$DISK"
