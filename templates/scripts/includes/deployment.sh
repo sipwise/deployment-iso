@@ -2380,9 +2380,28 @@ if [ -n "$PUPPET" ] ; then
     grml-chroot "${TARGET}" apt-get -y install dirmngr
   fi
 
+  # puppetlabs doesn't provide packages for Debian/trixie yet, so use
+  # the AIO packages from the bookworm repos for now,
+  puppet_deb_release="${DEBIAN_RELEASE}"
+  case "${DEBIAN_RELEASE}" in
+    trixie)
+      puppet_deb_release="bookworm"
+      echo "WARN: enabling ${puppet_deb_release} puppetlabs repository for ${DEBIAN_RELEASE} (see PA-4995)"
+      ;;
+  esac
+
+  # we need apt pinning, otherwise we get puppet-agent from Debian/trixie
+  echo "WARN: installing apt preferences for 'puppet-agent' package from upstream"
+  cat > ${TARGET}/etc/apt/preferences.d/puppetlabs << EOF
+Explanation: use puppet-agent from upstream puppetlabs
+Package: puppet-agent
+Pin: release o=Puppetlabs
+Pin-Priority: 600
+EOF
+
   echo "Installing 'puppet-agent' with dependencies"
   cat >> ${TARGET}/etc/apt/sources.list.d/puppetlabs.list << EOF
-deb ${DEBIAN_URL}/puppetlabs/ ${DEBIAN_RELEASE} main puppet dependencies
+deb ${DEBIAN_URL}/puppetlabs/ ${puppet_deb_release} main puppet dependencies
 EOF
 
   puppet_gpg='/root/puppet.gpg'
