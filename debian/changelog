@@ -1,3 +1,10 @@
+ngcp-deployment-iso (13.4.1.2+0~mr13.4.1.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [9f6407d] MT#63155 Fix EFI detection for kernel versions >=6.3
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 14 Jul 2025 09:05:04 +0200
+
 ngcp-deployment-iso (13.4.1.1+0~mr13.4.1.1) unstable; urgency=medium
 
   * New release.
