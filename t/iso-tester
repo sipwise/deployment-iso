@@ -67,6 +67,8 @@ send_command "sendkey down"
 send_command "sendkey ret"
 send_command "sendkey down"
 send_command "sendkey ret"
+# wait some time for memtest is started
+sleep 5
 send_command "screendump ${SCREENDUMP}"
 send_command "quit"
 
