@@ -50,9 +50,13 @@ case "${GRML_ISO}" in
     MEMTEST_SCREENSHOT="/code/t/screenshots/01-memtest-v5.jpg"
     echo "*** NOTE: identified Grml ISO ${GRML_ISO}, assuming we have memtest v5"
     ;;
-  *)
+  grml*bookworm*)
     MEMTEST_SCREENSHOT="/code/t/screenshots/01-memtest-v6.jpg"
     echo "*** NOTE: identified Grml ISO ${GRML_ISO}, assuming we have memtest v6"
+    ;;
+  *)
+    MEMTEST_SCREENSHOT="/code/t/screenshots/01-memtest-v7.jpg"
+    echo "*** NOTE: identified Grml ISO ${GRML_ISO}, assuming we have memtest v7"
     ;;
 esac
 
