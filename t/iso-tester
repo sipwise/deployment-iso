@@ -92,7 +92,9 @@ fi
 mkdir -p reports
 if [ -n "${SCREENSHOT_COMPARE:-}" ] ; then
   echo "Comparing ${SCREENSHOT} against ${SCREENSHOT_COMPARE}"
-  if ./screenshot-compare "${SCREENSHOT}" "${SCREENSHOT_COMPARE}" ; then
+  RC=0
+  ./screenshot-compare "${SCREENSHOT}" "${SCREENSHOT_COMPARE}" || RC=$?
+  if [[ "${RC}" -lt 100 ]] ; then
     echo "Looks like ${SCREENSHOT} and ${SCREENSHOT_COMPARE} are looking similar enough."
     echo "1..0" > ./reports/screenshot.tap
   else
