@@ -60,8 +60,8 @@ RUN wget https://debian.sipwise.com/debian/pool/main/m/memtest86+/memtest86+_5.0
 RUN wget -O /code/grml-live/templates/boot/addons/netboot.xyz.efi https://boot.netboot.xyz/ipxe/netboot.xyz.efi && \
   wget -O /code/grml-live/templates/boot/addons/netboot.xyz.lkrn https://boot.netboot.xyz/ipxe/netboot.xyz.lkrn
 
-RUN wget http://ftp.de.debian.org/debian/pool/main/i/ipxe/ipxe_1.0.0+git-20190125.36a4c85-1_all.deb && \
-  dpkg -x ipxe_1.0.0+git-20190125.36a4c85-1_all.deb /tmp/ipxe && \
+RUN wget http://ftp.de.debian.org/debian/pool/main/i/ipxe/ipxe_1.0.0+git-20190125.36a4c85-5.1_all.deb && \
+  dpkg -x ipxe_1.0.0+git-20190125.36a4c85-5.1_all.deb /tmp/ipxe && \
   cp /tmp/ipxe/boot/ipxe.efi /code/grml-live/templates/boot/addons/ipxe.efi && \
   cp /tmp/ipxe/boot/ipxe.lkrn /code/grml-live/templates/boot/addons/ipxe.lkrn && \
   rm -rf /tmp/ipxe
