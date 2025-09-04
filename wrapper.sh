@@ -76,7 +76,7 @@ build_command+=" cp -rv /grml/config/ /code/grml-live/"
 build_command+=" && ulimit -n 1048576"  # workaround to fix apt/apt-mark performance issue
 build_command+=" && GRML_NAME=grml64-small"
 build_command+=" CHROOT_OUTPUT=/root/grml_chroot"
-build_command+=" BOOTSTRAP_MIRROR=${debian_bootstrap_url}'"
+build_command+=" BOOTSTRAP_MIRROR='${debian_bootstrap_url}'"
 build_command+=" LIVE_CONF=/code/grml-live/etc/grml/grml-live.conf"
 build_command+=" GRML_FAI_CONFIG=${fai_config}"
 build_command+=" ./grml-live"
