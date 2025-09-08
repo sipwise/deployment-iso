@@ -1,3 +1,24 @@
+ngcp-deployment-iso (14.0.0.0+0~mr14.0.0.0) unstable; urgency=medium
+
+  [ Guillem Jover ]
+  * [1faedf4] MT#62763 Fix shellcheck issues
+
+  [ Michael Prokop ]
+  * [fd55984] MT#63155 Fix EFI detection for kernel versions >=6.3
+  * [75b0f92] MT#62787 SW-RAID: install only to first RAID disk to not fail in non-EFI mode
+  * [f511741] MT#63016 Use puppet-agent from bookworm on Debian/trixie
+  * [53cb777] MT#60283 Update grml-live to version 0.54.1
+
+  [ Mykola Malkov ]
+  * [2713ded] MT#62936 Wait for memtest starts
+  * [3eff753] MT#62936 Bump REFRESHED_AT to force docker image rebuild
+  * [b8e8423] MT#62936 Update memtest
+
+  [ Jose Su ]
+  * [817d48e] MT#63510 Add missing quote in build command inside wrapper.sh
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 08 Sep 2025 11:43:35 +0200
+
 ngcp-deployment-iso (13.5.0.0+0~mr13.5.0.0) unstable; urgency=medium
 
   [ Michael Prokop ]
