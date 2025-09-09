@@ -974,8 +974,8 @@ install_vbox_guest_additions_iso() {
   echo "Downloading virtualbox-guest-additions ISO"
 
   local virtualbox_dir="${TARGET}/usr/share/virtualbox"
-  local virtualbox_iso="VBoxGuestAdditions_7.1.8.iso"
-  local virtualbox_iso_checksum="0001ed19cc389f04723c9b911338559b9b74bea0d24edf794d8d2ce5b5cb14e0" # sha256
+  local virtualbox_iso="VBoxGuestAdditions_7.2.0.iso"
+  local virtualbox_iso_checksum="43f7a1045cad0aab40e3af906fea37244ba6873b91b4e227245a14e51b399abd" # sha256
   local virtualbox_iso_url_path="/files/${virtualbox_iso}"
 
   mkdir -p "${virtualbox_dir}"
