@@ -37,6 +37,7 @@ Control target system:
   ngcpeaddr=...            - cluster IP address
   ngcpextnetmask=...       - use the following netmask for external interface
   ngcphostname=...         - hostname of installed system (defaults to ngcp/sp[1,2])
+  ngcpinternal             - use internal (mrX.X.X-update) NGCP repo
   ngcpinst                 - force usage of NGCP installer
   ngcpip1=...              - IP address of first node (Pro Edition only)
   ngcpip2=...              - IP address of second node (Pro Edition only)
@@ -900,6 +901,25 @@ get_installer_path() {
     local installer_package='ngcp-installer-ce'
     local repos_base_path="${SIPWISE_URL}/spce/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
     INSTALLER_PATH="${SIPWISE_URL}/spce/${SP_VERSION}/pool/main/n/ngcp-installer/"
+    if "${NGCP_INTERNAL}"; then
+      repos_base_path="${SIPWISE_URL}/autobuild/release/spce/${SP_VERSION}-update/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
+      INSTALLER_PATH="${SIPWISE_URL}/autobuild/release/spce/${SP_VERSION}-update/pool/main/n/ngcp-installer/"
+      # check if mrX.X.X-update repo has ngcp-installer package
+      # if not - fallback to default repo
+      local tmp_packages
+      tmp_packages=$(mktemp -t ngcp-deployment-installer-path.XXXXXXXXXX)
+      wget --timeout=30 -O "${tmp_packages}" "${repos_base_path}Packages"
+      local installer_version
+      installer_version=$(sed "/./{H;\$!d;};x;/Package: ${installer_package}/b;d" "${tmp_packages}" | awk '/^Version: / {print $2}' | sort -u)
+      rm -f "${tmp_packages}"
+      if [ -n "${installer_version}" ]; then
+        echo "${SP_VERSION}-update contains ngcp-installer, using it, version '${installer_version}'"
+      else
+        echo "${SP_VERSION}-update does NOT contain ngcp-installer, using default ngcp-installer package"
+        repos_base_path="${SIPWISE_URL}/spce/${SP_VERSION}/dists/${DEBIAN_RELEASE}/main/binary-amd64/"
+        INSTALLER_PATH="${SIPWISE_URL}/spce/${SP_VERSION}/pool/main/n/ngcp-installer/"
+      fi
+    fi
   fi
 
   # use a separate repos for trunk releases
@@ -934,7 +954,7 @@ get_installer_path() {
       local repos_base_path="${ppa_repos_base_path}"
       INSTALLER_PATH="${SIPWISE_URL}/autobuild/pool/main/n/ngcp-installer/"
     else
-      echo "NGCP PPA does NOT contains ngcp-installer, using default ngcp-installer package"
+      echo "NGCP PPA does NOT contain ngcp-installer, using default ngcp-installer package"
     fi
   fi
 
@@ -1025,6 +1045,12 @@ IP_HA_SHARED="${IP_HA_SHARED}"
 MANAGEMENT_IP="${MANAGEMENT_IP}"
 NETWORK_DEVICES="${NETWORK_DEVICES}"
 TARGET_HOSTNAME="${TARGET_HOSTNAME}"
+EOF
+  fi
+
+  if "${CE_EDITION}" && "${NGCP_INTERNAL}" ; then
+    cat >> "${conf_file}" << EOF
+NGCP_INTERNAL=true
 EOF
   fi
 
@@ -1490,6 +1516,7 @@ IP_HA_SHARED='192.168.255.250'
 IP_LINE=''
 LOGO=true
 NGCP_INSTALLER=false
+NGCP_INTERNAL=false
 NGCP_PXE_INSTALL=false
 NGCP_UPLOAD=false
 NODE_NAME=''
@@ -1595,6 +1622,9 @@ for param in "${PARAMS[@]}" ; do
     ;;
     ngcpinst)
       NGCP_INSTALLER=true
+    ;;
+    ngcpinternal)
+      NGCP_INTERNAL=true
     ;;
     ngcpip1=*)
       IP1="${param//ngcpip1=/}"
