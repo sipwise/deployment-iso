@@ -53,11 +53,17 @@ if [ -z "${osversion:-}" ]; then
   exit 1
 fi
 
+declare build_time
+build_time="$(date +%Y%m%d_%H%M%S)"
+
 # misc variables
 fai_config='/code/grml-live/config/'
 outside_fai_config="${PWD}/grml_build/config/"
 debian_bootstrap_url="https://debian.sipwise.com/debian/"
-iso_image_name="grml-sipwise-${osversion}-$(date +%Y%m%d_%H%M%S).iso"
+iso_image_name="grml-sipwise-${osversion}-${build_time}.iso"
+if [[ -n "${repo_date:-}" ]]; then
+  iso_image_name="grml-sipwise-${osversion}-${repo_date}_${build_time}.iso"
+fi
 
 # write apt sources
 source_list_path='etc/apt/sources.list.d/sipwise.list'
@@ -70,6 +76,12 @@ echo "${repo_addr}" > "${outside_fai_config}files/SIPWISE/${source_list_path}"
 # get the puppet public key, so no need to download it in deployment.sh
 puppet_key='puppet.gpg'
 wget -O "${outside_fai_config}/files/PUPPETLABS/root/${puppet_key}" https://deb.sipwise.com/files/puppetlabs-pubkey-2025.gpg
+
+use_wayback="false"
+if [[ -n "${repo_date:-}" ]]; then
+  use_wayback="true"
+  echo "enabling wayback option, as repo_date parameter is set to '${repo_date}'"
+fi
 
 build_command=''
 build_command+=" cp -rv /grml/config/ /code/grml-live/"
@@ -89,6 +101,9 @@ build_command+=" -r 'grml-sipwise-${osversion}'"
 build_command+=" -v '${release}'"
 build_command+=" -R"
 build_command+=" -F"
+if "${use_wayback}"; then
+  build_command+=" -w '${repo_date}'"
+fi
 build_command+=" && cd /grml/grml_isos/"
 build_command+=" && sha1sum '${iso_image_name}' > '${iso_image_name}.sha1'"
 build_command+=" && md5sum  '${iso_image_name}' > '${iso_image_name}.md5'"
