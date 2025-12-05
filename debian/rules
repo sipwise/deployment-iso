@@ -1,8 +1,9 @@
 #!/usr/bin/make -f
-# Uncomment this to turn on verbose mode.
-# export DH_VERBOSE=1
 
-DEBVERSION:=$(shell dpkg-parsechangelog -SVersion)
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE = 1
+
+DEBVERSION := $(shell dpkg-parsechangelog -SVersion)
 
 ifneq ($(GIT_COMMIT),)
 export NGCP_VERSION := $(GIT_COMMIT)
