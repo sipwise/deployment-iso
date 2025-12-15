@@ -6,7 +6,7 @@ FROM docker.mgm.sipwise.com/sipwise-trixie:latest
 # is updated with the current date. It will force refresh of all
 # of the base images and things like `apt-get update` won't be using
 # old cached versions when the Dockerfile is built.
-ENV REFRESHED_AT=2025-08-15
+ENV REFRESHED_AT=2025-12-15
 
 # tools for building and testing
 RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
@@ -36,7 +36,7 @@ RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
 # base build tools
 WORKDIR /code/
 
-RUN git clone -b 'v0.54.1' --single-branch --depth 1 https://github.com/grml/grml-live
+RUN git clone -b 'v0.55.1' --single-branch --depth 1 https://github.com/grml/grml-live
 
 WORKDIR /code/grml-live
 
