@@ -354,7 +354,7 @@ efi_support() {
   modprobe efivarfs &>/dev/null || true
 
   if [ -d /sys/firmware/efi ] ; then
-    einfo "EFI support detected."
+    echo "EFI support detected."
     return 0
   fi
 
