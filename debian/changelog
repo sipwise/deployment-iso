@@ -1,3 +1,23 @@
+ngcp-deployment-iso (14.2.0.0+0~mr14.2.0.0) unstable; urgency=medium
+
+  [ Guillem Jover ]
+  * [6a3bfe3] MT#62899 Update packaging for Debian trixie
+
+  [ Michael Prokop ]
+  * [1cbbcc0] MT#63155 efi_support: do not rely on presence of einfo function.
+    Thanks to Volodymyr Fedorov for reporting
+  * [ab93c60] MT#64132 Update grml-live to version 0.55.1
+  * [4a51374] MT#60815 deployment.sh: raise Debian release default to trixie
+  * [69917c3] MT#62249 Update grml-build-trixie docker image
+
+  [ Jose Su ]
+  * [f78a8cd] MT#64169 Update UEFI Boot Grml ISO colors
+
+  [ Sipwise Jenkins Builder ]
+  * [b685559] MT#64349 Update bootstrap key with fixed SHA-1 situation
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Thu, 05 Feb 2026 10:21:52 +0100
+
 ngcp-deployment-iso (14.1.0.0+0~mr14.1.0.0) unstable; urgency=medium
 
   [ Guillem Jover ]
