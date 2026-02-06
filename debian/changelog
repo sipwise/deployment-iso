@@ -1,3 +1,10 @@
+ngcp-deployment-iso (14.0.1.2+0~mr14.0.1.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [a0049c3] MT#62249 Update grml-build-trixie docker image
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Fri, 06 Feb 2026 09:10:44 +0100
+
 ngcp-deployment-iso (14.0.1.1+0~mr14.0.1.1) unstable; urgency=medium
 
   * New release.
