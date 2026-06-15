@@ -1,3 +1,16 @@
+ngcp-deployment-iso (26.2.0.0+0~mr26.2.0.0) unstable; urgency=medium
+
+  [ Jose Su ]
+  * [52c8dd5] MT#64985 Cosmetic fix in deployment.sh
+
+  [ Michael Prokop ]
+  * [0755c0e] MT#64132 Update grml-live to version 0.56.0
+  * [3dfe3c7] MT#64132 Update to grml2usb version v0.20.13
+  * [342ef1a] MT#64132 Refresh docker image + update grml2usb to v0.20.14
+  * [66c0eb3] MT#64132 Refresh grml-build-trixie docker image
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 15 Jun 2026 15:30:51 +0200
+
 ngcp-deployment-iso (26.1.0.0+0~mr26.1.0.0) unstable; urgency=medium
 
   * New release.
