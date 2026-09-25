@@ -1790,9 +1790,15 @@ else
   exit 1
 fi
 
+# we use a new proxy/CDN approach starting with forky
+case "${DEBIAN_RELEASE}" in
+  forky)
+    DEBIAN_REPO_HOST="debian-cdn.sipwise.com"
+    ;;
+esac
+
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
-
 FALLBACKFS_SIZE="${FALLBACKFS_SIZE:-${ROOTFS_SIZE}}"
 
 ## }}}
@@ -2121,7 +2127,16 @@ case "${DEBIAN_RELEASE}" in
     ;;
 esac
 
-DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,zstd,isc-dhcp-client,ifupdown,ca-certificates,qemu-guest-agent${pkg_eatmydata}${pkg_usrmerge}")
+case "${DEBIAN_RELEASE}" in
+  forky)
+    # isc-dhcp-client is no longer available
+    DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,zstd,dhcpcd-base,ifupdown,ca-certificates,qemu-guest-agent${pkg_eatmydata}${pkg_usrmerge}")
+    ;;
+  *)
+    DEBOPT_OPTIONS+=("--variant=minbase --include=systemd,systemd-sysv,init,zstd,isc-dhcp-client,ifupdown,ca-certificates,qemu-guest-agent${pkg_eatmydata}${pkg_usrmerge}")
+    ;;
+esac
+
 # TT#61152 Add configuration Acquire::Retries=3, for apt to retry downloads
 DEBOPT_OPTIONS+=("--aptopt='Acquire::Retries=3'")
 

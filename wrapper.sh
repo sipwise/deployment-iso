@@ -59,7 +59,17 @@ build_time="$(date +%Y%m%d_%H%M%S)"
 # misc variables
 fai_config='/code/grml-live/config/'
 outside_fai_config="${PWD}/grml_build/config/"
-debian_bootstrap_url="https://debian.sipwise.com/debian/"
+
+case "${osversion}" in
+  forky)
+    # we use a new proxy/CDN approach starting with forky
+    debian_bootstrap_url="https://debian-cdn.sipwise.com/debian/"
+    ;;
+  *)
+    debian_bootstrap_url="https://debian.sipwise.com/debian/"
+    ;;
+esac
+
 iso_image_name="grml-sipwise-${osversion}-${build_time}.iso"
 if [[ -n "${repo_date:-}" ]]; then
   iso_image_name="grml-sipwise-${osversion}-${repo_date}_${build_time}.iso"
