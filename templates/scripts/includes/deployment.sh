@@ -283,7 +283,7 @@ ensure_packages_installed() {
 
   local deb_release
   case "${DEBIAN_RELEASE}" in
-    buster|bullseye|bookworm|trixie)
+    buster|bullseye|bookworm|trixie|forky)
       deb_release="${DEBIAN_RELEASE}"
       echo "Using ${deb_release} as Debian repository for ${FUNCNAME[0]}"
       ;;
@@ -2395,7 +2395,10 @@ fi
 
 # MT#61265 avoid "penalty: failed authentication" in automated SSH/SCP actions in Jenkins jobs
 case "${DEBIAN_RELEASE}" in
-  trixie)
+  buster|bullseye|bookworm)
+    # nothing to do here
+    ;;
+  *)
     echo "Adjusting /etc/ssh/sshd_config for Debian release '${DEBIAN_RELEASE}'"
     echo '# added by deployment.sh' >> "${TARGET}"/etc/ssh/sshd_config
 
@@ -2429,13 +2432,16 @@ if [ -n "$PUPPET" ] ; then
   # the AIO packages from the bookworm repos for now,
   puppet_deb_release="${DEBIAN_RELEASE}"
   case "${DEBIAN_RELEASE}" in
-    trixie)
+    buster|bullseye|bookworm)
+      # nothing to do here
+      ;;
+    *)
       puppet_deb_release="bookworm"
       echo "WARN: enabling ${puppet_deb_release} puppetlabs repository for ${DEBIAN_RELEASE} (see PA-4995)"
       ;;
   esac
 
-  # we need apt pinning, otherwise we get puppet-agent from Debian/trixie
+  # we need apt pinning, otherwise we get puppet-agent from Debian
   echo "WARN: installing apt preferences for 'puppet-agent' package from upstream"
   cat > ${TARGET}/etc/apt/preferences.d/puppetlabs << EOF
 Explanation: use puppet-agent from upstream puppetlabs
