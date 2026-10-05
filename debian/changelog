@@ -1,3 +1,12 @@
+ngcp-deployment-iso (26.3.1.0+0~mr26.3.1.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [f6e0c83] MT#64132 wrapper.sh: no longer invoke grml-live with arch specific option
+  * [40d6e63] MT#63385 Initial Debian/forky support
+  * [5d2b983] MT#66118 MT#63385 Further forky related changes
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 05 Oct 2026 12:33:47 +0200
+
 ngcp-deployment-iso (26.3.0.0+0~mr26.3.0.0) unstable; urgency=medium
 
   * New release.
