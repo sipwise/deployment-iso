@@ -1,3 +1,9 @@
+ngcp-deployment-iso (26.3.2.0+0~mr26.3.2.0) unstable; urgency=medium
+
+  * New release.
+
+ -- Sipwise Jenkins Builder <jenkins@sipwise.com>  Mon, 19 Oct 2026 10:57:55 +0200
+
 ngcp-deployment-iso (26.3.1.0+0~mr26.3.1.0) unstable; urgency=medium
 
   [ Michael Prokop ]
