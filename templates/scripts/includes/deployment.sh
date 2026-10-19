@@ -1448,15 +1448,7 @@ CARRIER_EDITION=false
 CE_EDITION=false
 CROLE=''
 DEBIAN_RELEASE='trixie'
-case "${DEBIAN_RELEASE}" in
-  buster|bullseye|bookworm|trixie)
-    DEBIAN_REPO_HOST="debian.sipwise.com"
-    ;;
-  *)
-    # we use a new proxy/CDN approach starting with forky
-    DEBIAN_REPO_HOST="debian-cdn.sipwise.com"
-    ;;
-esac
+DEBIAN_REPO_HOST="debian.sipwise.com"
 DEBIAN_REPO_TRANSPORT="https"
 DEBUG_MODE=false
 DHCP=false
@@ -1797,6 +1789,21 @@ else
   echo "Error: Could not determine 'edition' (spce, sppro, carrier)."
   exit 1
 fi
+
+case "${DEBIAN_RELEASE}" in
+  buster|bullseye|bookworm|trixie)
+    # nothing to do here
+    ;;
+  *)
+    if grep -q 'debianrepo=' "${CMD_LINE}" ; then
+      echo "Not setting DEBIAN_REPO_HOST for '${DEBIAN_RELEASE}', as boot option 'debianrepo' is present"
+    else
+      # we use a new proxy/CDN approach starting with forky
+      DEBIAN_REPO_HOST="debian-cdn.sipwise.com"
+      echo "Setting DEBIAN_REPO_HOST for '${DEBIAN_RELEASE}' to '${DEBIAN_REPO_HOST}'"
+    fi
+    ;;
+esac
 
 DEBIAN_URL="${DEBIAN_REPO_TRANSPORT}://${DEBIAN_REPO_HOST}"
 SIPWISE_URL="${SIPWISE_REPO_TRANSPORT}://${SIPWISE_REPO_HOST}"
