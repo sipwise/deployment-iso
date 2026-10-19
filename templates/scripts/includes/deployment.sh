@@ -1795,7 +1795,7 @@ case "${DEBIAN_RELEASE}" in
     # nothing to do here
     ;;
   *)
-    if grep -q 'debianrepo=' "${CMD_LINE}" ; then
+    if grep -q 'debianrepo=' /proc/cmdline 2>/dev/null ; then
       echo "Not setting DEBIAN_REPO_HOST for '${DEBIAN_RELEASE}', as boot option 'debianrepo' is present"
     else
       # we use a new proxy/CDN approach starting with forky
