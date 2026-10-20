@@ -2390,12 +2390,12 @@ EOT
 fi
 
 if [[ -n "${MANAGEMENT_IP}" ]] && "${RETRIEVE_MGMT_CONFIG}" ; then
-  echo "Retrieving public key from management node"
+  echo "Retrieving authorized keys from management node"
   cat > "${TARGET}/tmp/retrieve_authorized_keys.sh" << EOT
 #!/bin/bash
 set -e
 mkdir -p /root/.ssh
-wget --timeout=30 -O /root/.ssh/authorized_keys "http://${MANAGEMENT_IP}:3000/ssh/id_rsa_pub"
+wget --timeout=30 -O /root/.ssh/authorized_keys "http://${MANAGEMENT_IP}:3000/ssh/authorized_keys"
 chmod 600 /root/.ssh/authorized_keys
 EOT
   grml-chroot "${TARGET}" /bin/bash /tmp/retrieve_authorized_keys.sh
